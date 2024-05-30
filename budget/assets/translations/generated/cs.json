@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "Klepnutím na jednotlivé sekce přizpůsobíte",
   "transaction-no-longer-available": "Transakce byla smazána a již ji nelze obnovit",
   "category-not-available": "Kategorie není k dispozici",
-  "the-original-category-has-been-deleted": "Původní kategorie byla smazána a transakci nelze obnovit."
+  "the-original-category-has-been-deleted": "Původní kategorie byla smazána a transakci nelze obnovit.",
+  "transaction-restored": "Transakce obnovena",
+  "error-restoring": "Chyba při obnovování",
+  "expand-all-with-spending-goals": "Rozbalte vše pomocí cílů útraty",
+  "collapse-empty-categories": "Sbalit prázdné kategorie"
 }

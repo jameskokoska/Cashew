@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "Atingeți fiecare secțiune pentru a personaliza",
   "transaction-no-longer-available": "Tranzacția a fost ștearsă și nu mai este disponibilă pentru recuperare",
   "category-not-available": "Categoria nu este disponibilă",
-  "the-original-category-has-been-deleted": "Categoria inițială a fost ștearsă și tranzacția nu poate fi recuperată."
+  "the-original-category-has-been-deleted": "Categoria inițială a fost ștearsă și tranzacția nu poate fi recuperată.",
+  "transaction-restored": "Tranzacție restaurată",
+  "error-restoring": "Eroare la restaurare",
+  "expand-all-with-spending-goals": "Extindeți totul cu obiective de cheltuieli",
+  "collapse-empty-categories": "Restrângeți categoriile goale"
 }

@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "点击每个部分进行自定义",
   "transaction-no-longer-available": "交易已被删除且无法再恢复",
   "category-not-available": "类别不可用",
-  "the-original-category-has-been-deleted": "原分类已被删除，交易无法恢复。"
+  "the-original-category-has-been-deleted": "原分类已被删除，交易无法恢复。",
+  "transaction-restored": "交易已恢复",
+  "error-restoring": "错误恢复",
+  "expand-all-with-spending-goals": "扩大支出目标",
+  "collapse-empty-categories": "折叠空类别"
 }

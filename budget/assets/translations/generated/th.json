@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "แตะแต่ละส่วนเพื่อปรับแต่ง",
   "transaction-no-longer-available": "ธุรกรรมถูกลบแล้วและไม่สามารถกู้คืนได้อีกต่อไป",
   "category-not-available": "หมวดหมู่ไม่พร้อมใช้งาน",
-  "the-original-category-has-been-deleted": "หมวดหมู่เดิมถูกลบแล้ว และไม่สามารถกู้คืนธุรกรรมได้"
+  "the-original-category-has-been-deleted": "หมวดหมู่เดิมถูกลบแล้ว และไม่สามารถกู้คืนธุรกรรมได้",
+  "transaction-restored": "กู้คืนธุรกรรมแล้ว",
+  "error-restoring": "เกิดข้อผิดพลาดในการกู้คืน",
+  "expand-all-with-spending-goals": "ขยายทั้งหมดด้วยเป้าหมายการใช้จ่าย",
+  "collapse-empty-categories": "ยุบหมวดหมู่ที่ว่างเปล่า"
 }

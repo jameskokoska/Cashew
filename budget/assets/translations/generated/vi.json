@@ -1140,12 +1140,16 @@
   "no-subscription-transactions": "Không có giao dịch đăng ký.",
   "tools-and-extras": "Công cụ & Tiện ích bổ sung",
   "transaction-activity-log": "Nhật ký hoạt động giao dịch",
-  "activity-log": "Hoạt động đăng nhập",
+  "activity-log": "Nhật ký hoạt động",
   "modified": "Đã sửa đổi",
   "restore-transaction": "Khôi phục giao dịch?",
-  "created": "Tạo",
+  "created": "Đã tạo",
   "tap-each-section-to-customize": "Nhấn vào từng phần để tùy chỉnh",
-  "transaction-no-longer-available": "Giao dịch đã bị xóa và không thể khôi phục được nữa",
+  "transaction-no-longer-available": "Giao dịch đã bị xóa và không còn khôi phục được nữa",
   "category-not-available": "Danh mục không có sẵn",
-  "the-original-category-has-been-deleted": "Danh mục ban đầu đã bị xóa và giao dịch không thể phục hồi được."
+  "the-original-category-has-been-deleted": "Danh mục ban đầu đã bị xóa và giao dịch không thể phục hồi được.",
+  "transaction-restored": "Đã khôi phục giao dịch",
+  "error-restoring": "Lỗi khi khôi phục",
+  "expand-all-with-spending-goals": "Mở rộng tất cả với mục tiêu chi tiêu",
+  "collapse-empty-categories": "Thu gọn các danh mục trống"
 }

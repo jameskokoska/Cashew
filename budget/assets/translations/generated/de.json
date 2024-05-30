@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "Tippen Sie auf jeden Abschnitt, um ihn anzupassen",
   "transaction-no-longer-available": "Die Transaktion wurde gelöscht und kann nicht mehr wiederhergestellt werden",
   "category-not-available": "Kategorie nicht verfügbar",
-  "the-original-category-has-been-deleted": "Die ursprüngliche Kategorie wurde gelöscht und die Transaktion kann nicht wiederhergestellt werden."
+  "the-original-category-has-been-deleted": "Die ursprüngliche Kategorie wurde gelöscht und die Transaktion kann nicht wiederhergestellt werden.",
+  "transaction-restored": "Transaktion wiederhergestellt",
+  "error-restoring": "Fehler beim Wiederherstellen",
+  "expand-all-with-spending-goals": "Erweitern Sie alles mit Ausgabenzielen",
+  "collapse-empty-categories": "Leere Kategorien ausblenden"
 }

@@ -345,5 +345,9 @@
   "tap-each-section-to-customize": "Tik op elke afdeling om aan te pas",
   "transaction-no-longer-available": "Die transaksie is uitgevee en is nie meer beskikbaar om te herstel nie",
   "category-not-available": "Kategorie nie beskikbaar nie",
-  "the-original-category-has-been-deleted": "Die oorspronklike kategorie is uitgevee en die transaksie kan nie herwin word nie."
+  "the-original-category-has-been-deleted": "Die oorspronklike kategorie is uitgevee en die transaksie kan nie herwin word nie.",
+  "transaction-restored": "Transaksie is herstel",
+  "error-restoring": "Kon nie herstel nie",
+  "expand-all-with-spending-goals": "Brei alles uit met bestedingsdoelwitte",
+  "collapse-empty-categories": "Vou leë kategorieë in"
 }

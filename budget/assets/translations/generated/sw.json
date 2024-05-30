@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "Gusa kila sehemu ili kubinafsisha",
   "transaction-no-longer-available": "Muamala ulifutwa na haupatikani tena kurejesha",
   "category-not-available": "Aina Haipatikani",
-  "the-original-category-has-been-deleted": "Kategoria asili imefutwa na muamala hauwezi kurejeshwa."
+  "the-original-category-has-been-deleted": "Kategoria asili imefutwa na muamala hauwezi kurejeshwa.",
+  "transaction-restored": "Muamala Umerejeshwa",
+  "error-restoring": "Hitilafu katika Kurejesha",
+  "expand-all-with-spending-goals": "Panua Yote Kwa Malengo ya Matumizi",
+  "collapse-empty-categories": "Kunja Aina Tupu"
 }

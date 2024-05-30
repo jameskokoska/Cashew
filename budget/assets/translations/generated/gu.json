@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "કસ્ટમાઇઝ કરવા માટે દરેક વિભાગને ટેપ કરો",
   "transaction-no-longer-available": "વ્યવહાર કાઢી નાખવામાં આવ્યો હતો અને હવે પુનઃપ્રાપ્ત કરવા માટે ઉપલબ્ધ નથી",
   "category-not-available": "શ્રેણી ઉપલબ્ધ નથી",
-  "the-original-category-has-been-deleted": "મૂળ કેટેગરી કાઢી નાખવામાં આવી છે અને વ્યવહાર પુનઃપ્રાપ્ત કરી શકાતો નથી."
+  "the-original-category-has-been-deleted": "મૂળ કેટેગરી કાઢી નાખવામાં આવી છે અને વ્યવહાર પુનઃપ્રાપ્ત કરી શકાતો નથી.",
+  "transaction-restored": "વ્યવહાર પુનઃસ્થાપિત",
+  "error-restoring": "પુનઃસ્થાપિત કરવામાં ભૂલ",
+  "expand-all-with-spending-goals": "ખર્ચના લક્ષ્યો સાથે બધાને વિસ્તૃત કરો",
+  "collapse-empty-categories": "ખાલી શ્રેણીઓ સંકુચિત કરો"
 }

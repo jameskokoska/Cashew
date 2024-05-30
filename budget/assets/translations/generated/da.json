@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "Tryk på hver sektion for at tilpasse",
   "transaction-no-longer-available": "Transaktionen blev slettet og er ikke længere tilgængelig for gendannelse",
   "category-not-available": "Kategori ikke tilgængelig",
-  "the-original-category-has-been-deleted": "Den oprindelige kategori er blevet slettet, og transaktionen kan ikke gendannes."
+  "the-original-category-has-been-deleted": "Den oprindelige kategori er blevet slettet, og transaktionen kan ikke gendannes.",
+  "transaction-restored": "Transaktion gendannet",
+  "error-restoring": "Fejl ved gendannelse",
+  "expand-all-with-spending-goals": "Udvid alle med forbrugsmål",
+  "collapse-empty-categories": "Skjul tomme kategorier"
 }

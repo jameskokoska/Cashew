@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "ഇഷ്‌ടാനുസൃതമാക്കാൻ ഓരോ വിഭാഗത്തിലും ടാപ്പുചെയ്യുക",
   "transaction-no-longer-available": "ഇടപാട് ഇല്ലാതാക്കി, വീണ്ടെടുക്കാൻ ഇനി ലഭ്യമല്ല",
   "category-not-available": "വിഭാഗം ലഭ്യമല്ല",
-  "the-original-category-has-been-deleted": "യഥാർത്ഥ വിഭാഗം ഇല്ലാതാക്കി, ഇടപാട് വീണ്ടെടുക്കാൻ കഴിയില്ല."
+  "the-original-category-has-been-deleted": "യഥാർത്ഥ വിഭാഗം ഇല്ലാതാക്കി, ഇടപാട് വീണ്ടെടുക്കാൻ കഴിയില്ല.",
+  "transaction-restored": "ഇടപാട് പുനഃസ്ഥാപിച്ചു",
+  "error-restoring": "പുനഃസ്ഥാപിക്കുന്നതിൽ പിശക്",
+  "expand-all-with-spending-goals": "ചെലവ് ലക്ഷ്യങ്ങൾ ഉപയോഗിച്ച് എല്ലാം വികസിപ്പിക്കുക",
+  "collapse-empty-categories": "ശൂന്യമായ വിഭാഗങ്ങൾ ചുരുക്കുക"
 }

@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "কাস্টমাইজ করতে প্রতিটি বিভাগে আলতো চাপুন",
   "transaction-no-longer-available": "লেনদেনটি মুছে ফেলা হয়েছে এবং পুনরুদ্ধার করার জন্য আর উপলব্ধ নেই৷",
   "category-not-available": "বিভাগ উপলব্ধ নয়",
-  "the-original-category-has-been-deleted": "মূল বিভাগটি মুছে ফেলা হয়েছে এবং লেনদেন পুনরুদ্ধার করা যাবে না।"
+  "the-original-category-has-been-deleted": "আসল বিভাগটি মুছে ফেলা হয়েছে এবং লেনদেন পুনরুদ্ধার করা যাবে না।",
+  "transaction-restored": "লেনদেন পুনরুদ্ধার করা হয়েছে",
+  "error-restoring": "পুনরুদ্ধার করার সময় ত্রুটি৷",
+  "expand-all-with-spending-goals": "ব্যয়ের লক্ষ্য সহ সমস্ত প্রসারিত করুন",
+  "collapse-empty-categories": "খালি বিভাগগুলিকে সঙ্কুচিত করুন৷"
 }

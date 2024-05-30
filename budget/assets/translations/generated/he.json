@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "הקש על כל חלק כדי להתאים אישית",
   "transaction-no-longer-available": "העסקה נמחקה ואינה זמינה עוד לשחזור",
   "category-not-available": "קטגוריה לא זמינה",
-  "the-original-category-has-been-deleted": "הקטגוריה המקורית נמחקה ולא ניתן לשחזר את העסקה."
+  "the-original-category-has-been-deleted": "הקטגוריה המקורית נמחקה ולא ניתן לשחזר את העסקה.",
+  "transaction-restored": "העסקה שוחזרה",
+  "error-restoring": "שגיאה בשחזור",
+  "expand-all-with-spending-goals": "הרחב הכל עם יעדי הוצאות",
+  "collapse-empty-categories": "כווץ קטגוריות ריקות"
 }

@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "Érintse meg az egyes szakaszokat a testreszabáshoz",
   "transaction-no-longer-available": "A tranzakciót törölték, és már nem lehet visszaállítani",
   "category-not-available": "A kategória nem elérhető",
-  "the-original-category-has-been-deleted": "Az eredeti kategória törölve lett, és a tranzakció nem állítható vissza."
+  "the-original-category-has-been-deleted": "Az eredeti kategória törölve lett, és a tranzakció nem állítható vissza.",
+  "transaction-restored": "Tranzakció visszaállítva",
+  "error-restoring": "Hiba a visszaállítás során",
+  "expand-all-with-spending-goals": "Bontsa ki az összeset a költési célokkal",
+  "collapse-empty-categories": "Üres kategóriák összecsukása"
 }

@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "Kliknij każdą sekcję, aby ją dostosować",
   "transaction-no-longer-available": "Transakcja została usunięta i nie można jej już odzyskać",
   "category-not-available": "Kategoria niedostępna",
-  "the-original-category-has-been-deleted": "Oryginalna kategoria została usunięta i transakcji nie można odzyskać."
+  "the-original-category-has-been-deleted": "Oryginalna kategoria została usunięta i transakcji nie można odzyskać.",
+  "transaction-restored": "Transakcja przywrócona",
+  "error-restoring": "Błąd przywracania",
+  "expand-all-with-spending-goals": "Rozwiń wszystko z celami wydatków",
+  "collapse-empty-categories": "Zwiń puste kategorie"
 }

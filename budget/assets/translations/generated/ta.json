@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "தனிப்பயனாக்க ஒவ்வொரு பகுதியையும் தட்டவும்",
   "transaction-no-longer-available": "பரிவர்த்தனை நீக்கப்பட்டது, இனி மீட்க முடியாது",
   "category-not-available": "வகை கிடைக்கவில்லை",
-  "the-original-category-has-been-deleted": "அசல் வகை நீக்கப்பட்டது மற்றும் பரிவர்த்தனையை மீட்டெடுக்க முடியாது."
+  "the-original-category-has-been-deleted": "அசல் வகை நீக்கப்பட்டது மற்றும் பரிவர்த்தனையை மீட்டெடுக்க முடியாது.",
+  "transaction-restored": "பரிவர்த்தனை மீட்டெடுக்கப்பட்டது",
+  "error-restoring": "மீட்டமைப்பதில் பிழை",
+  "expand-all-with-spending-goals": "செலவு இலக்குகளுடன் அனைத்தையும் விரிவாக்குங்கள்",
+  "collapse-empty-categories": "வெற்று வகைகளைச் சுருக்கவும்"
 }

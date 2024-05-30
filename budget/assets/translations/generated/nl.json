@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "Tik op elke sectie om aan te passen",
   "transaction-no-longer-available": "De transactie is verwijderd en kan niet meer worden hersteld",
   "category-not-available": "Categorie niet beschikbaar",
-  "the-original-category-has-been-deleted": "De oorspronkelijke categorie is verwijderd en de transactie kan niet worden hersteld."
+  "the-original-category-has-been-deleted": "De oorspronkelijke categorie is verwijderd en de transactie kan niet worden hersteld.",
+  "transaction-restored": "Transactie hersteld",
+  "error-restoring": "Fout bij herstellen",
+  "expand-all-with-spending-goals": "Breid alles uit met bestedingsdoelen",
+  "collapse-empty-categories": "Lege categorieën samenvouwen"
 }

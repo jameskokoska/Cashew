@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "각 섹션을 탭하여 맞춤설정하세요.",
   "transaction-no-longer-available": "거래가 삭제되어 더 이상 복구할 수 없습니다.",
   "category-not-available": "카테고리를 사용할 수 없음",
-  "the-original-category-has-been-deleted": "원래 카테고리가 삭제되었으며 거래를 복구할 수 없습니다."
+  "the-original-category-has-been-deleted": "원래 카테고리가 삭제되었으며 거래를 복구할 수 없습니다.",
+  "transaction-restored": "거래가 복원되었습니다.",
+  "error-restoring": "복원 중 오류가 발생했습니다.",
+  "expand-all-with-spending-goals": "지출 목표로 모두 확장",
+  "collapse-empty-categories": "빈 카테고리 접기"
 }

@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "Ketik setiap bahagian untuk menyesuaikan",
   "transaction-no-longer-available": "Urus niaga telah dipadamkan dan tidak lagi tersedia untuk dipulihkan",
   "category-not-available": "Kategori Tidak Tersedia",
-  "the-original-category-has-been-deleted": "Kategori asal telah dipadamkan dan transaksi tidak boleh dipulihkan."
+  "the-original-category-has-been-deleted": "Kategori asal telah dipadamkan dan transaksi tidak boleh dipulihkan.",
+  "transaction-restored": "Transaksi Dipulihkan",
+  "error-restoring": "Ralat Memulihkan",
+  "expand-all-with-spending-goals": "Kembangkan Semua Dengan Matlamat Perbelanjaan",
+  "collapse-empty-categories": "Runtuhkan Kategori Kosong"
 }

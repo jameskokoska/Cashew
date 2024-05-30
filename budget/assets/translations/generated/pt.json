@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "Toque em cada seção para personalizar",
   "transaction-no-longer-available": "A transação foi excluída e não está mais disponível para recuperação",
   "category-not-available": "Categoria não disponível",
-  "the-original-category-has-been-deleted": "A categoria original foi excluída e a transação não pode ser recuperada."
+  "the-original-category-has-been-deleted": "A categoria original foi excluída e a transação não pode ser recuperada.",
+  "transaction-restored": "Transação restaurada",
+  "error-restoring": "Erro ao restaurar",
+  "expand-all-with-spending-goals": "Expanda tudo com metas de gastos",
+  "collapse-empty-categories": "Recolher categorias vazias"
 }

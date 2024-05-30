@@ -738,7 +738,7 @@
   "select-the-main-category-for-this-subcategory": "Select the main category for this subcategory",
   "make-subcategory-of": "Make Subcategory of",
   "make-subcategory-description-categories": "This will move all transactions to the new category and label them with this subcategory",
-  "make-subcategory": "Make Subcategory",
+  "make-subcategory": "Convert Into Subcategory",
   "subcategory-created": "Subcategory Created",
   "no-subcategory": "No Subcategory",
   "main-category": "Main Category",
@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "Tap each section to customize",
   "transaction-no-longer-available": "The transaction was deleted and is no longer available to restore",
   "category-not-available": "Category Not Available",
-  "the-original-category-has-been-deleted": "The original category has been deleted and the transaction cannot be recovered."
+  "the-original-category-has-been-deleted": "The original category has been deleted and the transaction cannot be recovered.",
+  "transaction-restored": "Transaction Restored",
+  "error-restoring": "Error Restoring",
+  "expand-all-with-spending-goals": "Expand All With Spending Goals",
+  "collapse-empty-categories": "Collapse Empty Categories"
 }

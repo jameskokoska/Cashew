@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "अनुकूलित करने के लिए प्रत्येक अनुभाग को टैप करें",
   "transaction-no-longer-available": "लेन-देन हटा दिया गया था और अब पुनर्प्राप्त करने के लिए उपलब्ध नहीं है",
   "category-not-available": "श्रेणी उपलब्ध नहीं है",
-  "the-original-category-has-been-deleted": "मूल श्रेणी हटा दी गई है और लेनदेन पुनर्प्राप्त नहीं किया जा सकता है।"
+  "the-original-category-has-been-deleted": "मूल श्रेणी हटा दी गई है और लेनदेन पुनर्प्राप्त नहीं किया जा सकता है।",
+  "transaction-restored": "लेन-देन बहाल",
+  "error-restoring": "पुनर्स्थापित करने में त्रुटि",
+  "expand-all-with-spending-goals": "व्यय लक्ष्यों के साथ सभी का विस्तार करें",
+  "collapse-empty-categories": "खाली श्रेणियाँ संक्षिप्त करें"
 }

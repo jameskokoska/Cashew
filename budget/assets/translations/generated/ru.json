@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "Коснитесь каждого раздела, чтобы настроить его",
   "transaction-no-longer-available": "Транзакция удалена и больше не доступна для восстановления.",
   "category-not-available": "Категория недоступна",
-  "the-original-category-has-been-deleted": "Исходная категория была удалена, и транзакция не может быть восстановлена."
+  "the-original-category-has-been-deleted": "Исходная категория была удалена, и транзакция не может быть восстановлена.",
+  "transaction-restored": "Транзакция восстановлена",
+  "error-restoring": "Восстановление ошибки",
+  "expand-all-with-spending-goals": "Расширьте все с помощью целей по расходам",
+  "collapse-empty-categories": "Свернуть пустые категории"
 }

@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "برای سفارشی کردن، روی هر بخش ضربه بزنید",
   "transaction-no-longer-available": "تراکنش حذف شد و دیگر برای بازیابی در دسترس نیست",
   "category-not-available": "دسته بندی موجود نیست",
-  "the-original-category-has-been-deleted": "دسته اصلی حذف شده است و تراکنش قابل بازیابی نیست."
+  "the-original-category-has-been-deleted": "دسته اصلی حذف شده است و تراکنش قابل بازیابی نیست.",
+  "transaction-restored": "تراکنش بازیابی شد",
+  "error-restoring": "خطا در بازیابی",
+  "expand-all-with-spending-goals": "همه چیز را با اهداف هزینه گسترش دهید",
+  "collapse-empty-categories": "جمع کردن دسته‌های خالی"
 }

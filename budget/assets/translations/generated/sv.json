@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "Tryck på varje avsnitt för att anpassa",
   "transaction-no-longer-available": "Transaktionen raderades och är inte längre tillgänglig att återställa",
   "category-not-available": "Kategori ej tillgänglig",
-  "the-original-category-has-been-deleted": "Den ursprungliga kategorin har tagits bort och transaktionen kan inte återställas."
+  "the-original-category-has-been-deleted": "Den ursprungliga kategorin har tagits bort och transaktionen kan inte återställas.",
+  "transaction-restored": "Transaktionen återställd",
+  "error-restoring": "Fel vid återställning",
+  "expand-all-with-spending-goals": "Utöka alla med utgiftsmål",
+  "collapse-empty-categories": "Komprimera tomma kategorier"
 }

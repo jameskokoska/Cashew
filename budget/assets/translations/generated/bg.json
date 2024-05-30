@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "Докоснете всяка секция, за да персонализирате",
   "transaction-no-longer-available": "Транзакцията беше изтрита и вече не е достъпна за възстановяване",
   "category-not-available": "Категорията не е налична",
-  "the-original-category-has-been-deleted": "Оригиналната категория е изтрита и транзакцията не може да бъде възстановена."
+  "the-original-category-has-been-deleted": "Оригиналната категория е изтрита и транзакцията не може да бъде възстановена.",
+  "transaction-restored": "Транзакцията е възстановена",
+  "error-restoring": "Грешка при възстановяване",
+  "expand-all-with-spending-goals": "Разгънете всички с цели на разходите",
+  "collapse-empty-categories": "Свиване на празните категории"
 }

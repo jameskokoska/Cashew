@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "Trykk på hver seksjon for å tilpasse",
   "transaction-no-longer-available": "Transaksjonen ble slettet og er ikke lenger tilgjengelig for gjenoppretting",
   "category-not-available": "Kategori ikke tilgjengelig",
-  "the-original-category-has-been-deleted": "Den opprinnelige kategorien er slettet og transaksjonen kan ikke gjenopprettes."
+  "the-original-category-has-been-deleted": "Den opprinnelige kategorien er slettet og transaksjonen kan ikke gjenopprettes.",
+  "transaction-restored": "Transaksjonen gjenopprettet",
+  "error-restoring": "Feil ved gjenoppretting",
+  "expand-all-with-spending-goals": "Utvid alle med forbruksmål",
+  "collapse-empty-categories": "Skjul tomme kategorier"
 }

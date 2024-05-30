@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "حسب ضرورت بنانے کے لیے ہر سیکشن کو تھپتھپائیں۔",
   "transaction-no-longer-available": "لین دین کو حذف کر دیا گیا تھا اور اب بازیافت کے لیے دستیاب نہیں ہے۔",
   "category-not-available": "زمرہ دستیاب نہیں ہے۔",
-  "the-original-category-has-been-deleted": "اصل زمرہ حذف کر دیا گیا ہے اور لین دین کو بازیافت نہیں کیا جا سکتا۔"
+  "the-original-category-has-been-deleted": "اصل زمرہ حذف کر دیا گیا ہے اور لین دین کو بازیافت نہیں کیا جا سکتا۔",
+  "transaction-restored": "لین دین بحال ہو گیا۔",
+  "error-restoring": "بحال کرنے میں خرابی۔",
+  "expand-all-with-spending-goals": "خرچ کرنے کے اہداف کے ساتھ سبھی کو پھیلائیں۔",
+  "collapse-empty-categories": "خالی زمرہ جات کو سمیٹیں۔"
 }

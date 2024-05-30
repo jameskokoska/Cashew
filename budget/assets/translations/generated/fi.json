@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "Mukauta kutakin osiota napauttamalla",
   "transaction-no-longer-available": "Tapahtuma poistettiin, eikä sitä voi enää palauttaa",
   "category-not-available": "Luokka ei saatavilla",
-  "the-original-category-has-been-deleted": "Alkuperäinen luokka on poistettu, eikä tapahtumaa voi palauttaa."
+  "the-original-category-has-been-deleted": "Alkuperäinen luokka on poistettu, eikä tapahtumaa voi palauttaa.",
+  "transaction-restored": "Tapahtuma palautettu",
+  "error-restoring": "Virhe palauttamisessa",
+  "expand-all-with-spending-goals": "Laajenna kaikki kulutustavoitteilla",
+  "collapse-empty-categories": "Kutista tyhjät luokat"
 }

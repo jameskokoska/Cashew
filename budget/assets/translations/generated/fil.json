@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "I-tap ang bawat seksyon para i-customize",
   "transaction-no-longer-available": "Ang transaksyon ay tinanggal at hindi na magagamit upang mabawi",
   "category-not-available": "Hindi Magagamit ang Kategorya",
-  "the-original-category-has-been-deleted": "Ang orihinal na kategorya ay tinanggal at ang transaksyon ay hindi na mababawi."
+  "the-original-category-has-been-deleted": "Ang orihinal na kategorya ay tinanggal at ang transaksyon ay hindi na mababawi.",
+  "transaction-restored": "Naibalik ang Transaksyon",
+  "error-restoring": "Error sa Pagpapanumbalik",
+  "expand-all-with-spending-goals": "Palawakin ang Lahat Gamit ang Mga Layunin sa Paggastos",
+  "collapse-empty-categories": "I-collapse ang Mga Walang Lamang Kategorya"
 }

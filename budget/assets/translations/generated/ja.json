@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "各セクションをタップしてカスタマイズします",
   "transaction-no-longer-available": "トランザクションは削除されたため、回復できなくなりました",
   "category-not-available": "カテゴリがありません",
-  "the-original-category-has-been-deleted": "元のカテゴリは削除されているため、トランザクションを回復できません。"
+  "the-original-category-has-been-deleted": "元のカテゴリは削除されているため、トランザクションを回復できません。",
+  "transaction-restored": "トランザクションが復元されました",
+  "error-restoring": "復元エラー",
+  "expand-all-with-spending-goals": "支出目標を設定してすべてを拡張する",
+  "collapse-empty-categories": "空のカテゴリを折りたたむ"
 }

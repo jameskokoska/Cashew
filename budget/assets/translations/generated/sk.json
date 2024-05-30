@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "Klepnutím na jednotlivé sekcie prispôsobíte",
   "transaction-no-longer-available": "Transakcia bola odstránená a už nie je k dispozícii na obnovenie",
   "category-not-available": "Kategória nie je k dispozícii",
-  "the-original-category-has-been-deleted": "Pôvodná kategória bola odstránená a transakciu nie je možné obnoviť."
+  "the-original-category-has-been-deleted": "Pôvodná kategória bola odstránená a transakciu nie je možné obnoviť.",
+  "transaction-restored": "Transakcia obnovená",
+  "error-restoring": "Chyba pri obnovovaní",
+  "expand-all-with-spending-goals": "Rozbaľte všetko pomocou cieľov výdavkov",
+  "collapse-empty-categories": "Zbaliť prázdne kategórie"
 }

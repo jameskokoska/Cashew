@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "అనుకూలీకరించడానికి ప్రతి విభాగాన్ని నొక్కండి",
   "transaction-no-longer-available": "లావాదేవీ తొలగించబడింది మరియు పునరుద్ధరించడానికి ఇకపై అందుబాటులో లేదు",
   "category-not-available": "వర్గం అందుబాటులో లేదు",
-  "the-original-category-has-been-deleted": "అసలు వర్గం తొలగించబడింది మరియు లావాదేవీని తిరిగి పొందడం సాధ్యం కాదు."
+  "the-original-category-has-been-deleted": "అసలు వర్గం తొలగించబడింది మరియు లావాదేవీని తిరిగి పొందడం సాధ్యం కాదు.",
+  "transaction-restored": "లావాదేవీ పునరుద్ధరించబడింది",
+  "error-restoring": "పునరుద్ధరించడంలో లోపం",
+  "expand-all-with-spending-goals": "ఖర్చు లక్ష్యాలతో అన్నింటినీ విస్తరించండి",
+  "collapse-empty-categories": "ఖాళీ వర్గాలను కుదించు"
 }

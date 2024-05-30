@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "Özelleştirmek için her bölüme dokunun",
   "transaction-no-longer-available": "İşlem silindi ve artık kurtarılamaz",
   "category-not-available": "Kategori Mevcut Değil",
-  "the-original-category-has-been-deleted": "Orijinal kategori silindi ve işlem kurtarılamaz."
+  "the-original-category-has-been-deleted": "Orijinal kategori silindi ve işlem kurtarılamaz.",
+  "transaction-restored": "İşlem Geri Yüklendi",
+  "error-restoring": "Geri Yükleme Hatası",
+  "expand-all-with-spending-goals": "Harcama Hedefleriyle Tümünü Genişletin",
+  "collapse-empty-categories": "Boş Kategorileri Daralt"
 }

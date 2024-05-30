@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "Додирните сваки одељак да бисте га прилагодили",
   "transaction-no-longer-available": "Трансакција је избрисана и више није доступна за опоравак",
   "category-not-available": "Категорија није доступна",
-  "the-original-category-has-been-deleted": "Оригинална категорија је избрисана и трансакција се не може повратити."
+  "the-original-category-has-been-deleted": "Оригинална категорија је избрисана и трансакција се не може повратити.",
+  "transaction-restored": "Трансакција је враћена",
+  "error-restoring": "Еррор Ресторинг",
+  "expand-all-with-spending-goals": "Проширите све помоћу циљева потрошње",
+  "collapse-empty-categories": "Скупи празне категорије"
 }

@@ -1147,5 +1147,9 @@
   "tap-each-section-to-customize": "اضغط على كل قسم لتخصيصه",
   "transaction-no-longer-available": "تم حذف المعاملة ولم تعد متاحة للاسترداد",
   "category-not-available": "الفئة غير متوفرة",
-  "the-original-category-has-been-deleted": "تم حذف الفئة الأصلية ولا يمكن استرداد المعاملة."
+  "the-original-category-has-been-deleted": "تم حذف الفئة الأصلية ولا يمكن استرداد المعاملة.",
+  "transaction-restored": "تمت استعادة المعاملة",
+  "error-restoring": "خطأ في الاستعادة",
+  "expand-all-with-spending-goals": "قم بتوسيع الكل مع أهداف الإنفاق",
+  "collapse-empty-categories": "طي الفئات الفارغة"
 }
