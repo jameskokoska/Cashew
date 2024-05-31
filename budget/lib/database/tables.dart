@@ -2823,10 +2823,9 @@ class FinanceDatabase extends _$FinanceDatabase {
         .get();
   }
 
-  Future<TransactionCategory?> getRelatingCategory(
-    String searchFor, {
-    bool onlySubCategories = false,
-  }) async {
+  Future<TransactionCategory?> getRelatingCategory(String searchFor,
+      {bool onlySubCategories = false,
+      String? mainCategoryPkMustBe = null}) async {
     Future<TransactionCategory?> getCategory(
             Expression<bool> nameMatching) async =>
         (await (select(categories)
@@ -2834,7 +2833,12 @@ class FinanceDatabase extends _$FinanceDatabase {
                       (onlySubCategories
                           ? onlyShowMainCategoryListing(c).not()
                           : onlyShowMainCategoryListing(c)) &
+                      evaluateIfNull(
+                          c.mainCategoryPk.equals(mainCategoryPkMustBe ?? ""),
+                          mainCategoryPkMustBe,
+                          true) &
                       nameMatching)
+                  ..orderBy([(c) => OrderingTerm.desc(c.order)])
                   ..limit(1))
                 .get())
             .firstOrNull;
@@ -2856,8 +2860,9 @@ class FinanceDatabase extends _$FinanceDatabase {
     Future<TransactionWallet?> getCategory(
             Expression<bool> nameMatching) async =>
         (await (select(wallets)
-                  ..where((c) => nameMatching)
-                  ..limit(1))
+                  ..where((w) => nameMatching)
+                  ..limit(1)
+                  ..orderBy([(w) => OrderingTerm.desc(w.order)]))
                 .get())
             .firstOrNull;
 

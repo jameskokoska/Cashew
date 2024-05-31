@@ -385,22 +385,60 @@ Future<MainAndSubcategory> getMainAndSubcategoryFromParams(
     Map<String, String?> params) async {
   MainAndSubcategory mainAndSubcategory = MainAndSubcategory();
 
+  // Handle case where a category AND subcategory is passed in
+  // Check for a main category, then find a subcategory in that main category
+  // else use default subcategory takes precedence behavior
+  if ((params.containsKey("category") || params.containsKey("categoryPk")) &&
+      (params.containsKey("subcategory") ||
+          params.containsKey("subcategoryPk"))) {
+    if (params.containsKey("categoryPk")) {
+      mainAndSubcategory.main = await database
+          .getCategoryInstanceOrNull(params["categoryPk"].toString());
+    }
+    if (mainAndSubcategory.main == null && params.containsKey("category")) {
+      mainAndSubcategory.main = await database.getRelatingCategory(
+        params["category"] ?? "",
+        onlySubCategories: false,
+      );
+    }
+    if (mainAndSubcategory.main != null) {
+      if (params.containsKey("subcategoryPk")) {
+        mainAndSubcategory.sub = await database
+            .getCategoryInstanceOrNull(params["subcategoryPk"].toString());
+        // Try again if the subcategories main category is not the same
+        if (mainAndSubcategory.sub?.mainCategoryPk !=
+            mainAndSubcategory.main?.categoryPk) {
+          mainAndSubcategory.sub = null;
+        }
+      }
+      if (mainAndSubcategory.sub == null && params.containsKey("subcategory")) {
+        mainAndSubcategory.sub = await database.getRelatingCategory(
+          params["subcategory"] ?? "",
+          onlySubCategories: true,
+          mainCategoryPkMustBe: mainAndSubcategory.main?.categoryPk,
+        );
+      }
+      // Return only if we found a subcategory (since this only runs with subcategory param)
+      if (mainAndSubcategory.sub != null) {
+        return mainAndSubcategory;
+      }
+    }
+  }
+
   // Subcategory takes precedence
-  TransactionCategory? subCategory;
   if (params.containsKey("subcategoryPk")) {
-    subCategory = await database
+    mainAndSubcategory.sub = await database
         .getCategoryInstanceOrNull(params["subcategoryPk"].toString());
   }
-  if (subCategory == null && params.containsKey("subcategory")) {
-    subCategory = await database.getRelatingCategory(
+  if (mainAndSubcategory.sub == null && params.containsKey("subcategory")) {
+    mainAndSubcategory.sub = await database.getRelatingCategory(
       params["subcategory"] ?? "",
       onlySubCategories: true,
     );
   }
-  if (subCategory?.mainCategoryPk != null) {
+  if (mainAndSubcategory.sub?.mainCategoryPk != null) {
     mainAndSubcategory.main =
-        await database.getCategory(subCategory!.mainCategoryPk!).$2;
-    mainAndSubcategory.sub = subCategory;
+        await database.getCategory(mainAndSubcategory.sub!.mainCategoryPk!).$2;
     return mainAndSubcategory;
   }
 
