@@ -4307,6 +4307,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   Stream<List<TransactionActivityLog>> watchAllTransactionDeleteActivityLog(
       {int? limit}) {
     final query = select(deleteLogs)
+      ..where((l) => l.type.equals(DeleteLogType.Transaction.index))
       ..limit(limit ?? DEFAULT_LIMIT)
       ..orderBy([(t) => OrderingTerm.desc(deleteLogs.dateTimeModified)]);
 
