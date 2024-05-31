@@ -244,6 +244,8 @@ class ActivityPage extends StatelessWidget {
                               Widget transactionEntry = transaction != null
                                   ? Tappable(
                                       color: Colors.transparent,
+                                      // Disable required for iOS so we can still use the pointer
+                                      disable: wasADeletedTransaction == false,
                                       onTap: wasADeletedTransaction
                                           ? () {
                                               if (wasADeletedTransaction &&
@@ -256,6 +258,7 @@ class ActivityPage extends StatelessWidget {
                                                 );
                                             }
                                           : null,
+
                                       child: Opacity(
                                         opacity:
                                             wasADeletedTransaction ? 0.4 : 1,

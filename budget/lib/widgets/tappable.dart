@@ -18,6 +18,7 @@ class Tappable extends StatelessWidget {
     required this.child,
     this.onLongPress,
     this.hasOpacity = true,
+    this.disable = false,
   }) : super(key: key);
 
   final double borderRadius;
@@ -29,9 +30,11 @@ class Tappable extends StatelessWidget {
   final MaterialType type;
   final VoidCallback? onLongPress;
   final bool hasOpacity;
+  final bool disable;
 
   @override
   Widget build(BuildContext context) {
+    if (disable) return child;
     if (getPlatform() == PlatformOS.isIOS) {
       return FadedButton(
         child: child,
