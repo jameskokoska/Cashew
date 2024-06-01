@@ -89,7 +89,9 @@ class _CheckWidgetLaunchState extends State<CheckWidgetLaunch> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _checkForWidgetLaunch();
+    Future.delayed(Duration(milliseconds: 50), () {
+      _checkForWidgetLaunch();
+    });
     HomeWidget.widgetClicked.listen(_launchedFromWidget);
   }
 
