@@ -93,7 +93,7 @@ class AnimatedSizeSwitcher extends StatelessWidget {
     this.sizeCurve = Curves.easeInOutCubicEmphasized,
     this.sizeDuration = const Duration(milliseconds: 800),
     this.switcherDuration = const Duration(milliseconds: 250),
-    this.sizeAlignment = Alignment.center,
+    this.sizeAlignment = AlignmentDirectional.center,
     this.clipBehavior = Clip.hardEdge,
     this.enabled = true,
     super.key,
@@ -102,7 +102,7 @@ class AnimatedSizeSwitcher extends StatelessWidget {
   final Curve sizeCurve;
   final Duration sizeDuration;
   final Duration switcherDuration;
-  final Alignment sizeAlignment;
+  final AlignmentDirectional sizeAlignment;
   final Clip clipBehavior;
   final bool enabled;
 

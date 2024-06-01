@@ -72,16 +72,16 @@ class DropdownSelectState extends State<DropdownSelect> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(
-          left: widget.compact ? 13 : 15,
-          right: widget.compact ? 1 : 6,
+      padding: EdgeInsetsDirectional.only(
+          start: widget.compact ? 13 : 15,
+          end: widget.compact ? 1 : 6,
           top: widget.compact ? 2 : 10,
           bottom: widget.compact ? 2 : 10),
       decoration: BoxDecoration(
         color: widget.backgroundColor == null
             ? getColor(context, "lightDarkAccent")
             : widget.backgroundColor,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadiusDirectional.circular(10),
       ),
       child: DropdownButton<String>(
         key: _dropdownButtonKey,
@@ -109,7 +109,7 @@ class DropdownSelectState extends State<DropdownSelect> {
             .toList()
             .map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem(
-            alignment: Alignment.centerLeft,
+            alignment: AlignmentDirectional.centerStart,
             child: TextFont(
               text: widget.getLabel != null ? widget.getLabel!(value) : value,
               fontSize: widget.compact ? 14 : 18,
@@ -164,7 +164,7 @@ class CustomPopupMenuButton extends StatelessWidget {
     return Tooltip(
       message: menuItem.label,
       child: Stack(
-        alignment: Alignment.center,
+        alignment: AlignmentDirectional.center,
         children: [
           AnimatedScale(
             scale: menuItem.selected ? 1.8 : 0,
@@ -185,7 +185,7 @@ class CustomPopupMenuButton extends StatelessWidget {
             ),
           ),
           IconButton(
-              padding: EdgeInsets.all(buttonPadding),
+              padding: EdgeInsetsDirectional.all(buttonPadding),
               onPressed: () {
                 menuItem.action();
               },
@@ -229,7 +229,7 @@ class CustomPopupMenuButton extends StatelessWidget {
             int length = items.length;
             double offsetX = (length - 1 - idx) * 7;
             return Transform.translate(
-              offset: Offset(offsetX, 0),
+              offset: Offset(offsetX, 0).withDirectionality(context),
               child: menuIconButtonBuilder(context, item.value),
             );
           })
@@ -242,22 +242,24 @@ class CustomPopupMenuButton extends StatelessWidget {
         if ((keepOutFirstConsideringHeader || forceKeepOutFirst) &&
             items.length > 0)
           Transform.translate(
-            offset: Offset(
-                itemsFiltered.isNotEmpty || items.length == 2 ? 7 : 0, 0),
+            offset:
+                Offset(itemsFiltered.isNotEmpty || items.length == 2 ? 7 : 0, 0)
+                    .withDirectionality(context),
             child: menuIconButtonBuilder(context, items[0]),
           ),
         if ((keepOutFirstConsideringHeader || forceKeepOutFirst) &&
             items.length > 0 &&
             items.length == 2)
           Transform.translate(
-            offset: Offset(itemsFiltered.isNotEmpty ? 7 : 0, 0),
+            offset: Offset(itemsFiltered.isNotEmpty ? 7 : 0, 0)
+                .withDirectionality(context),
             child: menuIconButtonBuilder(context, items[1]),
           ),
         if (itemsFiltered.isNotEmpty)
           PopupMenuButton<String>(
-            padding: EdgeInsets.all(buttonPadding),
+            padding: EdgeInsetsDirectional.all(buttonPadding),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
+              borderRadius: BorderRadiusDirectional.all(
                 Radius.circular(getPlatform() == PlatformOS.isIOS ? 5 : 10),
               ),
             ),
@@ -287,7 +289,7 @@ class CustomPopupMenuButton extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Stack(
-                        alignment: Alignment.center,
+                        alignment: AlignmentDirectional.center,
                         children: [
                           BreathingWidget(
                             duration: Duration(milliseconds: 700),

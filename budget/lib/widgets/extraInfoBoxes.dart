@@ -16,7 +16,7 @@ class TipBox extends StatefulWidget {
     required this.text,
     required this.settingsString,
     this.richTextSpan,
-    this.padding = EdgeInsets.zero,
+    this.padding = EdgeInsetsDirectional.zero,
     this.borderRadius,
     super.key,
   });
@@ -24,7 +24,7 @@ class TipBox extends StatefulWidget {
   final String text;
   final List<TextSpan>? richTextSpan;
   final String? settingsString;
-  final EdgeInsets padding;
+  final EdgeInsetsDirectional padding;
   final double? borderRadius;
 
   @override
@@ -49,15 +49,15 @@ class _TipBoxState extends State<TipBox> {
           borderRadius: widget.borderRadius ??
               (getPlatform() == PlatformOS.isIOS ? 10 : 15),
           child: Padding(
-            padding: EdgeInsets.only(
-                left: 15,
-                right: widget.settingsString == null ? 15 : 2,
+            padding: EdgeInsetsDirectional.only(
+                start: 15,
+                end: widget.settingsString == null ? 15 : 2,
                 top: 2,
                 bottom: 2),
             child: Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(right: 12),
+                  padding: const EdgeInsetsDirectional.only(end: 12),
                   child: Icon(
                     appStateSettings["outlinedIcons"]
                         ? Icons.lightbulb_outlined
@@ -68,7 +68,8 @@ class _TipBoxState extends State<TipBox> {
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    padding:
+                        const EdgeInsetsDirectional.symmetric(vertical: 8.0),
                     child: TextFont(
                       textColor:
                           Theme.of(context).colorScheme.onSecondaryContainer,
@@ -81,7 +82,7 @@ class _TipBoxState extends State<TipBox> {
                 ),
                 if (widget.settingsString != null)
                   IconButton(
-                    padding: EdgeInsets.all(15),
+                    padding: EdgeInsetsDirectional.all(15),
                     tooltip: "remove-tip".tr(),
                     onPressed: () async {
                       setState(() {
@@ -125,13 +126,14 @@ class ExtraInfoButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsetsDirectional.symmetric(horizontal: 15),
       child: Tappable(
         borderRadius: 15,
         color: color,
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          padding: const EdgeInsetsDirectional.symmetric(
+              horizontal: 15, vertical: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,

@@ -15,7 +15,7 @@ class OutlinedButtonStacked extends StatelessWidget {
     required this.onTap,
     required this.iconData,
     this.afterWidget,
-    this.alignLeft = false,
+    this.alignStart = false,
     this.padding,
     this.afterWidgetPadding,
     this.alignBeside,
@@ -31,9 +31,9 @@ class OutlinedButtonStacked extends StatelessWidget {
   final void Function()? onTap;
   final IconData? iconData;
   final Widget? afterWidget;
-  final bool alignLeft;
-  final EdgeInsets? padding;
-  final EdgeInsets? afterWidgetPadding;
+  final bool alignStart;
+  final EdgeInsetsDirectional? padding;
+  final EdgeInsetsDirectional? afterWidgetPadding;
   final bool? alignBeside;
   final bool filled;
   final bool transitionWhenFilled;
@@ -60,22 +60,23 @@ class OutlinedButtonStacked extends StatelessWidget {
                 children: [
                   Padding(
                     padding: padding ??
-                        EdgeInsets.symmetric(horizontal: 8, vertical: 30),
+                        EdgeInsetsDirectional.symmetric(
+                            horizontal: 8, vertical: 30),
                     child: Column(
-                      crossAxisAlignment: alignLeft
+                      crossAxisAlignment: alignStart
                           ? CrossAxisAlignment.start
                           : CrossAxisAlignment.center,
                       children: [
                         alignBeside != true
                             ? Column(
-                                crossAxisAlignment: alignLeft
+                                crossAxisAlignment: alignStart
                                     ? CrossAxisAlignment.start
                                     : CrossAxisAlignment.center,
                                 children: [
                                   if (iconData != null)
                                     Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 10),
+                                      padding: const EdgeInsetsDirectional.only(
+                                          bottom: 10),
                                       child: Transform.scale(
                                         scale: iconScale,
                                         child: Icon(
@@ -121,7 +122,7 @@ class OutlinedButtonStacked extends StatelessWidget {
                   ),
                   if (afterWidgetPadding != null)
                     Padding(
-                      padding: afterWidgetPadding ?? EdgeInsets.zero,
+                      padding: afterWidgetPadding ?? EdgeInsetsDirectional.zero,
                       child: afterWidget ?? SizedBox.shrink(),
                     ),
                 ],
@@ -167,11 +168,12 @@ class OutlinedContainer extends StatelessWidget {
         color: filled == true
             ? Theme.of(context).colorScheme.secondary.withOpacity(0.2)
             : Colors.transparent,
-        borderRadius: BorderRadius.circular(borderRadiusValue),
+        borderRadius: BorderRadiusDirectional.circular(borderRadiusValue),
       ),
       child: clip
           ? ClipRRect(
-              borderRadius: BorderRadius.circular(borderRadiusValue - 1),
+              borderRadius:
+                  BorderRadiusDirectional.circular(borderRadiusValue - 1),
               child: child,
             )
           : child,
@@ -185,7 +187,7 @@ class HeaderWithIconAndInfo extends StatelessWidget {
   final String? text;
   final double? fontSize;
   final Widget? infoButton;
-  final EdgeInsets padding;
+  final EdgeInsetsDirectional padding;
   final Widget? extraWidget;
 
   HeaderWithIconAndInfo({
@@ -194,7 +196,7 @@ class HeaderWithIconAndInfo extends StatelessWidget {
     required this.text,
     this.fontSize,
     this.infoButton,
-    this.padding = EdgeInsets.zero,
+    this.padding = EdgeInsetsDirectional.zero,
     this.extraWidget,
   });
 
@@ -206,7 +208,7 @@ class HeaderWithIconAndInfo extends StatelessWidget {
         children: [
           if (iconData != null)
             Padding(
-              padding: const EdgeInsets.only(right: 10),
+              padding: const EdgeInsetsDirectional.only(end: 10),
               child: Transform.scale(
                 scale: iconScale,
                 child: Icon(

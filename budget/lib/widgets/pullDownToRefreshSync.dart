@@ -174,7 +174,7 @@ class _PullDownToRefreshSyncState extends State<PullDownToRefreshSync>
               child: Column(
                 children: [
                   Container(
-                    padding: EdgeInsets.only(
+                    padding: EdgeInsetsDirectional.only(
                         top: MediaQuery.viewPaddingOf(context).top),
                     height: maxDrag + MediaQuery.viewPaddingOf(context).top,
                     width: double.infinity,
@@ -206,7 +206,7 @@ class _PullDownToRefreshSyncState extends State<PullDownToRefreshSync>
                     ),
                   ),
                   Transform.scale(
-                    alignment: Alignment.topCenter,
+                    alignment: AlignmentDirectional.topCenter,
                     scaleX: curvedAnimationSlow.value,
                     child: Container(
                       height: 2,

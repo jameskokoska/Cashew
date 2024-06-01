@@ -51,7 +51,7 @@ class SelectChips<T> extends StatefulWidget {
   final Widget Function(T)? getAvatar;
   final Color? selectedColor;
   final scrollablePositionedList;
-  final EdgeInsets? padding;
+  final EdgeInsetsDirectional? padding;
   final bool allowMultipleSelected;
   final bool extraWidgetBeforeSticky;
   final Color? backgroundColor;
@@ -134,7 +134,7 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
           return Opacity(
             opacity: opacity,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
+              padding: const EdgeInsetsDirectional.symmetric(horizontal: 5),
               child: Material(
                 color: Colors.transparent,
                 child: Tappable(
@@ -157,11 +157,12 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
                             ),
                       labelPadding: avatar == null
                           ? null
-                          : EdgeInsets.only(
-                              left: 5, right: 10, top: 1, bottom: 1),
+                          : EdgeInsetsDirectional.only(
+                              start: 5, end: 10, top: 1, bottom: 1),
                       padding: avatar == null
                           ? null
-                          : EdgeInsets.only(left: 10, top: 7, bottom: 7),
+                          : EdgeInsetsDirectional.only(
+                              start: 10, top: 7, bottom: 7),
                       showCheckmark: widget.allowMultipleSelected == true &&
                           avatar == null,
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -200,17 +201,17 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
         widget.extraWidgetAfter ?? SizedBox.shrink(),
     ];
 
-    EdgeInsets scrollPadding = widget.padding ??
-        EdgeInsets.only(
-          left: widget.extraWidgetBeforeSticky == true &&
+    EdgeInsetsDirectional scrollPadding = widget.padding ??
+        EdgeInsetsDirectional.only(
+          start: widget.extraWidgetBeforeSticky == true &&
                   widget.extraWidgetBefore != null
               ? (widget.extraHorizontalPadding ?? 0) + 3
               : (widget.extraHorizontalPadding ?? 0) + 18,
-          right: (widget.extraHorizontalPadding ?? 0) + 18,
+          end: (widget.extraHorizontalPadding ?? 0) + 18,
         );
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsetsDirectional.only(bottom: 8),
       child: Stack(
         children: [
           children.length > 0
@@ -246,18 +247,18 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
                   SizedBox(
                     height: heightOfScroll,
                     child: Padding(
-                      padding: EdgeInsets.only(
-                          left: (widget.extraHorizontalPadding ?? 0) + 18),
+                      padding: EdgeInsetsDirectional.only(
+                          start: (widget.extraHorizontalPadding ?? 0) + 18),
                       child: widget.extraWidgetBefore ?? SizedBox.shrink(),
                     ),
                   ),
                 Expanded(
                   child: Align(
-                    alignment: Alignment.centerLeft,
+                    alignment: AlignmentDirectional.centerStart,
                     child: widget.wrapped
                         ? Padding(
                             padding: widget.padding ??
-                                EdgeInsets.symmetric(
+                                EdgeInsetsDirectional.symmetric(
                                     horizontal:
                                         (widget.extraHorizontalPadding ?? 0) +
                                             18),
@@ -271,9 +272,9 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
                           )
                         : LinearGradientFadedEdges(
                             enableBottom: false,
-                            enableRight: false,
+                            enableEnd: false,
                             enableTop: false,
-                            enableLeft: widget.extraWidgetBeforeSticky &&
+                            enableStart: widget.extraWidgetBeforeSticky &&
                                 widget.extraWidgetBefore != null,
                             child: SizedBox(
                               height: heightOfScroll,
@@ -297,7 +298,11 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
                                           itemScrollController,
                                       scrollOffsetController:
                                           scrollOffsetController,
-                                      padding: scrollPadding,
+                                      padding: directionalityReverse(context) ==
+                                              -1
+                                          ? EdgeInsets.zero
+                                          : convertEdgeInsetsDirectionalToEdgeInsets(
+                                              context, scrollPadding),
                                       scrollDirection: Axis.horizontal,
                                       shrinkWrap: true,
                                       // physics:
@@ -333,7 +338,7 @@ class SelectChipsAddButtonExtraWidget extends StatelessWidget {
       icon: iconData,
       onTap: onTap ?? () {},
       width: 40,
-      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+      margin: EdgeInsetsDirectional.symmetric(horizontal: 5, vertical: 0),
       openPage: openPage,
       borderRadius: 8,
     );

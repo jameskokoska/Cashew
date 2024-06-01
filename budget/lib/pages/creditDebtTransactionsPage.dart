@@ -104,7 +104,7 @@ class CreditDebtTransactionsState extends State<CreditDebtTransactions>
                       ),
                       if (hasSomeLongTermLoans)
                         Padding(
-                          padding: const EdgeInsets.only(top: 20),
+                          padding: const EdgeInsetsDirectional.only(top: 20),
                           child: ExtraInfoButton(
                             onTap: () {
                               _tabController.animateTo(1);
@@ -180,7 +180,7 @@ class CreditDebtTransactionsState extends State<CreditDebtTransactions>
     List<Widget> loanInfoAppBar = [
       SliverToBoxAdapter(
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 8.0),
+          padding: const EdgeInsetsDirectional.only(bottom: 8.0),
           child: CenteredAmountAndNumTransactions(
             totalWithCountStream: database.watchTotalWithCountOfCreditDebt(
               allWallets: Provider.of<AllWallets>(context),
@@ -222,7 +222,7 @@ class CreditDebtTransactionsState extends State<CreditDebtTransactions>
       ),
       SliverToBoxAdapter(
         child: Padding(
-          padding: EdgeInsets.symmetric(
+          padding: EdgeInsetsDirectional.symmetric(
               horizontal: getHorizontalPaddingConstrained(context)),
           child: Row(
             children: [
@@ -247,14 +247,14 @@ class CreditDebtTransactionsState extends State<CreditDebtTransactions>
                       setState(() {});
                     },
                     options: ["all", "lent", "borrowed"],
-                    customPadding: EdgeInsets.zero,
+                    customPadding: EdgeInsetsDirectional.zero,
                   ),
                 ),
               ),
               AnimatedSizeSwitcher(
                 child: searchValue == null
                     ? Padding(
-                        padding: const EdgeInsets.only(left: 7.0),
+                        padding: const EdgeInsetsDirectional.only(start: 7.0),
                         child: ButtonIcon(
                           key: ValueKey(1),
                           onTap: () {
@@ -277,12 +277,12 @@ class CreditDebtTransactionsState extends State<CreditDebtTransactions>
       ),
       SliverToBoxAdapter(
         child: Padding(
-          padding: EdgeInsets.symmetric(
+          padding: EdgeInsetsDirectional.symmetric(
               horizontal: getHorizontalPaddingConstrained(context)),
           child: AnimatedExpanded(
             expand: searchValue != null,
             child: Padding(
-              padding: const EdgeInsets.only(top: 8),
+              padding: const EdgeInsetsDirectional.only(top: 8),
               child: TextInput(
                 labelText: "search-loans-placeholder".tr(),
                 icon: appStateSettings["outlinedIcons"]
@@ -428,9 +428,10 @@ class CreditDebtTransactionsState extends State<CreditDebtTransactions>
                                 sliverAppBar,
                                 SliverToBoxAdapter(
                                   child: Padding(
-                                    padding: EdgeInsets.only(bottom: 13),
+                                    padding:
+                                        EdgeInsetsDirectional.only(bottom: 13),
                                     child: Padding(
-                                      padding: EdgeInsets.symmetric(
+                                      padding: EdgeInsetsDirectional.symmetric(
                                         horizontal:
                                             getHorizontalPaddingConstrained(
                                                   context,
@@ -441,7 +442,8 @@ class CreditDebtTransactionsState extends State<CreditDebtTransactions>
                                                 13,
                                       ),
                                       child: Padding(
-                                        padding: EdgeInsets.symmetric(
+                                        padding:
+                                            EdgeInsetsDirectional.symmetric(
                                           horizontal:
                                               getHorizontalPaddingConstrained(
                                                   context),
@@ -480,7 +482,8 @@ class CreditDebtTransactionsState extends State<CreditDebtTransactions>
                                                   Widget? child) {
                                                 return ClipRRect(
                                                   borderRadius:
-                                                      BorderRadius.circular(15),
+                                                      BorderRadiusDirectional
+                                                          .circular(15),
                                                   child: SizeTransition(
                                                     sizeFactor: _tabController
                                                         .animation!,
@@ -490,8 +493,8 @@ class CreditDebtTransactionsState extends State<CreditDebtTransactions>
                                                           .animation!,
                                                       child: Padding(
                                                         padding:
-                                                            const EdgeInsets
-                                                                .only(left: 7),
+                                                            const EdgeInsetsDirectional
+                                                                .only(start: 7),
                                                         child: ButtonIcon(
                                                           size: 48,
                                                           iconPadding: 25,
@@ -593,9 +596,10 @@ class AddLoanPopup extends StatelessWidget {
             children: [
               Expanded(
                 child: OutlinedButtonStacked(
-                  alignLeft: true,
+                  alignStart: true,
                   alignBeside: true,
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  padding: EdgeInsetsDirectional.symmetric(
+                      horizontal: 20, vertical: 20),
                   text: "long-term-loan".tr(),
                   iconData: appStateSettings["outlinedIcons"]
                       ? Icons.av_timer_outlined
@@ -630,9 +634,10 @@ class AddLoanPopup extends StatelessWidget {
             children: [
               Expanded(
                 child: OutlinedButtonStacked(
-                  alignLeft: true,
+                  alignStart: true,
                   alignBeside: true,
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  padding: EdgeInsetsDirectional.symmetric(
+                      horizontal: 20, vertical: 20),
                   text: "one-time-loan".tr(),
                   iconData: appStateSettings["outlinedIcons"]
                       ? Icons.event_available_outlined

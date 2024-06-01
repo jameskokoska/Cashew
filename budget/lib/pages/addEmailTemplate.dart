@@ -176,11 +176,11 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
           SizedBox(height: 15),
           Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
+              borderRadius: BorderRadiusDirectional.all(Radius.circular(15)),
               color: getColor(context, "lightDarkAccentHeavy"),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(15),
+              padding: const EdgeInsetsDirectional.all(15),
               child: SelectableText(
                 messageString,
                 toolbarOptions: ToolbarOptions(
@@ -233,11 +233,11 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
           SizedBox(height: 15),
           Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
+              borderRadius: BorderRadiusDirectional.all(Radius.circular(15)),
               color: getColor(context, "lightDarkAccentHeavy"),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(15),
+              padding: const EdgeInsetsDirectional.all(15),
               child: SelectableText(
                 messageString,
                 toolbarOptions: ToolbarOptions(
@@ -307,11 +307,11 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
           SizedBox(height: 15),
           Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
+              borderRadius: BorderRadiusDirectional.all(Radius.circular(15)),
               color: getColor(context, "lightDarkAccentHeavy"),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(15),
+              padding: const EdgeInsetsDirectional.all(15),
               child: SelectableText(
                 messageString,
                 toolbarOptions: ToolbarOptions(
@@ -409,7 +409,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
         },
         child: PageFramework(
           staticOverlay: Align(
-            alignment: Alignment.bottomCenter,
+            alignment: AlignmentDirectional.bottomCenter,
             child: SaveBottomButton(
               label: widget.scannerTemplate == null
                   ? "Add Template"
@@ -450,7 +450,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
           listWidgets: [
             Container(height: 10),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsetsDirectional.symmetric(horizontal: 20),
               child: TextInput(
                 autoFocus: kIsWeb && getIsFullScreen(context),
                 labelText: "name-placeholder".tr(),
@@ -459,7 +459,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                 onChanged: (text) {
                   setSelectedName(text);
                 },
-                padding: EdgeInsets.only(left: 7, right: 7),
+                padding: EdgeInsetsDirectional.only(start: 7, end: 7),
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
                 topContentPadding: 20,
@@ -467,7 +467,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
             ),
             SizedBox(height: 20),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsetsDirectional.symmetric(horizontal: 20),
               child: TextFont(
                 text: "Default Category",
                 textColor: getColor(context, "textLight"),
@@ -476,7 +476,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
             ),
             SizedBox(height: 2),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsetsDirectional.symmetric(horizontal: 20),
               child: TextFont(
                 text:
                     "Categories are also automatically set based on the Associated Title.",
@@ -543,7 +543,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
             ),
             SizedBox(height: 15),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25),
+              padding: const EdgeInsetsDirectional.symmetric(horizontal: 25),
               child: Button(
                   label: "Select Message",
                   onTap: () {
@@ -589,7 +589,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
             ),
             SizedBox(height: 15),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
+              padding: const EdgeInsetsDirectional.symmetric(horizontal: 15),
               child: selectedMessageString == null
                   ? Container()
                   : Column(
@@ -656,13 +656,14 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
             widget.scannerTemplate == null && selectedMessageString == null
                 ? SizedBox.shrink()
                 : Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    padding:
+                        const EdgeInsetsDirectional.symmetric(horizontal: 15),
                     child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 10),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 18, vertical: 15),
+                      margin: EdgeInsetsDirectional.symmetric(vertical: 10),
+                      padding: EdgeInsetsDirectional.symmetric(
+                          horizontal: 18, vertical: 15),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadiusDirectional.circular(15),
                         color: getColor(context, "lightDarkAccentHeavy"),
                       ),
                       child: Column(
@@ -745,7 +746,7 @@ class TemplateInfoBox extends StatelessWidget {
           : getColor(context, "lightDarkAccent"),
       borderRadius: 15,
       child: Padding(
-        padding: const EdgeInsets.symmetric(
+        padding: const EdgeInsetsDirectional.symmetric(
           horizontal: 18.0,
           vertical: 14,
         ),

@@ -33,7 +33,7 @@ class IncomeOutcomeArrow extends StatelessWidget {
         height: height,
         child: UnconstrainedBox(
           clipBehavior: Clip.hardEdge,
-          alignment: Alignment.center,
+          alignment: AlignmentDirectional.center,
           child: Icon(
             appStateSettings["outlinedIcons"]
                 ? Icons.arrow_drop_down_outlined

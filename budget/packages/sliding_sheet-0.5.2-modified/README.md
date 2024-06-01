@@ -205,7 +205,7 @@ Widget build(BuildContext context) {
               height: 56,
               width: double.infinity,
               color: Colors.green,
-              alignment: Alignment.center,
+              alignment: AlignmentDirectional.center,
               child: Text(
                 'This is the header',
                 style: Theme.of(context).textTheme.body1.copyWith(color: Colors.white),
@@ -217,7 +217,7 @@ Widget build(BuildContext context) {
               height: 56,
               width: double.infinity,
               color: Colors.yellow,
-              alignment: Alignment.center,
+              alignment: AlignmentDirectional.center,
               child: Text(
                 'This is the footer',
                 style: Theme.of(context).textTheme.body1.copyWith(color: Colors.black),

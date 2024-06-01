@@ -121,12 +121,12 @@ Future<DateTimeRangeOrAllTime> showCustomDateRangePicker(
             ),
             if (allTimeButton)
               Align(
-                alignment: Alignment.centerRight,
+                alignment: AlignmentDirectional.centerEnd,
                 child: Transform.translate(
                   offset: Offset(0, -10),
                   child: Padding(
-                    padding: EdgeInsets.only(
-                        right: max(
+                    padding: EdgeInsetsDirectional.only(
+                        end: max(
                             (MediaQuery.sizeOf(context).width / 2 - 300), 30)),
                     child: Opacity(
                       opacity: allTime ? 1 : 0.7,

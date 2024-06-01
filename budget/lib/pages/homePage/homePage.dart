@@ -185,7 +185,7 @@ class HomePageState extends State<HomePage>
             )
           : KeepAliveClientMixin(
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 15),
+                padding: const EdgeInsetsDirectional.only(bottom: 15),
                 child: homePageTransactionsList,
               ),
             );
@@ -288,7 +288,7 @@ class HomePageState extends State<HomePage>
                         Tooltip(
                           message: "edit-home".tr(),
                           child: IconButton(
-                            padding: EdgeInsets.all(15),
+                            padding: EdgeInsetsDirectional.all(15),
                             onPressed: () {
                               pushRoute(context, EditHomePage());
                             },
@@ -311,11 +311,11 @@ class HomePageState extends State<HomePage>
                                     1.34),
                             child: Container(
                               // Subtract one (1) here because of the thickness of the wiper above
-                              alignment: Alignment.bottomLeft,
-                              padding: EdgeInsets.only(
-                                  left: 9,
+                              alignment: AlignmentDirectional.bottomStart,
+                              padding: EdgeInsetsDirectional.only(
+                                  start: 9,
                                   bottom: enableDoubleColumn(context) ? 10 : 17,
-                                  right: 9),
+                                  end: 9),
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 mainAxisAlignment:
@@ -364,7 +364,7 @@ class HomePageState extends State<HomePage>
                                     if (homePageSectionsFullScreenLeft
                                         .contains(sectionKey))
                                       LinearGradientFadedEdges(
-                                        enableLeft: false,
+                                        enableStart: false,
                                         enableBottom: false,
                                         enableTop: false,
                                         child: ClipRRect(
@@ -384,7 +384,7 @@ class HomePageState extends State<HomePage>
                                     if (homePageSectionsFullScreenRight
                                         .contains(sectionKey))
                                       LinearGradientFadedEdges(
-                                        enableRight: false,
+                                        enableEnd: false,
                                         enableBottom: false,
                                         enableTop: false,
                                         child: ClipRRect(
@@ -472,13 +472,14 @@ class _HomePageRatingBoxState extends State<HomePageRatingBox> {
             )
           : Padding(
               key: ValueKey(2),
-              padding: const EdgeInsets.only(bottom: 13),
+              padding: const EdgeInsetsDirectional.only(bottom: 13),
               child: Container(
-                padding:
-                    EdgeInsets.only(left: 15, right: 15, bottom: 18, top: 18),
-                margin: EdgeInsets.symmetric(horizontal: 13),
+                padding: EdgeInsetsDirectional.only(
+                    start: 15, end: 15, bottom: 18, top: 18),
+                margin: EdgeInsetsDirectional.symmetric(horizontal: 13),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  borderRadius:
+                      BorderRadiusDirectional.all(Radius.circular(15)),
                   color: getColor(context, "lightDarkAccentHeavyLight"),
                   boxShadow: boxShadowCheck(boxShadowGeneral(context)),
                 ),
@@ -493,7 +494,8 @@ class _HomePageRatingBoxState extends State<HomePageRatingBox> {
                     ),
                     SizedBox(height: 7),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      padding:
+                          const EdgeInsetsDirectional.symmetric(horizontal: 10),
                       child: TextFont(
                         text: "consider-rating".tr(),
                         fontSize: 16,

@@ -404,7 +404,7 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
               key: ValueKey(1),
             )
           : Padding(
-              padding: const EdgeInsets.only(left: 7),
+              padding: const EdgeInsetsDirectional.only(start: 7),
               child: ButtonIcon(
                 key: ValueKey(2),
                 onTap: () {
@@ -422,7 +422,7 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
     );
 
     Widget historySettingsButtonAlwaysShow = Padding(
-      padding: const EdgeInsets.only(left: 7),
+      padding: const EdgeInsetsDirectional.only(start: 7),
       child: ButtonIcon(
         key: ValueKey(2),
         onTap: () {
@@ -473,7 +473,7 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
       animation: _tabController.animation!,
       builder: (BuildContext context, Widget? child) {
         return ClipRRect(
-          borderRadius: BorderRadius.circular(
+          borderRadius: BorderRadiusDirectional.circular(
               getPlatform() == PlatformOS.isIOS ? 10 : 15),
           child: SizeTransition(
             sizeFactor: _tabController.animation!,
@@ -490,7 +490,7 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
     Widget selectFiltersButton = AnimatedSwitcher(
       duration: Duration(milliseconds: 500),
       child: Padding(
-        padding: const EdgeInsets.only(left: 7),
+        padding: const EdgeInsetsDirectional.only(start: 7),
         child: ButtonIcon(
           key: ValueKey(
             searchFilters?.isClear(ignoreDateTimeRange: true),
@@ -512,7 +512,7 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
     );
 
     Widget tabDateFilterSelectorHeader = Padding(
-      padding: EdgeInsets.symmetric(
+      padding: EdgeInsetsDirectional.symmetric(
           horizontal: getHorizontalPaddingConstrained(
                 context,
                 enabled: enableDoubleColumn(context) == false &&
@@ -539,7 +539,7 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
         ),
         belowWidgetBuilder: (bool selectedHistoryTab) {
           return Padding(
-            padding: EdgeInsets.only(top: 10),
+            padding: EdgeInsetsDirectional.only(top: 10),
             child: Row(
               children: [
                 // Expanded(
@@ -549,7 +549,7 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                 //       key: ValueKey(getLabelOfSelectedCustomPeriod("")),
                 //       fontSize: 18.5,
                 //       borderRadius: 10,
-                //       padding: EdgeInsets.symmetric(
+                //       padding: EdgeInsetsDirectional.symmetric(
                 //           horizontal: 10, vertical: 5),
                 //       text: getLabelOfSelectedCustomPeriod(""),
                 //       iconData: appStateSettings["outlinedIcons"]
@@ -569,10 +569,10 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                       double animationProgress =
                           _tabController.animation?.value ?? 0;
                       return ClipRRect(
-                        borderRadius: BorderRadius.circular(
+                        borderRadius: BorderRadiusDirectional.circular(
                             getPlatform() == PlatformOS.isIOS ? 10 : 15),
                         child: Stack(
-                          alignment: Alignment.center,
+                          alignment: AlignmentDirectional.center,
                           children: [
                             IgnorePointer(
                               ignoring: animationProgress > 0.5,
@@ -611,7 +611,7 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                   ),
                 ),
                 Stack(
-                  alignment: Alignment.center,
+                  alignment: AlignmentDirectional.center,
                   children: [
                     historySettingsButton,
                     clearSelectedPeriodButton,
@@ -628,7 +628,7 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
     Widget appliedFilterChipsWidget =
         searchFilters != null && widget.wallet == null
             ? Padding(
-                padding: EdgeInsets.symmetric(
+                padding: EdgeInsetsDirectional.symmetric(
                   horizontal: getHorizontalPaddingConstrained(
                     context,
                     enabled: enableDoubleColumn(context) == false &&
@@ -636,7 +636,7 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                   ),
                 ),
                 child: AppliedFilterChips(
-                  padding: EdgeInsets.only(top: 10),
+                  padding: EdgeInsetsDirectional.only(top: 10),
                   searchFilters: searchFilters!,
                   openFiltersSelection: () {
                     selectAllSpendingFilters();
@@ -647,9 +647,9 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
             : SizedBox.shrink();
 
     Widget totalNetContainer = Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 13),
+      padding: const EdgeInsetsDirectional.symmetric(horizontal: 13),
       child: Padding(
-        padding: EdgeInsets.symmetric(
+        padding: EdgeInsetsDirectional.symmetric(
             horizontal: getHorizontalPaddingConstrained(
           context,
           enabled:
@@ -714,7 +714,7 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
             SizedBox(height: 10),
             if (widget.wallet == null)
               Padding(
-                padding: const EdgeInsets.only(bottom: 13),
+                padding: const EdgeInsetsDirectional.only(bottom: 13),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -725,16 +725,16 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
               ),
             if (widget.wallet != null)
               Padding(
-                padding: EdgeInsets.symmetric(
+                padding: EdgeInsetsDirectional.symmetric(
                     horizontal: 13 + getHorizontalPaddingConstrained(context)),
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 13),
+                      padding: const EdgeInsetsDirectional.only(bottom: 13),
                       child: selectedTabCurrent,
                     ),
                     // TipBox(
-                    //   padding: const EdgeInsets.only(bottom: 13),
+                    //   padding: const EdgeInsetsDirectional.only(bottom: 13),
                     //   onTap: () {
                     //     pushRoute(
                     //       context,
@@ -750,9 +750,10 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                 ),
               ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 13, left: 13, right: 13),
+              padding: const EdgeInsetsDirectional.only(
+                  bottom: 13, start: 13, end: 13),
               child: Padding(
-                padding: EdgeInsets.symmetric(
+                padding: EdgeInsetsDirectional.symmetric(
                     horizontal: getHorizontalPaddingConstrained(
                   context,
                   enabled: (enableDoubleColumn(context) == false &&
@@ -763,10 +764,10 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                   decoration: BoxDecoration(
                     color: getColor(context, "lightDarkAccentHeavyLight"),
                     boxShadow: boxShadowCheck(boxShadowGeneral(context)),
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadiusDirectional.circular(15),
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadiusDirectional.circular(15),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
@@ -1127,9 +1128,9 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
               ),
             ),
             // Padding(
-            //   padding: const EdgeInsets.only(bottom: 13, left: 13, right: 13),
+            //   padding: const EdgeInsetsDirectional.only(bottom: 13, start: 13, end: 13),
             //   child: Padding(
-            //     padding: EdgeInsets.symmetric(
+            //     padding: EdgeInsetsDirectional.symmetric(
             //       horizontal: getHorizontalPaddingConstrained(context),
             //     ),
             //     child: Row(
@@ -1369,7 +1370,7 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                 return Column(
                   children: [
                     Stack(
-                      alignment: Alignment.centerRight,
+                      alignment: AlignmentDirectional.centerEnd,
                       children: [
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -1377,8 +1378,8 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                             Expanded(
                               child: Container(
                                 height: totalHeaderHeight,
-                                padding:
-                                    EdgeInsets.only(top: topPaddingOfBanner),
+                                padding: EdgeInsetsDirectional.only(
+                                    top: topPaddingOfBanner),
                                 color: Theme.of(context)
                                     .colorScheme
                                     .secondaryContainer,
@@ -1397,14 +1398,14 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                             ),
                           ],
                         ),
-                        Positioned(
+                        PositionedDirectional(
                           top: topPaddingOfBanner + 5,
-                          right: 55,
+                          end: 55,
                           child: historySettingsButtonAlwaysShow,
                         ),
-                        Positioned(
+                        PositionedDirectional(
                           top: topPaddingOfBanner + 5,
-                          right: 10,
+                          end: 10,
                           child: selectFiltersButton,
                         ),
                       ],
@@ -1436,11 +1437,14 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                                                   child: SizedBox(height: 20)),
                                               SliverToBoxAdapter(
                                                 child: Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 13),
+                                                  padding:
+                                                      const EdgeInsetsDirectional
+                                                          .symmetric(
+                                                          horizontal: 13),
                                                   child: Stack(
-                                                    alignment: Alignment.center,
+                                                    alignment:
+                                                        AlignmentDirectional
+                                                            .center,
                                                     children: [
                                                       selectedTabCurrent,
                                                       selectedTabPeriodSelected(
@@ -1450,8 +1454,8 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                                                                   false);
                                                         },
                                                       ),
-                                                      Positioned(
-                                                        right: 0,
+                                                      PositionedDirectional(
+                                                        end: 0,
                                                         child:
                                                             clearSelectedPeriodButton,
                                                       )
@@ -1482,9 +1486,10 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                                                   child: SizedBox(height: 20)),
                                               SliverToBoxAdapter(
                                                 child: Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 13),
+                                                  padding:
+                                                      const EdgeInsetsDirectional
+                                                          .symmetric(
+                                                          horizontal: 13),
                                                   child: selectedTabHistory,
                                                 ),
                                               ),
@@ -1522,13 +1527,14 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                               if (widget.wallet != null)
                                 SliverToBoxAdapter(
                                   child: Padding(
-                                    padding: EdgeInsets.symmetric(
+                                    padding: EdgeInsetsDirectional.symmetric(
                                       horizontal:
                                           getHorizontalPaddingConstrained(
                                               context),
                                     ),
                                     child: Padding(
-                                      padding: const EdgeInsets.only(top: 8),
+                                      padding: const EdgeInsetsDirectional.only(
+                                          top: 8),
                                       child: totalNetContainer,
                                     ),
                                   ),
@@ -1597,13 +1603,14 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                         forceHide: selectedDateTimeRange == null,
                         animationProgress: animationProgress,
                         selectPeriodContent: Padding(
-                          padding: const EdgeInsets.only(bottom: 3, top: 3),
+                          padding: const EdgeInsetsDirectional.only(
+                              bottom: 3, top: 3),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
+                                padding: const EdgeInsetsDirectional.symmetric(
+                                    horizontal: 10),
                                 child: IconButtonScaled(
                                   iconData: appStateSettings["outlinedIcons"]
                                       ? Icons.chevron_left_outlined
@@ -1637,8 +1644,9 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                                   opacity:
                                       selectedDateTimeRangeIndex == 0 ? 0.5 : 1,
                                   child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
+                                    padding:
+                                        const EdgeInsetsDirectional.symmetric(
+                                            horizontal: 10),
                                     child: IconButtonScaled(
                                       iconData:
                                           appStateSettings["outlinedIcons"]
@@ -1786,7 +1794,7 @@ class _SelectedPeriodAppBarState extends State<SelectedPeriodAppBar> {
         clipper: TopSideClipper(totalTranslation),
         child: Stack(
           children: [
-            AnimatedPositioned(
+            AnimatedPositionedDirectional(
               curve: Curves.easeInOutCubicEmphasized,
               duration: Duration(milliseconds: 650),
               top: (dropdown &&
@@ -1794,8 +1802,8 @@ class _SelectedPeriodAppBarState extends State<SelectedPeriodAppBar> {
                       widget.forceHide == false)
                   ? totalTranslation
                   : (-bannerSize.height),
-              left: 0,
-              right: 0,
+              start: 0,
+              end: 0,
               child: WidgetSize(
                 onChange: (size) {
                   bannerSize = size;
@@ -1962,7 +1970,7 @@ class _WalletDetailsCategorySelectionState
       SliverToBoxAdapter(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.only(top: 8.0),
+            padding: const EdgeInsetsDirectional.only(top: 8.0),
             child: ViewAllTransactionsButton(
               onPress: () {
                 pushRoute(
@@ -2050,14 +2058,14 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(
+          padding: EdgeInsetsDirectional.symmetric(
               horizontal: getHorizontalPaddingConstrained(
             context,
             enabled: enableDoubleColumn(context) == false ||
                 widget.isAllSpending == false,
           )),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 13),
+            padding: const EdgeInsetsDirectional.symmetric(horizontal: 13),
             child: IncomeExpenseTabSelector(
               hasBorderRadius: true,
               onTabChanged: (income) {
@@ -2259,11 +2267,11 @@ class WalletDetailsLineGraph extends StatelessWidget {
       //     10, //we want this because the corner has the load more dates button
       builder: (Widget spendingGraph) {
         return Padding(
-          padding: const EdgeInsets.only(bottom: 13),
+          padding: const EdgeInsetsDirectional.only(bottom: 13),
           child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 13),
+            margin: EdgeInsetsDirectional.symmetric(horizontal: 13),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
+              borderRadius: BorderRadiusDirectional.all(Radius.circular(15)),
               color: getColor(context, "lightDarkAccentHeavyLight"),
               boxShadow: boxShadowCheck(boxShadowGeneral(context)),
             ),
@@ -2384,14 +2392,14 @@ class _AllSpendingPastSpendingGraphState
               : boxShadowCheck(boxShadowGeneral(context)),
         ),
         margin: getPlatform() == PlatformOS.isIOS
-            ? EdgeInsets.zero
-            : EdgeInsets.only(
-                left: getHorizontalPaddingConstrained(
+            ? EdgeInsetsDirectional.zero
+            : EdgeInsetsDirectional.only(
+                start: getHorizontalPaddingConstrained(
                       context,
                       enabled: enableDoubleColumn(context) == false,
                     ) +
                     13,
-                right: getHorizontalPaddingConstrained(
+                end: getHorizontalPaddingConstrained(
                       context,
                       enabled: enableDoubleColumn(context) == false,
                     ) +
@@ -2399,8 +2407,8 @@ class _AllSpendingPastSpendingGraphState
                 bottom: 10,
               ),
         child: ClipRRect(
-          borderRadius:
-              BorderRadius.circular(getPlatform() == PlatformOS.isIOS ? 0 : 18),
+          borderRadius: BorderRadiusDirectional.circular(
+              getPlatform() == PlatformOS.isIOS ? 0 : 18),
           child: Stack(
             children: [
               Tappable(
@@ -2409,7 +2417,7 @@ class _AllSpendingPastSpendingGraphState
                   widget.onEntryTapped(budgetRange, index);
                 },
                 child: Padding(
-                  padding: EdgeInsets.symmetric(
+                  padding: EdgeInsetsDirectional.symmetric(
                       horizontal: (getPlatform() == PlatformOS.isIOS
                               ? getHorizontalPaddingConstrained(
                                   context,
@@ -2443,9 +2451,9 @@ class _AllSpendingPastSpendingGraphState
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(
+                                  padding: const EdgeInsetsDirectional.only(
                                     bottom: 2,
-                                    left: 5,
+                                    start: 5,
                                   ),
                                   child: TextFont(
                                     text: budgetRange.start.year !=
@@ -2514,7 +2522,7 @@ class _AllSpendingPastSpendingGraphState
                 ),
               ),
               if (getPlatform() != PlatformOS.isIOS)
-                Positioned(
+                PositionedDirectional(
                   top: 0,
                   bottom: 0,
                   child: AnimatedExpanded(
@@ -2658,11 +2666,13 @@ class _AllSpendingPastSpendingGraphState
                                 child: Stack(
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 7, horizontal: 0),
+                                      padding:
+                                          const EdgeInsetsDirectional.symmetric(
+                                              vertical: 7, horizontal: 0),
                                       child: Padding(
                                         padding:
-                                            const EdgeInsets.only(right: 5),
+                                            const EdgeInsetsDirectional.only(
+                                                end: 5),
                                         child: ClipRRect(
                                           child: BudgetHistoryLineGraph(
                                             forceMinYIfPositive: widget
@@ -2740,8 +2750,8 @@ class _AllSpendingPastSpendingGraphState
                                           .canvasColor
                                           .withOpacity(0.0),
                                     ],
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
+                                    begin: AlignmentDirectional.topCenter,
+                                    end: AlignmentDirectional.bottomCenter,
                                     stops: [0.1, 1],
                                   ),
                                 ),
@@ -2829,7 +2839,7 @@ class _AllSpendingPastSpendingGraphState
                           SliverToBoxAdapter(
                             child: Center(
                               child: Padding(
-                                padding: EdgeInsets.only(
+                                padding: EdgeInsetsDirectional.only(
                                   bottom: 45,
                                   top: getPlatform() == PlatformOS.isIOS
                                       ? 10
@@ -2894,11 +2904,11 @@ class SelectedPeriodHeaderLabel extends StatelessWidget {
     return Tappable(
       color: color,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        padding: EdgeInsetsDirectional.symmetric(horizontal: 10, vertical: 5),
         child: Row(
           children: [
             Padding(
-              padding: const EdgeInsets.all(5),
+              padding: const EdgeInsetsDirectional.all(5),
               child: Icon(
                 iconData,
                 size: 24,
@@ -2975,8 +2985,8 @@ class AmountSpentEntryRow extends StatelessWidget {
                 color: getColor(context, "lightDarkAccentHeavyLight"),
                 borderRadius: 0,
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+                  padding: const EdgeInsetsDirectional.symmetric(
+                      horizontal: 20, vertical: 6),
                   child: Container(
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
@@ -3036,8 +3046,8 @@ class AmountSpentEntryRow extends StatelessWidget {
                                   ),
                                   Expanded(
                                     child: Container(
-                                      margin: EdgeInsets.only(
-                                          left: 15, right: 10, top: 1),
+                                      margin: EdgeInsetsDirectional.only(
+                                          start: 15, end: 10, top: 1),
                                       height: 2,
                                       color: Theme.of(context)
                                           .colorScheme

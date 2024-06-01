@@ -37,7 +37,8 @@ class HomePageAllSpendingSummary extends StatelessWidget {
                 appStateSettings["allSpendingSummaryAllWallets"] == true)
               walletPks = null;
             return Padding(
-              padding: const EdgeInsets.only(bottom: 13, left: 13, right: 13),
+              padding: const EdgeInsetsDirectional.only(
+                  bottom: 13, start: 13, end: 13),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,

@@ -40,7 +40,7 @@ class CategoryIcon extends StatelessWidget {
   final VoidCallback? onTap;
   final bool label;
   final double labelSize;
-  final EdgeInsets? margin;
+  final EdgeInsetsDirectional? margin;
   final double sizePadding;
   final bool outline;
   final bool noBackground;
@@ -60,13 +60,13 @@ class CategoryIcon extends StatelessWidget {
     Widget child = Column(
       children: [
         Stack(
-          alignment: Alignment.center,
+          alignment: AlignmentDirectional.center,
           children: [
             AnimatedContainer(
               duration: Duration(milliseconds: 250),
               margin: margin ??
-                  EdgeInsets.only(
-                      left: 8, right: 8, top: 8, bottom: label ? 2 : 8),
+                  EdgeInsetsDirectional.only(
+                      start: 8, end: 8, top: 8, bottom: label ? 2 : 8),
               height: size + sizePadding,
               width: size + sizePadding,
               decoration: outline
@@ -83,16 +83,16 @@ class CategoryIcon extends StatelessWidget {
                             inverse: true),
                         width: 3,
                       ),
-                      borderRadius:
-                          BorderRadius.all(Radius.circular(borderRadius)),
+                      borderRadius: BorderRadiusDirectional.all(
+                          Radius.circular(borderRadius)),
                     )
                   : BoxDecoration(
                       border: Border.all(
                         color: Colors.transparent,
                         width: 0,
                       ),
-                      borderRadius:
-                          BorderRadius.all(Radius.circular(borderRadius)),
+                      borderRadius: BorderRadiusDirectional.all(
+                          Radius.circular(borderRadius)),
                     ),
               child: Tappable(
                 color: noBackground && category != null
@@ -176,7 +176,7 @@ class CategoryIcon extends StatelessWidget {
         ),
         label
             ? Container(
-                margin: EdgeInsets.only(top: 3),
+                margin: EdgeInsetsDirectional.only(top: 3),
                 width: 60,
                 child: Center(
                   child: TextFont(
@@ -291,7 +291,7 @@ class EmojiIcon extends StatelessWidget {
       data: MediaQueryData(textScaleFactor: 1),
       child: IgnorePointer(
         child: Padding(
-          padding: EdgeInsets.only(
+          padding: EdgeInsetsDirectional.only(
               bottom: size * 0.185 - (correctionPaddingBottom ?? 0)),
           child: Transform.scale(
             scale: emojiScale,

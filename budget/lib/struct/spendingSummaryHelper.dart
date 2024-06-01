@@ -148,14 +148,14 @@ class PieChartOptions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(
+      padding: EdgeInsetsDirectional.symmetric(
           horizontal: getHorizontalPaddingConstrained(context,
                   enabled: useHorizontalPaddingConstrained) +
               2),
       child: Transform.translate(
         offset: Offset(0, 5),
         child: Align(
-          alignment: Alignment.bottomRight,
+          alignment: AlignmentDirectional.bottomEnd,
           child: Builder(builder: (context) {
             bool showClearButton = selectedCategory != null;
             return Row(
@@ -167,7 +167,7 @@ class PieChartOptions extends StatelessWidget {
                   child: Tooltip(
                     message: "clear-selection".tr(),
                     child: IconButton(
-                      padding: EdgeInsets.all(15),
+                      padding: EdgeInsetsDirectional.all(15),
                       onPressed: onClearSelection,
                       icon: Icon(
                         appStateSettings["outlinedIcons"]
@@ -183,11 +183,12 @@ class PieChartOptions extends StatelessWidget {
                     if (hasSubCategories)
                       Transform.translate(
                         key: ValueKey(showClearButton),
-                        offset: Offset(onEditSpendingGoals != null ? 10 : 0, 0),
+                        offset: Offset(onEditSpendingGoals != null ? 10 : 0, 0)
+                            .withDirectionality(context),
                         child: Tooltip(
                           message: "view-subcategories".tr(),
                           child: IconButton(
-                            padding: EdgeInsets.all(15),
+                            padding: EdgeInsetsDirectional.all(15),
                             onPressed: toggleAllSubCategories,
                             icon: ScaledAnimatedSwitcher(
                               keyToWatch: showAllSubcategories.toString(),
@@ -211,7 +212,7 @@ class PieChartOptions extends StatelessWidget {
                             ? "edit-saving-goals".tr()
                             : "edit-spending-goals".tr(),
                         child: IconButton(
-                          padding: EdgeInsets.all(15),
+                          padding: EdgeInsetsDirectional.all(15),
                           onPressed: onEditSpendingGoals,
                           icon: Icon(
                             appStateSettings["outlinedIcons"]

@@ -116,7 +116,7 @@ class _ExchangeRatesState extends State<ExchangeRates> {
       title: "exchange-rates".tr(),
       actions: [
         IconButton(
-          padding: EdgeInsets.all(15),
+          padding: EdgeInsetsDirectional.all(15),
           tooltip: "info".tr(),
           onPressed: () {
             openPopup(
@@ -150,7 +150,7 @@ class _ExchangeRatesState extends State<ExchangeRates> {
         ),
         SliverToBoxAdapter(
           child: Padding(
-            padding: const EdgeInsets.only(top: 5),
+            padding: const EdgeInsetsDirectional.only(top: 5),
             child: Row(
               children: [
                 SizedBox(width: 15),
@@ -166,7 +166,7 @@ class _ExchangeRatesState extends State<ExchangeRates> {
                       });
                     },
                     autoFocus: false,
-                    padding: EdgeInsets.zero,
+                    padding: EdgeInsetsDirectional.zero,
                   ),
                 ),
                 SizedBox(width: 10),
@@ -204,9 +204,9 @@ class _ExchangeRatesState extends State<ExchangeRates> {
         ),
         SliverToBoxAdapter(
           child: Padding(
-            padding: EdgeInsets.only(top: 5),
+            padding: EdgeInsetsDirectional.only(top: 5),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 17),
+              padding: const EdgeInsetsDirectional.symmetric(horizontal: 17),
               child: TextFont(
                 text: "select-an-entry-to-set-custom-exchange-rate".tr(),
                 maxLines: 2,
@@ -219,9 +219,10 @@ class _ExchangeRatesState extends State<ExchangeRates> {
         ),
         SliverToBoxAdapter(
           child: Padding(
-            padding: EdgeInsets.only(top: 7),
+            padding: EdgeInsetsDirectional.only(top: 7),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 5),
+              padding: const EdgeInsetsDirectional.symmetric(
+                  horizontal: 17, vertical: 5),
               child: TextFont(
                 text: "1 " +
                     Provider.of<AllWallets>(context)
@@ -261,8 +262,8 @@ class _ExchangeRatesState extends State<ExchangeRates> {
                           .toString(),
                       key: ValueKey(key),
                       child: Padding(
-                        padding:
-                            EdgeInsets.only(bottom: isCustomCurrency ? 5 : 0),
+                        padding: EdgeInsetsDirectional.only(
+                            bottom: isCustomCurrency ? 5 : 0),
                         child: Tappable(
                           onTap: () async {
                             await openBottomSheet(
@@ -280,15 +281,16 @@ class _ExchangeRatesState extends State<ExchangeRates> {
                                   .colorScheme
                                   .secondaryContainer,
                           child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8),
+                            padding:
+                                EdgeInsetsDirectional.symmetric(horizontal: 8),
                             child: OutlinedContainer(
                               enabled: isCustomCurrency,
                               filled: appStateSettings["customCurrencyAmounts"]
                                       ?[key] !=
                                   null,
                               child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 7),
+                                padding: const EdgeInsetsDirectional.symmetric(
+                                    horizontal: 7),
                                 child: Row(
                                   children: [
                                     Expanded(
@@ -326,7 +328,7 @@ class _ExchangeRatesState extends State<ExchangeRates> {
                                     ),
                                     if (isCustomCurrency)
                                       IconButton(
-                                        padding: EdgeInsets.all(15),
+                                        padding: EdgeInsetsDirectional.all(15),
                                         tooltip: "delete-currency".tr(),
                                         onPressed: () {
                                           deleteCustomCurrency(key);

@@ -923,7 +923,7 @@ class _SlidingSheetState extends State<SlidingSheet>
           ),
           if (hasHeader)
             Align(
-              alignment: Alignment.topCenter,
+              alignment: AlignmentDirectional.topCenter,
               child: ElevatedContainer(
                 shadowColor: widget.shadowColor,
                 elevation: widget.liftOnScrollHeaderElevation,
@@ -938,7 +938,7 @@ class _SlidingSheetState extends State<SlidingSheet>
             ),
           if (hasFooter)
             Align(
-              alignment: Alignment.bottomCenter,
+              alignment: AlignmentDirectional.bottomCenter,
               child: ElevatedContainer(
                 shadowColor: widget.shadowColor,
                 elevation: widget.liftOnScrollFooterElevation,
@@ -980,7 +980,7 @@ class _SlidingSheetState extends State<SlidingSheet>
                   heightFactor: isLaidOut
                       ? currentExtent.clamp(headerFooterExtent, 1.0)
                       : 1.0,
-                  alignment: Alignment.bottomCenter,
+                  alignment: AlignmentDirectional.bottomCenter,
                   child: FractionalTranslation(
                     translation: Offset(0, translation),
                     child: SheetContainer(

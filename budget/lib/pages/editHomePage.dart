@@ -444,7 +444,7 @@ class _EditHomePageState extends State<EditHomePage> {
           fontSize: 18,
           maxLines: 2,
         ),
-        subtitleAlignment: Alignment.bottomLeft,
+        subtitleAlignment: AlignmentDirectional.bottomStart,
         subtitleSize: 10,
         slivers: [
           if (enableDoubleColumn(context))
@@ -507,8 +507,8 @@ class _EditHomePageState extends State<EditHomePage> {
                 canReorder: true,
                 key: ValueKey(key),
                 currentReorder: currentReorder != -1 && currentReorder != index,
-                padding:
-                    EdgeInsets.only(left: 18, right: 0, top: 16, bottom: 16),
+                padding: EdgeInsetsDirectional.only(
+                    start: 18, end: 0, top: 16, bottom: 16),
                 extraWidget: Row(
                   children: [
                     getPlatform() == PlatformOS.isIOS
@@ -585,7 +585,8 @@ class PanelSectionSeparator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 10),
+      padding: const EdgeInsetsDirectional.only(
+          start: 15, end: 15, top: 20, bottom: 10),
       child: Row(
         children: [
           if (orderKey == "ORDER:LEFT")
@@ -596,7 +597,7 @@ class PanelSectionSeparator extends StatelessWidget {
             ),
           Expanded(
               child: HorizontalBreak(
-            padding: const EdgeInsets.all(15),
+            padding: const EdgeInsetsDirectional.all(15),
           )),
           if (orderKey == "ORDER:CENTER")
             TextFont(
@@ -607,7 +608,7 @@ class PanelSectionSeparator extends StatelessWidget {
           if (orderKey == "ORDER:CENTER")
             Expanded(
                 child: HorizontalBreak(
-              padding: const EdgeInsets.all(15),
+              padding: const EdgeInsetsDirectional.all(15),
             )),
           if (orderKey == "ORDER:RIGHT")
             TextFont(
@@ -675,11 +676,11 @@ class _TransactionsListHomePageBottomSheetSettingsState
                 : Symbols.event_upcoming_rounded,
           ),
           HorizontalBreakAbove(
-            padding: EdgeInsets.symmetric(vertical: 15),
+            padding: EdgeInsetsDirectional.symmetric(vertical: 15),
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  padding: const EdgeInsetsDirectional.symmetric(horizontal: 5),
                   child: TextFont(
                     text:
                         "applies-when-switching-tabs-in-the-homepage-transactions-list"
@@ -726,7 +727,7 @@ Future openPieChartHomePageBottomSheetSettings(BuildContext context) async {
             homePageWidgetDisplay: HomePageWidgetDisplay.PieChart,
           ),
           HorizontalBreakAbove(
-            padding: EdgeInsets.symmetric(vertical: 15),
+            padding: EdgeInsetsDirectional.symmetric(vertical: 15),
             child: IncomeAndExpenseOnlyPicker(
               initialValue:
                   appStateSettings["pieChartIncomeAndExpenseOnly"] == true,
@@ -756,7 +757,7 @@ Future openPieChartHomePageBottomSheetSettings(BuildContext context) async {
       //       },
       //     ),
       //     Padding(
-      //       padding: const EdgeInsets.only(top: 5),
+      //       padding: const EdgeInsetsDirectional.only(top: 5),
       //       child: HorizontalBreakAbove(
       //         enabled: true,
       //         child: PeriodCyclePicker(
@@ -795,7 +796,7 @@ class _IncomeAndExpenseOnlyPickerState
                 opacity: pieChartIncomeAndExpenseOnly ? 1 : 0.5,
                 child: OutlinedButtonStacked(
                   filled: pieChartIncomeAndExpenseOnly,
-                  alignLeft: true,
+                  alignStart: true,
                   alignBeside: true,
                   afterWidget: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -810,8 +811,8 @@ class _IncomeAndExpenseOnlyPickerState
                     ],
                   ),
                   text: "only-expense-income".tr(),
-                  padding:
-                      EdgeInsets.only(left: 20, right: 15, top: 15, bottom: 15),
+                  padding: EdgeInsetsDirectional.only(
+                      start: 20, end: 15, top: 15, bottom: 15),
                   iconData: null,
                   onTap: () {
                     widget.onChanged(!pieChartIncomeAndExpenseOnly);
@@ -834,7 +835,7 @@ class _IncomeAndExpenseOnlyPickerState
                 opacity: !pieChartIncomeAndExpenseOnly ? 1 : 0.5,
                 child: OutlinedButtonStacked(
                   filled: !pieChartIncomeAndExpenseOnly,
-                  alignLeft: true,
+                  alignStart: true,
                   alignBeside: true,
                   afterWidget: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -849,8 +850,8 @@ class _IncomeAndExpenseOnlyPickerState
                     ],
                   ),
                   text: "all-outgoing-incoming".tr(),
-                  padding:
-                      EdgeInsets.only(left: 20, right: 15, top: 15, bottom: 15),
+                  padding: EdgeInsetsDirectional.only(
+                      start: 20, end: 15, top: 15, bottom: 15),
                   iconData: null,
                   onTap: () {
                     widget.onChanged(!pieChartIncomeAndExpenseOnly);
@@ -894,7 +895,8 @@ class _HomePageEditRowEntryUsernameState
   Widget build(BuildContext context) {
     return EditRowEntry(
       canReorder: false,
-      padding: EdgeInsets.only(left: 18, right: 0, top: 16, bottom: 16),
+      padding:
+          EdgeInsetsDirectional.only(start: 18, end: 0, top: 16, bottom: 16),
       extraWidget: Row(
         children: [
           getPlatform() == PlatformOS.isIOS

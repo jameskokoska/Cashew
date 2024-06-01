@@ -146,7 +146,7 @@ class AccountsPageState extends State<AccountsPage> {
                       SizedBox(height: 35),
                       getPlatform() == PlatformOS.isIOS
                           ? Container(
-                              padding: EdgeInsets.all(20),
+                              padding: EdgeInsetsDirectional.all(20),
                               decoration: BoxDecoration(
                                 color: Theme.of(context).colorScheme.primary,
                                 shape: BoxShape.circle,
@@ -210,14 +210,15 @@ class AccountsPageState extends State<AccountsPage> {
                               }
                             }
                           },
-                          padding: EdgeInsets.symmetric(
+                          padding: EdgeInsetsDirectional.symmetric(
                               horizontal: 17, vertical: 12),
                           fontSize: 15,
                         ),
                       ),
                       SizedBox(height: 25),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                        padding: const EdgeInsetsDirectional.symmetric(
+                            horizontal: 18.0),
                         child: Row(
                           children: [
                             Expanded(
@@ -263,7 +264,8 @@ class AccountsPageState extends State<AccountsPage> {
                       ),
                       SizedBox(height: 15),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                        padding: const EdgeInsetsDirectional.symmetric(
+                            horizontal: 18.0),
                         child: Row(
                           children: [
                             Expanded(
@@ -287,7 +289,7 @@ class AccountsPageState extends State<AccountsPage> {
                       ),
                       if (kIsWeb)
                         TipBox(
-                          padding: const EdgeInsets.symmetric(
+                          padding: const EdgeInsetsDirectional.symmetric(
                               vertical: 20, horizontal: 7),
                           settingsString: "autoLoginDisabledOnWebTip",
                           onTap: () {
@@ -323,7 +325,7 @@ class AccountsPageState extends State<AccountsPage> {
                         ),
                       // if (kIsWeb)
                       //   Padding(
-                      //     padding: const EdgeInsets.symmetric(
+                      //     padding: const EdgeInsetsDirectional.symmetric(
                       //         horizontal: 18, vertical: 15),
                       //     child: SettingsContainerSwitch(
                       //       icon: appStateSettings["outlinedIcons"]
@@ -347,7 +349,7 @@ class AccountsPageState extends State<AccountsPage> {
                       //   ),
                       getPlatform() == PlatformOS.isIOS
                           ? Padding(
-                              padding: const EdgeInsets.symmetric(
+                              padding: const EdgeInsetsDirectional.symmetric(
                                   vertical: 20, horizontal: 7),
                               child: Tappable(
                                 borderRadius: 15,
@@ -356,8 +358,9 @@ class AccountsPageState extends State<AccountsPage> {
                                       "https://cashewapp.web.app/policy.html");
                                 },
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 10),
+                                  padding:
+                                      const EdgeInsetsDirectional.symmetric(
+                                          horizontal: 8, vertical: 10),
                                   child: TextFont(
                                     text:
                                         "google-drive-backup-description".tr(),
@@ -431,7 +434,8 @@ class _SignInWithGoogleFlyInState extends State<SignInWithGoogleFlyIn> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 20),
+      padding:
+          const EdgeInsetsDirectional.symmetric(horizontal: 22, vertical: 20),
       child: SlideFadeTransition(
         animate: true,
         animationDuration: Duration(milliseconds: 1700),
@@ -441,12 +445,13 @@ class _SignInWithGoogleFlyInState extends State<SignInWithGoogleFlyIn> {
         child: AnimatedExpanded(
           expand: !hide,
           child: Align(
-            alignment: Alignment.topRight,
+            alignment: AlignmentDirectional.topEnd,
             child: ConstrainedBox(
               constraints: BoxConstraints(maxWidth: 400),
               child: Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(13)),
+                  borderRadius:
+                      BorderRadiusDirectional.all(Radius.circular(13)),
                   color: getColor(context, "lightDarkAccentHeavyLight"),
                   boxShadow: boxShadowCheck(boxShadowSharp(context)),
                 ),
@@ -468,9 +473,9 @@ class _SignInWithGoogleFlyInState extends State<SignInWithGoogleFlyIn> {
                     children: [
                       Flexible(
                         child: Padding(
-                          padding: const EdgeInsets.only(
-                            left: 25,
-                            right: 15,
+                          padding: const EdgeInsetsDirectional.only(
+                            start: 25,
+                            end: 15,
                             top: 15,
                             bottom: 15,
                           ),
@@ -492,7 +497,8 @@ class _SignInWithGoogleFlyInState extends State<SignInWithGoogleFlyIn> {
                                 ],
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(left: 18.0),
+                                padding: const EdgeInsetsDirectional.only(
+                                    start: 18.0),
                                 child: IconButtonScaled(
                                   iconData: appStateSettings["outlinedIcons"]
                                       ? Icons.close_outlined
@@ -511,7 +517,7 @@ class _SignInWithGoogleFlyInState extends State<SignInWithGoogleFlyIn> {
                         ),
                       ),
                       HorizontalBreak(
-                        padding: EdgeInsets.zero,
+                        padding: EdgeInsetsDirectional.zero,
                         color: dynamicPastel(
                           context,
                           Theme.of(context).colorScheme.secondaryContainer,
@@ -520,7 +526,7 @@ class _SignInWithGoogleFlyInState extends State<SignInWithGoogleFlyIn> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(
+                        padding: const EdgeInsetsDirectional.symmetric(
                             horizontal: 22, vertical: 12),
                         child: Button(
                           label: "Continue with Google",
@@ -536,8 +542,8 @@ class _SignInWithGoogleFlyInState extends State<SignInWithGoogleFlyIn> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(
-                            left: 22, right: 22, bottom: 22),
+                        padding: const EdgeInsetsDirectional.only(
+                            start: 22, end: 22, bottom: 22),
                         child: TextFont(
                           text: "onboarding-info-3".tr(),
                           maxLines: 10,

@@ -343,7 +343,7 @@ class NavigationDestination extends StatelessWidget {
         );
 
         return Stack(
-          alignment: Alignment.center,
+          alignment: AlignmentDirectional.center,
           children: <Widget>[
             NavigationIndicator(
                 animation: animation,
@@ -372,10 +372,10 @@ class NavigationDestination extends StatelessWidget {
             navigationBarTheme.labelTextStyle?.resolve(unselectedState) ??
                 defaults.labelTextStyle!.resolve(unselectedState);
         return Padding(
-          padding: EdgeInsets.only(
+          padding: EdgeInsetsDirectional.only(
               top: 4,
-              left: _isForwardOrCompleted(animation) ? 0 : 3,
-              right: _isForwardOrCompleted(animation) ? 0 : 3),
+              start: _isForwardOrCompleted(animation) ? 0 : 3,
+              end: _isForwardOrCompleted(animation) ? 0 : 3),
           child: _ClampTextScaleFactor(
             // Don't scale labels of destinations, instead, tooltip text will
             // upscale.
@@ -683,7 +683,7 @@ class NavigationIndicator extends StatelessWidget {
   /// This is used to create a [RoundedRectangleBorder] shape for the indicator.
   /// This is ignored if [shape] is non-null.
   ///
-  /// Defaults to `BorderRadius.circular(16)`.
+  /// Defaults to `BorderRadiusDirectional.circular(16)`.
   final BorderRadius borderRadius;
 
   /// The shape of the indicator.
@@ -708,7 +708,7 @@ class NavigationIndicator extends StatelessWidget {
                     .transform(animation.value));
 
         return Transform(
-          alignment: Alignment.center,
+          alignment: AlignmentDirectional.center,
           // Scale in the X direction only.
           transform: Matrix4.diagonal3Values(
             scale,
@@ -896,7 +896,7 @@ class _NavigationBarDestinationSemantics extends StatelessWidget {
         );
       },
       child: Stack(
-        alignment: Alignment.center,
+        alignment: AlignmentDirectional.center,
         children: <Widget>[
           child,
           Semantics(
@@ -1332,7 +1332,7 @@ class _NavigationBarDefaultsM2 extends NavigationBarThemeData {
           height: 80.0,
           elevation: 0.0,
           indicatorShape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(16))),
+              borderRadius: BorderRadiusDirectional.all(Radius.circular(16))),
           labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
         );
 

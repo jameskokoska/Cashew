@@ -46,7 +46,7 @@ class PopupFramework extends StatelessWidget {
               if (title != null) SizedBox(height: 17),
               getPlatform() == PlatformOS.isIOS
                   ? Stack(
-                      alignment: Alignment.topLeft,
+                      alignment: AlignmentDirectional.topStart,
                       children: [
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -55,7 +55,8 @@ class PopupFramework extends StatelessWidget {
                           children: [
                             if (title != null)
                               Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 18),
+                                padding: EdgeInsetsDirectional.symmetric(
+                                    horizontal: 18),
                                 child: TextFont(
                                   text: (title ?? "").capitalizeFirstofEach,
                                   fontSize: 23,
@@ -67,7 +68,8 @@ class PopupFramework extends StatelessWidget {
                             if (subtitle != null ||
                                 customSubtitleWidget != null)
                               Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 18),
+                                padding: EdgeInsetsDirectional.symmetric(
+                                    horizontal: 18),
                                 child: customSubtitleWidget ??
                                     TextFont(
                                       text: subtitle ?? "",
@@ -82,22 +84,24 @@ class PopupFramework extends StatelessWidget {
                                 color: Theme.of(context)
                                     .colorScheme
                                     .secondaryContainer,
-                                margin: EdgeInsets.only(top: 10, bottom: 5),
+                                margin: EdgeInsetsDirectional.only(
+                                    top: 10, bottom: 5),
                               )
                             else
                               SizedBox(height: 5),
                           ],
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(
-                            left: 10,
+                          padding: const EdgeInsetsDirectional.only(
+                            start: 10,
                           ),
                           child: icon ?? SizedBox.shrink(),
                         )
                       ],
                     )
                   : Padding(
-                      padding: EdgeInsets.only(left: 18, right: 18, top: 5),
+                      padding: EdgeInsetsDirectional.only(
+                          start: 18, end: 18, top: 5),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -118,8 +122,8 @@ class PopupFramework extends StatelessWidget {
                                 if (subtitle != null ||
                                     customSubtitleWidget != null)
                                   Padding(
-                                    padding:
-                                        EdgeInsets.only(left: 2, bottom: 4),
+                                    padding: EdgeInsetsDirectional.only(
+                                        start: 2, bottom: 4),
                                     child: customSubtitleWidget ??
                                         TextFont(
                                           text: subtitle ?? "",
@@ -138,8 +142,8 @@ class PopupFramework extends StatelessWidget {
                 SizedBox(height: 13),
               Padding(
                 padding: hasPadding
-                    ? EdgeInsets.symmetric(horizontal: 18)
-                    : EdgeInsets.zero,
+                    ? EdgeInsetsDirectional.symmetric(horizontal: 18)
+                    : EdgeInsetsDirectional.zero,
                 child: child,
               ),
               // Bottom safe area extra padding
@@ -169,7 +173,7 @@ class PopupFramework extends StatelessWidget {
           ),
         ),
         Align(
-          alignment: Alignment.topRight,
+          alignment: AlignmentDirectional.topEnd,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -183,7 +187,7 @@ class PopupFramework extends StatelessWidget {
               if (getIsFullScreen(context) || showCloseButton)
                 IconButton(
                   iconSize: 25,
-                  padding: EdgeInsets.all(
+                  padding: EdgeInsetsDirectional.all(
                       getPlatform() == PlatformOS.isIOS ? 15 : 20),
                   icon: Icon(
                     appStateSettings["outlinedIcons"]

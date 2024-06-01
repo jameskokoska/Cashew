@@ -416,7 +416,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                 onlyShowOneTransactionType: selectedType,
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 12),
+                padding: const EdgeInsetsDirectional.only(top: 12),
                 child: Row(
                   children: [
                     Flexible(
@@ -505,7 +505,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                 child: Column(
                   children: [
                     HorizontalBreak(
-                        padding: EdgeInsets.only(top: 15, bottom: 10)),
+                        padding:
+                            EdgeInsetsDirectional.only(top: 15, bottom: 10)),
                     TransactionEntry(
                       useHorizontalPaddingConstrained: false,
                       openPage: Container(),
@@ -514,7 +515,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                           .colorScheme
                           .secondaryContainer
                           .withOpacity(0.4),
-                      customPadding: EdgeInsets.zero,
+                      customPadding: EdgeInsetsDirectional.zero,
                     ),
                     SizedBox(height: 5),
                     TransactionEntry(
@@ -522,7 +523,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                       openPage: Container(),
                       transaction: closelyRelatedTransferCorrectionTransaction,
                       containerColor: Colors.transparent,
-                      customPadding: EdgeInsets.zero,
+                      customPadding: EdgeInsetsDirectional.zero,
                     ),
                   ],
                 ),
@@ -956,7 +957,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
           enableWalletPicker: true,
           selectedWalletPk: selectedWalletPk,
           setSelectedWalletPk: setSelectedWalletPk,
-          padding: EdgeInsets.symmetric(horizontal: 18),
+          padding: EdgeInsetsDirectional.symmetric(horizontal: 18),
           walletPkForCurrency: selectedWalletPk,
           // onlyShowCurrencyIcon:
           //     appStateSettings[
@@ -1078,7 +1079,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         ),
         Container(height: 14),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 22),
+          padding: const EdgeInsetsDirectional.symmetric(horizontal: 22),
           child: TransactionNotesTextInput(
             noteInputController: _noteInputController,
             setNotesInputFocused: (isFocused) {
@@ -1101,12 +1102,12 @@ class _AddTransactionPageState extends State<AddTransactionPage>
             children: [
               Container(height: 10),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
                 child: AnimatedSwitcher(
                   duration: Duration(milliseconds: 300),
                   child: DateButton(
-                    internalPadding:
-                        EdgeInsets.only(left: 12, bottom: 6, top: 6, right: 8),
+                    internalPadding: EdgeInsetsDirectional.only(
+                        start: 12, bottom: 6, top: 6, end: 8),
                     key: ValueKey(selectedDate.toString()),
                     initialSelectedDate: selectedDate,
                     initialSelectedTime: TimeOfDay(
@@ -1127,7 +1128,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
               HorizontalBreakAbove(
                 enabled: enableDoubleColumn(context),
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 5),
+                  padding: const EdgeInsetsDirectional.only(top: 5),
                   child: SelectChips(
                     allowMultipleSelected: false,
                     wrapped: enableDoubleColumn(context),
@@ -1137,7 +1138,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                     extraWidgetBefore: Transform.scale(
                       scale: 1.3,
                       child: IconButton(
-                        padding: EdgeInsets.zero,
+                        padding: EdgeInsetsDirectional.zero,
                         visualDensity: VisualDensity.compact,
                         icon: Icon(
                           appStateSettings["outlinedIcons"]
@@ -1200,11 +1201,11 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                 expand: selectedType == TransactionSpecialType.repetitive ||
                     selectedType == TransactionSpecialType.subscription,
                 child: Padding(
-                  padding: const EdgeInsets.only(bottom: 9),
+                  padding: const EdgeInsetsDirectional.only(bottom: 9),
                   child: Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 5),
+                        padding: const EdgeInsetsDirectional.only(top: 5),
                         child: Wrap(
                           alignment: WrapAlignment.center,
                           crossAxisAlignment: WrapCrossAlignment.center,
@@ -1244,9 +1245,10 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                   },
                                   fontSize: 23,
                                   fontWeight: FontWeight.bold,
-                                  internalPadding: EdgeInsets.symmetric(
-                                      vertical: 4, horizontal: 6),
-                                  padding: EdgeInsets.symmetric(
+                                  internalPadding:
+                                      EdgeInsetsDirectional.symmetric(
+                                          vertical: 4, horizontal: 6),
+                                  padding: EdgeInsetsDirectional.symmetric(
                                       vertical: 0, horizontal: 4),
                                 ),
                                 TappableTextEntry(
@@ -1278,9 +1280,10 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                   },
                                   fontSize: 23,
                                   fontWeight: FontWeight.bold,
-                                  internalPadding: EdgeInsets.symmetric(
-                                      vertical: 4, horizontal: 6),
-                                  padding: EdgeInsets.symmetric(
+                                  internalPadding:
+                                      EdgeInsetsDirectional.symmetric(
+                                          vertical: 4, horizontal: 6),
+                                  padding: EdgeInsetsDirectional.symmetric(
                                       vertical: 0, horizontal: 3),
                                 ),
                               ],
@@ -1289,7 +1292,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
+                        padding: const EdgeInsetsDirectional.only(bottom: 5),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -1322,9 +1325,10 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                 },
                                 fontSize: 23,
                                 fontWeight: FontWeight.bold,
-                                internalPadding: EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 4),
-                                padding: EdgeInsets.symmetric(
+                                internalPadding:
+                                    EdgeInsetsDirectional.symmetric(
+                                        vertical: 5, horizontal: 4),
+                                padding: EdgeInsetsDirectional.symmetric(
                                     vertical: 0, horizontal: 5),
                               ),
                             ),
@@ -1360,7 +1364,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                   : HorizontalBreakAbove(
                       enabled: enableDoubleColumn(context),
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 5),
+                        padding: const EdgeInsetsDirectional.only(top: 5),
                         child: SelectChips(
                           wrapped: enableDoubleColumn(context),
                           extraWidgetBeforeSticky: true,
@@ -1463,7 +1467,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                 expand:
                     selectedBudgetPk != null && selectedBudgetIsShared == true,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 5),
+                  padding: const EdgeInsetsDirectional.only(top: 5),
                   child: SelectChips(
                     allowMultipleSelected: false,
                     wrapped: enableDoubleColumn(context),
@@ -1496,9 +1500,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                     HorizontalBreakAbove(
                       enabled: enableDoubleColumn(context),
                       child: Padding(
-                        padding: const EdgeInsets.only(
-                          left: 22,
-                          right: 22,
+                        padding: const EdgeInsetsDirectional.only(
+                          start: 22,
+                          end: 22,
                           bottom: 8,
                           top: 5,
                         ),
@@ -1536,7 +1540,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
               AnimatedSizeSwitcher(
                 child: showMoreOptions == false
                     ? Padding(
-                        padding: const EdgeInsets.only(top: 5),
+                        padding: const EdgeInsetsDirectional.only(top: 5),
                         child: LowKeyButton(
                           key: ValueKey(1),
                           onTap: () {
@@ -1558,9 +1562,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                               children: [
                                 if (selectedType == null)
                                   Padding(
-                                    padding: const EdgeInsets.only(
-                                      left: 22,
-                                      right: 22,
+                                    padding: const EdgeInsetsDirectional.only(
+                                      start: 22,
+                                      end: 22,
                                       bottom: 8,
                                       top: 5,
                                     ),
@@ -1575,9 +1579,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                   ),
                                 if (widget.transaction != null)
                                   Padding(
-                                    padding: const EdgeInsets.only(
-                                      left: 22,
-                                      right: 22,
+                                    padding: const EdgeInsetsDirectional.only(
+                                      start: 22,
+                                      end: 22,
                                       bottom: 8,
                                       top: 5,
                                     ),
@@ -1607,7 +1611,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                           HorizontalBreakAbove(
                             enabled: enableDoubleColumn(context),
                             child: Padding(
-                              padding: const EdgeInsets.only(top: 4),
+                              padding: const EdgeInsetsDirectional.only(top: 4),
                               child: StickyLabelDivider(
                                 info: "exclude-from-budget".tr(),
                               ),
@@ -1625,7 +1629,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
 
               if (appStateSettings["showTransactionPk"] == true)
                 Padding(
-                  padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+                  padding: const EdgeInsetsDirectional.only(
+                      start: 10, end: 10, top: 10),
                   child: TextFont(
                     text: widget.transaction?.transactionPk ?? "",
                     fontSize: 13,
@@ -1639,7 +1644,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                       widget.transaction!.sharedDateUpdated == null
                   ? SizedBox.shrink()
                   : Padding(
-                      padding: const EdgeInsets.symmetric(
+                      padding: const EdgeInsetsDirectional.symmetric(
                           horizontal: 10, vertical: 28),
                       child: TextFont(
                         text: "synced".tr() +
@@ -1794,7 +1799,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                 color: Colors.transparent,
                 child: Container(
                   height: 136,
-                  padding: const EdgeInsets.only(left: 17, right: 20),
+                  padding: const EdgeInsetsDirectional.only(start: 17, end: 20),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -1864,7 +1869,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                       onLongPress: onLongPress,
                       onTap: selectAmountPopup,
                       child: Container(
-                        padding: const EdgeInsets.only(right: 37),
+                        padding: const EdgeInsetsDirectional.only(end: 37),
                         height: 136,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
@@ -1876,7 +1881,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                               child: Align(
                                 key: ValueKey(selectedWalletPk.toString() +
                                     selectedAmount.toString()),
-                                alignment: Alignment.centerRight,
+                                alignment: AlignmentDirectional.centerEnd,
                                 child: TextFont(
                                   textAlign: TextAlign.right,
                                   text: convertToMoney(
@@ -1928,7 +1933,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                 : AnimatedSwitcher(
                                     duration: Duration(milliseconds: 350),
                                     child: Align(
-                                      alignment: Alignment.centerRight,
+                                      alignment: AlignmentDirectional.centerEnd,
                                       child: TextFont(
                                         textAlign: TextAlign.right,
                                         text: convertToMoney(
@@ -1961,7 +1966,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
               },
               selectedCategoryPk: selectedCategory!.categoryPk,
               selectedSubCategoryPk: selectedSubCategory?.categoryPk,
-              padding: const EdgeInsets.only(bottom: 6),
+              padding: const EdgeInsetsDirectional.only(bottom: 6),
             )
         ],
       ),
@@ -2022,7 +2027,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
           actions: [
             widget.transaction != null
                 ? IconButton(
-                    padding: EdgeInsets.all(15),
+                    padding: EdgeInsetsDirectional.all(15),
                     tooltip: "delete-transaction".tr(),
                     onPressed: () async {
                       deleteTransactionPopup(
@@ -2040,7 +2045,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
           ],
           overlay: MinimizeKeyboardFABOverlay(isEnabled: notesInputFocused),
           staticOverlay: Align(
-            alignment: Alignment.bottomCenter,
+            alignment: AlignmentDirectional.bottomCenter,
             child: Row(
               children: [
                 Expanded(
@@ -2090,7 +2095,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                               key: ValueKey(1),
                               width: size?.width,
                               child: SaveBottomButton(
-                                margin: EdgeInsets.only(left: 5),
+                                margin: EdgeInsetsDirectional.only(start: 5),
                                 color: isTransactionActionDealtWith(
                                         createTransaction())
                                     ? Theme.of(context)
@@ -2151,11 +2156,12 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                           child: Column(
                             children: [
                               Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 13),
+                                padding: const EdgeInsetsDirectional.symmetric(
+                                    horizontal: 13),
                                 child: ClipRRect(
                                   child: transactionAmountAndCategoryHeader,
-                                  borderRadius: BorderRadius.circular(15),
+                                  borderRadius:
+                                      BorderRadiusDirectional.circular(15),
                                 ),
                               ),
                               transactionTextInput,
@@ -2213,7 +2219,8 @@ class SelectedWalletButton extends StatelessWidget {
       onTap: onTap,
       borderRadius: 10,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+        padding:
+            const EdgeInsetsDirectional.symmetric(horizontal: 20, vertical: 6),
         child: Row(
           children: [
             ButtonIcon(
@@ -2246,14 +2253,14 @@ class DateButton extends StatefulWidget {
     required this.setSelectedDate,
     required this.setSelectedTime,
     this.internalPadding =
-        const EdgeInsets.only(left: 20, top: 6, bottom: 6, right: 4),
+        const EdgeInsetsDirectional.only(start: 20, top: 6, bottom: 6, end: 4),
     this.timeBackgroundColor,
   }) : super(key: key);
   final DateTime initialSelectedDate;
   final TimeOfDay initialSelectedTime;
   final Function(DateTime) setSelectedDate;
   final Function(TimeOfDay) setSelectedTime;
-  final EdgeInsets internalPadding;
+  final EdgeInsetsDirectional internalPadding;
   final Color? timeBackgroundColor;
 
   @override
@@ -2362,7 +2369,7 @@ class _DateButtonState extends State<DateButton> {
               },
               borderRadius: 5,
               child: Padding(
-                padding: const EdgeInsets.all(4),
+                padding: const EdgeInsetsDirectional.all(4),
                 child: TimeDigits(
                   timeOfDay: TimeOfDay(
                     hour: selectedTime.hour,
@@ -2489,8 +2496,8 @@ class _SelectTitleState extends State<SelectTitle> {
           ? SizedBox.shrink()
           : IconButton(
               iconSize: 25,
-              padding:
-                  EdgeInsets.all(getPlatform() == PlatformOS.isIOS ? 15 : 20),
+              padding: EdgeInsetsDirectional.all(
+                  getPlatform() == PlatformOS.isIOS ? 15 : 20),
               icon: Icon(
                 appStateSettings["outlinedIcons"]
                     ? Icons.calendar_month_outlined
@@ -2520,11 +2527,11 @@ class _SelectTitleState extends State<SelectTitle> {
           AnimatedExpanded(
             expand: customDateTimeSelected,
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 13),
+              padding: const EdgeInsetsDirectional.only(bottom: 13),
               child: AnimatedSwitcher(
                 duration: Duration(milliseconds: 300),
                 child: DateButton(
-                  internalPadding: EdgeInsets.zero,
+                  internalPadding: EdgeInsetsDirectional.zero,
                   key: ValueKey(selectedDateTime.toString()),
                   initialSelectedDate: selectedDateTime,
                   initialSelectedTime: TimeOfDay(
@@ -2587,7 +2594,7 @@ class _SelectTitleState extends State<SelectTitle> {
                       }
                     },
                     labelText: "title-placeholder".tr(),
-                    padding: EdgeInsets.zero,
+                    padding: EdgeInsetsDirectional.zero,
                   ),
                   AnimatedSizeSwitcher(
                     sizeDuration: Duration(milliseconds: 400),
@@ -2599,7 +2606,7 @@ class _SelectTitleState extends State<SelectTitle> {
                         : Container(
                             key: ValueKey(
                                 selectedAssociatedTitle?.category.categoryPk),
-                            padding: EdgeInsets.only(top: 13),
+                            padding: EdgeInsetsDirectional.only(top: 13),
                             child: Tappable(
                               borderRadius: 15,
                               color: Colors.transparent,
@@ -2612,7 +2619,7 @@ class _SelectTitleState extends State<SelectTitle> {
                                     categoryPk: "-1",
                                     size: 40,
                                     category: selectedAssociatedTitle?.category,
-                                    margin: EdgeInsets.zero,
+                                    margin: EdgeInsetsDirectional.zero,
                                     onTap: () {
                                       selectTitle();
                                     },
@@ -2658,7 +2665,7 @@ class _SelectTitleState extends State<SelectTitle> {
                           getIsFullScreen(context) ||
                       appStateSettings["askForTransactionNoteWithTitle"])
                     Padding(
-                      padding: const EdgeInsets.only(top: 13),
+                      padding: const EdgeInsetsDirectional.only(top: 13),
                       child: Container(
                         child: TransactionNotesTextInput(
                           noteInputController: widget.noteInputController,
@@ -2675,7 +2682,7 @@ class _SelectTitleState extends State<SelectTitle> {
                   //   duration: Duration(milliseconds: 300),
                   //   child: CategoryIcon(
                   //     key: ValueKey(selectedCategory?.categoryPk ?? ""),
-                  //     margin: EdgeInsets.zero,
+                  //     margin: EdgeInsetsDirectional.zero,
                   //     categoryPk: selectedCategory?.categoryPk ?? 0,
                   //     size: 55,
                   //     onTap: () {
@@ -2728,7 +2735,7 @@ class _SelectTitleState extends State<SelectTitle> {
 //   @override
 //   Widget build(BuildContext context) {
 //     return Padding(
-//       padding: const EdgeInsets.only(bottom: 8.0),
+//       padding: const EdgeInsetsDirectional.only(bottom: 8.0),
 //       child: Center(
 //         child: Wrap(
 //           alignment: WrapAlignment.center,
@@ -2856,7 +2863,7 @@ class _SelectTextState extends State<SelectText> {
                   }
                 },
                 labelText: widget.placeholder ?? widget.labelText,
-                padding: EdgeInsets.zero,
+                padding: EdgeInsetsDirectional.zero,
               ),
             ),
             if (widget.widgetBeside != null) widget.widgetBeside!,
@@ -2909,7 +2916,7 @@ class _EnterTextButtonState extends State<EnterTextButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 19),
+      padding: const EdgeInsetsDirectional.symmetric(horizontal: 19),
       child: Tappable(
         color: getColor(context, "canvasContainer"),
         onTap: () {
@@ -2934,7 +2941,7 @@ class _EnterTextButtonState extends State<EnterTextButton> {
         borderRadius: 15,
         child: IgnorePointer(
           child: TextInput(
-            padding: EdgeInsets.zero,
+            padding: EdgeInsetsDirectional.zero,
             readOnly: true,
             labelText: widget.placeholder,
             icon: widget.icon,
@@ -3047,7 +3054,7 @@ class _SelectAddedBudgetState extends State<SelectAddedBudget> {
             enabled:
                 enableDoubleColumn(context) && widget.horizontalBreak == true,
             child: Padding(
-                padding: const EdgeInsets.only(top: 5),
+                padding: const EdgeInsetsDirectional.only(top: 5),
                 child: SelectChips(
                   allowMultipleSelected: false,
                   wrapped: widget.wrapped ?? enableDoubleColumn(context),
@@ -3155,7 +3162,7 @@ class _SelectObjectiveState extends State<SelectObjective> {
             enabled:
                 enableDoubleColumn(context) && widget.horizontalBreak == true,
             child: Padding(
-                padding: const EdgeInsets.only(top: 5),
+                padding: const EdgeInsetsDirectional.only(top: 5),
                 child: SelectChips(
                   allowMultipleSelected: false,
                   wrapped: widget.wrapped ?? enableDoubleColumn(context),
@@ -3259,8 +3266,8 @@ class _SelectExcludeBudgetState extends State<SelectExcludeBudget> {
         if (snapshot.hasData) {
           if (snapshot.data!.length <= 0)
             return Padding(
-              padding: const EdgeInsets.only(
-                  left: 17, right: 17, top: 6, bottom: 15),
+              padding: const EdgeInsetsDirectional.only(
+                  start: 17, end: 17, top: 6, bottom: 15),
               child: Row(
                 children: [
                   TextFont(
@@ -3272,7 +3279,7 @@ class _SelectExcludeBudgetState extends State<SelectExcludeBudget> {
               ),
             );
           return Padding(
-              padding: const EdgeInsets.only(top: 5),
+              padding: const EdgeInsetsDirectional.only(top: 5),
               child: SelectChips(
                 wrapped: widget.wrapped ?? enableDoubleColumn(context),
                 extraHorizontalPadding: widget.extraHorizontalPadding,
@@ -3339,12 +3346,12 @@ class HorizontalBreakAbove extends StatelessWidget {
   const HorizontalBreakAbove({
     required this.child,
     this.enabled = true,
-    this.padding = const EdgeInsets.symmetric(vertical: 10),
+    this.padding = const EdgeInsetsDirectional.symmetric(vertical: 10),
     super.key,
   });
   final Widget child;
   final bool enabled;
-  final EdgeInsets padding;
+  final EdgeInsetsDirectional padding;
 
   @override
   Widget build(BuildContext context) {
@@ -3361,10 +3368,10 @@ class HorizontalBreakAbove extends StatelessWidget {
 
 class HorizontalBreak extends StatelessWidget {
   const HorizontalBreak(
-      {this.padding = const EdgeInsets.symmetric(vertical: 10),
+      {this.padding = const EdgeInsetsDirectional.symmetric(vertical: 10),
       this.color,
       super.key});
-  final EdgeInsets padding;
+  final EdgeInsetsDirectional padding;
   final Color? color;
 
   @override
@@ -3374,7 +3381,7 @@ class HorizontalBreak extends StatelessWidget {
       height: 2,
       decoration: BoxDecoration(
         color: color ?? getColor(context, "dividerColor"),
-        borderRadius: BorderRadius.all(Radius.circular(15)),
+        borderRadius: BorderRadiusDirectional.all(Radius.circular(15)),
       ),
     );
   }
@@ -3429,7 +3436,8 @@ Future checkToDeleteCloselyRelatedBalanceCorrectionTransaction(
         descriptionWidget: IgnorePointer(
           child: Column(
             children: [
-              HorizontalBreak(padding: EdgeInsets.only(top: 15, bottom: 10)),
+              HorizontalBreak(
+                  padding: EdgeInsetsDirectional.only(top: 15, bottom: 10)),
               TransactionEntry(
                 useHorizontalPaddingConstrained: false,
                 openPage: Container(),
@@ -3438,7 +3446,7 @@ Future checkToDeleteCloselyRelatedBalanceCorrectionTransaction(
                     .colorScheme
                     .secondaryContainer
                     .withOpacity(0.4),
-                customPadding: EdgeInsets.zero,
+                customPadding: EdgeInsetsDirectional.zero,
               ),
               SizedBox(height: 5),
               TransactionEntry(
@@ -3446,7 +3454,7 @@ Future checkToDeleteCloselyRelatedBalanceCorrectionTransaction(
                 openPage: Container(),
                 transaction: closelyRelatedTransferCorrectionTransaction,
                 containerColor: Colors.transparent,
-                customPadding: EdgeInsets.zero,
+                customPadding: EdgeInsetsDirectional.zero,
               ),
             ],
           ),
@@ -3637,12 +3645,13 @@ class SelectTransactionTypePopup extends StatelessWidget {
               : getColor(context, "canvasContainer"),
           borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15),
+            padding: const EdgeInsetsDirectional.symmetric(vertical: 15),
             child: Column(
               children: [
                 SizedBox(height: 8),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding:
+                      const EdgeInsetsDirectional.symmetric(horizontal: 20),
                   child: TextFont(
                     maxLines: 5,
                     fontSize: 16,
@@ -3681,7 +3690,8 @@ class SelectTransactionTypePopup extends StatelessWidget {
                         in TransactionSpecialType.values)
                       IgnorePointer(
                         child: TransactionEntryActionButton(
-                          padding: EdgeInsets.symmetric(horizontal: 6),
+                          padding:
+                              EdgeInsetsDirectional.symmetric(horizontal: 6),
                           allowOpenIntoObjectiveLoanPage: false,
                           transaction: Transaction(
                             transactionPk: "-1",
@@ -3747,15 +3757,16 @@ class TransactionTypeInfoEntry extends StatelessWidget {
     if (onlyShowOneTransactionType == null ||
         onlyShowOneTransactionType == transactionType) {
       return Padding(
-        padding: const EdgeInsets.only(top: 13),
+        padding: const EdgeInsetsDirectional.only(top: 13),
         child: Row(
           children: [
             Expanded(
               child: OutlinedButtonStacked(
                 filled: selectedTransactionType == transactionType,
-                alignLeft: true,
+                alignStart: true,
                 alignBeside: true,
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                padding: EdgeInsetsDirectional.symmetric(
+                    horizontal: 20, vertical: 20),
                 text: title,
                 iconData: icon ?? getTransactionTypeIcon(transactionType),
                 onTap: onTap ??
@@ -3873,7 +3884,7 @@ Future<MainAndSubcategory> selectCategorySequence(
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(top: 2),
+                      margin: EdgeInsetsDirectional.only(top: 2),
                       child: Center(
                         child: TextFont(
                           textAlign: TextAlign.center,
@@ -4014,7 +4025,7 @@ class _SelectCategoryWithIncomeExpenseSelectorState
               setSelectedIncome(value);
             }),
           Padding(
-            padding: const EdgeInsets.only(left: 18, right: 18),
+            padding: const EdgeInsetsDirectional.only(start: 18, end: 18),
             child: SelectCategory(
               skipIfSet: widget.skipIfSet,
               selectedCategory: widget.selectedCategory,
@@ -4042,7 +4053,7 @@ class ReorderCategoriesPopup extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
+            padding: const EdgeInsetsDirectional.only(bottom: 8.0),
             child: SelectCategory(
               skipIfSet: false,
               selectedIncome: null, // needs to be null
@@ -4137,7 +4148,8 @@ class RenderImageData extends StatelessWidget {
             color: Colors.transparent,
             borderRadius: 15,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+              padding: const EdgeInsetsDirectional.symmetric(
+                  horizontal: 20, vertical: 25),
               child: Column(
                 children: [
                   TextFont(
@@ -4191,8 +4203,8 @@ class LinkInNotes extends StatelessWidget {
                 Theme.of(context).brightness == Brightness.light ? 0.07 : 0.25,
           ),
       child: Padding(
-        padding: EdgeInsets.only(
-            left: 15, right: extraWidget == null ? 15 : 0, top: 10, bottom: 10),
+        padding: EdgeInsetsDirectional.only(
+            start: 15, end: extraWidget == null ? 15 : 0, top: 10, bottom: 10),
         child: Row(
           children: [
             Icon(
@@ -4289,14 +4301,14 @@ class _TransactionNotesTextInputState extends State<TransactionNotesTextInput> {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius:
-          BorderRadius.circular(getPlatform() == PlatformOS.isIOS ? 8 : 15),
+      borderRadius: BorderRadiusDirectional.circular(
+          getPlatform() == PlatformOS.isIOS ? 8 : 15),
       child: Column(
         children: [
           Focus(
             child: TextInput(
               borderRadius: BorderRadius.zero,
-              padding: EdgeInsets.zero,
+              padding: EdgeInsetsDirectional.zero,
               labelText: "notes-placeholder".tr(),
               icon: appStateSettings["outlinedIcons"]
                   ? Icons.sticky_note_2_outlined
@@ -4321,7 +4333,7 @@ class _TransactionNotesTextInputState extends State<TransactionNotesTextInput> {
             },
           ),
           HorizontalBreak(
-            padding: EdgeInsets.zero,
+            padding: EdgeInsetsDirectional.zero,
             color: appStateSettings["materialYou"]
                 ? dynamicPastel(
                     context,
@@ -4356,15 +4368,15 @@ class _TransactionNotesTextInputState extends State<TransactionNotesTextInput> {
                     children: [
                       if (kIsWeb == false)
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 13),
+                          padding: const EdgeInsetsDirectional.only(bottom: 13),
                           child: Row(
                             children: [
                               Expanded(
                                 child: OutlinedButtonStacked(
                                   filled: false,
-                                  alignLeft: true,
+                                  alignStart: true,
                                   alignBeside: true,
-                                  padding: EdgeInsets.symmetric(
+                                  padding: EdgeInsetsDirectional.symmetric(
                                       horizontal: 20, vertical: 20),
                                   text: "take-photo".tr(),
                                   iconData: appStateSettings["outlinedIcons"]
@@ -4388,15 +4400,15 @@ class _TransactionNotesTextInputState extends State<TransactionNotesTextInput> {
                         ),
                       if (kIsWeb == false)
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 13),
+                          padding: const EdgeInsetsDirectional.only(bottom: 13),
                           child: Row(
                             children: [
                               Expanded(
                                 child: OutlinedButtonStacked(
                                   filled: false,
-                                  alignLeft: true,
+                                  alignStart: true,
                                   alignBeside: true,
-                                  padding: EdgeInsets.symmetric(
+                                  padding: EdgeInsetsDirectional.symmetric(
                                       horizontal: 20, vertical: 20),
                                   text: "select-photo".tr(),
                                   iconData: appStateSettings["outlinedIcons"]
@@ -4418,15 +4430,15 @@ class _TransactionNotesTextInputState extends State<TransactionNotesTextInput> {
                           ),
                         ),
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 13),
+                        padding: const EdgeInsetsDirectional.only(bottom: 13),
                         child: Row(
                           children: [
                             Expanded(
                               child: OutlinedButtonStacked(
                                 filled: false,
-                                alignLeft: true,
+                                alignStart: true,
                                 alignBeside: true,
-                                padding: EdgeInsets.symmetric(
+                                padding: EdgeInsetsDirectional.symmetric(
                                     horizontal: 20, vertical: 20),
                                 text: "select-file".tr(),
                                 iconData: appStateSettings["outlinedIcons"]
@@ -4472,8 +4484,8 @@ class _TransactionNotesTextInputState extends State<TransactionNotesTextInput> {
                             children: [
                               if (link.contains("drive.google.com"))
                                 Padding(
-                                  padding:
-                                      const EdgeInsets.only(right: 3, left: 5),
+                                  padding: const EdgeInsetsDirectional.only(
+                                      end: 3, start: 5),
                                   child: IconButtonScaled(
                                     iconData: appStateSettings["outlinedIcons"]
                                         ? Icons.photo_outlined
@@ -4492,8 +4504,8 @@ class _TransactionNotesTextInputState extends State<TransactionNotesTextInput> {
                                           PopupFramework(
                                             child: ClipRRect(
                                               borderRadius:
-                                                  BorderRadius.circular(
-                                                      getPlatform() ==
+                                                  BorderRadiusDirectional
+                                                      .circular(getPlatform() ==
                                                               PlatformOS.isIOS
                                                           ? 10
                                                           : 15),
@@ -4517,8 +4529,8 @@ class _TransactionNotesTextInputState extends State<TransactionNotesTextInput> {
                                   ),
                                 ),
                               Padding(
-                                padding:
-                                    const EdgeInsets.only(right: 11, left: 5),
+                                padding: const EdgeInsetsDirectional.only(
+                                    end: 11, start: 5),
                                 child: IconButtonScaled(
                                   iconData: appStateSettings["outlinedIcons"]
                                       ? Icons.remove_outlined
@@ -4656,12 +4668,12 @@ class SelectSubcategoryChips extends StatelessWidget {
       {required this.selectedCategoryPk,
       required this.selectedSubCategoryPk,
       required this.setSelectedSubCategory,
-      this.padding = EdgeInsets.zero,
+      this.padding = EdgeInsetsDirectional.zero,
       super.key});
   final String selectedCategoryPk;
   final String? selectedSubCategoryPk;
   final Function(TransactionCategory category) setSelectedSubCategory;
-  final EdgeInsets padding;
+  final EdgeInsetsDirectional padding;
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<TransactionCategory>>(
@@ -4769,7 +4781,7 @@ class SelectSubcategoryChips extends StatelessWidget {
                               sizePadding: 0,
                               noBackground: true,
                               canEditByLongPress: false,
-                              margin: EdgeInsets.zero,
+                              margin: EdgeInsetsDirectional.zero,
                             );
                           });
                         },
@@ -4827,7 +4839,7 @@ class TitleInput extends StatefulWidget {
     this.titleInputScrollController,
     required this.setSelectedCategory,
     required this.setSelectedSubCategory,
-    this.padding = const EdgeInsets.symmetric(horizontal: 22),
+    this.padding = const EdgeInsetsDirectional.symmetric(horizontal: 22),
     this.alsoSearchCategories = true,
     this.onNewRecommendedTitle,
     this.onRecommendedTitleTapped,
@@ -4852,7 +4864,7 @@ class TitleInput extends StatefulWidget {
   final ScrollController? titleInputScrollController;
   final Function(TransactionCategory category) setSelectedCategory;
   final Function(TransactionCategory category) setSelectedSubCategory;
-  final EdgeInsets padding;
+  final EdgeInsetsDirectional padding;
   final bool alsoSearchCategories;
   final VoidCallback? onNewRecommendedTitle;
   final Function(TransactionAssociatedTitleWithCategory)?
@@ -4903,8 +4915,8 @@ class _TitleInputState extends State<TitleInput> {
     return Padding(
       padding: widget.padding,
       child: ClipRRect(
-        borderRadius:
-            BorderRadius.circular(getPlatform() == PlatformOS.isIOS ? 8 : 15),
+        borderRadius: BorderRadiusDirectional.circular(
+            getPlatform() == PlatformOS.isIOS ? 8 : 15),
         child: Column(
           children: [
             Focus(
@@ -4919,7 +4931,7 @@ class _TitleInputState extends State<TitleInput> {
                 focusNode: widget.focusNode,
                 scrollController: widget.titleInputScrollController,
                 borderRadius: BorderRadius.zero,
-                padding: EdgeInsets.zero,
+                padding: EdgeInsetsDirectional.zero,
                 labelText: widget.labelText ?? "title-placeholder".tr(),
                 icon: appStateSettings["outlinedIcons"]
                     ? Icons.title_outlined
@@ -4968,11 +4980,11 @@ class _TitleInputState extends State<TitleInput> {
                       key: ValueKey(1),
                       duration: Duration(milliseconds: 250),
                       curve: Curves.easeInOut,
-                      alignment: Alignment.topCenter,
+                      alignment: AlignmentDirectional.topCenter,
                       child: Column(
                         children: [
                           HorizontalBreak(
-                            padding: EdgeInsets.zero,
+                            padding: EdgeInsetsDirectional.zero,
                             color: dynamicPastel(
                               context,
                               Theme.of(context).colorScheme.secondaryContainer,
@@ -5043,7 +5055,7 @@ class _TitleInputState extends State<TitleInput> {
                                           categoryPk: foundAssociatedTitle
                                               .title.categoryFk,
                                           size: 23,
-                                          margin: EdgeInsets.zero,
+                                          margin: EdgeInsetsDirectional.zero,
                                           sizePadding: 16,
                                           borderRadius: 0,
                                         ),
@@ -5053,9 +5065,9 @@ class _TitleInputState extends State<TitleInput> {
                                         child: Padding(
                                       padding: widget
                                               .showCategoryIconForRecommendedTitles
-                                          ? EdgeInsets.zero
-                                          : const EdgeInsets.only(
-                                              bottom: 12, top: 11, left: 5),
+                                          ? EdgeInsetsDirectional.zero
+                                          : const EdgeInsetsDirectional.only(
+                                              bottom: 12, top: 11, start: 5),
                                       child: TextFont(
                                         text: "",
                                         richTextSpan: generateSpans(
@@ -5076,7 +5088,8 @@ class _TitleInputState extends State<TitleInput> {
                                                   TitleType.SubCategoryName
                                           ? Padding(
                                               padding:
-                                                  const EdgeInsets.symmetric(
+                                                  const EdgeInsetsDirectional
+                                                      .symmetric(
                                                       horizontal: 7.5),
                                               child: Icon(
                                                 appStateSettings[

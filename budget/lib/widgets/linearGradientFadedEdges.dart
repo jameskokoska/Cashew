@@ -1,10 +1,11 @@
+import 'package:budget/functions.dart';
 import 'package:flutter/material.dart';
 
 class LinearGradientFadedEdges extends StatelessWidget {
   const LinearGradientFadedEdges({
     required this.child,
-    this.enableLeft = true,
-    this.enableRight = true,
+    this.enableStart = true,
+    this.enableEnd = true,
     this.enableTop = true,
     this.enableBottom = true,
     this.gradientSize = 12,
@@ -12,8 +13,8 @@ class LinearGradientFadedEdges extends StatelessWidget {
     super.key,
   });
   final Widget child;
-  final bool enableLeft;
-  final bool enableRight;
+  final bool enableStart;
+  final bool enableEnd;
   final bool enableTop;
   final bool enableBottom;
   final double gradientSize;
@@ -28,13 +29,13 @@ class LinearGradientFadedEdges extends StatelessWidget {
     return Stack(
       children: [
         child,
-        if (enableLeft)
-          Positioned(
-            left: 0,
+        if (enableStart)
+          PositionedDirectional(
+            start: 0,
             top: 0,
             bottom: 0,
             child: Transform.translate(
-              offset: Offset(-1, 0),
+              offset: Offset(-1, 0).withDirectionality(context),
               child: IgnorePointer(
                 child: Container(
                   width: gradientSize,
@@ -44,8 +45,8 @@ class LinearGradientFadedEdges extends StatelessWidget {
                         gradientColorFiltered,
                         gradientColorFiltered.withOpacity(0.0),
                       ],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
+                      begin: AlignmentDirectional.centerStart,
+                      end: AlignmentDirectional.centerEnd,
                       stops: [0.1, 1],
                     ),
                   ),
@@ -53,13 +54,13 @@ class LinearGradientFadedEdges extends StatelessWidget {
               ),
             ),
           ),
-        if (enableRight)
-          Positioned(
-            right: 0,
+        if (enableEnd)
+          PositionedDirectional(
+            end: 0,
             top: 0,
             bottom: 0,
             child: Transform.translate(
-              offset: Offset(1, 0),
+              offset: Offset(1, 0).withDirectionality(context),
               child: IgnorePointer(
                 child: Container(
                   width: gradientSize,
@@ -69,8 +70,8 @@ class LinearGradientFadedEdges extends StatelessWidget {
                         gradientColorFiltered,
                         gradientColorFiltered.withOpacity(0.0),
                       ],
-                      begin: Alignment.centerRight,
-                      end: Alignment.centerLeft,
+                      begin: AlignmentDirectional.centerEnd,
+                      end: AlignmentDirectional.centerStart,
                       stops: [0.1, 1],
                     ),
                   ),
@@ -79,9 +80,9 @@ class LinearGradientFadedEdges extends StatelessWidget {
             ),
           ),
         if (enableTop)
-          Positioned(
-            right: 0,
-            left: 0,
+          PositionedDirectional(
+            end: 0,
+            start: 0,
             top: 0,
             child: Transform.translate(
               offset: Offset(0, -1),
@@ -94,8 +95,8 @@ class LinearGradientFadedEdges extends StatelessWidget {
                         gradientColorFiltered,
                         gradientColorFiltered.withOpacity(0.0),
                       ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
+                      begin: AlignmentDirectional.topCenter,
+                      end: AlignmentDirectional.bottomCenter,
                       stops: [0.1, 1],
                     ),
                   ),
@@ -104,9 +105,9 @@ class LinearGradientFadedEdges extends StatelessWidget {
             ),
           ),
         if (enableBottom)
-          Positioned(
-            right: 0,
-            left: 0,
+          PositionedDirectional(
+            end: 0,
+            start: 0,
             bottom: 0,
             child: Transform.translate(
               offset: Offset(0, 1),
@@ -119,8 +120,8 @@ class LinearGradientFadedEdges extends StatelessWidget {
                         gradientColorFiltered,
                         gradientColorFiltered.withOpacity(0.0),
                       ],
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
+                      begin: AlignmentDirectional.bottomCenter,
+                      end: AlignmentDirectional.topCenter,
                       stops: [0.1, 1],
                     ),
                   ),

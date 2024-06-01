@@ -169,11 +169,11 @@ class _AmountSlideRangerState extends State<AmountRangeSlider> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 8, right: 8, bottom: 5),
+      padding: const EdgeInsetsDirectional.only(start: 8, end: 8, bottom: 5),
       child: Stack(
         children: [
           Align(
-            alignment: Alignment.topCenter,
+            alignment: AlignmentDirectional.topCenter,
             child: RangeSlider(
               values: _currentRangeValues,
               max: widget.rangeLimit.end,
@@ -182,9 +182,9 @@ class _AmountSlideRangerState extends State<AmountRangeSlider> {
             ),
           ),
           Align(
-            alignment: Alignment.bottomCenter,
+            alignment: AlignmentDirectional.bottomCenter,
             child: Padding(
-              padding: EdgeInsets.only(left: 20, right: 20, top: 40),
+              padding: EdgeInsetsDirectional.only(start: 20, end: 20, top: 40),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -194,7 +194,7 @@ class _AmountSlideRangerState extends State<AmountRangeSlider> {
                     borderRadius: 7,
                     onTap: setLowerRangePopup,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
+                      padding: const EdgeInsetsDirectional.symmetric(
                           horizontal: 8, vertical: 6),
                       child: TextFont(
                         text: convertToMoney(Provider.of<AllWallets>(context),
@@ -209,7 +209,7 @@ class _AmountSlideRangerState extends State<AmountRangeSlider> {
                     borderRadius: 7,
                     onTap: setUpperRangePopup,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
+                      padding: const EdgeInsetsDirectional.symmetric(
                           horizontal: 8, vertical: 6),
                       child: TextFont(
                         text: convertToMoney(Provider.of<AllWallets>(context),

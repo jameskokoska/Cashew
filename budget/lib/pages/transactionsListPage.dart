@@ -164,7 +164,7 @@ class TransactionsListPageState extends State<TransactionsListPage>
                                   onPressed: () {
                                     selectFilters(context);
                                   },
-                                  padding: EdgeInsets.all(15 - 8),
+                                  padding: EdgeInsetsDirectional.all(15 - 8),
                                   icon: AnimatedContainer(
                                     duration: Duration(milliseconds: 500),
                                     decoration: BoxDecoration(
@@ -174,9 +174,10 @@ class TransactionsListPageState extends State<TransactionsListPage>
                                               .colorScheme
                                               .tertiary
                                               .withOpacity(0.1),
-                                      borderRadius: BorderRadius.circular(100),
+                                      borderRadius:
+                                          BorderRadiusDirectional.circular(100),
                                     ),
-                                    padding: EdgeInsets.all(8),
+                                    padding: EdgeInsetsDirectional.all(8),
                                     child: Icon(
                                       appStateSettings["outlinedIcons"]
                                           ? Icons.filter_alt_outlined
@@ -190,7 +191,7 @@ class TransactionsListPageState extends State<TransactionsListPage>
                                   ),
                                 ),
                                 IconButton(
-                                  padding: EdgeInsets.all(15),
+                                  padding: EdgeInsetsDirectional.all(15),
                                   tooltip: "search-transactions".tr(),
                                   onPressed: () {
                                     pushRoute(
@@ -206,7 +207,8 @@ class TransactionsListPageState extends State<TransactionsListPage>
                             ),
                             SliverToBoxAdapter(
                               child: Padding(
-                                padding: const EdgeInsets.only(bottom: 5),
+                                padding:
+                                    const EdgeInsetsDirectional.only(bottom: 5),
                                 child: MonthSelector(
                                   key: monthSelectorStateKey,
                                   setSelectedDateStart:
@@ -237,7 +239,8 @@ class TransactionsListPageState extends State<TransactionsListPage>
                                   selectFilters(context);
                                 },
                                 clearSearchFilters: clearSearchFilters,
-                                padding: EdgeInsets.symmetric(vertical: 5),
+                                padding: EdgeInsetsDirectional.symmetric(
+                                    vertical: 5),
                               ),
                             ),
                           ],
@@ -314,9 +317,10 @@ class TransactionsListPageState extends State<TransactionsListPage>
                                               child: Column(
                                                 children: [
                                                   Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 8),
+                                                    padding:
+                                                        const EdgeInsetsDirectional
+                                                            .symmetric(
+                                                            horizontal: 8),
                                                     child: TextFont(
                                                       text:
                                                           "enabled-in-settings-at-any-time"
@@ -353,11 +357,11 @@ class TransactionsListPageState extends State<TransactionsListPage>
                       getIsFullScreen(context) == false
                           ? SizedBox.shrink()
                           : Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsetsDirectional.all(8.0),
                               child: Align(
-                                alignment: Alignment.centerLeft,
+                                alignment: AlignmentDirectional.centerStart,
                                 child: IconButton(
-                                  padding: EdgeInsets.all(15),
+                                  padding: EdgeInsetsDirectional.all(15),
                                   icon: Icon(
                                     appStateSettings["outlinedIcons"]
                                         ? Icons.arrow_left_outlined
@@ -380,11 +384,11 @@ class TransactionsListPageState extends State<TransactionsListPage>
                       getIsFullScreen(context) == false
                           ? SizedBox.shrink()
                           : Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsetsDirectional.all(8.0),
                               child: Align(
-                                alignment: Alignment.centerRight,
+                                alignment: AlignmentDirectional.centerEnd,
                                 child: IconButton(
-                                  padding: EdgeInsets.all(15),
+                                  padding: EdgeInsetsDirectional.all(15),
                                   icon: Icon(
                                     appStateSettings["outlinedIcons"]
                                         ? Icons.arrow_right_outlined

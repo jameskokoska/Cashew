@@ -188,7 +188,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
               slivers: [
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(
+                    padding: EdgeInsetsDirectional.symmetric(
                         horizontal: getHorizontalPaddingConstrained(context)),
                     child: AnimatedBuilder(
                       animation: _animationControllerSearch,
@@ -219,7 +219,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                                     });
                                 });
                               },
-                              padding: EdgeInsets.all(0),
+                              padding: EdgeInsetsDirectional.all(0),
                               focusNode: _searchFocusNode,
                             ),
                           ),
@@ -294,7 +294,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                 ),
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(
+                    padding: EdgeInsetsDirectional.symmetric(
                         horizontal: getHorizontalPaddingConstrained(context)),
                     child: AppliedFilterChips(
                       searchFilters: searchFilters,
@@ -314,9 +314,9 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                     },
                     color: Colors.transparent,
                     child: Padding(
-                      padding: const EdgeInsets.only(
-                        left: 10,
-                        right: 10,
+                      padding: const EdgeInsetsDirectional.only(
+                        start: 10,
+                        end: 10,
                         top: 10,
                         bottom: 8,
                       ),
@@ -403,7 +403,7 @@ class AppliedFilterChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
+      padding: const EdgeInsetsDirectional.symmetric(horizontal: 4),
       child: Tappable(
         onTap: () {
           openFiltersSelection();
@@ -412,9 +412,10 @@ class AppliedFilterChip extends StatelessWidget {
         color:
             Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.5),
         child: Container(
-          padding: EdgeInsets.only(left: 14, right: 14, top: 7, bottom: 7),
+          padding:
+              EdgeInsetsDirectional.only(start: 14, end: 14, top: 7, bottom: 7),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadiusDirectional.circular(8),
             border: Border.all(
               color: customBorderColor == null
                   ? Theme.of(context).colorScheme.secondaryContainer
@@ -426,7 +427,7 @@ class AppliedFilterChip extends StatelessWidget {
               icon == null
                   ? SizedBox.shrink()
                   : Padding(
-                      padding: const EdgeInsets.only(right: 5),
+                      padding: const EdgeInsetsDirectional.only(end: 5),
                       child: Icon(icon, size: 23),
                     ),
               TextFont(
@@ -434,7 +435,7 @@ class AppliedFilterChip extends StatelessWidget {
                 fontSize: 14,
               ),
               // Padding(
-              //   padding: EdgeInsets.only(left: 4.5),
+              //   padding: EdgeInsetsDirectional.only(start: 4.5),
               //   child: Opacity(
               //     opacity: 0.6,
               //     child: Icon(

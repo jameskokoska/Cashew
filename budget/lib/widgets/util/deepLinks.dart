@@ -147,13 +147,13 @@ Future<Transaction?> processAddTransactionFromParams(
       selectedIncomeInitial: null,
       allowReorder: false,
       extraWidgetBefore: Padding(
-        padding: const EdgeInsets.only(bottom: 18),
+        padding: const EdgeInsetsDirectional.only(bottom: 18),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Expanded(
               child: TableEntry(
-                padding: const EdgeInsets.symmetric(horizontal: 18),
+                padding: const EdgeInsetsDirectional.symmetric(horizontal: 18),
                 firstEntry: [
                   convertToMoney(
                       Provider.of<AllWallets>(context, listen: false), amount,

@@ -29,6 +29,7 @@ import 'package:budget/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'package:universal_io/io.dart';
+import 'dart:ui' as ui;
 
 String getDecimalSeparator() {
   if (appStateSettings["customNumberFormat"] == true) {
@@ -69,7 +70,7 @@ class SelectAmount extends StatefulWidget {
     this.walletPkForCurrency,
     this.onlyShowCurrencyIcon = false,
     this.allowZero = false,
-    this.padding = EdgeInsets.zero,
+    this.padding = EdgeInsetsDirectional.zero,
     this.enableWalletPicker = false,
     this.setSelectedWalletPk,
     this.selectedWalletPk,
@@ -90,7 +91,7 @@ class SelectAmount extends StatefulWidget {
   final String? walletPkForCurrency;
   final bool onlyShowCurrencyIcon;
   final bool allowZero;
-  final EdgeInsets padding;
+  final EdgeInsetsDirectional padding;
   final bool enableWalletPicker;
   final Function(String)? setSelectedWalletPk;
   final String? selectedWalletPk;
@@ -566,8 +567,8 @@ class _SelectAmountState extends State<SelectAmount> {
                           key: ValueKey(amount),
                           widthFactor: 0.5,
                           child: Padding(
-                            padding: const EdgeInsets.only(
-                                bottom: 3.0, left: 8, top: 5),
+                            padding: const EdgeInsetsDirectional.only(
+                                bottom: 3.0, start: 8, top: 5),
                             child: TextFont(
                               text: (includesOperations(amount, false) &&
                                       onlyOneOperationAndIsNegativeSign(
@@ -616,10 +617,10 @@ class _SelectAmountState extends State<SelectAmount> {
                                     },
                                     onLongPress: onLongPress,
                                     child: Padding(
-                                      padding: const EdgeInsets.only(
-                                        right: 8.0,
+                                      padding: const EdgeInsetsDirectional.only(
+                                        end: 8.0,
                                         bottom: 5,
-                                        left: 5,
+                                        start: 5,
                                         top: 5,
                                       ),
                                       child: AnimatedSizeSwitcher(
@@ -650,8 +651,8 @@ class _SelectAmountState extends State<SelectAmount> {
                                   ? SizedBox.shrink()
                                   : MediaQuery(
                                       child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 3.0),
+                                        padding: const EdgeInsetsDirectional
+                                            .symmetric(vertical: 3.0),
                                         child: AnimatedExpanded(
                                           axis: Axis.horizontal,
                                           expand: (getSelectedWallet(
@@ -746,7 +747,8 @@ class _SelectAmountState extends State<SelectAmount> {
                                             },
                                             child: Padding(
                                               padding:
-                                                  const EdgeInsets.symmetric(
+                                                  const EdgeInsetsDirectional
+                                                      .symmetric(
                                                       horizontal: 8,
                                                       vertical: 7),
                                               child: Column(
@@ -797,7 +799,7 @@ class _SelectAmountState extends State<SelectAmount> {
                               .allContainSameCurrency())
                   ? SizedBox.shrink()
                   : Padding(
-                      padding: const EdgeInsets.only(top: 3),
+                      padding: const EdgeInsetsDirectional.only(top: 3),
                       child: SelectChips(
                         allowMultipleSelected: false,
                         items: Provider.of<AllWallets>(context).list,
@@ -952,7 +954,7 @@ class NumberPadAmount extends StatelessWidget {
   final bool enableDecimal;
   final VoidCallback removeToAmount;
   final VoidCallback removeAll;
-  final EdgeInsets padding;
+  final EdgeInsetsDirectional padding;
   final bool Function() canChange;
   final VoidCallback setState;
   final bool enableCalculator;
@@ -962,6 +964,7 @@ class NumberPadAmount extends StatelessWidget {
   Widget build(BuildContext context) {
     NumberPadFormat selectedFormat = format ?? getNumberPadFormat();
     Widget row123 = Row(
+      textDirection: ui.TextDirection.ltr,
       children: [
         CalculatorButton(
           disabled: !canChange(),
@@ -985,6 +988,7 @@ class NumberPadAmount extends StatelessWidget {
       ],
     );
     Widget row456 = Row(
+      textDirection: ui.TextDirection.ltr,
       children: [
         CalculatorButton(
             disabled: !canChange(),
@@ -1007,6 +1011,7 @@ class NumberPadAmount extends StatelessWidget {
       ],
     );
     Widget row789 = Row(
+      textDirection: ui.TextDirection.ltr,
       children: [
         CalculatorButton(
             disabled: !canChange(),
@@ -1032,7 +1037,7 @@ class NumberPadAmount extends StatelessWidget {
       padding: padding,
       child: Center(
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(
+          borderRadius: BorderRadiusDirectional.circular(
               getPlatform() == PlatformOS.isIOS ? 10 : 20),
           child: GestureDetector(
             onLongPress: () async {
@@ -1056,6 +1061,7 @@ class NumberPadAmount extends StatelessWidget {
                       child: extraWidgetAboveNumbers!,
                     ),
                   Row(
+                    textDirection: ui.TextDirection.ltr,
                     children: [
                       Flexible(
                         flex: 3,
@@ -1075,6 +1081,7 @@ class NumberPadAmount extends StatelessWidget {
                             if (selectedFormat == NumberPadFormat.format789)
                               row123,
                             Row(
+                              textDirection: ui.TextDirection.ltr,
                               children: [
                                 CalculatorButton(
                                   disabled:
@@ -1123,6 +1130,7 @@ class NumberPadAmount extends StatelessWidget {
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Row(
+                                textDirection: ui.TextDirection.ltr,
                                 children: [
                                   CalculatorButton(
                                     height:
@@ -1138,6 +1146,7 @@ class NumberPadAmount extends StatelessWidget {
                                 ],
                               ),
                               Row(
+                                textDirection: ui.TextDirection.ltr,
                                 children: [
                                   CalculatorButton(
                                     height:
@@ -1153,6 +1162,7 @@ class NumberPadAmount extends StatelessWidget {
                                 ],
                               ),
                               Row(
+                                textDirection: ui.TextDirection.ltr,
                                 children: [
                                   CalculatorButton(
                                     height:
@@ -1168,6 +1178,7 @@ class NumberPadAmount extends StatelessWidget {
                                 ],
                               ),
                               Row(
+                                textDirection: ui.TextDirection.ltr,
                                 children: [
                                   CalculatorButton(
                                     height:
@@ -1184,6 +1195,7 @@ class NumberPadAmount extends StatelessWidget {
                               ),
                               if (appStateSettings["extraZerosButton"] != null)
                                 Row(
+                                  textDirection: ui.TextDirection.ltr,
                                   children: [
                                     CalculatorButton(
                                       height: appStateSettings[
@@ -1460,7 +1472,7 @@ class _SelectAmountValueState extends State<SelectAmountValue> {
       children: [
         if (widget.showEnteredNumber == true)
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsetsDirectional.symmetric(horizontal: 8.0),
             child: AnimatedSwitcher(
               duration: Duration(milliseconds: 200),
               child: FractionallySizedBox(
@@ -1486,7 +1498,7 @@ class _SelectAmountValueState extends State<SelectAmountValue> {
           removeToAmount: removeToAmount,
           removeAll: removeAll,
           canChange: () => true,
-          padding: EdgeInsets.zero,
+          padding: EdgeInsetsDirectional.zero,
           setState: () => setState(() {}),
           enableCalculator: false,
         ),

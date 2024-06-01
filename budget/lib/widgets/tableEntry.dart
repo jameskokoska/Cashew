@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class TableEntry extends StatelessWidget {
   final List<String> headers;
   final List<String> firstEntry;
-  final EdgeInsets padding;
+  final EdgeInsetsDirectional padding;
 
   const TableEntry({
     Key? key,
@@ -19,7 +19,7 @@ class TableEntry extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       padding: padding,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadiusDirectional.circular(10),
         child: Table(
           defaultColumnWidth: IntrinsicColumnWidth(),
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
@@ -33,8 +33,8 @@ class TableEntry extends StatelessWidget {
               children: <Widget>[
                 for (String header in headers)
                   Padding(
-                    padding: const EdgeInsets.only(
-                        left: 11.0, right: 11, top: 6, bottom: 3),
+                    padding: const EdgeInsetsDirectional.only(
+                        start: 11.0, end: 11, top: 6, bottom: 3),
                     child: Text(
                       header,
                       style: TextStyle(
@@ -55,8 +55,8 @@ class TableEntry extends StatelessWidget {
               children: <Widget>[
                 for (String entry in firstEntry)
                   Padding(
-                    padding: const EdgeInsets.only(
-                        left: 11.0, right: 11, top: 6, bottom: 3),
+                    padding: const EdgeInsetsDirectional.only(
+                        start: 11.0, end: 11, top: 6, bottom: 3),
                     child: Text(
                       entry,
                       style: TextStyle(

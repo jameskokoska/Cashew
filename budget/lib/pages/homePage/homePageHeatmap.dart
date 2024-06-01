@@ -200,12 +200,13 @@ class HeatMap extends StatelessWidget {
         getColor(context, "lightDarkAccentHeavyLight");
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 13),
+      padding: const EdgeInsetsDirectional.only(bottom: 13),
       child: Container(
-        padding: EdgeInsets.only(left: 0, right: 0, bottom: 12, top: 15),
-        margin: EdgeInsets.symmetric(horizontal: 13),
+        padding:
+            EdgeInsetsDirectional.only(start: 0, end: 0, bottom: 12, top: 15),
+        margin: EdgeInsetsDirectional.symmetric(horizontal: 13),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(15)),
+          borderRadius: BorderRadiusDirectional.all(Radius.circular(15)),
           color: backgroundColor,
           boxShadow: boxShadowCheck(boxShadowGeneral(context)),
         ),
@@ -225,11 +226,12 @@ class HeatMap extends StatelessWidget {
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               reverse: true,
-              padding: EdgeInsets.symmetric(horizontal: 13),
+              padding: EdgeInsetsDirectional.symmetric(horizontal: 13),
               child: Stack(
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(bottom: bottomTitleSpacing),
+                    padding:
+                        EdgeInsetsDirectional.only(bottom: bottomTitleSpacing),
                     child: Row(
                       children: [
                         for (int i = 0; i < totalWeeks; i++)
@@ -237,7 +239,8 @@ class HeatMap extends StatelessWidget {
                             children: [
                               for (int j = 0; j < 7; j++)
                                 Padding(
-                                  padding: EdgeInsets.all(dayPadding),
+                                  padding:
+                                      EdgeInsetsDirectional.all(dayPadding),
                                   child: Builder(
                                     builder: (context) {
                                       int index = i * 7 + j;
@@ -322,7 +325,8 @@ class HeatMap extends StatelessWidget {
                                                 width: 1,
                                               ),
                                               borderRadius:
-                                                  BorderRadius.circular(5),
+                                                  BorderRadiusDirectional
+                                                      .circular(5),
                                             ),
                                           ),
                                           borderRadius: 5,
@@ -339,12 +343,12 @@ class HeatMap extends StatelessWidget {
                   ),
                   loadMoreMonths == null
                       ? SizedBox.shrink()
-                      : Positioned(
-                          left: 0,
+                      : PositionedDirectional(
+                          start: 0,
                           child: Tooltip(
                             message: "view-more".tr(),
                             child: ButtonIcon(
-                              padding: EdgeInsets.zero,
+                              padding: EdgeInsetsDirectional.zero,
                               size: dayWidth * 2 + dayPadding * 4,
                               icon: appStateSettings["outlinedIcons"]
                                   ? Icons.history_outlined
@@ -357,7 +361,7 @@ class HeatMap extends StatelessWidget {
                         ),
                   for (int i = 0; i < totalWeeks; i++)
                     i % 4 == 0
-                        ? Positioned(
+                        ? PositionedDirectional(
                             bottom: 0,
                             child: HeatMapMonthLabel(
                               label: getWordedDateShort(
@@ -402,7 +406,7 @@ Future<dynamic> openTransactionsOnDayBottomSheet(
         builder: (context, snapshot) {
           if (snapshot.hasData && snapshot.data != null) {
             return Padding(
-              padding: EdgeInsets.only(
+              padding: EdgeInsetsDirectional.only(
                   top: getPlatform() == PlatformOS.isIOS ? 4 : 1),
               child: AmountWithColorAndArrow(
                 showIncomeArrow: true,
@@ -434,7 +438,8 @@ Future<dynamic> openTransactionsOnDayBottomSheet(
         includeDateDivider: false,
         allowSelect: false,
         useHorizontalPaddingConstrained: false,
-        noResultsPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        noResultsPadding:
+            EdgeInsetsDirectional.symmetric(horizontal: 10, vertical: 10),
         limitPerDay: 50,
         enableFutureTransactionsCollapse: false,
       ),
@@ -462,7 +467,7 @@ class HeatMapMonthLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: weekWidth * weekNumber),
+      padding: EdgeInsetsDirectional.only(start: weekWidth * weekNumber),
       child: Container(
         child: TextFont(
           textAlign: TextAlign.center,

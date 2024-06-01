@@ -29,7 +29,7 @@ class HomePageUsername extends StatelessWidget {
         !showUsername
             ? SizedBox()
             : Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 9),
+                padding: const EdgeInsetsDirectional.symmetric(horizontal: 9),
                 child: AnimatedBuilder(
                   animation: animationControllerHeader,
                   builder: (_, child) {
@@ -59,7 +59,7 @@ class HomePageUsername extends StatelessWidget {
           animation: animationControllerHeader,
           builder: (_, child) {
             return Transform.scale(
-              alignment: Alignment.bottomLeft,
+              alignment: AlignmentDirectional.bottomStart,
               scale: animationControllerHeader.value < 0.5
                   ? 0.5 * 0.4 + 0.6
                   : (animationControllerHeader.value) * 0.4 + 0.6,
@@ -77,7 +77,7 @@ class HomePageUsername extends StatelessWidget {
             );
           },
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 9),
+            padding: const EdgeInsetsDirectional.symmetric(horizontal: 9),
             child: MediaQuery(
               data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
               child: PartyHat(
@@ -107,7 +107,7 @@ class HomePageWelcomeBannerSmall extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 17, right: 5),
+      padding: const EdgeInsetsDirectional.only(start: 17, end: 5),
       child: PartyHat(
         child: TextFont(
           text: showUsername ? getWelcomeMessage() : "home".tr(),
@@ -143,8 +143,8 @@ class PartyHat extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         child,
-        Positioned(
-          left: -7,
+        PositionedDirectional(
+          start: -7,
           top: -16.6,
           child: Transform.rotate(
             angle: -0.24,

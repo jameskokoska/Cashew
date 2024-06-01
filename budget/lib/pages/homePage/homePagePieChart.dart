@@ -58,14 +58,15 @@ class _HomePagePieChartState extends State<HomePagePieChart>
     const double borderRadius = 15;
     return KeepAliveClientMixin(
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 13, left: 13, right: 13),
+        padding:
+            const EdgeInsetsDirectional.only(bottom: 13, start: 13, end: 13),
         child: Container(
           decoration: BoxDecoration(
             boxShadow: boxShadowCheck(boxShadowGeneral(context)),
-            borderRadius: BorderRadius.circular(borderRadius),
+            borderRadius: BorderRadiusDirectional.circular(borderRadius),
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(borderRadius),
+            borderRadius: BorderRadiusDirectional.circular(borderRadius),
             child: Tappable(
               borderRadius: borderRadius,
               onLongPress: openPieChartSettings,
@@ -78,7 +79,7 @@ class _HomePagePieChartState extends State<HomePagePieChart>
               child: LayoutBuilder(builder: (context, constraints) {
                 if (constraints.maxWidth < 320 * 2 + 50) {
                   return Padding(
-                    padding: const EdgeInsets.only(bottom: 25),
+                    padding: const EdgeInsetsDirectional.only(bottom: 25),
                     child: Stack(
                       clipBehavior: Clip.none,
                       children: [
@@ -105,18 +106,18 @@ class _HomePagePieChartState extends State<HomePagePieChart>
                                 selectedCategory: selectedCategory)
                           ],
                         ),
-                        Positioned(
-                          left: 0,
-                          right: 0,
+                        PositionedDirectional(
+                          start: 0,
+                          end: 0,
                           bottom: -10,
                           child: PageIndicator(
                             controller: _pageController,
                             itemCount: 2,
                           ),
                         ),
-                        Positioned(
+                        PositionedDirectional(
                           top: 0,
-                          right: 0,
+                          end: 0,
                           child: IncomeOutcomeArrowPageIndicator(
                             controller: _pageController,
                             onTap: (isIncome) {
@@ -133,7 +134,7 @@ class _HomePagePieChartState extends State<HomePagePieChart>
                   );
                 }
                 return Padding(
-                  padding: EdgeInsets.only(bottom: 5),
+                  padding: EdgeInsetsDirectional.only(bottom: 5),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -185,7 +186,7 @@ class IncomeOutcomeArrowPageIndicator extends StatelessWidget {
           onTap: () => onTap(isIncome),
           color: Colors.transparent,
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsetsDirectional.all(8.0),
             child: IncomeOutcomeArrow(
               iconSize: 30,
               width: 30,
@@ -403,8 +404,8 @@ class _PieChartHomeAndCategorySummaryState
                       clipBehavior: Clip.none,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(
-                              left: 10, right: 10, bottom: 15, top: 30),
+                          padding: EdgeInsetsDirectional.only(
+                              start: 10, end: 10, bottom: 15, top: 30),
                           child: LayoutBuilder(
                             builder: (_, boxConstraints) {
                               bool showTopCategoriesLegend =
@@ -419,7 +420,8 @@ class _PieChartHomeAndCategorySummaryState
                                     Flexible(
                                       flex: 1,
                                       child: Padding(
-                                        padding: EdgeInsets.only(left: 12),
+                                        padding: EdgeInsetsDirectional.only(
+                                            start: 12),
                                         child: TopCategoriesSpentLegend(
                                           categoriesWithTotal: snapshot.data!
                                               .take(
@@ -435,11 +437,11 @@ class _PieChartHomeAndCategorySummaryState
                                     flex: 2,
                                     child: Stack(
                                       clipBehavior: Clip.none,
-                                      alignment: Alignment.center,
+                                      alignment: AlignmentDirectional.center,
                                       children: [
                                         Padding(
-                                          padding: EdgeInsets.only(
-                                              right: showTopCategoriesLegend
+                                          padding: EdgeInsetsDirectional.only(
+                                              end: showTopCategoriesLegend
                                                   ? 20
                                                   : 0),
                                           child: PieChartWrapper(
@@ -468,7 +470,9 @@ class _PieChartHomeAndCategorySummaryState
                                         ),
                                         if (snapshot.data!.length <= 0)
                                           Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                                            padding:
+                                                const EdgeInsetsDirectional.all(
+                                                    8.0),
                                             child: Column(
                                               children: [
                                                 ConstrainedBox(
@@ -520,10 +524,10 @@ class _PieChartHomeAndCategorySummaryState
                             },
                           ),
                         ),
-                        Positioned(
+                        PositionedDirectional(
                           bottom: -2,
-                          left: 0,
-                          right: 0,
+                          start: 0,
+                          end: 0,
                           child: PieChartOptions(
                             isIncomeBudget: false,
                             hasSubCategories: s.hasSubCategories,
@@ -584,7 +588,7 @@ class TopCategoriesSpentLegend extends StatelessWidget {
       children: [
         for (CategoryWithTotal categoryWithTotal in categoriesWithTotal)
           Padding(
-            padding: const EdgeInsets.only(bottom: 4),
+            padding: const EdgeInsetsDirectional.only(bottom: 4),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -592,7 +596,7 @@ class TopCategoriesSpentLegend extends StatelessWidget {
                   width: 10,
                   height: 10,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100),
+                    borderRadius: BorderRadiusDirectional.circular(100),
                     color: HexColor(categoryWithTotal.category.colour),
                   ),
                 ),

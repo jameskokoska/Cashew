@@ -98,7 +98,7 @@ class MoreActionsPageState extends State<MoreActionsPage>
         horizontalPadding: getHorizontalPaddingConstrained(context),
         listWidgets: [
           Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
+            padding: const EdgeInsetsDirectional.only(bottom: 8.0),
             child: PremiumBanner(),
           ),
           MorePages()
@@ -116,7 +116,7 @@ class MorePages extends StatelessWidget {
     bool hasSideNavigation = getIsFullScreen(context);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
+      padding: const EdgeInsetsDirectional.symmetric(horizontal: 4),
       child: Column(
         children: [
           if (hasSideNavigation == false)
@@ -158,7 +158,7 @@ class MorePages extends StatelessWidget {
             children: [
               // Expanded(
               //   child: Padding(
-              //     padding: EdgeInsets.symmetric(vertical: 5, horizontal: 4),
+              //     padding: EdgeInsetsDirectional.symmetric(vertical: 5, horizontal: 4),
               //     child: SettingsContainer(
               //       onTap: () {
               //         openUrl("https://github.com/jameskokoska/Cashew");
@@ -179,7 +179,8 @@ class MorePages extends StatelessWidget {
               ),
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 4),
+                  padding: EdgeInsetsDirectional.symmetric(
+                      vertical: 5, horizontal: 4),
                   child: SettingsContainer(
                     onTap: () {
                       openBottomSheet(context, RatingPopup(), fullSnap: true);
@@ -407,7 +408,8 @@ class SettingsPageContent extends StatelessWidget {
                       children: [
                         getPlatform() == PlatformOS.isIOS
                             ? Padding(
-                                padding: const EdgeInsets.only(bottom: 8.0),
+                                padding: const EdgeInsetsDirectional.only(
+                                    bottom: 8.0),
                                 child: SettingsContainerSwitch(
                                   title: "colorful-interface".tr(),
                                   onSwitched: (value) {
@@ -496,7 +498,8 @@ class SettingsPageContent extends StatelessWidget {
             color: Theme.of(context).colorScheme.secondaryContainer,
             borderRadius: 10,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              padding: const EdgeInsetsDirectional.symmetric(
+                  horizontal: 16, vertical: 10),
               child: TextFont(
                 text: languageDisplayFilter(
                     appStateSettings["locale"].toString()),
@@ -725,7 +728,7 @@ class WidgetSettings extends StatelessWidget {
               : Icons.blur_on_rounded,
           descriptionWidget: Container(
             height: 28,
-            padding: EdgeInsets.only(right: 10),
+            padding: EdgeInsetsDirectional.only(end: 10),
             child: SliderTheme(
               data: SliderThemeData(
                 trackShape: CustomTrackShape(),
@@ -992,7 +995,8 @@ class FontPickerSetting extends StatelessWidget {
         color: Theme.of(context).colorScheme.secondaryContainer,
         borderRadius: 10,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          padding: const EdgeInsetsDirectional.symmetric(
+              horizontal: 16, vertical: 10),
           child: Builder(builder: (context) {
             String displayFontName =
                 fontNameDisplayFilter(appStateSettings["font"].toString());
@@ -1067,7 +1071,8 @@ class NumberFormattingSetting extends StatelessWidget {
           color: Theme.of(context).colorScheme.secondaryContainer,
           borderRadius: 10,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            padding: const EdgeInsetsDirectional.symmetric(
+                horizontal: 16, vertical: 10),
             child: TextFont(
               text: convertToMoney(
                 Provider.of<AllWallets>(context, listen: true),
@@ -1168,12 +1173,14 @@ class _SetNumberFormatPopupState extends State<SetNumberFormatPopup> {
                 Expanded(
                   child: OutlinedButtonStacked(
                     filled: customNumberFormat == false,
-                    alignLeft: true,
+                    alignStart: true,
                     alignBeside: true,
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    padding: EdgeInsetsDirectional.symmetric(
+                        horizontal: 20, vertical: 20),
                     text: "default".tr(),
                     afterWidget: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      padding:
+                          const EdgeInsetsDirectional.symmetric(vertical: 8),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -1215,9 +1222,10 @@ class _SetNumberFormatPopupState extends State<SetNumberFormatPopup> {
                 Expanded(
                   child: OutlinedButtonStacked(
                     filled: customNumberFormat == true,
-                    alignLeft: true,
+                    alignStart: true,
                     alignBeside: true,
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    padding: EdgeInsetsDirectional.symmetric(
+                        horizontal: 20, vertical: 20),
                     text: "custom".tr(),
                     afterWidget: CustomNumberFormatPopup(onChangeAnyOption: () {
                       updateSettings("customNumberFormat", true,
@@ -1250,8 +1258,8 @@ class _SetNumberFormatPopupState extends State<SetNumberFormatPopup> {
               pushRoute(context, EditWalletsPage());
             },
             child: Padding(
-              padding:
-                  const EdgeInsets.only(left: 8, right: 8, top: 5, bottom: 5),
+              padding: const EdgeInsetsDirectional.only(
+                  start: 8, end: 8, top: 5, bottom: 5),
               child: TextFont(
                 text: "decimal-precision-edit-account-info".tr(),
                 fontSize: 14,
@@ -1497,7 +1505,7 @@ class _NumberPadFormatPickerState extends State<NumberPadFormatPicker> {
                     : 0.5,
                 child: OutlinedButtonStacked(
                   filled: selectedNumberPadFormat == NumberPadFormat.format123,
-                  alignLeft: true,
+                  alignStart: true,
                   alignBeside: true,
                   text: null,
                   afterWidget: IgnorePointer(
@@ -1509,13 +1517,13 @@ class _NumberPadFormatPickerState extends State<NumberPadFormatPicker> {
                       removeAll: () {},
                       canChange: () => true,
                       enableCalculator: true,
-                      padding: EdgeInsets.zero,
+                      padding: EdgeInsetsDirectional.zero,
                       setState: () {},
                       format: NumberPadFormat.format123,
                     ),
                   ),
-                  padding:
-                      EdgeInsets.only(left: 20, right: 15, top: 10, bottom: 15),
+                  padding: EdgeInsetsDirectional.only(
+                      start: 20, end: 15, top: 10, bottom: 15),
                   iconData: null,
                   onTap: () {
                     setState(() {
@@ -1541,7 +1549,7 @@ class _NumberPadFormatPickerState extends State<NumberPadFormatPicker> {
                     : 0.5,
                 child: OutlinedButtonStacked(
                   filled: selectedNumberPadFormat == NumberPadFormat.format789,
-                  alignLeft: true,
+                  alignStart: true,
                   alignBeside: true,
                   text: null,
                   afterWidget: IgnorePointer(
@@ -1553,13 +1561,13 @@ class _NumberPadFormatPickerState extends State<NumberPadFormatPicker> {
                       removeAll: () {},
                       canChange: () => true,
                       enableCalculator: true,
-                      padding: EdgeInsets.zero,
+                      padding: EdgeInsetsDirectional.zero,
                       setState: () {},
                       format: NumberPadFormat.format789,
                     ),
                   ),
-                  padding:
-                      EdgeInsets.only(left: 20, right: 15, top: 10, bottom: 15),
+                  padding: EdgeInsetsDirectional.only(
+                      start: 20, end: 15, top: 10, bottom: 15),
                   iconData: null,
                   onTap: () {
                     setState(() {

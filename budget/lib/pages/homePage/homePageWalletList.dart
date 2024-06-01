@@ -28,14 +28,15 @@ class HomePageWalletList extends StatelessWidget {
     const double borderRadius = 15;
     return KeepAliveClientMixin(
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 13, left: 13, right: 13),
+        padding:
+            const EdgeInsetsDirectional.only(bottom: 13, start: 13, end: 13),
         child: Container(
           decoration: BoxDecoration(
             boxShadow: boxShadowCheck(boxShadowGeneral(context)),
-            borderRadius: BorderRadius.circular(borderRadius),
+            borderRadius: BorderRadiusDirectional.circular(borderRadius),
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(borderRadius),
+            borderRadius: BorderRadiusDirectional.circular(borderRadius),
             child: Tappable(
               color: getColor(context, "lightDarkAccentHeavyLight"),
               borderRadius: borderRadius,
@@ -95,8 +96,8 @@ class HomePageWalletList extends StatelessWidget {
                                       height: null,
                                       labelUnder: "account".tr(),
                                       icon: Icons.format_list_bulleted_add,
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 10),
+                                      padding: EdgeInsetsDirectional.symmetric(
+                                          vertical: 10),
                                     ),
                                   ),
                                 ],
@@ -116,7 +117,7 @@ class HomePageWalletList extends StatelessWidget {
                               .containsMultipleAccountsWithSameCurrency() ==
                           true)
                     HorizontalBreakAbove(
-                      padding: EdgeInsets.zero,
+                      padding: EdgeInsetsDirectional.zero,
                       child: StreamBuilder<List<WalletWithDetails>>(
                         stream: database.watchAllWalletsWithDetails(
                             mergeLikeCurrencies: true),

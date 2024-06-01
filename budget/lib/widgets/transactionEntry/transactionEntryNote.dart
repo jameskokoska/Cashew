@@ -20,21 +20,22 @@ class TransactionEntryNote extends StatelessWidget {
     required this.transaction,
     required this.iconColor,
     this.padding =
-        const EdgeInsets.only(left: 5, right: 3, top: 10, bottom: 10),
+        const EdgeInsetsDirectional.only(start: 5, end: 3, top: 10, bottom: 10),
     super.key,
   });
   final Transaction transaction;
   final Color iconColor;
-  final EdgeInsets padding;
+  final EdgeInsetsDirectional padding;
 
   @override
   Widget build(BuildContext context) {
     return transaction.note.toString().trim() != ""
         ? Tooltip(
-            padding: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 8),
-            margin: EdgeInsets.symmetric(horizontal: 15),
+            padding: EdgeInsetsDirectional.only(
+                start: 15, end: 15, top: 10, bottom: 8),
+            margin: EdgeInsetsDirectional.symmetric(horizontal: 15),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadiusDirectional.circular(10),
               color: getColor(context, "lightDarkAccent"),
               boxShadow: boxShadowCheck(
                 [

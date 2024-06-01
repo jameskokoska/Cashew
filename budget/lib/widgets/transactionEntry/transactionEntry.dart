@@ -133,7 +133,7 @@ class TransactionEntry extends StatelessWidget {
   final bool? allowSelect;
   final bool highlightActionButton;
   final bool showObjectivePercentage;
-  final EdgeInsets? customPadding;
+  final EdgeInsetsDirectional? customPadding;
   final bool allowOpenIntoObjectiveLoanPage;
   final bool Function(Transaction transaction)? showExcludedBudgetTag;
   final bool enableFutureTransactionsDivider;
@@ -182,7 +182,7 @@ class TransactionEntry extends StatelessWidget {
     //                     color: Theme.of(context).colorScheme.secondary,
     //                   ),
     //                   Padding(
-    //                     padding: const EdgeInsets.only(left: 10),
+    //                     padding: const EdgeInsetsDirectional.only(start: 10),
     //                     child: TextFont(
     //                       text: "Transfer",
     //                       fontSize: 16,
@@ -313,13 +313,13 @@ class TransactionEntry extends StatelessWidget {
           categoryPk: transaction.categoryFk,
           size: 27,
           sizePadding: 20,
-          margin: EdgeInsets.zero,
+          margin: EdgeInsetsDirectional.zero,
           borderRadius: 100,
           onTap: openContainer,
           tintColor: categoryTintColor,
         ),
       );
-      Widget actionButton(EdgeInsets padding) {
+      Widget actionButton(EdgeInsetsDirectional padding) {
         Widget actionButton = TransactionEntryActionButton(
           padding: padding,
           transaction: transaction,
@@ -376,7 +376,7 @@ class TransactionEntry extends StatelessWidget {
           TransactionEntryNote(
             transaction: transaction,
             iconColor: iconColor,
-            padding: EdgeInsets.only(right: 5),
+            padding: EdgeInsetsDirectional.only(end: 5),
           ),
           Expanded(
             child: TextFont(
@@ -397,141 +397,142 @@ class TransactionEntry extends StatelessWidget {
       Widget transactionActionLabelButton = TransactionEntryTypeButton(
         transaction: transaction,
       );
-      Widget finalTransactionContainer =
-          appStateSettings["nonCompactTransactions"] == true
-              ? Padding(
-                  padding: enableSelectionCheckmark
-                      ? const EdgeInsets.only(right: 5)
-                      : EdgeInsets.zero,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      transactionSelectionCheck,
-                      categoryIcon,
-                      Expanded(
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(minHeight: 45),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 5),
-                                child: Row(
-                                  children: [
-                                    actionButton(
-                                      const EdgeInsets.only(
-                                        left: 3,
-                                        top: 5,
-                                        bottom: 5,
-                                        right: 0,
+      Widget finalTransactionContainer = appStateSettings[
+                  "nonCompactTransactions"] ==
+              true
+          ? Padding(
+              padding: enableSelectionCheckmark
+                  ? const EdgeInsetsDirectional.only(end: 5)
+                  : EdgeInsetsDirectional.zero,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  transactionSelectionCheck,
+                  categoryIcon,
+                  Expanded(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(minHeight: 45),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsetsDirectional.only(start: 5),
+                            child: Row(
+                              children: [
+                                actionButton(
+                                  const EdgeInsetsDirectional.only(
+                                    start: 3,
+                                    top: 5,
+                                    bottom: 5,
+                                    end: 0,
+                                  ),
+                                ),
+                                SizedBox(width: 5),
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsetsDirectional.only(
+                                        start: 3, bottom: 2, top: 2),
+                                    child: Container(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: transaction.name.trim() != ""
+                                            ? [
+                                                transactionName,
+                                                transactionCategoryName,
+                                              ]
+                                            : [transactionLabel],
                                       ),
                                     ),
-                                    SizedBox(width: 5),
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 3, bottom: 2, top: 2),
-                                        child: Container(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children:
-                                                transaction.name.trim() != ""
-                                                    ? [
-                                                        transactionName,
-                                                        transactionCategoryName,
-                                                      ]
-                                                    : [transactionLabel],
-                                          ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 7,
+                                ),
+                                if (getIsFullScreen(context))
+                                  transactionActionLabelButton,
+                                amount,
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsetsDirectional.only(start: 5 + 3),
+                            child: Column(
+                              children: [
+                                if (showNote)
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsetsDirectional.only(
+                                                  bottom: 4, top: 3),
+                                          child: note,
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      width: 7,
-                                    ),
-                                    if (getIsFullScreen(context))
-                                      transactionActionLabelButton,
-                                    amount,
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 5 + 3),
-                                child: Column(
-                                  children: [
-                                    if (showNote)
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 4, top: 3),
-                                              child: note,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    tags,
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              : Padding(
-                  padding: enableSelectionCheckmark
-                      ? const EdgeInsets.only(right: 7)
-                      : EdgeInsets.zero,
-                  child: Row(
-                    children: [
-                      transactionSelectionCheck,
-                      categoryIcon,
-                      SizedBox(width: 5),
-                      actionButton(
-                        const EdgeInsets.only(
-                          left: 3,
-                          top: 5.5,
-                          bottom: 5.5,
-                          right: 0,
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 3),
-                              child: transactionLabel,
+                                    ],
+                                  ),
+                                tags,
+                              ],
                             ),
-                            tags,
-                          ],
-                        ),
+                          )
+                        ],
                       ),
-                      SizedBox(
-                        width: 7,
-                      ),
-                      if (getIsFullScreen(context))
-                        transactionActionLabelButton,
-                      noteIcon,
-                      amount,
-                    ],
+                    ),
+                  )
+                ],
+              ),
+            )
+          : Padding(
+              padding: enableSelectionCheckmark
+                  ? const EdgeInsetsDirectional.only(end: 7)
+                  : EdgeInsetsDirectional.zero,
+              child: Row(
+                children: [
+                  transactionSelectionCheck,
+                  categoryIcon,
+                  SizedBox(width: 5),
+                  actionButton(
+                    const EdgeInsetsDirectional.only(
+                      start: 3,
+                      top: 5.5,
+                      bottom: 5.5,
+                      end: 0,
+                    ),
                   ),
-                );
+                  SizedBox(width: 5),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsetsDirectional.only(start: 3),
+                          child: transactionLabel,
+                        ),
+                        tags,
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: 7,
+                  ),
+                  if (getIsFullScreen(context)) transactionActionLabelButton,
+                  noteIcon,
+                  amount,
+                ],
+              ),
+            );
 
       if (aboveWidget != null)
         return Column(
           children: [
             Padding(
-              padding: EdgeInsets.only(
-                left: getPlatform() == PlatformOS.isIOS ? 10 : 0,
+              padding: EdgeInsetsDirectional.only(
+                start: getPlatform() == PlatformOS.isIOS ? 10 : 0,
               ),
               child: aboveWidget ?? SizedBox.shrink(),
             ),
@@ -543,7 +544,7 @@ class TransactionEntry extends StatelessWidget {
     }
 
     return Padding(
-      padding: EdgeInsets.symmetric(
+      padding: EdgeInsetsDirectional.symmetric(
           horizontal: getHorizontalPaddingConstrained(context,
               enabled: useHorizontalPaddingConstrained)),
       child: TransactionEntryBox(
@@ -606,11 +607,12 @@ class TransactionEntry extends StatelessWidget {
                   Widget transactionEntryWidget = Padding(
                     padding: customPadding ??
                         (enableSelectionCheckmark
-                            ? const EdgeInsets.only(left: 5, right: 5)
-                            : const EdgeInsets.only(left: 13, right: 13)),
+                            ? const EdgeInsetsDirectional.only(start: 5, end: 5)
+                            : const EdgeInsetsDirectional.only(
+                                start: 13, end: 13)),
                     child: OpenContainerNavigation(
                       borderRadius: 0,
-                      customBorderRadius: BorderRadius.vertical(
+                      customBorderRadius: BorderRadiusDirectional.vertical(
                         top: Radius.circular(
                           isTransactionBeforeSelected ? 0 : borderRadius,
                         ),
@@ -649,13 +651,13 @@ class TransactionEntry extends StatelessWidget {
                             child: AnimatedContainer(
                               duration: const Duration(seconds: 1),
                               curve: Curves.easeInOutCubicEmphasized,
-                              padding: EdgeInsets.only(
-                                left: enableSelectionCheckmark
+                              padding: EdgeInsetsDirectional.only(
+                                start: enableSelectionCheckmark
                                     ? 0
                                     : selected
                                         ? 12 - 2
                                         : 10 - 2,
-                                right: !enableSelectionCheckmark && selected
+                                end: !enableSelectionCheckmark && selected
                                     ? 12
                                     : 10,
                                 top: !enableSelectionCheckmark &&
@@ -673,7 +675,7 @@ class TransactionEntry extends StatelessWidget {
                                 color: selected
                                     ? selectedColor
                                     : Colors.transparent,
-                                borderRadius: BorderRadius.vertical(
+                                borderRadius: BorderRadiusDirectional.vertical(
                                   top: Radius.circular(
                                     isTransactionBeforeSelected
                                         ? 0
@@ -900,8 +902,8 @@ class TransactionSelectionCheck extends StatelessWidget {
               key: ValueKey(areTransactionsBeingSelected),
               curve: Curves.easeInOutCubicEmphasized,
               child: Padding(
-                padding: EdgeInsets.only(
-                  left: getIsFullScreen(context) ? 5 : 0,
+                padding: EdgeInsetsDirectional.only(
+                  start: getIsFullScreen(context) ? 5 : 0,
                 ),
                 child: GestureDetector(
                   onVerticalDragStart: (_) {
@@ -914,7 +916,7 @@ class TransactionSelectionCheck extends StatelessWidget {
                     },
                     color: Colors.transparent,
                     child: Padding(
-                      padding: EdgeInsets.symmetric(
+                      padding: EdgeInsetsDirectional.symmetric(
                         horizontal: 10,
                         vertical: 12,
                       ),
@@ -939,7 +941,7 @@ class TransactionSelectionCheck extends StatelessWidget {
                                 width: 2,
                               ),
                             ),
-                            padding: EdgeInsets.all(2),
+                            padding: EdgeInsetsDirectional.all(2),
                             child: Icon(
                               Icons.check,
                               size: 14,

@@ -182,7 +182,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
           },
           nextLabel: "set-amount".tr(),
           enableWalletPicker: true,
-          padding: EdgeInsets.symmetric(horizontal: 18),
+          padding: EdgeInsetsDirectional.symmetric(horizontal: 18),
           setSelectedWalletPk: (walletPk) {
             setState(() {
               selectedWalletPk = walletPk;
@@ -479,7 +479,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
             ),
           ],
           staticOverlay: Align(
-            alignment: Alignment.bottomCenter,
+            alignment: AlignmentDirectional.bottomCenter,
             child: selectedTitle == "" || selectedTitle == null
                 ? SaveBottomButton(
                     label: "set-name".tr(),
@@ -516,7 +516,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
           slivers: [
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 13),
+                padding: const EdgeInsetsDirectional.symmetric(horizontal: 13),
                 // Flip the order if ObjectiveType.loan
                 child: Row(
                   children: [
@@ -569,7 +569,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
                         (widget.objectiveType == ObjectiveType.loan ||
                             widget.objective?.type == ObjectiveType.loan))
                       Padding(
-                        padding: const EdgeInsets.only(left: 7),
+                        padding: const EdgeInsetsDirectional.only(start: 7),
                         child: ButtonIcon(
                           onTap: () {
                             setState(() {
@@ -621,7 +621,8 @@ class _AddObjectivePageState extends State<AddObjectivePage>
                     color: Colors.transparent,
                     child: Container(
                       height: 126,
-                      padding: const EdgeInsets.only(left: 13, right: 18),
+                      padding:
+                          const EdgeInsetsDirectional.only(start: 13, end: 18),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -654,7 +655,8 @@ class _AddObjectivePageState extends State<AddObjectivePage>
                   Expanded(
                     child: IntrinsicWidth(
                       child: Padding(
-                        padding: const EdgeInsets.only(right: 20, bottom: 40),
+                        padding: const EdgeInsetsDirectional.only(
+                            end: 20, bottom: 40),
                         child: TextInput(
                           autoFocus: kIsWeb && getIsFullScreen(context),
                           focusNode: _titleFocusNode,
@@ -663,7 +665,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
                           onChanged: (text) {
                             setSelectedTitle(text);
                           },
-                          padding: EdgeInsets.zero,
+                          padding: EdgeInsetsDirectional.zero,
                           fontSize: getIsFullScreen(context) ? 34 : 27,
                           fontWeight: FontWeight.bold,
                           topContentPadding: 40,
@@ -693,10 +695,12 @@ class _AddObjectivePageState extends State<AddObjectivePage>
             if (widget.objective != null || isDifferenceOnlyLoan == false)
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding:
+                      const EdgeInsetsDirectional.symmetric(horizontal: 20),
                   child: OutlinedContainer(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      padding:
+                          const EdgeInsetsDirectional.symmetric(vertical: 8.0),
                       child: Column(
                         children: [
                           widget.objective != null &&
@@ -728,7 +732,8 @@ class _AddObjectivePageState extends State<AddObjectivePage>
                                       children: [
                                         Padding(
                                           padding:
-                                              const EdgeInsets.only(bottom: 14),
+                                              const EdgeInsetsDirectional.only(
+                                                  bottom: 14),
                                           child: AnimatedSizeSwitcher(
                                             child: TextFont(
                                               key: ValueKey(
@@ -778,10 +783,12 @@ class _AddObjectivePageState extends State<AddObjectivePage>
                                           },
                                           fontSize: 32,
                                           fontWeight: FontWeight.bold,
-                                          internalPadding: EdgeInsets.symmetric(
-                                              vertical: 2, horizontal: 4),
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 10, horizontal: 5),
+                                          internalPadding:
+                                              EdgeInsetsDirectional.symmetric(
+                                                  vertical: 2, horizontal: 4),
+                                          padding:
+                                              EdgeInsetsDirectional.symmetric(
+                                                  vertical: 10, horizontal: 5),
                                         ),
                                       ],
                                     ),
@@ -789,7 +796,8 @@ class _AddObjectivePageState extends State<AddObjectivePage>
                             HorizontalBreakAbove(
                               child: Center(
                                 child: SelectDateRange(
-                                  padding: EdgeInsets.only(bottom: 8),
+                                  padding:
+                                      EdgeInsetsDirectional.only(bottom: 8),
                                   initialStartDate: selectedStartDate,
                                   initialEndDate: selectedEndDate,
                                   onSelectedStartDate: setSelectedStartDate,
@@ -802,12 +810,13 @@ class _AddObjectivePageState extends State<AddObjectivePage>
                               isDifferenceOnlyLoan == false)
                             HorizontalBreakAbove(
                               child: Padding(
-                                padding: const EdgeInsets.all(5.0),
+                                padding: const EdgeInsetsDirectional.all(5.0),
                                 child: Column(
                                   children: [
                                     HeaderWithIconAndInfo(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 20 - 5.0),
+                                      padding:
+                                          const EdgeInsetsDirectional.symmetric(
+                                              horizontal: 20 - 5.0),
                                       iconData:
                                           appStateSettings["outlinedIcons"]
                                               ? Icons.exposure_outlined
@@ -873,14 +882,15 @@ class _AddObjectivePageState extends State<AddObjectivePage>
                                       },
                                       fontSize: 32,
                                       fontWeight: FontWeight.bold,
-                                      internalPadding: EdgeInsets.symmetric(
-                                          vertical: 2, horizontal: 4),
-                                      padding: EdgeInsets.symmetric(
+                                      internalPadding:
+                                          EdgeInsetsDirectional.symmetric(
+                                              vertical: 2, horizontal: 4),
+                                      padding: EdgeInsetsDirectional.symmetric(
                                           vertical: 10, horizontal: 5),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8, right: 8, bottom: 8, top: 2),
+                                      padding: const EdgeInsetsDirectional.only(
+                                          start: 8, end: 8, bottom: 8, top: 2),
                                       child: StreamBuilder<Objective>(
                                         stream: database.getObjective(
                                             widget.objective?.objectivePk ??
@@ -983,9 +993,10 @@ class SelectObjectiveTypePopup extends StatelessWidget {
             children: [
               Expanded(
                 child: OutlinedButtonStacked(
-                  alignLeft: true,
+                  alignStart: true,
                   alignBeside: true,
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  padding: EdgeInsetsDirectional.symmetric(
+                      horizontal: 20, vertical: 20),
                   text: "savings-goal".tr(),
                   iconData: appStateSettings["outlinedIcons"]
                       ? Icons.savings_outlined
@@ -1021,9 +1032,10 @@ class SelectObjectiveTypePopup extends StatelessWidget {
             children: [
               Expanded(
                 child: OutlinedButtonStacked(
-                  alignLeft: true,
+                  alignStart: true,
                   alignBeside: true,
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  padding: EdgeInsetsDirectional.symmetric(
+                      horizontal: 20, vertical: 20),
                   text: "expense-goal".tr(),
                   iconData: appStateSettings["outlinedIcons"]
                       ? Icons.request_quote_outlined
@@ -1119,7 +1131,7 @@ class _InstallmentObjectivePopupState extends State<InstallmentObjectivePopup> {
         child: SelectAmount(
           enableWalletPicker: true,
           hideWalletPickerIfOneCurrency: true,
-          padding: EdgeInsets.symmetric(horizontal: 18),
+          padding: EdgeInsetsDirectional.symmetric(horizontal: 18),
           onlyShowCurrencyIcon: true,
           amountPassed: (amountPerInstallmentPayment ?? 0).toString(),
           setSelectedAmount: (amount, _) {
@@ -1182,10 +1194,10 @@ class _InstallmentObjectivePopupState extends State<InstallmentObjectivePopup> {
           },
           initialValue: selectedTitle,
           labelText: "title-placeholder".tr(),
-          padding: EdgeInsets.only(bottom: 13),
+          padding: EdgeInsetsDirectional.only(bottom: 13),
         ),
         DateButton(
-          internalPadding: EdgeInsets.only(right: 5),
+          internalPadding: EdgeInsetsDirectional.only(end: 5),
           initialSelectedDate: selectedDateTime ?? DateTime.now(),
           initialSelectedTime: TimeOfDay(
               hour: selectedDateTime?.hour ?? TimeOfDay.now().hour,
@@ -1218,7 +1230,7 @@ class _InstallmentObjectivePopupState extends State<InstallmentObjectivePopup> {
           Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18),
+                padding: const EdgeInsetsDirectional.symmetric(horizontal: 18),
                 child: Builder(
                   builder: (context) {
                     List<double> results = getInstallmentPaymentCalculations(
@@ -1267,14 +1279,14 @@ class _InstallmentObjectivePopupState extends State<InstallmentObjectivePopup> {
                               },
                               fontSize: 23,
                               fontWeight: FontWeight.bold,
-                              internalPadding: EdgeInsets.symmetric(
+                              internalPadding: EdgeInsetsDirectional.symmetric(
                                   vertical: 4, horizontal: 4),
-                              padding: EdgeInsets.symmetric(
+                              padding: EdgeInsetsDirectional.symmetric(
                                   vertical: 0, horizontal: 3),
                             ),
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 3),
+                              padding: const EdgeInsetsDirectional.symmetric(
+                                  horizontal: 3),
                               child: TextFont(
                                 text: numberOfInstallmentPayments == 1
                                     ? "payment-of".tr()
@@ -1297,15 +1309,16 @@ class _InstallmentObjectivePopupState extends State<InstallmentObjectivePopup> {
                               },
                               fontSize: 23,
                               fontWeight: FontWeight.bold,
-                              internalPadding: EdgeInsets.symmetric(
+                              internalPadding: EdgeInsetsDirectional.symmetric(
                                   vertical: 4, horizontal: 4),
-                              padding: EdgeInsets.symmetric(
+                              padding: EdgeInsetsDirectional.symmetric(
                                   vertical: 0, horizontal: 3),
                             ),
                           ],
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          padding: const EdgeInsetsDirectional.symmetric(
+                              vertical: 5),
                           child: TextFont(
                             text: "until-goal-reached".tr().toLowerCase(),
                             fontSize: 23,
@@ -1319,7 +1332,7 @@ class _InstallmentObjectivePopupState extends State<InstallmentObjectivePopup> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18),
+                padding: const EdgeInsetsDirectional.symmetric(horizontal: 18),
                 child: Wrap(
                   alignment: WrapAlignment.center,
                   crossAxisAlignment: WrapCrossAlignment.center,
@@ -1357,10 +1370,10 @@ class _InstallmentObjectivePopupState extends State<InstallmentObjectivePopup> {
                           },
                           fontSize: 23,
                           fontWeight: FontWeight.bold,
-                          internalPadding:
-                              EdgeInsets.symmetric(vertical: 4, horizontal: 4),
-                          padding:
-                              EdgeInsets.symmetric(vertical: 0, horizontal: 3),
+                          internalPadding: EdgeInsetsDirectional.symmetric(
+                              vertical: 4, horizontal: 4),
+                          padding: EdgeInsetsDirectional.symmetric(
+                              vertical: 0, horizontal: 3),
                         ),
                         TappableTextEntry(
                           title: selectedRecurrenceDisplay
@@ -1388,10 +1401,10 @@ class _InstallmentObjectivePopupState extends State<InstallmentObjectivePopup> {
                           },
                           fontSize: 23,
                           fontWeight: FontWeight.bold,
-                          internalPadding:
-                              EdgeInsets.symmetric(vertical: 4, horizontal: 4),
-                          padding:
-                              EdgeInsets.symmetric(vertical: 0, horizontal: 3),
+                          internalPadding: EdgeInsetsDirectional.symmetric(
+                              vertical: 4, horizontal: 4),
+                          padding: EdgeInsetsDirectional.symmetric(
+                              vertical: 0, horizontal: 3),
                         ),
                       ],
                     )
@@ -1409,7 +1422,7 @@ class _InstallmentObjectivePopupState extends State<InstallmentObjectivePopup> {
               if (selectedCategory != null)
                 SelectCategory(
                   horizontalList: true,
-                  listPadding: EdgeInsets.symmetric(horizontal: 10),
+                  listPadding: EdgeInsetsDirectional.symmetric(horizontal: 10),
                   addButton: false,
                   setSelectedCategory: (category) {
                     // Clear the subcategory
@@ -1445,12 +1458,12 @@ class _InstallmentObjectivePopupState extends State<InstallmentObjectivePopup> {
                 ),
               SizedBox(height: 9),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18),
+                padding: const EdgeInsetsDirectional.symmetric(horizontal: 18),
                 child: editTransferDetails,
               ),
               SizedBox(height: 15),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18),
+                padding: const EdgeInsetsDirectional.symmetric(horizontal: 18),
                 child: Button(
                   disabled: selectedCategory == null ||
                       (amountPerInstallmentPayment == null &&

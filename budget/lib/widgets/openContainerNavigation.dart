@@ -36,7 +36,8 @@ class OpenContainerNavigation extends StatelessWidget {
         if (onClosed != null) onClosed!();
       });
       return ClipRRect(
-        borderRadius: customBorderRadius ?? BorderRadius.circular(borderRadius),
+        borderRadius: customBorderRadius ??
+            BorderRadiusDirectional.circular(borderRadius),
         child: Container(
           color: closedColor ?? Colors.transparent,
           child: child,
@@ -67,7 +68,7 @@ class OpenContainerNavigation extends StatelessWidget {
       },
       closedShape: RoundedRectangleBorder(
         borderRadius: customBorderRadius ??
-            BorderRadius.all(
+            BorderRadiusDirectional.all(
               Radius.circular(borderRadius),
             ),
       ),

@@ -52,15 +52,16 @@ class _HomePageBudgetsState extends State<HomePageBudgets> {
                 },
                 height: 160,
                 width: null,
-                margin: const EdgeInsets.only(left: 13, right: 13, bottom: 13),
+                margin: const EdgeInsetsDirectional.only(
+                    start: 13, end: 13, bottom: 13),
                 labelUnder: "budget".tr(),
                 icon: Icons.format_list_bulleted_add,
               );
             }
             // if (snapshot.data!.length == 1) {
             //   return Padding(
-            //     padding: const EdgeInsets.only(
-            //         left: 13, right: 13, bottom: 13),
+            //     padding: const EdgeInsetsDirectional.only(
+            //         start: 13, end: 13, bottom: 13),
             //     child: BudgetContainer(
             //       budget: snapshot.data![0],
             //     ),
@@ -69,7 +70,8 @@ class _HomePageBudgetsState extends State<HomePageBudgets> {
             List<Widget> budgetItems = [
               ...(snapshot.data?.map((Budget budget) {
                     return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 3),
+                      padding:
+                          const EdgeInsetsDirectional.symmetric(horizontal: 3),
                       child: BudgetContainer(
                         intermediatePadding: false,
                         budget: budget,
@@ -78,7 +80,7 @@ class _HomePageBudgetsState extends State<HomePageBudgets> {
                   }).toList() ??
                   []),
               Padding(
-                padding: const EdgeInsets.only(left: 3, right: 3),
+                padding: const EdgeInsetsDirectional.only(start: 3, end: 3),
                 child: AddButton(
                   onTap: () {
                     openBottomSheet(
@@ -91,7 +93,7 @@ class _HomePageBudgetsState extends State<HomePageBudgets> {
                   },
                   height: null,
                   width: null,
-                  margin: EdgeInsets.all(0),
+                  margin: EdgeInsetsDirectional.all(0),
                   labelUnder: "budget".tr(),
                   icon: Icons.format_list_bulleted_add,
                 ),
@@ -120,7 +122,7 @@ class _HomePageBudgetsState extends State<HomePageBudgets> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 13),
+                  padding: const EdgeInsetsDirectional.only(bottom: 13),
                   child: getIsFullScreen(context)
                       ? SizedBox(
                           height: height,
@@ -131,14 +133,15 @@ class _HomePageBudgetsState extends State<HomePageBudgets> {
                             children: [
                               for (Widget widget in budgetItems)
                                 Padding(
-                                  padding: const EdgeInsets.only(right: 7),
+                                  padding:
+                                      const EdgeInsetsDirectional.only(end: 7),
                                   child: SizedBox(
                                     width: 500,
                                     child: widget,
                                   ),
                                 )
                             ],
-                            padding: EdgeInsets.symmetric(
+                            padding: EdgeInsetsDirectional.symmetric(
                               horizontal: 10,
                             ),
                           ),
@@ -188,8 +191,8 @@ class EditHomePagePinnedBudgetsPopup extends StatelessWidget {
             title: "select-budgets".tr(),
             outsideExtraWidget: IconButton(
               iconSize: 25,
-              padding:
-                  EdgeInsets.all(getPlatform() == PlatformOS.isIOS ? 15 : 20),
+              padding: EdgeInsetsDirectional.all(
+                  getPlatform() == PlatformOS.isIOS ? 15 : 20),
               icon: Icon(
                 appStateSettings["outlinedIcons"]
                     ? Icons.edit_outlined
@@ -203,7 +206,7 @@ class EditHomePagePinnedBudgetsPopup extends StatelessWidget {
               children: [
                 if (showBudgetsTotalLabelSetting)
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadiusDirectional.circular(15),
                     child: TotalSpentToggle(),
                   ),
                 if (allBudgets.length <= 0)
@@ -268,9 +271,9 @@ class EditHomePagePinnedBudgetsPopup extends StatelessWidget {
                     onTap: () {},
                     height: 50,
                     width: null,
-                    margin: const EdgeInsets.only(
-                      left: 13,
-                      right: 13,
+                    margin: const EdgeInsetsDirectional.only(
+                      start: 13,
+                      end: 13,
                       bottom: 13,
                       top: 13,
                     ),

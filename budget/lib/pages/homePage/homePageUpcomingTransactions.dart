@@ -23,7 +23,8 @@ class HomePageUpcomingTransactions extends StatelessWidget {
   Widget build(BuildContext context) {
     return KeepAliveClientMixin(
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 13, left: 13, right: 13),
+        padding:
+            const EdgeInsetsDirectional.only(bottom: 13, start: 13, end: 13),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,

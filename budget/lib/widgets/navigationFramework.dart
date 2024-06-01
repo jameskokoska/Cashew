@@ -344,11 +344,11 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
           ),
         ),
         Align(
-          alignment: Alignment.bottomRight,
+          alignment: AlignmentDirectional.bottomEnd,
           child: Padding(
-            padding: EdgeInsets.only(
+            padding: EdgeInsetsDirectional.only(
               bottom: getHeightNavigationSidebar(context) + 15,
-              right: 15,
+              end: 15,
             ),
             child: Stack(
               children: [
@@ -493,7 +493,7 @@ class AddMoreThingsPopup extends StatelessWidget {
             routesToPopAfterDelete: RoutesToPopAfterDelete.None,
           ),
           widgetAfter: SelectChips(
-            padding: EdgeInsets.symmetric(horizontal: 13),
+            padding: EdgeInsetsDirectional.symmetric(horizontal: 13),
             items: [
               if (Provider.of<AllWallets>(context).list.length > 1)
                 "transfer-balance",
@@ -582,7 +582,7 @@ class AddMoreThingsPopup extends StatelessWidget {
                         : Icons.info_outline_rounded,
                     iconSize: 14,
                     scale: 1.8,
-                    padding: EdgeInsets.all(5),
+                    padding: EdgeInsetsDirectional.all(5),
                     onTap: () {
                       openPopup(
                         context,
@@ -604,7 +604,7 @@ class AddMoreThingsPopup extends StatelessWidget {
                   openPage: AddTransactionPage(
                       routesToPopAfterDelete: RoutesToPopAfterDelete.None),
                   widgetAfter: SelectChips(
-                    padding: EdgeInsets.symmetric(horizontal: 13),
+                    padding: EdgeInsetsDirectional.symmetric(horizontal: 13),
                     items: commonTransactions,
                     getSelected: (_) {
                       return false;
@@ -692,7 +692,7 @@ class AddMoreThingsPopup extends StatelessWidget {
                           sizePadding: 0,
                           noBackground: true,
                           canEditByLongPress: false,
-                          margin: EdgeInsets.zero,
+                          margin: EdgeInsetsDirectional.zero,
                         );
                       });
                     },
@@ -710,7 +710,7 @@ class AddMoreThingsPopup extends StatelessWidget {
             objectiveType: ObjectiveType.loan,
           ),
           widgetAfter: SelectChips(
-            padding: EdgeInsets.symmetric(horizontal: 13),
+            padding: EdgeInsetsDirectional.symmetric(horizontal: 13),
             items: ["long-term", "one-time"],
             getSelected: (_) {
               return false;
@@ -770,7 +770,7 @@ class AddMoreThingsPopup extends StatelessWidget {
             routesToPopAfterDelete: RoutesToPopAfterDelete.None,
           ),
           widgetAfter: SelectChips(
-            padding: EdgeInsets.symmetric(horizontal: 13),
+            padding: EdgeInsetsDirectional.symmetric(horizontal: 13),
             items: ["installment"],
             getSelected: (_) {
               return false;
@@ -850,7 +850,7 @@ class AddThing extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
+      padding: const EdgeInsetsDirectional.only(
         bottom: 5,
         top: 5,
       ),
@@ -859,11 +859,13 @@ class AddThing extends StatelessWidget {
           Expanded(
             child: OutlinedButtonStacked(
               filled: false,
-              alignLeft: true,
+              alignStart: true,
               alignBeside: true,
               padding: widgetAfter != null
-                  ? EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 5)
-                  : EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  ? EdgeInsetsDirectional.only(
+                      start: 20, end: 20, top: 20, bottom: 5)
+                  : EdgeInsetsDirectional.symmetric(
+                      horizontal: 20, vertical: 20),
               text: title.capitalizeFirst,
               iconData: iconData,
               iconScale: iconScale,
@@ -877,8 +879,8 @@ class AddThing extends StatelessWidget {
               },
               afterWidget: widgetAfter,
               afterWidgetPadding: widgetAfter != null
-                  ? EdgeInsets.only(bottom: 8)
-                  : EdgeInsets.zero,
+                  ? EdgeInsetsDirectional.only(bottom: 8)
+                  : EdgeInsetsDirectional.zero,
               infoButton: infoButton,
             ),
           ),

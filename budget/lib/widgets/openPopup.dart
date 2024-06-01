@@ -66,9 +66,9 @@ Future<T?> openPopup<T extends Object?>(
           child: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: getWidthBottomSheet(context)),
             child: Container(
-              margin: EdgeInsets.only(
-                left: 20,
-                right: 20,
+              margin: EdgeInsetsDirectional.only(
+                start: 20,
+                end: 20,
                 top: MediaQuery.paddingOf(context).top + 20,
                 bottom: MediaQuery.paddingOf(context).bottom + 20,
               ),
@@ -78,7 +78,7 @@ Future<T?> openPopup<T extends Object?>(
                         Theme.of(context).colorScheme.secondaryContainer,
                         amount: 0.5)
                     : getColor(context, "lightDarkAccent"),
-                borderRadius: BorderRadius.circular(borderRadius),
+                borderRadius: BorderRadiusDirectional.circular(borderRadius),
                 boxShadow: boxShadowGeneral(context),
               ),
               child: SingleChildScrollView(
@@ -86,13 +86,13 @@ Future<T?> openPopup<T extends Object?>(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 25),
+                      padding: EdgeInsetsDirectional.symmetric(horizontal: 25),
                       child: Column(
                         children: [
                           SizedBox(height: 17),
                           if (icon != null)
                             Padding(
-                              padding: const EdgeInsets.symmetric(
+                              padding: const EdgeInsetsDirectional.symmetric(
                                   vertical: 8.0, horizontal: 10),
                               child: Transform.scale(
                                 scale: iconScale ?? 1,
@@ -105,7 +105,7 @@ Future<T?> openPopup<T extends Object?>(
                             ),
                           if (title != null)
                             Padding(
-                              padding: const EdgeInsets.symmetric(
+                              padding: const EdgeInsetsDirectional.symmetric(
                                   vertical: 8.0, horizontal: 10),
                               child: TextFont(
                                 textAlign: TextAlign.center,
@@ -120,7 +120,7 @@ Future<T?> openPopup<T extends Object?>(
                             ),
                           if (subtitle != null)
                             Padding(
-                              padding: const EdgeInsets.symmetric(
+                              padding: const EdgeInsetsDirectional.symmetric(
                                   vertical: 8.0, horizontal: 10),
                               child: TextFont(
                                 textAlign: TextAlign.center,
@@ -137,7 +137,7 @@ Future<T?> openPopup<T extends Object?>(
                             beforeDescriptionWidget,
                           if (description != null)
                             Padding(
-                              padding: const EdgeInsets.symmetric(
+                              padding: const EdgeInsetsDirectional.symmetric(
                                   vertical: 8.0, horizontal: 10),
                               child: TextFont(
                                 textAlign: TextAlign.center,
@@ -149,8 +149,8 @@ Future<T?> openPopup<T extends Object?>(
                           if (descriptionWidget != null) descriptionWidget,
                           if (onSubmitLabel != null || onCancelLabel != null)
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 16.0),
+                              padding: const EdgeInsetsDirectional.symmetric(
+                                  vertical: 16.0),
                               child: Wrap(
                                 alignment: WrapAlignment.center,
                                 runSpacing: 10,
@@ -158,8 +158,8 @@ Future<T?> openPopup<T extends Object?>(
                                   onCancelLabel != null
                                       ? IntrinsicWidth(
                                           child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
+                                            padding: const EdgeInsetsDirectional
+                                                .symmetric(horizontal: 8.0),
                                             child:
                                                 Builder(builder: (boxContext) {
                                               return Button(
@@ -188,8 +188,8 @@ Future<T?> openPopup<T extends Object?>(
                                   onExtraLabel != null
                                       ? IntrinsicWidth(
                                           child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
+                                            padding: const EdgeInsetsDirectional
+                                                .symmetric(horizontal: 8.0),
                                             child: Button(
                                               expandedLayout: true,
                                               color: Theme.of(context)
@@ -207,8 +207,8 @@ Future<T?> openPopup<T extends Object?>(
                                   onSubmitLabel != null
                                       ? IntrinsicWidth(
                                           child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
+                                            padding: const EdgeInsetsDirectional
+                                                .symmetric(horizontal: 8.0),
                                             child: Button(
                                               color: Theme.of(context)
                                                   .colorScheme
@@ -233,9 +233,9 @@ Future<T?> openPopup<T extends Object?>(
                     ),
                     if (onExtraLabel2 != null)
                       Padding(
-                        padding: const EdgeInsets.only(
-                          left: 10,
-                          right: 10,
+                        padding: const EdgeInsetsDirectional.only(
+                          start: 10,
+                          end: 10,
                           bottom: 12,
                         ),
                         child: Button(
@@ -340,9 +340,9 @@ Future<T?> openPopupCustom<T extends Object?>(
         onWillPop: () async => barrierDismissible,
         child: Center(
           child: Container(
-            margin: EdgeInsets.only(
-              left: 20,
-              right: 20,
+            margin: EdgeInsetsDirectional.only(
+              start: 20,
+              end: 20,
               top: MediaQuery.paddingOf(context).top,
               bottom: MediaQuery.paddingOf(context).bottom,
             ),
@@ -352,12 +352,13 @@ Future<T?> openPopupCustom<T extends Object?>(
                       context, Theme.of(context).colorScheme.secondaryContainer,
                       amount: 0.5)
                   : getColor(context, "lightDarkAccent"),
-              borderRadius: BorderRadius.circular(
+              borderRadius: BorderRadiusDirectional.circular(
                   getPlatform() == PlatformOS.isIOS ? 10 : 25),
               boxShadow: boxShadowGeneral(context),
             ),
             child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+              padding:
+                  EdgeInsetsDirectional.symmetric(horizontal: 25, vertical: 20),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -365,7 +366,7 @@ Future<T?> openPopupCustom<T extends Object?>(
                   title == null
                       ? SizedBox.shrink()
                       : Padding(
-                          padding: const EdgeInsets.only(bottom: 15),
+                          padding: const EdgeInsetsDirectional.only(bottom: 15),
                           child: TextFont(
                             text: title,
                             fontSize: 25,
@@ -414,10 +415,11 @@ Future<T?> openLoadingPopup<T extends Object?>(BuildContext context) {
         onWillPop: () async => false,
         child: Center(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            margin: EdgeInsets.only(
-              left: 20,
-              right: 20,
+            padding:
+                EdgeInsetsDirectional.symmetric(horizontal: 20, vertical: 20),
+            margin: EdgeInsetsDirectional.only(
+              start: 20,
+              end: 20,
               top: MediaQuery.paddingOf(context).top,
               bottom: MediaQuery.paddingOf(context).bottom,
             ),
@@ -427,7 +429,7 @@ Future<T?> openLoadingPopup<T extends Object?>(BuildContext context) {
                       context, Theme.of(context).colorScheme.secondaryContainer,
                       amount: 0.5)
                   : getColor(context, "lightDarkAccent"),
-              borderRadius: BorderRadius.circular(
+              borderRadius: BorderRadiusDirectional.circular(
                   getPlatform() == PlatformOS.isIOS ? 10 : 25),
             ),
             child: CircularProgressIndicator(),
@@ -530,7 +532,7 @@ class CodeBlock extends StatelessWidget {
       color: Theme.of(context).colorScheme.secondaryContainer,
       onLongPress: () => copyToClipboard(text),
       child: Padding(
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsetsDirectional.all(10),
         child: TextFont(
           text: "",
           textAlign: TextAlign.center,

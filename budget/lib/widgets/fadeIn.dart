@@ -2,7 +2,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-
+import '../functions.dart';
 import 'package:flutter/services.dart';
 
 class FadeIn extends StatefulWidget {
@@ -508,14 +508,14 @@ class AnimatedScaleOpacity extends StatelessWidget {
       required this.animateIn,
       this.duration = const Duration(milliseconds: 500),
       this.durationOpacity = const Duration(milliseconds: 100),
-      this.alignment = Alignment.center,
+      this.alignment = AlignmentDirectional.center,
       this.curve = Curves.easeInOutCubicEmphasized,
       super.key});
   final Widget child;
   final bool animateIn;
   final Duration duration;
   final Duration durationOpacity;
-  final Alignment alignment;
+  final AlignmentDirectional alignment;
   final Curve curve;
 
   @override
@@ -528,7 +528,7 @@ class AnimatedScaleOpacity extends StatelessWidget {
         duration: duration,
         curve: curve,
         child: child,
-        alignment: alignment,
+        alignment: alignment.toAlignment(),
       ),
     );
   }

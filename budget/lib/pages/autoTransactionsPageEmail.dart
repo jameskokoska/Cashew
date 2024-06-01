@@ -206,7 +206,8 @@ class _AutoTransactionsPageNotificationsState
       ],
       listWidgets: [
         Padding(
-          padding: const EdgeInsets.only(bottom: 5, left: 20, right: 20),
+          padding:
+              const EdgeInsetsDirectional.only(bottom: 5, start: 20, end: 20),
           child: TextFont(
             text:
                 "Transactions can be created automatically based on your notifications.",
@@ -241,7 +242,7 @@ class _AutoTransactionsPageNotificationsState
             if (snapshot.hasData) {
               if (snapshot.data!.length <= 0) {
                 return Padding(
-                  padding: const EdgeInsets.all(5),
+                  padding: const EdgeInsetsDirectional.all(5),
                   child: StatusBox(
                     title: "Notification Configuration Missing",
                     description: "Please add a configuration.",
@@ -276,9 +277,9 @@ class _AutoTransactionsPageNotificationsState
               children: [
                 Expanded(
                   child: AddButton(
-                    margin: EdgeInsets.only(
-                      left: 15,
-                      right: 15,
+                    margin: EdgeInsetsDirectional.only(
+                      start: 15,
+                      end: 15,
                       bottom: 9,
                       top: 4,
                     ),
@@ -338,7 +339,8 @@ class _AutoTransactionsPageEmailState extends State<AutoTransactionsPageEmail> {
       ],
       listWidgets: [
         Padding(
-          padding: const EdgeInsets.only(bottom: 5, left: 20, right: 20),
+          padding:
+              const EdgeInsetsDirectional.only(bottom: 5, start: 20, end: 20),
           child: TextFont(
             text:
                 "Transactions can be created automatically based on your emails. This can be useful when you get emails from your bank, and you want to automatically add these transactions.",
@@ -709,10 +711,10 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
     }
     if (error != "") {
       return Padding(
-        padding: const EdgeInsets.only(
+        padding: const EdgeInsetsDirectional.only(
           top: 28.0,
-          left: 20,
-          right: 20,
+          start: 20,
+          end: 20,
         ),
         child: Center(
           child: TextFont(
@@ -748,7 +750,8 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
                 : Icons.format_list_numbered_rounded,
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 13, bottom: 4, left: 15),
+            padding:
+                const EdgeInsetsDirectional.only(top: 13, bottom: 4, start: 15),
             child: TextFont(
               text: "Configure",
               fontSize: 22,
@@ -762,7 +765,7 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
               if (snapshot.hasData) {
                 if (snapshot.data!.length <= 0) {
                   return Padding(
-                    padding: const EdgeInsets.all(5),
+                    padding: const EdgeInsetsDirectional.all(5),
                     child: StatusBox(
                       title: "Email Configuration Missing",
                       description: "Please add a configuration.",
@@ -797,9 +800,9 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
                 children: [
                   Expanded(
                     child: AddButton(
-                      margin: EdgeInsets.only(
-                        left: 15,
-                        right: 15,
+                      margin: EdgeInsetsDirectional.only(
+                        start: 15,
+                        end: 15,
                         bottom: 9,
                         top: 4,
                       ),
@@ -815,7 +818,7 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
       );
     } else {
       return Padding(
-        padding: const EdgeInsets.only(top: 28.0),
+        padding: const EdgeInsetsDirectional.only(top: 28.0),
         child: Center(child: CircularProgressIndicator()),
       );
     }
@@ -834,7 +837,7 @@ class ScannerTemplateEntry extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
+      padding: const EdgeInsetsDirectional.only(start: 15, end: 15, bottom: 10),
       child: OpenContainerNavigation(
         openPage: AddEmailTemplate(
           messagesList: messagesList,
@@ -847,9 +850,9 @@ class ScannerTemplateEntry extends StatelessWidget {
             color: getColor(context, "lightDarkAccent"),
             onTap: openContainer,
             child: Padding(
-              padding: const EdgeInsets.only(
-                left: 7,
-                right: 15,
+              padding: const EdgeInsetsDirectional.only(
+                start: 7,
+                end: 15,
                 top: 5,
                 bottom: 5,
               ),
@@ -951,8 +954,8 @@ class EmailsList extends StatelessWidget {
 
             messageTxt.add(
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                padding: const EdgeInsetsDirectional.symmetric(
+                    horizontal: 15, vertical: 5),
                 child: Tappable(
                   borderRadius: 15,
                   color: doesEmailContain &&
@@ -977,7 +980,7 @@ class EmailsList extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(
+                          padding: const EdgeInsetsDirectional.symmetric(
                               horizontal: 20, vertical: 15),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -985,7 +988,8 @@ class EmailsList extends StatelessWidget {
                               doesEmailContain &&
                                       (title == null || amountDouble == null)
                                   ? Padding(
-                                      padding: const EdgeInsets.only(bottom: 5),
+                                      padding: const EdgeInsetsDirectional.only(
+                                          bottom: 5),
                                       child: TextFont(
                                         text: "Parsing failed.",
                                         fontWeight: FontWeight.bold,
@@ -1026,8 +1030,9 @@ class EmailsList extends StatelessWidget {
                               doesEmailContain
                                   ? amountDouble == null
                                       ? Padding(
-                                          padding: const EdgeInsets.only(
-                                              bottom: 8.0),
+                                          padding:
+                                              const EdgeInsetsDirectional.only(
+                                                  bottom: 8.0),
                                           child: TextFont(
                                             fontSize: 15,
                                             text:
@@ -1037,8 +1042,9 @@ class EmailsList extends StatelessWidget {
                                           ),
                                         )
                                       : Padding(
-                                          padding: const EdgeInsets.only(
-                                              bottom: 8.0),
+                                          padding:
+                                              const EdgeInsetsDirectional.only(
+                                                  bottom: 8.0),
                                           child: TextFont(
                                             fontSize: 15,
                                             text: "Amount: " +

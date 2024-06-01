@@ -28,8 +28,8 @@ class GlobalLoadingProgressState extends State<GlobalLoadingProgress> {
     double loadingBarHeight = 3.1;
     return Align(
       alignment: getIsFullScreen(context) == false
-          ? Alignment.bottomLeft
-          : Alignment.topCenter,
+          ? AlignmentDirectional.bottomStart
+          : AlignmentDirectional.topCenter,
       child: AnimatedOpacity(
         opacity: progressPercentage <= 0 || progressPercentage >= 1 ? 0 : 1,
         duration: Duration(milliseconds: 300),
@@ -52,9 +52,9 @@ class GlobalLoadingProgressState extends State<GlobalLoadingProgress> {
                 color: dynamicPastel(
                     context, Theme.of(context).colorScheme.primary,
                     amount: 0.5),
-                borderRadius: BorderRadius.only(
-                  bottomRight: Radius.circular(5),
-                  topRight: Radius.circular(5),
+                borderRadius: BorderRadiusDirectional.only(
+                  bottomEnd: Radius.circular(5),
+                  topEnd: Radius.circular(5),
                 ),
               ),
             ),
@@ -105,23 +105,23 @@ class GlobalLoadingIndeterminateState
             : getWidthNavigationSidebar(context),
         child: Align(
           alignment: getIsFullScreen(context) == false
-              ? Alignment.bottomLeft
-              : Alignment.topCenter,
+              ? AlignmentDirectional.bottomStart
+              : AlignmentDirectional.topCenter,
           child: AnimatedContainer(
             duration: Duration(milliseconds: 300),
             curve: Curves.easeInOut,
             height: !visible ? 0 : 3,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primaryContainer,
-              borderRadius: BorderRadius.only(
-                bottomRight: Radius.circular(5),
-                topRight: Radius.circular(5),
+              borderRadius: BorderRadiusDirectional.only(
+                bottomEnd: Radius.circular(5),
+                topEnd: Radius.circular(5),
               ),
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                bottomRight: Radius.circular(5),
-                topRight: Radius.circular(5),
+              borderRadius: BorderRadiusDirectional.only(
+                bottomEnd: Radius.circular(5),
+                topEnd: Radius.circular(5),
               ),
               child: IndeterminateProgressBar(),
             ),

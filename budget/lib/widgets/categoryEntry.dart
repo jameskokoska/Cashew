@@ -131,7 +131,7 @@ class CategoryEntry extends StatelessWidget {
             ? categorySpent.abs() > categoryLimitAmount
             : categorySpent.abs() > (categoryLimitAmount / 100 * budgetLimit);
     component = Padding(
-      padding: EdgeInsets.symmetric(
+      padding: EdgeInsetsDirectional.symmetric(
         horizontal: isSubcategory == false
             ? getHorizontalPaddingConstrained(context,
                 enabled: useHorizontalPaddingConstrained)
@@ -141,8 +141,9 @@ class CategoryEntry extends StatelessWidget {
         builder: (context) {
           Widget mainCategoryWidget = Padding(
             padding: hasSubCategories
-                ? EdgeInsets.zero
-                : EdgeInsets.only(left: 20, right: 25, top: 8, bottom: 8),
+                ? EdgeInsetsDirectional.zero
+                : EdgeInsetsDirectional.only(
+                    start: 20, end: 25, top: 8, bottom: 8),
             child: Row(
               children: [
                 CategoryIconPercent(
@@ -225,7 +226,8 @@ class CategoryEntry extends StatelessWidget {
                                     ? SizedBox.shrink()
                                     : Padding(
                                         padding:
-                                            const EdgeInsets.only(bottom: 1),
+                                            const EdgeInsetsDirectional.only(
+                                                bottom: 1),
                                         child: TextFont(
                                           text: " / " +
                                               convertToMoney(
@@ -253,9 +255,9 @@ class CategoryEntry extends StatelessWidget {
                             Expanded(
                               child: categoryBudgetLimit != null
                                   ? Padding(
-                                      padding: const EdgeInsets.only(
+                                      padding: const EdgeInsetsDirectional.only(
                                         top: 3,
-                                        right: 13,
+                                        end: 13,
                                         bottom: 3,
                                       ),
                                       child: ThinProgress(
@@ -342,12 +344,12 @@ class CategoryEntry extends StatelessWidget {
               },
               key: ValueKey(category.categoryPk),
               mainCategory: Padding(
-                padding: const EdgeInsets.only(
-                    left: 20, right: 25, top: 8, bottom: 8),
+                padding: const EdgeInsetsDirectional.only(
+                    start: 20, end: 25, top: 8, bottom: 8),
                 child: mainCategoryWidget,
               ),
               subCategoryEntries: Padding(
-                padding: const EdgeInsets.only(top: 5),
+                padding: const EdgeInsetsDirectional.only(top: 5),
                 child: Builder(builder: (context) {
                   List<Widget> categoryEntries = [];
                   double totalSpentPercent =
@@ -491,9 +493,9 @@ class CategoryIconPercent extends StatelessWidget {
             defaultColor: Theme.of(context).colorScheme.primary),
         amountLight: 0.55,
         amountDark: 0.35);
-    return Stack(alignment: Alignment.center, children: [
+    return Stack(alignment: AlignmentDirectional.center, children: [
       // Padding(
-      //   padding: EdgeInsets.all(insetPadding / 2),
+      //   padding: EdgeInsetsDirectional.all(insetPadding / 2),
       //   child: SimpleShadow(
       //     child: Image.asset(
       //       "assets/categories/" + (category.iconName ?? ""),
@@ -515,7 +517,7 @@ class CategoryIconPercent extends StatelessWidget {
               ),
               height: size + insetPadding,
               width: size + insetPadding,
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsetsDirectional.all(10),
               child: CacheCategoryIcon(
                 iconName: category.iconName ?? "",
                 size: size,
@@ -524,7 +526,7 @@ class CategoryIconPercent extends StatelessWidget {
           : SizedBox.shrink(),
       category.emojiIconName != null
           ? Stack(
-              alignment: Alignment.center,
+              alignment: AlignmentDirectional.center,
               children: [
                 Container(
                   decoration: BoxDecoration(
@@ -535,7 +537,7 @@ class CategoryIconPercent extends StatelessWidget {
                   ),
                   height: size + insetPadding,
                   width: size + insetPadding,
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsetsDirectional.all(10),
                 ),
                 EmojiIcon(
                   emojiIconName: category.emojiIconName,
@@ -594,7 +596,7 @@ class ThinProgress extends StatelessWidget {
           clipBehavior: Clip.none,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(100),
+              borderRadius: BorderRadiusDirectional.circular(100),
               child: Stack(
                 children: [
                   Container(
@@ -605,7 +607,7 @@ class ThinProgress extends StatelessWidget {
                     duration: Duration(milliseconds: 1000),
                     curve: Curves.easeInOutCubicEmphasized,
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
+                      borderRadius: BorderRadiusDirectional.circular(100),
                       child: Container(
                         color: color,
                         height: 5,
@@ -617,15 +619,15 @@ class ThinProgress extends StatelessWidget {
               ),
             ),
             if (dotProgress != null && dotProgress! >= 0 && dotProgress! <= 1)
-              Positioned(
-                left: x - 5,
+              PositionedDirectional(
+                start: x - 5,
                 top: -3 / 2,
                 child: Container(
                   height: 8,
                   width: 4,
                   decoration: BoxDecoration(
                     color: color,
-                    borderRadius: BorderRadius.circular(100),
+                    borderRadius: BorderRadiusDirectional.circular(100),
                   ),
                 ),
               ),

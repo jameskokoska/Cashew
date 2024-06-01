@@ -24,16 +24,17 @@ class StatusBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(15)),
+        borderRadius: BorderRadiusDirectional.all(Radius.circular(15)),
         border: Border.all(color: color, width: 2),
       ),
-      margin: EdgeInsets.all(10),
+      margin: EdgeInsetsDirectional.all(10),
       child: Tappable(
         borderRadius: 12,
         onTap: onTap,
         color: color.withOpacity(0.4),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+          padding:
+              EdgeInsetsDirectional.symmetric(horizontal: 17, vertical: 10),
           child: Row(
             children: [
               Icon(icon, size: 35),

@@ -41,7 +41,8 @@ class HomePageNetWorth extends StatelessWidget {
                   appStateSettings["netWorthAllWallets"] == true)
                 walletPks = null;
               return Padding(
-                padding: const EdgeInsets.only(bottom: 13, left: 13, right: 13),
+                padding: const EdgeInsetsDirectional.only(
+                    bottom: 13, start: 13, end: 13),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -140,10 +141,10 @@ class _WalletPickerPeriodCycleState extends State<WalletPickerPeriodCycle> {
                   opacity: allWalletsSelected ? 1 : 0.5,
                   child: OutlinedButtonStacked(
                     filled: allWalletsSelected,
-                    alignLeft: true,
+                    alignStart: true,
                     alignBeside: true,
-                    padding: EdgeInsets.only(
-                        left: 20, right: 15, top: 15, bottom: 15),
+                    padding: EdgeInsetsDirectional.only(
+                        start: 20, end: 15, top: 15, bottom: 15),
                     showToggleSwitch: true,
                     text: "all-accounts".tr(),
                     iconData: appStateSettings["outlinedIcons"]
@@ -224,8 +225,8 @@ class _WalletPickerPeriodCycleState extends State<WalletPickerPeriodCycle> {
           ),
         Padding(
           padding: showAllWalletsSelection
-              ? EdgeInsets.zero
-              : const EdgeInsets.only(top: 8.0),
+              ? EdgeInsetsDirectional.zero
+              : const EdgeInsetsDirectional.only(top: 8.0),
           child: HorizontalBreakAbove(
             enabled: showAllWalletsSelection,
             child: PeriodCyclePicker(

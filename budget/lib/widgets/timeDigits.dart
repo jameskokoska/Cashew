@@ -4,6 +4,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'dart:ui' as ui;
 
 bool? isSetting24HourFormat() {
   if (appStateSettings["use24HourFormat"] == "12-hour") return false;
@@ -56,13 +57,14 @@ class TimeDigits extends StatelessWidget {
                 amountLight: 0, amountDark: 0.6)
             : getColor(context, "lightDarkAccent"));
     return Row(
+      textDirection: ui.TextDirection.ltr,
       children: [
         Container(
           decoration: BoxDecoration(
             color: backgroundColor,
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadiusDirectional.circular(5),
           ),
-          padding: EdgeInsets.symmetric(horizontal: 7, vertical: 5),
+          padding: EdgeInsetsDirectional.symmetric(horizontal: 7, vertical: 5),
           child: TextFont(
             text: hours,
             fontSize: 18,
@@ -70,7 +72,7 @@ class TimeDigits extends StatelessWidget {
           ),
         ),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 4, vertical: 5),
+          padding: EdgeInsetsDirectional.symmetric(horizontal: 4, vertical: 5),
           child: TextFont(
             text: ":",
             fontSize: 18,
@@ -80,9 +82,9 @@ class TimeDigits extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             color: backgroundColor,
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadiusDirectional.circular(5),
           ),
-          padding: EdgeInsets.symmetric(horizontal: 7, vertical: 5),
+          padding: EdgeInsetsDirectional.symmetric(horizontal: 7, vertical: 5),
           child: TextFont(
             text: minutes,
             fontSize: 18,
@@ -97,9 +99,10 @@ class TimeDigits extends StatelessWidget {
             : Container(
                 decoration: BoxDecoration(
                   color: backgroundColor,
-                  borderRadius: BorderRadius.circular(5),
+                  borderRadius: BorderRadiusDirectional.circular(5),
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 4, vertical: 5),
+                padding:
+                    EdgeInsetsDirectional.symmetric(horizontal: 4, vertical: 5),
                 child: Transform.scale(
                   scale: 0.8,
                   child: TextFont(

@@ -67,7 +67,7 @@ class ObjectivesListPageState extends State<ObjectivesListPage> {
           : 0,
       actions: [
         IconButton(
-          padding: EdgeInsets.all(15),
+          padding: EdgeInsetsDirectional.all(15),
           tooltip: "edit-goals".tr(),
           onPressed: () {
             pushRoute(
@@ -84,7 +84,7 @@ class ObjectivesListPageState extends State<ObjectivesListPage> {
         ),
         if (getIsFullScreen(context))
           IconButton(
-            padding: EdgeInsets.all(15),
+            padding: EdgeInsetsDirectional.all(15),
             tooltip: "add-goal".tr(),
             onPressed: () {
               pushRoute(
@@ -183,12 +183,12 @@ class ObjectiveList extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Padding(
-                          padding: EdgeInsets.only(
+                          padding: EdgeInsetsDirectional.only(
                             top: getPlatform() == PlatformOS.isIOS ? 10 : 0,
                             bottom: 20,
                           ),
                           child: Padding(
-                            padding: EdgeInsets.symmetric(
+                            padding: EdgeInsetsDirectional.symmetric(
                               horizontal:
                                   getPlatform() == PlatformOS.isIOS ? 13 : 0,
                             ),
@@ -209,7 +209,7 @@ class ObjectiveList extends StatelessWidget {
                   ),
                   if (showDemoObjectives)
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
+                      padding: const EdgeInsetsDirectional.only(bottom: 8.0),
                       child: TextFont(
                         text: "example-goals".tr(),
                         textColor: getColor(context, "black").withOpacity(0.25),
@@ -220,7 +220,7 @@ class ObjectiveList extends StatelessWidget {
                 ],
               );
         return SliverPadding(
-          padding: EdgeInsets.symmetric(
+          padding: EdgeInsetsDirectional.symmetric(
             vertical: getPlatform() == PlatformOS.isIOS ? 3 : 7,
             horizontal: getPlatform() == PlatformOS.isIOS ? 0 : 13,
           ),
@@ -282,7 +282,7 @@ class ObjectiveList extends StatelessWidget {
                         Objective objective = objectivesList[
                             index - (showDemoObjectives ? 1 : 0)];
                         return Padding(
-                          padding: EdgeInsets.only(
+                          padding: EdgeInsetsDirectional.only(
                             bottom:
                                 getPlatform() == PlatformOS.isIOS ? 0 : 16.0,
                           ),
@@ -337,7 +337,7 @@ class ObjectiveListDifferenceLoan extends StatelessWidget {
             child: SizedBox.shrink(),
           );
         return SliverPadding(
-          padding: EdgeInsets.symmetric(
+          padding: EdgeInsetsDirectional.symmetric(
             vertical: getPlatform() == PlatformOS.isIOS ? 3 : 7,
             horizontal: getPlatform() == PlatformOS.isIOS ? 0 : 13,
           ),
@@ -346,7 +346,7 @@ class ObjectiveListDifferenceLoan extends StatelessWidget {
               (BuildContext context, int index) {
                 Objective objective = objectivesList[index];
                 return Padding(
-                  padding: EdgeInsets.only(
+                  padding: EdgeInsetsDirectional.only(
                     bottom: getPlatform() == PlatformOS.isIOS
                         ? 0
                         : index == objectivesList.length - 1
@@ -393,12 +393,12 @@ class ObjectiveContainer extends StatelessWidget {
         getPlatform() == PlatformOS.isIOS && forceAndroidBubbleDesign == false
             ? Theme.of(context).canvasColor
             : getColor(context, "lightDarkAccentHeavyLight");
-    EdgeInsets containerPadding = EdgeInsets.only(
-      left:
+    EdgeInsetsDirectional containerPadding = EdgeInsetsDirectional.only(
+      start:
           getPlatform() == PlatformOS.isIOS && forceAndroidBubbleDesign == false
               ? 23
               : 30,
-      right:
+      end:
           getPlatform() == PlatformOS.isIOS && forceAndroidBubbleDesign == false
               ? 23
               : 20,
@@ -438,7 +438,7 @@ class ObjectiveContainer extends StatelessWidget {
                   openContainer();
                 },
                 child: Padding(
-                  padding: EdgeInsets.only(
+                  padding: EdgeInsetsDirectional.only(
                     top: 18,
                     bottom: 23,
                   ),
@@ -465,11 +465,12 @@ class ObjectiveContainer extends StatelessWidget {
                                       children: [
                                         Flexible(
                                           child: Padding(
-                                            padding:
-                                                const EdgeInsets.only(right: 3),
+                                            padding: const EdgeInsetsDirectional
+                                                .only(end: 3),
                                             child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 3),
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .only(bottom: 3),
                                               child:
                                                   Builder(builder: (context) {
                                                 String content =
@@ -523,7 +524,7 @@ class ObjectiveContainer extends StatelessWidget {
                                 sizePadding: 20,
                                 borderRadius: 100,
                                 canEditByLongPress: false,
-                                margin: EdgeInsets.zero,
+                                margin: EdgeInsetsDirectional.zero,
                               ),
                             ],
                           ),
@@ -550,7 +551,8 @@ class ObjectiveContainer extends StatelessWidget {
                                                 0;
                                         return Padding(
                                           padding:
-                                              const EdgeInsets.only(bottom: 2),
+                                              const EdgeInsetsDirectional.only(
+                                                  bottom: 2),
                                           child: TextFont(
                                             textAlign: TextAlign.left,
                                             text: (objective.type ==
@@ -611,7 +613,8 @@ class ObjectiveContainer extends StatelessWidget {
                                               : getColor(context, "black"),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.only(bottom: 2),
+                                      padding: const EdgeInsetsDirectional.only(
+                                          bottom: 2),
                                       child: TextFont(
                                         text: objectiveRemainingAmountText(
                                           objectiveAmount: objectiveAmount,
@@ -634,13 +637,15 @@ class ObjectiveContainer extends StatelessWidget {
                       Padding(
                         padding: objective.endDate == null
                             ? containerPadding
-                            : const EdgeInsets.symmetric(horizontal: 15),
+                            : const EdgeInsetsDirectional.symmetric(
+                                horizontal: 15),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             if (objective.endDate != null)
                               Padding(
-                                padding: const EdgeInsets.only(right: 7),
+                                padding:
+                                    const EdgeInsetsDirectional.only(end: 7),
                                 child: TextFont(
                                   textAlign: TextAlign.center,
                                   text: getWordedDateShort(
@@ -665,7 +670,7 @@ class ObjectiveContainer extends StatelessWidget {
                                 todayPercent: -1,
                                 showToday: false,
                                 yourPercent: 0,
-                                padding: EdgeInsets.zero,
+                                padding: EdgeInsetsDirectional.zero,
                                 enableShake: false,
                                 backgroundColor: (getPlatform() ==
                                                 PlatformOS.isIOS &&
@@ -680,7 +685,8 @@ class ObjectiveContainer extends StatelessWidget {
                             ),
                             if (objective.endDate != null)
                               Padding(
-                                padding: const EdgeInsets.only(left: 7),
+                                padding:
+                                    const EdgeInsetsDirectional.only(start: 7),
                                 child: TextFont(
                                   textAlign: TextAlign.center,
                                   text: getWordedDateShort(
@@ -729,7 +735,7 @@ class ObjectiveContainer extends StatelessWidget {
         child: Opacity(
           opacity: 0.25,
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadiusDirectional.circular(20),
             child: ColorFiltered(
               colorFilter: ColorFilter.mode(
                 Colors.grey,
@@ -808,11 +814,11 @@ class ObjectiveContainerDifferenceLoan extends StatelessWidget {
                   openContainer();
                 },
                 child: Padding(
-                  padding: EdgeInsets.only(
+                  padding: EdgeInsetsDirectional.only(
                     top: rowEntry ? 7 : 10,
                     bottom: rowEntry ? 7 : 10,
-                    left: 15,
-                    right: 20,
+                    start: 15,
+                    end: 20,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -837,7 +843,7 @@ class ObjectiveContainerDifferenceLoan extends StatelessWidget {
                               sizePadding: 20,
                               borderRadius: 100,
                               canEditByLongPress: false,
-                              margin: EdgeInsets.zero,
+                              margin: EdgeInsetsDirectional.zero,
                             ),
                             SizedBox(width: 10),
                             Flexible(
@@ -909,7 +915,8 @@ class ObjectiveContainerDifferenceLoan extends StatelessWidget {
                           ),
                           SizedBox(height: 1),
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 2),
+                            padding:
+                                const EdgeInsetsDirectional.only(bottom: 2),
                             child: TextFont(
                               textAlign: TextAlign.right,
                               text: percentageTowardsGoal == 1

@@ -48,9 +48,9 @@ class BarGraphState extends State<BarGraph> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-        left: 10,
-        right: 30,
+      padding: const EdgeInsetsDirectional.only(
+        start: 10,
+        end: 30,
         top: 5,
       ),
       child: Container(
@@ -119,7 +119,7 @@ class BarGraphState extends State<BarGraph> {
                     showTitles: true,
                     getTitlesWidget: (value, _) {
                       return Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
+                        padding: const EdgeInsetsDirectional.only(top: 8.0),
                         child: TextFont(
                           textAlign: TextAlign.center,
                           fontSize: 13,
@@ -163,7 +163,7 @@ class BarGraphState extends State<BarGraph> {
                       return SizedBox.shrink();
                     }
                     return Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
+                      padding: const EdgeInsetsDirectional.only(end: 8.0),
                       child: TextFont(
                         textAlign: TextAlign.right,
                         text: getWordedNumber(
@@ -201,8 +201,8 @@ BarChartGroupData makeGroupData(int x, double y1, double y2, color) {
         toY: y1,
         gradient: LinearGradient(
           colors: [color.withAlpha(120), color],
-          begin: Alignment.bottomCenter,
-          end: Alignment.topCenter,
+          begin: AlignmentDirectional.bottomCenter,
+          end: AlignmentDirectional.topCenter,
         ),
         width: 13,
         borderRadius: BorderRadius.only(

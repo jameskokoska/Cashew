@@ -15,7 +15,7 @@ class SaveBottomButton extends StatelessWidget {
     this.disabled = false,
     this.color,
     this.labelColor,
-    this.margin = EdgeInsets.zero,
+    this.margin = EdgeInsetsDirectional.zero,
   });
 
   final String label;
@@ -23,7 +23,7 @@ class SaveBottomButton extends StatelessWidget {
   final bool disabled;
   final Color? color;
   final Color? labelColor;
-  final EdgeInsets margin;
+  final EdgeInsetsDirectional margin;
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +41,8 @@ class SaveBottomButton extends StatelessWidget {
                   Theme.of(context).canvasColor.withOpacity(0),
                   Theme.of(context).canvasColor,
                 ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
+                begin: AlignmentDirectional.topCenter,
+                end: AlignmentDirectional.bottomCenter,
                 stops: [0.1, 1],
               ),
             ),
@@ -103,8 +103,8 @@ class _MinimizeKeyboardFABOverlayState extends State<MinimizeKeyboardFABOverlay>
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      right: 10,
+    return PositionedDirectional(
+      end: 10,
       bottom: 10,
       child: AnimatedContainer(
         duration: Duration(milliseconds: 100),

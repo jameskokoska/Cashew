@@ -156,9 +156,9 @@ class GlobalSnackbarState extends State<GlobalSnackbar>
           onPointerUp: (ptr) => {_onPointerUp(ptr)},
           child: Center(
             child: Align(
-              alignment: Alignment.topCenter,
+              alignment: AlignmentDirectional.topCenter,
               child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 15),
+                margin: EdgeInsetsDirectional.symmetric(horizontal: 15),
                 decoration: BoxDecoration(boxShadow: [
                   BoxShadow(
                     color: Theme.of(context).brightness == Brightness.light
@@ -183,9 +183,9 @@ class GlobalSnackbarState extends State<GlobalSnackbar>
                             amountLight: 1, amountDark: 0.4)
                         : getColor(context, "lightDarkAccent"),
                     child: Padding(
-                      padding: EdgeInsets.only(
-                        left: 12,
-                        right: currentMessage?.icon == null ? 12 : 17,
+                      padding: EdgeInsetsDirectional.only(
+                        start: 12,
+                        end: currentMessage?.icon == null ? 12 : 17,
                         top: 8,
                         bottom: 8,
                       ),
@@ -202,7 +202,8 @@ class GlobalSnackbarState extends State<GlobalSnackbar>
                               currentMessage?.icon == null
                                   ? SizedBox.shrink()
                                   : Padding(
-                                      padding: const EdgeInsets.only(right: 10),
+                                      padding: const EdgeInsetsDirectional.only(
+                                          end: 10),
                                       child: Icon(
                                         currentMessage?.icon,
                                         size: 33,

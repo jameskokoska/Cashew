@@ -106,7 +106,8 @@ class BottomNavBarState extends State<BottomNavBar> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 2),
+              padding:
+                  EdgeInsetsDirectional.symmetric(horizontal: 25, vertical: 2),
               child: Column(
                 children: [
                   Row(
@@ -408,7 +409,7 @@ class NavBarShortcutSelection extends StatelessWidget {
   Widget build(BuildContext context) {
     NavBarIconData iconData = navBarIconsData[navBarIconDataKey]!;
     return Padding(
-      padding: const EdgeInsets.only(
+      padding: const EdgeInsetsDirectional.only(
         bottom: 5,
         top: 5,
       ),
@@ -418,13 +419,14 @@ class NavBarShortcutSelection extends StatelessWidget {
             child: OutlinedButtonStacked(
               filled:
                   appStateSettings[shortcutAppSettingKey] == navBarIconDataKey,
-              alignLeft: true,
+              alignStart: true,
               alignBeside: true,
               padding: onSettings == null
-                  ? EdgeInsets.symmetric(horizontal: 20, vertical: 15)
-                  : EdgeInsets.only(
-                      left: 20,
-                      right: 5,
+                  ? EdgeInsetsDirectional.symmetric(
+                      horizontal: 20, vertical: 15)
+                  : EdgeInsetsDirectional.only(
+                      start: 20,
+                      end: 5,
                       top: 3,
                       bottom: 3,
                     ),
@@ -439,7 +441,7 @@ class NavBarShortcutSelection extends StatelessWidget {
               infoButton: onSettings == null
                   ? null
                   : IconButton(
-                      padding: EdgeInsets.all(15),
+                      padding: EdgeInsetsDirectional.all(15),
                       onPressed: onSettings,
                       icon: Icon(
                         appStateSettings["outlinedIcons"]
@@ -474,7 +476,7 @@ class NavBarIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     bool selected = currentIndex == index;
     return Stack(
-      alignment: Alignment.center,
+      alignment: AlignmentDirectional.center,
       children: [
         selected
             ? ScaleIn(
@@ -492,17 +494,17 @@ class NavBarIcon extends StatelessWidget {
                   ),
                   height: 52,
                   width: 52,
-                  margin: EdgeInsets.all(5),
+                  margin: EdgeInsetsDirectional.all(5),
                 ),
               )
             : Container(
                 color: Colors.transparent,
                 height: 52,
                 width: 52,
-                margin: EdgeInsets.all(5),
+                margin: EdgeInsetsDirectional.all(5),
               ),
         IconButton(
-          padding: EdgeInsets.all(15),
+          padding: EdgeInsetsDirectional.all(15),
           color: selected
               ? Theme.of(context).colorScheme.onSecondaryContainer
               : null,

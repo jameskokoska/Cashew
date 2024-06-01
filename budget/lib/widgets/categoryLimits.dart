@@ -51,7 +51,7 @@ class _CategoryLimitsState extends State<CategoryLimits> {
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
-      padding: EdgeInsets.symmetric(
+      padding: EdgeInsetsDirectional.symmetric(
           horizontal: getHorizontalPaddingConstrained(context)),
       sliver: StreamBuilder<List<TransactionCategory>>(
         stream: database.watchAllCategories(),
@@ -134,13 +134,13 @@ class _CategoryLimitsState extends State<CategoryLimits> {
                   widget.showAddCategoryButton == false
                       ? SizedBox.shrink()
                       : Padding(
-                          padding: const EdgeInsets.symmetric(
+                          padding: const EdgeInsetsDirectional.symmetric(
                             horizontal: 15,
                             vertical: 10,
                           ),
                           child: AddButton(
                             onTap: () {},
-                            margin: EdgeInsets.zero,
+                            margin: EdgeInsetsDirectional.zero,
                             openPage: AddCategoryPage(
                               routesToPopAfterDelete:
                                   RoutesToPopAfterDelete.None,
@@ -218,7 +218,7 @@ class CategoryLimitEntry extends StatelessWidget {
             );
           },
           child: Padding(
-            padding: EdgeInsets.symmetric(
+            padding: EdgeInsetsDirectional.symmetric(
               horizontal: isSubCategory || hasSubCategories ? 16 : 25,
               vertical: 3,
             ),
@@ -319,9 +319,10 @@ class CategoryLimitEntry extends StatelessWidget {
                   },
                   fontSize: 23,
                   fontWeight: FontWeight.bold,
-                  internalPadding:
-                      EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 3),
+                  internalPadding: EdgeInsetsDirectional.symmetric(
+                      vertical: 2, horizontal: 4),
+                  padding: EdgeInsetsDirectional.symmetric(
+                      vertical: 10, horizontal: 3),
                 ),
               ],
             ),
@@ -335,7 +336,7 @@ class CategoryLimitEntry extends StatelessWidget {
             mainCategory: mainCategory,
             separatorBanner: Column(
               children: [
-                HorizontalBreak(padding: EdgeInsets.zero),
+                HorizontalBreak(padding: EdgeInsetsDirectional.zero),
                 StickyLabelDivider(
                   color: Theme.of(context)
                       .colorScheme
@@ -388,7 +389,7 @@ class CategoryLimitEntry extends StatelessWidget {
                     },
                   ),
                 ),
-                HorizontalBreak(padding: EdgeInsets.only(bottom: 5)),
+                HorizontalBreak(padding: EdgeInsetsDirectional.only(bottom: 5)),
               ],
             ),
             subCategoryEntries: Column(
@@ -415,10 +416,10 @@ class CategoryLimitEntry extends StatelessWidget {
               ],
             ),
             extraButtonEnd: Padding(
-              padding: EdgeInsets.only(top: 5, bottom: 7),
+              padding: EdgeInsetsDirectional.only(top: 5, bottom: 7),
               child: AddButton(
                 onTap: () {},
-                margin: EdgeInsets.symmetric(horizontal: 7),
+                margin: EdgeInsetsDirectional.symmetric(horizontal: 7),
                 openPage: AddCategoryPage(
                   routesToPopAfterDelete: RoutesToPopAfterDelete.None,
                   mainCategoryPkWhenSubCategory: category.categoryPk,
@@ -461,13 +462,13 @@ class SubCategoriesContainer extends StatelessWidget {
                 .colorScheme
                 .secondaryContainer
                 .withOpacity(getPlatform() == PlatformOS.isIOS ? 0.15 : 0.5),
-            borderRadius: BorderRadius.vertical(
+            borderRadius: BorderRadiusDirectional.vertical(
               top: Radius.circular(
                 getPlatform() == PlatformOS.isIOS ? 0 : 14,
               ),
             ),
           ),
-          padding: EdgeInsets.symmetric(
+          padding: EdgeInsetsDirectional.symmetric(
               vertical: getPlatform() == PlatformOS.isIOS ? 2 : 7),
           child: mainCategory,
         ),
@@ -480,7 +481,7 @@ class SubCategoriesContainer extends StatelessWidget {
     if (getPlatform() == PlatformOS.isIOS)
       return Column(
         children: [
-          HorizontalBreak(padding: EdgeInsets.zero),
+          HorizontalBreak(padding: EdgeInsetsDirectional.zero),
           Container(
             child: content,
             color: Theme.of(context)
@@ -488,14 +489,14 @@ class SubCategoriesContainer extends StatelessWidget {
                 .secondaryContainer
                 .withOpacity(0.3),
           ),
-          HorizontalBreak(padding: EdgeInsets.zero),
+          HorizontalBreak(padding: EdgeInsetsDirectional.zero),
           SizedBox(height: 6),
         ],
       );
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+      padding: EdgeInsetsDirectional.symmetric(horizontal: 10, vertical: 3),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadiusDirectional.circular(15),
         child: Tappable(
           onTap: onTap,
           color: Colors.transparent,
@@ -507,7 +508,7 @@ class SubCategoriesContainer extends StatelessWidget {
                     : getColor(context, "lightDarkAccentHeavy")),
                 width: 2,
               ),
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadiusDirectional.circular(15),
             ),
             child: content,
           ),
@@ -538,7 +539,7 @@ void enterCategoryLimitPopup(
         categoryPk: category.categoryPk,
         size: 35,
         borderRadius: 500,
-        margin: EdgeInsets.zero,
+        margin: EdgeInsetsDirectional.zero,
         canEditByLongPress: true,
         onLongPress: () {
           Navigator.pop(context);
@@ -587,7 +588,7 @@ void enterCategoryLimitPopup(
               onlyShowCurrencyIcon: true,
               enableWalletPicker: true,
               hideWalletPickerIfOneCurrency: true,
-              padding: EdgeInsets.symmetric(horizontal: 18),
+              padding: EdgeInsetsDirectional.symmetric(horizontal: 18),
               selectedWalletPk: selectedWalletPk,
               walletPkForCurrency: selectedWalletPk,
               setSelectedWalletPk: (walletPkPassed) {

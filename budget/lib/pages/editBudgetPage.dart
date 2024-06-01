@@ -120,7 +120,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                   loadingIndeterminateKey.currentState?.setVisibility(false);
                 }),
           IconButton(
-            padding: EdgeInsets.all(15),
+            padding: EdgeInsetsDirectional.all(15),
             tooltip: "add-budget".tr(),
             onPressed: () {
               pushRoute(
@@ -138,7 +138,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
         slivers: [
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
+              padding: const EdgeInsetsDirectional.only(bottom: 8.0),
               child: Focus(
                 onFocusChange: (value) {
                   setState(() {
@@ -360,7 +360,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                               //         .entries
                               //         .map((categoryFk) {
                               //       return Padding(
-                              //         padding: const EdgeInsets.only(top: 1.4),
+                              //         padding: const EdgeInsetsDirectional.only(top: 1.4),
                               //         child: FutureBuilder(
                               //             future: database
                               //                 .getCategoryInstance(categoryFk.value),
@@ -397,10 +397,10 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                         ),
                         budget.sharedKey != null
                             ? Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 15, right: 20),
+                                padding: const EdgeInsetsDirectional.only(
+                                    top: 15, end: 20),
                                 child: Align(
-                                  alignment: Alignment.topRight,
+                                  alignment: AlignmentDirectional.topEnd,
                                   child: Icon(
                                     appStateSettings["outlinedIcons"]
                                         ? Icons.people_alt_outlined
@@ -641,7 +641,7 @@ class NoResultsCreate extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: EdgeInsetsDirectional.symmetric(horizontal: 10),
               child: TextFont(
                 text: message.tr(),
                 fontSize: 15,

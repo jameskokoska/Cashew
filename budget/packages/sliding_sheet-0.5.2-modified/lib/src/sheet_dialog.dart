@@ -100,7 +100,7 @@ Future<T?> showSlidingBottomSheet<T>(
               sheet = Stack(
                 children: [
                   Align(
-                    alignment: Alignment.bottomCenter,
+                    alignment: AlignmentDirectional.bottomCenter,
                     child: Container(
                       height: MediaQuery.viewInsetsOf(context).bottom,
                       color: bottomPaddingColor,

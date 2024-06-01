@@ -120,26 +120,26 @@ class _ContextMenuRegionState extends State<ContextMenuRegion> {
 //   await showMenu(
 //     context: context,
 //     position: positionRelativeRect,
-//     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+//     shape: RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.circular(8)),
 //     color: Colors.transparent,
 //     elevation: 0,
 //     items: [
 //       PopupMenuItem(
 //         value: 1,
 //         enabled: false,
-//         padding: EdgeInsets.zero,
+//         padding: EdgeInsetsDirectional.zero,
 //         child: Row(
 //           children: [
 //             Tappable(
 //               child: Padding(
-//                 padding: const EdgeInsets.all(8.0),
+//                 padding: const EdgeInsetsDirectional.all(8.0),
 //                 child: TextFont(text: "Copy"),
 //               ),
 //               onTap: () {},
 //             ),
 //             Tappable(
 //               child: Padding(
-//                 padding: const EdgeInsets.all(8.0),
+//                 padding: const EdgeInsetsDirectional.all(8.0),
 //                 child: TextFont(text: "Paste"),
 //               ),
 //               onTap: () {},
@@ -184,7 +184,7 @@ class _ContextMenuRegionState extends State<ContextMenuRegion> {
 //       child: Stack(
 //         clipBehavior: Clip.none,
 //         fit: StackFit.loose,
-//         alignment: Alignment.topCenter,
+//         alignment: AlignmentDirectional.topCenter,
 //         children: [
 //           WidgetSize(
 //             onChange: (size) {
@@ -207,13 +207,13 @@ class _ContextMenuRegionState extends State<ContextMenuRegion> {
 //                           key: key,
 //                           child: ContextMenuBox(
 //                             child: Align(
-//                               alignment: Alignment.topCenter,
+//                               alignment: AlignmentDirectional.topCenter,
 //                               child: FadeIn(
 //                                 child: ScaleIn(
 //                                   child: Column(
 //                                     children: [
 //                                       ClipRRect(
-//                                         borderRadius: BorderRadius.circular(8),
+//                                         borderRadius: BorderRadiusDirectional.circular(8),
 //                                         child: DeferPointer(
 //                                           child: Row(
 //                                             mainAxisSize: MainAxisSize.min,
@@ -229,9 +229,9 @@ class _ContextMenuRegionState extends State<ContextMenuRegion> {
 //                                                     "lightDarkAccentHeavy"),
 //                                                 child: Padding(
 //                                                   padding:
-//                                                       const EdgeInsets.only(
-//                                                     left: 12,
-//                                                     right: 6,
+//                                                       const EdgeInsetsDirectional.only(
+//                                                     start: 12,
+//                                                     end: 6,
 //                                                     top: 12.0,
 //                                                     bottom: 12,
 //                                                   ),
@@ -252,9 +252,9 @@ class _ContextMenuRegionState extends State<ContextMenuRegion> {
 //                                                     "lightDarkAccentHeavy"),
 //                                                 child: Padding(
 //                                                   padding:
-//                                                       const EdgeInsets.only(
-//                                                     right: 12,
-//                                                     left: 6,
+//                                                       const EdgeInsetsDirectional.only(
+//                                                     end: 12,
+//                                                     start: 6,
 //                                                     top: 12.0,
 //                                                     bottom: 12,
 //                                                   ),

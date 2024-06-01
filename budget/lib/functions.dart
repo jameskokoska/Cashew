@@ -982,7 +982,7 @@ void restartAppPopup(context,
       descriptionWidget: codeBlock == null
           ? null
           : Padding(
-              padding: const EdgeInsets.only(top: 8, bottom: 12),
+              padding: const EdgeInsetsDirectional.only(top: 8, bottom: 12),
               child: CodeBlock(text: codeBlock),
             ),
       icon: appStateSettings["outlinedIcons"]
@@ -1093,7 +1093,7 @@ bool isNumber(dynamic value) {
 }
 
 bool getIsKeyboardOpen(context) {
-  return EdgeInsets.zero !=
+  return EdgeInsetsDirectional.zero !=
       EdgeInsets.fromViewPadding(
           View.of(context).viewInsets, View.of(context).devicePixelRatio);
 }
@@ -1401,4 +1401,44 @@ String addAmountToString(String string, int amount,
 
 int directionalityReverse(BuildContext context) {
   return (Directionality.of(context) == ui.TextDirection.rtl ? -1 : 1);
+}
+
+EdgeInsets convertEdgeInsetsDirectionalToEdgeInsets(
+    BuildContext context, EdgeInsetsDirectional edgeInsetsDirectional) {
+  return EdgeInsets.only(
+    left: Directionality.of(context) == ui.TextDirection.ltr
+        ? edgeInsetsDirectional.start
+        : edgeInsetsDirectional.end,
+    right: Directionality.of(context) == ui.TextDirection.ltr
+        ? edgeInsetsDirectional.end
+        : edgeInsetsDirectional.start,
+    top: edgeInsetsDirectional.top,
+    bottom: edgeInsetsDirectional.bottom,
+  );
+}
+
+extension OffsetDirectionality on Offset {
+  Offset withDirectionality(BuildContext context) {
+    if (Directionality.of(context) == ui.TextDirection.rtl) {
+      return Offset(-dx, dy);
+    } else {
+      return this;
+    }
+  }
+}
+
+extension AlignmentConverter on AlignmentDirectional {
+  Alignment toAlignment() {
+    return Alignment(start, y);
+  }
+}
+
+extension AlignmentDirectionality on Alignment {
+  Alignment withDirectionality(BuildContext context) {
+    if (Directionality.of(context) == ui.TextDirection.rtl) {
+      return Alignment(-x, y);
+    } else {
+      return this;
+    }
+  }
 }

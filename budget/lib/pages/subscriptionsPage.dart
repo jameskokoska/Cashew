@@ -129,10 +129,10 @@ class SubscriptionsPageState extends State<SubscriptionsPage> {
                     if (snapshot.data!.length <= 0) {
                       return SliverToBoxAdapter(
                           child: NoResults(
-                              padding: const EdgeInsets.only(
+                              padding: const EdgeInsetsDirectional.only(
                                 top: 15,
-                                right: 30,
-                                left: 30,
+                                end: 30,
+                                start: 30,
                               ),
                               message: "no-subscription-transactions".tr()));
                     }
@@ -144,7 +144,8 @@ class SubscriptionsPageState extends State<SubscriptionsPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               HorizontalBreak(
-                                  padding: EdgeInsets.only(top: 4, bottom: 6)),
+                                  padding: EdgeInsetsDirectional.only(
+                                      top: 4, bottom: 6)),
                               TransactionEntry(
                                 aboveWidget: UpcomingTransactionDateHeader(
                                   selectedType: selectedType,
@@ -204,7 +205,7 @@ class UpcomingTransactionDateHeader extends StatelessWidget {
       children: [
         Flexible(
           child: Padding(
-            padding: const EdgeInsets.only(bottom: 3, right: 5),
+            padding: const EdgeInsetsDirectional.only(bottom: 3, end: 5),
             child: Row(
               children: [
                 TextFont(
@@ -367,7 +368,8 @@ class TotalUpcomingHeaderPeriodSwitcher extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 30, left: 20, right: 20, bottom: 35),
+      padding: const EdgeInsetsDirectional.only(
+          top: 30, start: 20, end: 20, bottom: 35),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -389,7 +391,7 @@ class TotalUpcomingHeaderPeriodSwitcher extends StatelessWidget {
             },
           ),
           Padding(
-            padding: EdgeInsets.only(top: 5),
+            padding: EdgeInsetsDirectional.only(top: 5),
             child: AnimatedSizeSwitcher(
               child: TextFont(
                 key: ValueKey(selectedType.toString()),
@@ -401,7 +403,7 @@ class TotalUpcomingHeaderPeriodSwitcher extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 18.0),
+            padding: const EdgeInsetsDirectional.only(top: 18.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -426,7 +428,8 @@ class TotalUpcomingHeaderPeriodSwitcher extends StatelessWidget {
                           pagesNeedingRefresh: [], updateGlobalState: false);
                     },
                     fontSize: 12,
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+                    padding: EdgeInsetsDirectional.symmetric(
+                        horizontal: 16, vertical: 13),
                   ),
                 ),
                 SizedBox(width: 7),
@@ -451,7 +454,8 @@ class TotalUpcomingHeaderPeriodSwitcher extends StatelessWidget {
                           pagesNeedingRefresh: [], updateGlobalState: false);
                     },
                     fontSize: 12,
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+                    padding: EdgeInsetsDirectional.symmetric(
+                        horizontal: 16, vertical: 13),
                   ),
                 ),
                 SizedBox(width: 7),
@@ -476,7 +480,8 @@ class TotalUpcomingHeaderPeriodSwitcher extends StatelessWidget {
                           pagesNeedingRefresh: [], updateGlobalState: false);
                     },
                     fontSize: 12,
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+                    padding: EdgeInsetsDirectional.symmetric(
+                        horizontal: 16, vertical: 13),
                   ),
                 ),
               ],

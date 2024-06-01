@@ -128,7 +128,7 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
         children: [
           SizedBox(height: 15),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsetsDirectional.symmetric(horizontal: 20),
             child: TextFont(
               text: widget.budget.sharedOwnerMember == SharedOwnerMember.owner
                   ? "Add Members"
@@ -139,7 +139,7 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
           ),
           SizedBox(height: 5),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsetsDirectional.symmetric(horizontal: 20),
             child: TextFont(
               text: "Only group owners can edit members",
               textColor: getColor(context, "textLight"),
@@ -174,7 +174,7 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
       children: [
         SizedBox(height: 5),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsetsDirectional.symmetric(horizontal: 20),
           child: TextFont(
             text: widget.budget.sharedOwnerMember == SharedOwnerMember.owner
                 ? "Add Members"
@@ -185,7 +185,7 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
         ),
         SizedBox(height: 5),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsetsDirectional.symmetric(horizontal: 20),
           child: TextFont(
             text: "Only group owners can edit members",
             textColor: getColor(context, "textLight"),
@@ -200,9 +200,9 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                     children: [
                       Expanded(
                         child: AddButton(
-                            margin: EdgeInsets.only(
-                              left: 15,
-                              right: 15,
+                            margin: EdgeInsetsDirectional.only(
+                              start: 15,
+                              end: 15,
                               bottom: 9,
                               top: 4,
                             ),
@@ -239,18 +239,20 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                         : getColor(context, "lightDarkAccentHeavy")
                             .withAlpha(20),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      padding:
+                          const EdgeInsetsDirectional.symmetric(horizontal: 15),
                       child: Container(
-                        padding: EdgeInsets.only(
-                          left: 15,
-                          right: 15,
+                        padding: EdgeInsetsDirectional.only(
+                          start: 15,
+                          end: 15,
                           bottom: 9,
                           top: 10,
                         ),
                         height: 52,
-                        margin: const EdgeInsets.only(bottom: 8.0, top: 4.0),
+                        margin: const EdgeInsetsDirectional.only(
+                            bottom: 8.0, top: 4.0),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
+                          borderRadius: BorderRadiusDirectional.circular(15),
                           color: getColor(context, "lightDarkAccent")
                               .withOpacity(0.5),
                           border: Border.all(
@@ -291,15 +293,16 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                           : getColor(context, "lightDarkAccentHeavy")
                               .withAlpha(20),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        padding: const EdgeInsetsDirectional.symmetric(
+                            horizontal: 15),
                         child: Container(
                           width: double.infinity,
                           height: 70,
-                          margin: const EdgeInsets.only(bottom: 8.0),
-                          padding: const EdgeInsets.symmetric(
+                          margin: const EdgeInsetsDirectional.only(bottom: 8.0),
+                          padding: const EdgeInsetsDirectional.symmetric(
                               horizontal: 25, vertical: 15),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadiusDirectional.circular(15),
                             color: getColor(context, "lightDarkAccent")
                                 .withOpacity(0.5),
                           ),
@@ -309,8 +312,8 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                             children: [
                               Container(
                                 decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5)),
+                                  borderRadius: BorderRadiusDirectional.all(
+                                      Radius.circular(5)),
                                   color: Colors.white,
                                 ),
                                 height: 15,
@@ -318,8 +321,8 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                               ),
                               Container(
                                 decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5)),
+                                  borderRadius: BorderRadiusDirectional.all(
+                                      Radius.circular(5)),
                                   color: Colors.white,
                                 ),
                                 height: 17,
@@ -335,7 +338,8 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
             : Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    padding:
+                        const EdgeInsetsDirectional.symmetric(horizontal: 15),
                     child: CategoryMemberContainer(
                       member: members[0],
                       setMember: (_) {},
@@ -347,7 +351,8 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                   ),
                   for (String member in members.sublist(1))
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      padding:
+                          const EdgeInsetsDirectional.symmetric(horizontal: 15),
                       child: CategoryMemberContainer(
                         member: member,
                         setMember: (text) async {
@@ -368,7 +373,7 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
         SizedBox(height: 5),
         widget.budget.sharedOwnerMember == SharedOwnerMember.owner
             ? Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
+                padding: const EdgeInsetsDirectional.symmetric(horizontal: 15),
                 child: Button(
                   icon: appStateSettings["outlinedIcons"]
                       ? Icons.block_outlined
@@ -416,7 +421,7 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                 ),
               )
             : Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
+                padding: const EdgeInsetsDirectional.symmetric(horizontal: 15),
                 child: Button(
                   icon: appStateSettings["outlinedIcons"]
                       ? Icons.logout_outlined
@@ -499,7 +504,7 @@ class CategoryMemberContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
+      padding: const EdgeInsetsDirectional.only(bottom: 8.0),
       child: Tappable(
         onTap: () {
           if (!canModify)
@@ -554,8 +559,8 @@ class CategoryMemberContainer extends StatelessWidget {
           children: [
             Expanded(
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+                padding: const EdgeInsetsDirectional.symmetric(
+                    horizontal: 25, vertical: 15),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -611,7 +616,7 @@ class CategoryMemberContainer extends StatelessWidget {
                     borderRadius: 15,
                     color: getColor(context, "lightDarkAccent"),
                     child: Padding(
-                      padding: const EdgeInsets.all(14),
+                      padding: const EdgeInsetsDirectional.all(14),
                       child: Icon(
                         appStateSettings["outlinedIcons"]
                             ? Icons.close_outlined

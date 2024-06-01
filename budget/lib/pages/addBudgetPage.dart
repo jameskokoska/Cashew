@@ -649,7 +649,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
             ),
           ],
           staticOverlay: Align(
-            alignment: Alignment.bottomCenter,
+            alignment: AlignmentDirectional.bottomCenter,
             child: selectedTitle == "" || selectedTitle == null
                 ? SaveBottomButton(
                     label: "set-name".tr(),
@@ -685,7 +685,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
               centered: true,
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(
+                  padding: EdgeInsetsDirectional.symmetric(
                       horizontal:
                           13 + getHorizontalPaddingConstrained(context)),
                   child: IncomeExpenseTabSelector(
@@ -699,7 +699,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                 ),
                 SizedBox(height: 4),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding:
+                      const EdgeInsetsDirectional.symmetric(horizontal: 20),
                   child: IntrinsicWidth(
                     child: TextInput(
                       textAlign: TextAlign.center,
@@ -711,7 +712,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                       onChanged: (text) {
                         setSelectedTitle(text);
                       },
-                      padding: EdgeInsets.only(left: 7, right: 7),
+                      padding: EdgeInsetsDirectional.only(start: 7, end: 7),
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
                       topContentPadding: 18,
@@ -790,9 +791,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
             //   child: widget.budget == null
             //       ? SizedBox.shrink()
             //       : Padding(
-            //           padding: const EdgeInsets.only(
-            //             left: 20,
-            //             right: 20,
+            //           padding: const EdgeInsetsDirectional.only(
+            //             start: 20,
+            //             end: 20,
             //             bottom: 15,
             //           ),
             //           child: SettingsContainer(
@@ -831,12 +832,12 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
               child: widget.budget == null
                   ? SizedBox.shrink()
                   : Padding(
-                      padding: EdgeInsets.symmetric(
+                      padding: EdgeInsetsDirectional.symmetric(
                           horizontal: getHorizontalPaddingConstrained(context)),
                       child: Padding(
-                        padding: const EdgeInsets.only(
-                          left: 20,
-                          right: 20,
+                        padding: const EdgeInsetsDirectional.only(
+                          start: 20,
+                          end: 20,
                           bottom: 15,
                         ),
                         child: Button(
@@ -879,7 +880,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
               info: "select-color".tr(),
               sliver: SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
+                  padding: const EdgeInsetsDirectional.only(bottom: 8),
                   child: Container(
                     height: 65,
                     child: SelectColor(
@@ -903,7 +904,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                           extraWidgetBefore: Transform.scale(
                             scale: 1.3,
                             child: IconButton(
-                              padding: EdgeInsets.zero,
+                              padding: EdgeInsetsDirectional.zero,
                               visualDensity: VisualDensity.compact,
                               icon: Icon(
                                 appStateSettings["outlinedIcons"]
@@ -981,7 +982,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                               extraWidgetBefore: Transform.scale(
                                 scale: 1.3,
                                 child: IconButton(
-                                  padding: EdgeInsets.zero,
+                                  padding: EdgeInsetsDirectional.zero,
                                   visualDensity: VisualDensity.compact,
                                   icon: Icon(
                                     appStateSettings["outlinedIcons"]
@@ -1156,8 +1157,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                   children: [
                     Expanded(
                       child: Padding(
-                        padding:
-                            const EdgeInsets.only(left: 15, right: 15, top: 25),
+                        padding: const EdgeInsetsDirectional.only(
+                            start: 15, end: 15, top: 25),
                         child: TextFont(
                           text: "added-budget-description".tr(),
                           fontSize: 14,
@@ -1276,7 +1277,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                       ? 1
                       : 0.3,
                   child: Padding(
-                    padding: const EdgeInsets.only(bottom: 5),
+                    padding: const EdgeInsetsDirectional.only(bottom: 5),
                     child: AnimatedExpanded(
                       expand: !(selectedShared == true ||
                           selectedAddedTransactionsOnly),
@@ -1313,7 +1314,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                       ? 1
                       : 0.3,
                   child: Padding(
-                    padding: const EdgeInsets.only(bottom: 5),
+                    padding: const EdgeInsetsDirectional.only(bottom: 5),
                     child: AnimatedExpanded(
                       expand: !(selectedShared == true ||
                           selectedAddedTransactionsOnly),
@@ -1476,7 +1477,7 @@ class _BudgetDetailsState extends State<BudgetDetails> {
           },
           nextLabel: "set-amount".tr(),
           enableWalletPicker: true,
-          padding: EdgeInsets.symmetric(horizontal: 18),
+          padding: EdgeInsetsDirectional.symmetric(horizontal: 18),
           setSelectedWalletPk: (walletPk) {
             setState(() {
               selectedWalletPk = walletPk;
@@ -1623,7 +1624,7 @@ class _BudgetDetailsState extends State<BudgetDetails> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10),
+          padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
           child: Wrap(
             crossAxisAlignment: WrapCrossAlignment.end,
             alignment: WrapAlignment.center,
@@ -1656,9 +1657,10 @@ class _BudgetDetailsState extends State<BudgetDetails> {
                   },
                   fontSize: 35,
                   fontWeight: FontWeight.bold,
-                  internalPadding:
-                      EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 3),
+                  internalPadding: EdgeInsetsDirectional.symmetric(
+                      vertical: 2, horizontal: 4),
+                  padding: EdgeInsetsDirectional.symmetric(
+                      vertical: 10, horizontal: 3),
                 ),
               ),
               IntrinsicWidth(
@@ -1674,9 +1676,9 @@ class _BudgetDetailsState extends State<BudgetDetails> {
                             },
                             fontSize: 25,
                             fontWeight: FontWeight.bold,
-                            internalPadding: EdgeInsets.symmetric(
+                            internalPadding: EdgeInsetsDirectional.symmetric(
                                 vertical: 4, horizontal: 4),
-                            padding: EdgeInsets.symmetric(
+                            padding: EdgeInsetsDirectional.symmetric(
                                 vertical: 10, horizontal: 3),
                           )
                         : TextFont(
@@ -1696,10 +1698,10 @@ class _BudgetDetailsState extends State<BudgetDetails> {
                       },
                       fontSize: 25,
                       fontWeight: FontWeight.bold,
-                      internalPadding:
-                          EdgeInsets.symmetric(vertical: 4, horizontal: 4),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 3),
+                      internalPadding: EdgeInsetsDirectional.symmetric(
+                          vertical: 4, horizontal: 4),
+                      padding: EdgeInsetsDirectional.symmetric(
+                          vertical: 10, horizontal: 3),
                     ),
                   ],
                 ),
@@ -1714,7 +1716,7 @@ class _BudgetDetailsState extends State<BudgetDetails> {
                   ? 0
                   : -5),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
             child: selectedRecurrence != "Custom"
                 ? Tappable(
                     onTap: () {
@@ -1723,7 +1725,8 @@ class _BudgetDetailsState extends State<BudgetDetails> {
                     color: Colors.transparent,
                     borderRadius: 15,
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+                      padding: EdgeInsetsDirectional.symmetric(
+                          horizontal: 5, vertical: 8),
                       child: Center(
                         child: Wrap(
                           crossAxisAlignment: WrapCrossAlignment.end,
@@ -1731,7 +1734,8 @@ class _BudgetDetailsState extends State<BudgetDetails> {
                           alignment: WrapAlignment.center,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(bottom: 5.8),
+                              padding:
+                                  const EdgeInsetsDirectional.only(bottom: 5.8),
                               child: TextFont(
                                 text: "beginning".tr() + " ",
                                 fontSize: 17,
@@ -1746,9 +1750,10 @@ class _BudgetDetailsState extends State<BudgetDetails> {
                                 onTap: () {},
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
-                                internalPadding: EdgeInsets.symmetric(
-                                    vertical: 2, horizontal: 4),
-                                padding: EdgeInsets.symmetric(
+                                internalPadding:
+                                    EdgeInsetsDirectional.symmetric(
+                                        vertical: 2, horizontal: 4),
+                                padding: EdgeInsetsDirectional.symmetric(
                                     vertical: 0, horizontal: 5),
                               ),
                             ),
@@ -1764,7 +1769,8 @@ class _BudgetDetailsState extends State<BudgetDetails> {
                     color: Colors.transparent,
                     borderRadius: 15,
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+                      padding: EdgeInsetsDirectional.symmetric(
+                          horizontal: 5, vertical: 8),
                       child: Center(
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
@@ -1781,9 +1787,10 @@ class _BudgetDetailsState extends State<BudgetDetails> {
                                 onTap: () {},
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
-                                internalPadding: EdgeInsets.symmetric(
-                                    vertical: 2, horizontal: 4),
-                                padding: EdgeInsets.symmetric(
+                                internalPadding:
+                                    EdgeInsetsDirectional.symmetric(
+                                        vertical: 2, horizontal: 4),
+                                padding: EdgeInsetsDirectional.symmetric(
                                     vertical: 0, horizontal: 5),
                               ),
                             ),
@@ -1830,7 +1837,7 @@ class _BudgetDetailsState extends State<BudgetDetails> {
                 children: [
                   Flexible(
                     child: Padding(
-                      padding: const EdgeInsets.only(
+                      padding: const EdgeInsetsDirectional.only(
                         bottom: 10,
                         top: 5,
                       ),
@@ -1869,9 +1876,10 @@ class SelectBudgetIncomeTypePopup extends StatelessWidget {
             children: [
               Expanded(
                 child: OutlinedButtonStacked(
-                  alignLeft: true,
+                  alignStart: true,
                   alignBeside: true,
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  padding: EdgeInsetsDirectional.symmetric(
+                      horizontal: 20, vertical: 20),
                   text: "savings-budget".tr(),
                   iconData: appStateSettings["outlinedIcons"]
                       ? Icons.savings_outlined
@@ -1898,9 +1906,10 @@ class SelectBudgetIncomeTypePopup extends StatelessWidget {
             children: [
               Expanded(
                 child: OutlinedButtonStacked(
-                  alignLeft: true,
+                  alignStart: true,
                   alignBeside: true,
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  padding: EdgeInsetsDirectional.symmetric(
+                      horizontal: 20, vertical: 20),
                   text: "expense-budget".tr(),
                   iconData: appStateSettings["outlinedIcons"]
                       ? Icons.request_quote_outlined
@@ -1950,9 +1959,10 @@ class SelectBudgetTypePopup extends StatelessWidget {
               Expanded(
                 child: OutlinedButtonStacked(
                   filled: selectedBudgetTypeAdded == true,
-                  alignLeft: true,
+                  alignStart: true,
                   alignBeside: true,
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  padding: EdgeInsetsDirectional.symmetric(
+                      horizontal: 20, vertical: 20),
                   text: "added-only".tr(),
                   iconData: appStateSettings["outlinedIcons"]
                       ? Icons.folder_outlined
@@ -1989,9 +1999,10 @@ class SelectBudgetTypePopup extends StatelessWidget {
               Expanded(
                 child: OutlinedButtonStacked(
                   filled: selectedBudgetTypeAll == true,
-                  alignLeft: true,
+                  alignStart: true,
                   alignBeside: true,
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  padding: EdgeInsetsDirectional.symmetric(
+                      horizontal: 20, vertical: 20),
                   text: "all-transactions".tr(),
                   iconData: appStateSettings["outlinedIcons"]
                       ? Icons.category_outlined
@@ -2104,9 +2115,10 @@ class _ViewBudgetTransactionFilterInfoState
                 child: OutlinedButtonStacked(
                   filled: selectedBudgetFilters.contains(
                       BudgetTransactionFilters.defaultBudgetTransactionFilters),
-                  alignLeft: true,
+                  alignStart: true,
                   alignBeside: true,
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  padding: EdgeInsetsDirectional.symmetric(
+                      horizontal: 20, vertical: 20),
                   text: "default".tr(),
                   iconData: appStateSettings["outlinedIcons"]
                       ? Icons.check_circle_outlined
@@ -2262,7 +2274,7 @@ class FilterTypeInfoEntry extends StatelessWidget {
           ? 0.5
           : 1,
       child: Padding(
-        padding: const EdgeInsets.only(top: 13),
+        padding: const EdgeInsetsDirectional.only(top: 13),
         child: Row(
           children: [
             Expanded(
@@ -2271,9 +2283,10 @@ class FilterTypeInfoEntry extends StatelessWidget {
                   selectedBudgetFilters,
                   budgetTransactionFilter,
                 ),
-                alignLeft: true,
+                alignStart: true,
                 alignBeside: true,
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                padding: EdgeInsetsDirectional.symmetric(
+                    horizontal: 20, vertical: 20),
                 text: title,
                 iconData: icon,
                 onTap: () {

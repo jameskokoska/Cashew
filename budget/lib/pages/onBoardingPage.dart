@@ -208,7 +208,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
       //     ),
       //     SizedBox(height: 15),
       //     Padding(
-      //       padding: const EdgeInsets.symmetric(horizontal: 25),
+      //       padding: const EdgeInsetsDirectional.symmetric(horizontal: 25),
       //       child: TextFont(
       //         text: "Losing track of your spending?",
       //         fontWeight: FontWeight.bold,
@@ -219,7 +219,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
       //     ),
       //     SizedBox(height: 15),
       //     Padding(
-      //       padding: const EdgeInsets.symmetric(horizontal: 25),
+      //       padding: const EdgeInsetsDirectional.symmetric(horizontal: 25),
       //       child: TextFont(
       //         text: "It's important to be mindful of your purchases.",
       //         textAlign: TextAlign.center,
@@ -241,7 +241,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           ),
           SizedBox(height: 15),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
+            padding: const EdgeInsetsDirectional.symmetric(horizontal: 25),
             child: TextFont(
               text: "onboarding-title-1".tr(namedArgs: {"app": globalAppName}),
               fontWeight: FontWeight.bold,
@@ -252,7 +252,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           ),
           SizedBox(height: 15),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
+            padding: const EdgeInsetsDirectional.symmetric(horizontal: 25),
             child: TextFont(
               text: "onboarding-info-1".tr(),
               textAlign: TextAlign.center,
@@ -280,7 +280,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           ),
           SizedBox(height: 15),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
+            padding: const EdgeInsetsDirectional.symmetric(horizontal: 25),
             child: TextFont(
               text: "onboarding-title-2".tr(),
               fontWeight: FontWeight.bold,
@@ -352,7 +352,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                   .data?.indexedByPk[appStateSettings["selectedWalletPk"]];
               if (primaryWallet != null) {
                 return Padding(
-                  padding: const EdgeInsets.only(top: 15),
+                  padding: const EdgeInsetsDirectional.only(top: 15),
                   child: LowKeyButton(
                     onTap: () {
                       openBottomSheet(
@@ -363,7 +363,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                           child: Column(
                             children: [
                               CurrencyPicker(
-                                padding: EdgeInsets.zero,
+                                padding: EdgeInsetsDirectional.zero,
                                 onSelected: (selectedCurrency) {
                                   Navigator.pop(context);
                                   database.createOrUpdateWallet(
@@ -392,7 +392,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           ),
           SizedBox(height: 15),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
+            padding: const EdgeInsetsDirectional.symmetric(horizontal: 25),
             child: TextFont(
               text: "onboarding-info-2-1".tr(),
               textAlign: TextAlign.center,
@@ -415,7 +415,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           ),
           SizedBox(height: 15),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
+            padding: const EdgeInsetsDirectional.symmetric(horizontal: 25),
             child: TextFont(
               text: "onboarding-title-3".tr(namedArgs: {"app": globalAppName}),
               fontWeight: FontWeight.bold,
@@ -428,7 +428,8 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           getPlatform() == PlatformOS.isIOS
               ? IntrinsicWidth(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    padding:
+                        const EdgeInsetsDirectional.symmetric(horizontal: 8.0),
                     child: Button(
                       label: "lets-go".tr(),
                       onTap: () {
@@ -528,7 +529,8 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           getPlatform() == PlatformOS.isIOS
               ? SizedBox.shrink()
               : Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  padding:
+                      const EdgeInsetsDirectional.symmetric(horizontal: 25),
                   child: TextFont(
                     text: "onboarding-info-3".tr(),
                     textAlign: TextAlign.center,
@@ -565,7 +567,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           controller: controller,
           children: children,
         ),
-        Positioned(
+        PositionedDirectional(
           bottom: 0,
           child: IgnorePointer(
             child: Container(
@@ -577,8 +579,8 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                     Theme.of(context).canvasColor.withOpacity(0.0),
                     Theme.of(context).canvasColor,
                   ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
+                  begin: AlignmentDirectional.topCenter,
+                  end: AlignmentDirectional.bottomCenter,
                   stops: [0.1, 1],
                 ),
               ),
@@ -586,12 +588,12 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           ),
         ),
         Align(
-          alignment: Alignment.bottomCenter,
+          alignment: AlignmentDirectional.bottomCenter,
           child: Padding(
-            padding: EdgeInsets.only(
+            padding: EdgeInsetsDirectional.only(
                 bottom: MediaQuery.viewPaddingOf(context).bottom),
             child: Padding(
-              padding: const EdgeInsets.symmetric(
+              padding: const EdgeInsetsDirectional.symmetric(
                 horizontal: 18,
                 vertical: 15,
               ),
@@ -620,8 +622,8 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                                     : Icons.arrow_back_rounded,
                             size: 50,
                             padding: getIsFullScreen(context) == false
-                                ? EdgeInsets.all(3)
-                                : EdgeInsets.all(6),
+                                ? EdgeInsetsDirectional.all(3)
+                                : EdgeInsetsDirectional.all(6),
                           ),
                         );
                       },
@@ -655,8 +657,8 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                                     : Icons.arrow_forward_rounded,
                             size: 50,
                             padding: getIsFullScreen(context) == false
-                                ? EdgeInsets.all(3)
-                                : EdgeInsets.all(6),
+                                ? EdgeInsetsDirectional.all(3)
+                                : EdgeInsetsDirectional.all(6),
                           ),
                         );
                       },
@@ -696,10 +698,10 @@ class OnBoardPage extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(
+          padding: EdgeInsetsDirectional.only(
               bottom: 60 + MediaQuery.paddingOf(context).bottom),
           child: Align(
-            alignment: Alignment.bottomCenter,
+            alignment: AlignmentDirectional.bottomCenter,
             child: bottomWidget ?? SizedBox.shrink(),
           ),
         ),

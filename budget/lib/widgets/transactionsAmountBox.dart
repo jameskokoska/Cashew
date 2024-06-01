@@ -59,8 +59,8 @@ class TransactionsAmountBox extends StatelessWidget {
             },
             child: Container(
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 17),
+                padding: const EdgeInsetsDirectional.symmetric(
+                    horizontal: 15, vertical: 17),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   mainAxisSize: MainAxisSize.min,

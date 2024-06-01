@@ -95,7 +95,7 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
         ),
         actions: [
           IconButton(
-            padding: EdgeInsets.all(15),
+            padding: EdgeInsetsDirectional.all(15),
             tooltip: widget.objectiveType == ObjectiveType.loan
                 ? "add-loan".tr()
                 : "add-goal".tr(),
@@ -116,7 +116,7 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
         slivers: [
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
+              padding: const EdgeInsetsDirectional.only(bottom: 8.0),
               child: Focus(
                 onFocusChange: (value) {
                   setState(() {
@@ -203,8 +203,8 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
                           (snapshot.data ?? []).length != 1,
                       currentReorder:
                           currentReorder != -1 && currentReorder != index,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      padding: EdgeInsetsDirectional.symmetric(
+                          horizontal: 10, vertical: 5),
                       content: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -545,7 +545,7 @@ Future<dynamic> selectObjectivePopup(
               children: [
                 Expanded(
                   child: AddButton(
-                    margin: EdgeInsets.only(top: 7),
+                    margin: EdgeInsetsDirectional.only(top: 7),
                     onTap: () {
                       pushRoute(
                         context,

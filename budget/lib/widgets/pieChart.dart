@@ -91,7 +91,7 @@ class PieChartWrapper extends StatelessWidget {
       width: enableDoubleColumn(context) == false || disableLarge ? 200 : 300,
       height: enableDoubleColumn(context) == false || disableLarge ? 200 : 300,
       child: Stack(
-        alignment: Alignment.center,
+        alignment: AlignmentDirectional.center,
         children: [
           ScaledAnimatedSwitcher(
             keyToWatch:
@@ -383,7 +383,7 @@ class _Badge extends StatelessWidget {
             ),
           ),
           child: Stack(
-            alignment: Alignment.center,
+            alignment: AlignmentDirectional.center,
             children: [
               AnimatedOpacity(
                 duration: Duration(milliseconds: 200),
@@ -400,9 +400,9 @@ class _Badge extends StatelessWidget {
                     child: IntrinsicWidth(
                       child: Container(
                         height: 20,
-                        padding: EdgeInsets.symmetric(horizontal: 5),
+                        padding: EdgeInsetsDirectional.symmetric(horizontal: 5),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
+                          borderRadius: BorderRadiusDirectional.circular(5),
                           border: Border.all(
                             color: color,
                             width: 1.5,
@@ -450,7 +450,7 @@ class _Badge extends StatelessWidget {
                           : Colors.transparent,
                       shape: BoxShape.circle,
                     ),
-                    padding: EdgeInsets.all(8),
+                    padding: EdgeInsetsDirectional.all(8),
                     child: emojiIconName != null
                         ? Container()
                         : CacheCategoryIcon(

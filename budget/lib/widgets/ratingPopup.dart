@@ -81,7 +81,7 @@ class _RatingPopupState extends State<RatingPopup> {
             keyboardType: TextInputType.multiline,
             maxLines: null,
             minLines: 3,
-            padding: EdgeInsets.zero,
+            padding: EdgeInsetsDirectional.zero,
             controller: _feedbackController,
             onChanged: (value) {
               if (writingFeedback == false) {
@@ -96,10 +96,10 @@ class _RatingPopupState extends State<RatingPopup> {
           AnimatedExpanded(
             expand: writingFeedback,
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 10),
+              padding: const EdgeInsetsDirectional.only(bottom: 10),
               child: TextInput(
                 labelText: "email-optional".tr(),
-                padding: EdgeInsets.zero,
+                padding: EdgeInsetsDirectional.zero,
                 controller: _feedbackControllerEmail,
                 textCapitalization: TextCapitalization.none,
                 autocorrect: false,

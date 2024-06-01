@@ -33,7 +33,7 @@ class AboutPage extends StatelessWidget {
       forceShow: true,
       majorChangesOnly: true,
       extraWidget: Padding(
-        padding: const EdgeInsets.only(
+        padding: const EdgeInsetsDirectional.only(
           bottom: 10,
         ),
         child: Button(
@@ -60,7 +60,8 @@ class AboutPage extends StatelessWidget {
       horizontalPadding: getHorizontalPaddingConstrained(context),
       listWidgets: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+          padding: const EdgeInsetsDirectional.symmetric(
+              horizontal: 15, vertical: 7),
           child: Wrap(
             alignment: WrapAlignment.center,
             runAlignment: WrapAlignment.center,
@@ -86,7 +87,7 @@ class AboutPage extends StatelessWidget {
                         );
                     },
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
+                      padding: const EdgeInsetsDirectional.symmetric(
                           vertical: 3, horizontal: 10),
                       child: TextFont(
                         text: globalAppName,
@@ -103,7 +104,7 @@ class AboutPage extends StatelessWidget {
                       showChangelogForce(context);
                     },
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
+                      padding: const EdgeInsetsDirectional.symmetric(
                           vertical: 0, horizontal: 10),
                       child: TextFont(
                         text: getVersionString(),
@@ -120,7 +121,8 @@ class AboutPage extends StatelessWidget {
         ),
         SizedBox(height: 5),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+          padding: const EdgeInsetsDirectional.symmetric(
+              horizontal: 15, vertical: 5),
           child: Tappable(
             onTap: () {
               openUrl("https://github.com/jameskokoska/Cashew");
@@ -128,7 +130,8 @@ class AboutPage extends StatelessWidget {
             color: containerColor,
             borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 15),
+              padding: const EdgeInsetsDirectional.symmetric(
+                  horizontal: 13, vertical: 15),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -160,7 +163,7 @@ class AboutPage extends StatelessWidget {
           children: [
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(left: 15),
+                padding: const EdgeInsetsDirectional.only(start: 15),
                 child: Button(
                   label: "view-app-intro".tr(),
                   onTap: () {
@@ -179,7 +182,7 @@ class AboutPage extends StatelessWidget {
             SizedBox(width: 10),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(right: 15),
+                padding: const EdgeInsetsDirectional.only(end: 15),
                 child: Button(
                   label: "view-changelog".tr(),
                   onTap: () {
@@ -193,7 +196,8 @@ class AboutPage extends StatelessWidget {
         ),
         SizedBox(height: 20),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+          padding: const EdgeInsetsDirectional.symmetric(
+              horizontal: 15, vertical: 7),
           child: Center(
             child: TextFont(
               text: "development-team".tr(),
@@ -205,7 +209,8 @@ class AboutPage extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+          padding: const EdgeInsetsDirectional.symmetric(
+              horizontal: 15, vertical: 5),
           child: Tappable(
             onTap: () {
               openUrl('mailto:dapperappdeveloper@gmail.com');
@@ -216,7 +221,8 @@ class AboutPage extends StatelessWidget {
             color: containerColor,
             borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 15),
+              padding: const EdgeInsetsDirectional.symmetric(
+                  horizontal: 13, vertical: 15),
               child: Column(
                 children: [
                   TextFont(
@@ -247,13 +253,15 @@ class AboutPage extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+          padding: const EdgeInsetsDirectional.symmetric(
+              horizontal: 15, vertical: 5),
           child: Tappable(
             onTap: () {},
             color: containerColor,
             borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 15),
+              padding: const EdgeInsetsDirectional.symmetric(
+                  horizontal: 13, vertical: 15),
               child: Column(
                 children: [
                   TextFont(
@@ -278,7 +286,7 @@ class AboutPage extends StatelessWidget {
         ),
         SizedBox(height: 20),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
+          padding: const EdgeInsetsDirectional.symmetric(horizontal: 15),
           child: OutlinedContainer(
             borderColor:
                 Theme.of(context).colorScheme.tertiary.withOpacity(0.6),
@@ -342,10 +350,10 @@ class AboutPage extends StatelessWidget {
                             child: Column(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.only(
+                                  padding: const EdgeInsetsDirectional.only(
                                     bottom: 18,
-                                    left: 5,
-                                    right: 5,
+                                    start: 5,
+                                    end: 5,
                                   ),
                                   child: TextFont(
                                     text: "erase-cloud-data-description".tr(),
@@ -415,7 +423,8 @@ class AboutPage extends StatelessWidget {
         ),
         SizedBox(height: 15),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+          padding: const EdgeInsetsDirectional.symmetric(
+              horizontal: 15, vertical: 7),
           child: Center(
             child: TextFont(
               text: "made-in-canada".tr() + " " + "🍁",
@@ -429,14 +438,14 @@ class AboutPage extends StatelessWidget {
         if (getPlatform(ignoreEmulation: true) == PlatformOS.isAndroid ||
             kIsWeb)
           Padding(
-            padding: const EdgeInsets.only(top: 10, bottom: 10),
+            padding: const EdgeInsetsDirectional.only(top: 10, bottom: 10),
             child: HorizontalBreakAbove(
                 child: Column(
               children: [
                 SizedBox(height: 10),
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+                  padding: const EdgeInsetsDirectional.symmetric(
+                      horizontal: 15, vertical: 7),
                   child: Center(
                     child: TextFont(
                       text: "advanced-automation".tr(),
@@ -455,7 +464,8 @@ class AboutPage extends StatelessWidget {
         HorizontalBreak(),
         SizedBox(height: 10),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+          padding: const EdgeInsetsDirectional.symmetric(
+              horizontal: 15, vertical: 7),
           child: Center(
             child: TextFont(
               text: "graphics".tr(),
@@ -480,7 +490,8 @@ class AboutPage extends StatelessWidget {
         ),
         Container(height: 15),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+          padding: const EdgeInsetsDirectional.symmetric(
+              horizontal: 15, vertical: 7),
           child: Center(
             child: TextFont(
               text: "major-tools".tr(),
@@ -513,7 +524,8 @@ class AboutPage extends StatelessWidget {
         ),
         Container(height: 15),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+          padding: const EdgeInsetsDirectional.symmetric(
+              horizontal: 15, vertical: 7),
           child: Center(
             child: TextFont(
               text: "translations".tr().capitalizeFirst,
@@ -525,7 +537,8 @@ class AboutPage extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+          padding: const EdgeInsetsDirectional.symmetric(
+              horizontal: 15, vertical: 5),
           child: TranslationsHelp(
             showIcon: false,
             backgroundColor: containerColor,
@@ -712,14 +725,14 @@ class AboutInfoBox extends StatelessWidget {
   final List<String>? list;
   final Color? color;
   final Color? listTextColor;
-  final EdgeInsets? padding;
+  final EdgeInsetsDirectional? padding;
   final bool showLink;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-          padding ?? const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      padding: padding ??
+          const EdgeInsetsDirectional.symmetric(horizontal: 15, vertical: 5),
       child: Tappable(
         onTap: () async {
           if (link != null) openUrl(link ?? "");
@@ -735,7 +748,8 @@ class AboutInfoBox extends StatelessWidget {
                 : getColor(context, "lightDarkAccent")),
         borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 15),
+          padding: const EdgeInsetsDirectional.symmetric(
+              horizontal: 13, vertical: 15),
           child: Column(
             children: [
               TextFont(

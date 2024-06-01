@@ -720,7 +720,8 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
     }
     return googleUser == null
         ? Padding(
-            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 4),
+            padding:
+                EdgeInsetsDirectional.symmetric(vertical: 5, horizontal: 4),
             child: getPlatform() == PlatformOS.isIOS
                 ? SettingsContainer(
                     isOutlined: widget.isOutlinedButton,
@@ -887,9 +888,9 @@ class _BackupManagementState extends State<BackupManagement> {
                         color: appStateSettings["materialYou"]
                             ? Theme.of(context).colorScheme.secondaryContainer
                             : getColor(context, "lightDarkAccentHeavyLight"),
-                        padding: EdgeInsets.only(
-                          left: 5,
-                          right: 5,
+                        padding: EdgeInsetsDirectional.only(
+                          start: 5,
+                          end: 5,
                           bottom: 10,
                           top: 5,
                         ),
@@ -1049,7 +1050,8 @@ class _BackupManagementState extends State<BackupManagement> {
                           key: ValueKey(1),
                         )
                       : Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
+                          padding:
+                              const EdgeInsetsDirectional.only(bottom: 8.0),
                           child: Tappable(
                             onTap: () async {
                               if (!widget.isManaging) {
@@ -1072,7 +1074,7 @@ class _BackupManagementState extends State<BackupManagement> {
                                                   DateTime.now())
                                               .toLocal()),
                                   beforeDescriptionWidget: Padding(
-                                    padding: const EdgeInsets.only(
+                                    padding: const EdgeInsetsDirectional.only(
                                       top: 8,
                                       bottom: 5,
                                     ),
@@ -1128,7 +1130,7 @@ class _BackupManagementState extends State<BackupManagement> {
                                     : getColor(
                                         context, "lightDarkAccentHeavyLight"),
                             child: Container(
-                              padding: EdgeInsets.symmetric(
+                              padding: EdgeInsetsDirectional.symmetric(
                                   horizontal: 20, vertical: 15),
                               child: Row(
                                 children: [
@@ -1184,7 +1186,7 @@ class _BackupManagementState extends State<BackupManagement> {
                                               //         file.value.name)
                                               //     ? Padding(
                                               //         padding:
-                                              //             const EdgeInsets
+                                              //             const EdgeInsetsDirectional
                                               //                 .only(top: 3),
                                               //         child: TextFont(
                                               //           text:
@@ -1208,8 +1210,9 @@ class _BackupManagementState extends State<BackupManagement> {
                                                 ? SizedBox.shrink()
                                                 : Padding(
                                                     padding:
-                                                        const EdgeInsets.only(
-                                                      left: 8.0,
+                                                        const EdgeInsetsDirectional
+                                                            .only(
+                                                      start: 8.0,
                                                     ),
                                                     child: Builder(
                                                         builder: (boxContext) {
@@ -1241,8 +1244,9 @@ class _BackupManagementState extends State<BackupManagement> {
                                                     }),
                                                   ),
                                             Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 5),
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .only(start: 5),
                                               child: ButtonIcon(
                                                 color: appStateSettings[
                                                         "materialYou"]
@@ -1285,7 +1289,8 @@ class _BackupManagementState extends State<BackupManagement> {
                                                     beforeDescriptionWidget:
                                                         Padding(
                                                       padding:
-                                                          const EdgeInsets.only(
+                                                          const EdgeInsetsDirectional
+                                                              .only(
                                                         top: 8,
                                                         bottom: 5,
                                                       ),
@@ -1420,7 +1425,7 @@ class LoadingShimmerDriveFiles extends StatelessWidget {
           ? Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.2)
           : getColor(context, "lightDarkAccentHeavy").withAlpha(20),
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 8.0),
+        padding: const EdgeInsetsDirectional.only(bottom: 8.0),
         child: Tappable(
           onTap: () {},
           borderRadius: 15,
@@ -1431,7 +1436,8 @@ class LoadingShimmerDriveFiles extends StatelessWidget {
                   .withOpacity(0.5)
               : getColor(context, "lightDarkAccentHeavy").withOpacity(0.5),
           child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+              padding:
+                  EdgeInsetsDirectional.symmetric(horizontal: 20, vertical: 15),
               child: Row(
                 children: [
                   Expanded(
@@ -1451,8 +1457,8 @@ class LoadingShimmerDriveFiles extends StatelessWidget {
                             children: [
                               Container(
                                 decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5)),
+                                  borderRadius: BorderRadiusDirectional.all(
+                                      Radius.circular(5)),
                                   color: Colors.white,
                                 ),
                                 height: 20,
@@ -1461,8 +1467,8 @@ class LoadingShimmerDriveFiles extends StatelessWidget {
                               SizedBox(height: 6),
                               Container(
                                 decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5)),
+                                  borderRadius: BorderRadiusDirectional.all(
+                                      Radius.circular(5)),
                                   color: Colors.white,
                                 ),
                                 height: 14,

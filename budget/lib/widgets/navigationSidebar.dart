@@ -104,8 +104,8 @@ class NavigationSidebarState extends State<NavigationSidebar> {
         child: Container(
           decoration: BoxDecoration(
             color: Theme.of(context).canvasColor,
-            border: Border(
-              right: BorderSide(
+            border: BorderDirectional(
+              end: BorderSide(
                 color: appStateSettings["materialYou"]
                     ? dynamicPastel(context,
                         Theme.of(context).colorScheme.secondaryContainer,
@@ -116,8 +116,8 @@ class NavigationSidebarState extends State<NavigationSidebar> {
             ),
           ),
           child: Padding(
-            padding:
-                EdgeInsets.only(left: MediaQuery.viewPaddingOf(context).left),
+            padding: EdgeInsetsDirectional.only(
+                start: MediaQuery.viewPaddingOf(context).left),
             child: IgnorePointer(
               ignoring: appStateSettings["hasOnboarded"] == false ||
                   lockAppWaitForRestart == true,
@@ -148,7 +148,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                                 child: AnimatedPadding(
                                   duration: Duration(milliseconds: 1500),
                                   curve: Curves.easeInOutCubicEmphasized,
-                                  padding: EdgeInsets.only(
+                                  padding: EdgeInsetsDirectional.only(
                                     bottom: appStateSettings[
                                             "expandedNavigationSidebar"]
                                         ? 0
@@ -157,7 +157,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                                             "expandedNavigationSidebar"]
                                         ? 0
                                         : 7,
-                                    left: appStateSettings[
+                                    start: appStateSettings[
                                             "expandedNavigationSidebar"]
                                         ? 0
                                         : 7,
@@ -170,7 +170,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                                         : -0.5,
                                     curve: Curves.easeInOutCubicEmphasized,
                                     child: IconButton(
-                                      padding: EdgeInsets.all(15),
+                                      padding: EdgeInsetsDirectional.all(15),
                                       onPressed: () {
                                         updateSettings(
                                             "expandedNavigationSidebar",
@@ -191,8 +191,9 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                                 children: [
                                   Expanded(
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 14),
+                                      padding:
+                                          const EdgeInsetsDirectional.symmetric(
+                                              horizontal: 14),
                                       child: Tappable(
                                         borderRadius: 20,
                                         onTap: () async {
@@ -214,7 +215,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                                               Duration(milliseconds: 1500),
                                           curve:
                                               Curves.easeInOutCubicEmphasized,
-                                          padding: EdgeInsets.only(
+                                          padding: EdgeInsetsDirectional.only(
                                             top: appStateSettings[
                                                     "expandedNavigationSidebar"]
                                                 ? 12
@@ -368,8 +369,8 @@ class SidebarClock extends StatelessWidget {
                                       .trim(),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(
-                                      bottom: 4.4, left: 7),
+                                  padding: const EdgeInsetsDirectional.only(
+                                      bottom: 4.4, start: 7),
                                   child: TextFont(
                                     textColor: getColor(context, "black"),
                                     fontSize: 25,
@@ -426,7 +427,7 @@ class _SyncButtonState extends State<SyncButton> {
             ? Icons.sync_outlined
             : Icons.sync_rounded,
         flipIcon: true,
-        padding: EdgeInsets.zero,
+        padding: EdgeInsetsDirectional.zero,
         iconOnly: true,
         onTap: () async {
           if (runningCloudFunctions == false) {
@@ -442,7 +443,8 @@ class _SyncButtonState extends State<SyncButton> {
       expand: !(appStateSettings["currentUserEmail"] == "" ||
           appStateSettings["backupSync"] == false),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+        padding:
+            const EdgeInsetsDirectional.symmetric(horizontal: 5, vertical: 1),
         child: Tappable(
           borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 50,
           onTap: () async {
@@ -459,8 +461,8 @@ class _SyncButtonState extends State<SyncButton> {
           child: appStateSettings["expandedNavigationSidebar"]
               ? Padding(
                   key: ValueKey(appStateSettings["expandedNavigationSidebar"]),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 13),
+                  padding: const EdgeInsetsDirectional.symmetric(
+                      horizontal: 20, vertical: 13),
                   child: Row(
                     children: [
                       refreshButton,
@@ -505,8 +507,8 @@ class _SyncButtonState extends State<SyncButton> {
                 )
               : Padding(
                   key: ValueKey(appStateSettings["expandedNavigationSidebar"]),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 0, vertical: 13),
+                  padding: const EdgeInsetsDirectional.symmetric(
+                      horizontal: 0, vertical: 13),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [refreshButton],
@@ -594,7 +596,8 @@ class NavigationSidebarButton extends StatelessWidget {
       ),
     );
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+      padding:
+          const EdgeInsetsDirectional.symmetric(horizontal: 5, vertical: 1),
       child: AnimatedSwitcher(
         duration: Duration(milliseconds: 250),
         child: Tappable(
@@ -622,7 +625,7 @@ class NavigationSidebarButton extends StatelessWidget {
                 ? Padding(
                     key:
                         ValueKey(appStateSettings["expandedNavigationSidebar"]),
-                    padding: EdgeInsets.symmetric(
+                    padding: EdgeInsetsDirectional.symmetric(
                       horizontal: 20,
                       vertical: 13,
                     ),
@@ -643,7 +646,7 @@ class NavigationSidebarButton extends StatelessWidget {
                 : Padding(
                     key:
                         ValueKey(appStateSettings["expandedNavigationSidebar"]),
-                    padding: EdgeInsets.symmetric(
+                    padding: EdgeInsetsDirectional.symmetric(
                       horizontal: 0,
                       vertical: 13,
                     ),
@@ -699,8 +702,8 @@ class _EdiDatatButtonsState extends State<EditDataButtons> {
         AnimatedPadding(
           duration: Duration(milliseconds: 1500),
           curve: Curves.easeInOutCubicEmphasized,
-          padding: EdgeInsets.only(
-              left: appStateSettings["expandedNavigationSidebar"] ? 8 : 0),
+          padding: EdgeInsetsDirectional.only(
+              start: appStateSettings["expandedNavigationSidebar"] ? 8 : 0),
           child: AnimatedSizeSwitcher(
             child: !showEditDataButtons
                 ? Container(key: ValueKey(1))

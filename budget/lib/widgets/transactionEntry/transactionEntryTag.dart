@@ -48,7 +48,7 @@ class TransactionEntryTag extends StatelessWidget {
       data: Theme.of(context)
           .copyWith(colorScheme: getColorScheme(Theme.of(context).brightness)),
       child: Padding(
-        padding: const EdgeInsets.only(top: 1.0),
+        padding: const EdgeInsetsDirectional.only(top: 1.0),
         child: LayoutBuilder(builder: (context, constraints) {
           double maxWidth = constraints.maxWidth;
           List<bool> tagsToShow = [
@@ -207,7 +207,7 @@ class SubCategoryTag extends StatelessWidget {
       leading: category.emojiIconName != null
           ? null
           : Padding(
-              padding: const EdgeInsets.only(right: 3),
+              padding: const EdgeInsetsDirectional.only(end: 3),
               child: CategoryIcon(
                 categoryPk: "-1",
                 category: category,
@@ -215,7 +215,7 @@ class SubCategoryTag extends StatelessWidget {
                 sizePadding: 1,
                 noBackground: true,
                 canEditByLongPress: false,
-                margin: EdgeInsets.zero,
+                margin: EdgeInsetsDirectional.zero,
               ),
             ),
     );
@@ -260,16 +260,17 @@ class ObjectivePercentTag extends StatelessWidget {
 class TransactionTag extends StatelessWidget {
   final Color color;
   final String name;
-  final EdgeInsets margin;
-  final EdgeInsets padding;
+  final EdgeInsetsDirectional margin;
+  final EdgeInsetsDirectional padding;
   final Widget? leading;
   final double? progress;
 
   TransactionTag({
     required this.color,
     required this.name,
-    this.margin = const EdgeInsets.only(left: 3),
-    this.padding = const EdgeInsets.symmetric(horizontal: 4.5, vertical: 1.05),
+    this.margin = const EdgeInsetsDirectional.only(start: 3),
+    this.padding =
+        const EdgeInsetsDirectional.symmetric(horizontal: 4.5, vertical: 1.05),
     this.leading,
     this.progress,
   });
@@ -279,7 +280,7 @@ class TransactionTag extends StatelessWidget {
     Widget tagWidget = Container(
       decoration: BoxDecoration(
         color: color.withOpacity(progress != null ? 0.15 : 0.25),
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadiusDirectional.circular(6),
       ),
       padding: padding,
       child: Row(
@@ -302,17 +303,17 @@ class TransactionTag extends StatelessWidget {
         return ConstrainedBox(
           constraints: BoxConstraints(maxWidth: constraints.maxWidth),
           child: Padding(
-            padding: const EdgeInsets.only(left: 3),
+            padding: const EdgeInsetsDirectional.only(start: 3),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(6),
+              borderRadius: BorderRadiusDirectional.circular(6),
               child: Stack(
                 children: [
                   tagWidget,
-                  Positioned(
+                  PositionedDirectional(
                     top: 0,
                     bottom: 0,
-                    left: 0,
-                    right: 0,
+                    start: 0,
+                    end: 0,
                     child: Stack(
                       children: [
                         FractionallySizedBox(
@@ -321,7 +322,7 @@ class TransactionTag extends StatelessWidget {
                           child: Container(
                             decoration: BoxDecoration(
                               color: color.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(6),
+                              borderRadius: BorderRadiusDirectional.circular(6),
                             ),
                           ),
                         ),
@@ -345,12 +346,12 @@ class SharedBudgetLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 1.0),
+      padding: const EdgeInsetsDirectional.only(top: 1.0),
       child: Row(
         children: [
           transaction.sharedStatus == SharedStatus.waiting
               ? Padding(
-                  padding: const EdgeInsets.only(top: 2.0),
+                  padding: const EdgeInsetsDirectional.only(top: 2.0),
                   child: InfiniteRotationAnimation(
                     duration: Duration(milliseconds: 5000),
                     child: Icon(
@@ -372,7 +373,7 @@ class SharedBudgetLabel extends StatelessWidget {
                   ),
                 )
               : Padding(
-                  padding: const EdgeInsets.only(top: 2),
+                  padding: const EdgeInsetsDirectional.only(top: 2),
                   child: Icon(
                     transaction.transactionOwnerEmail !=
                             appStateSettings["currentUserEmail"]

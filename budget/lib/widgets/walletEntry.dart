@@ -31,9 +31,9 @@ class WalletEntry extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left: 6, right: 6),
+      padding: const EdgeInsetsDirectional.only(start: 6, end: 6),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadiusDirectional.circular(15),
         boxShadow: boxShadowCheck(boxShadowGeneral(context)),
       ),
       child: OpenContainerNavigation(
@@ -46,7 +46,7 @@ class WalletEntry extends StatelessWidget {
             borderRadius: 14,
             child: AnimatedContainer(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadiusDirectional.circular(15),
                 border: Border.all(
                   width: 2,
                   color: selected
@@ -59,17 +59,17 @@ class WalletEntry extends StatelessWidget {
               ),
               duration: Duration(milliseconds: 450),
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 18, vertical: 13),
+                padding: const EdgeInsetsDirectional.symmetric(
+                    horizontal: 18, vertical: 13),
                 child: Stack(
                   clipBehavior: Clip.none,
                   children: [
-                    Positioned(
-                      right: -11,
+                    PositionedDirectional(
+                      end: -11,
                       top: -5,
                       child: Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
+                          borderRadius: BorderRadiusDirectional.circular(100),
                           color: HexColor(walletWithDetails.wallet.colour,
                                   defaultColor:
                                       Theme.of(context).colorScheme.primary)
@@ -85,7 +85,7 @@ class WalletEntry extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(right: 17),
+                            padding: const EdgeInsetsDirectional.only(end: 17),
                             child: TextFont(
                               text: walletWithDetails.wallet.name,
                               fontWeight: FontWeight.bold,
@@ -175,7 +175,8 @@ class WalletEntryRow extends StatelessWidget {
           color: Colors.transparent,
           borderRadius: 0,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+            padding: const EdgeInsetsDirectional.symmetric(
+                horizontal: 18, vertical: 8),
             child: Container(
               child: Row(
                 mainAxisSize: MainAxisSize.max,
@@ -190,7 +191,8 @@ class WalletEntryRow extends StatelessWidget {
                           child: selected
                               ? Container(
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
+                                    borderRadius:
+                                        BorderRadiusDirectional.circular(100),
                                     color: HexColor(
                                       walletWithDetails.wallet.colour,
                                       defaultColor:
@@ -204,7 +206,8 @@ class WalletEntryRow extends StatelessWidget {
                                   scale: 0.9,
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(100),
+                                      borderRadius:
+                                          BorderRadiusDirectional.circular(100),
                                       border: Border.all(
                                         width: 2,
                                         color: HexColor(
@@ -222,9 +225,9 @@ class WalletEntryRow extends StatelessWidget {
                         ),
                         Flexible(
                           child: Padding(
-                            padding: const EdgeInsets.only(
-                              right: 17,
-                              left: 10,
+                            padding: const EdgeInsetsDirectional.only(
+                              end: 17,
+                              start: 10,
                             ),
                             child: TextFont(
                               textAlign: TextAlign.left,

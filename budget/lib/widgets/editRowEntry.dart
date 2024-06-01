@@ -43,7 +43,7 @@ class EditRowEntry extends StatelessWidget {
   final Color? accentColor;
   final Widget openPage;
   final Future<bool> Function()? onDelete;
-  final EdgeInsets? padding;
+  final EdgeInsetsDirectional? padding;
   final bool currentReorder;
   final bool canReorder;
   final bool canDelete;
@@ -56,7 +56,7 @@ class EditRowEntry extends StatelessWidget {
   final bool? hideReorder;
   final bool disableIntrinsicContentHeight;
   final double? extraButtonHeight;
-  final Alignment? iconAlignment;
+  final AlignmentDirectional? iconAlignment;
   final bool hasMoreOptionsIcon;
   final bool disableActions;
   final double? opacity;
@@ -98,7 +98,7 @@ class EditRowEntry extends StatelessWidget {
             },
             child: Stack(
               children: [
-                Positioned(
+                PositionedDirectional(
                   bottom: 0,
                   top: 0,
                   child: AnimatedContainer(
@@ -120,8 +120,8 @@ class EditRowEntry extends StatelessWidget {
                 AnimatedPadding(
                   curve: Curves.easeInOutCubicEmphasized,
                   duration: Duration(milliseconds: 1000),
-                  padding: EdgeInsets.only(
-                    left: accentColor == null
+                  padding: EdgeInsetsDirectional.only(
+                    start: accentColor == null
                         ? 0
                         : getPlatform() == PlatformOS.isIOS
                             ? 4
@@ -137,9 +137,9 @@ class EditRowEntry extends StatelessWidget {
                             Expanded(
                               child: Container(
                                 padding: padding ??
-                                    EdgeInsets.only(
-                                      left: 25 - 3,
-                                      right: 10,
+                                    EdgeInsetsDirectional.only(
+                                      start: 25 - 3,
+                                      end: 10,
                                       top: 15,
                                       bottom: 15,
                                     ),
@@ -176,8 +176,8 @@ class EditRowEntry extends StatelessWidget {
                                     borderRadius: borderRadius,
                                     child: Container(
                                       alignment: iconAlignment,
-                                      margin: EdgeInsets.only(
-                                        right: hideReorder == true &&
+                                      margin: EdgeInsetsDirectional.only(
+                                        end: hideReorder == true &&
                                                 showMoreWidget == null
                                             ? 10
                                             : 0,
@@ -212,8 +212,9 @@ class EditRowEntry extends StatelessWidget {
                                             borderRadius: borderRadius,
                                             child: Container(
                                               alignment: iconAlignment,
-                                              margin: EdgeInsets.only(
-                                                right: showMoreWidget == null
+                                              margin:
+                                                  EdgeInsetsDirectional.only(
+                                                end: showMoreWidget == null
                                                     ? 10
                                                     : 0,
                                               ),
@@ -235,7 +236,8 @@ class EditRowEntry extends StatelessWidget {
                                         opacity: 0.2,
                                         child: Container(
                                           alignment: iconAlignment,
-                                          margin: EdgeInsets.only(right: 10),
+                                          margin: EdgeInsetsDirectional.only(
+                                              end: 10),
                                           width: 40,
                                           height: disableIntrinsicContentHeight
                                               ? null
@@ -293,7 +295,7 @@ class EditRowEntry extends StatelessWidget {
     //                 amount: 0.3),
     //             width: 2,
     //           ),
-    //           borderRadius: BorderRadius.circular(15),
+    //           borderRadius: BorderRadiusDirectional.circular(15),
     //         ),
     //         child: IntrinsicHeight(
     //           child: Row(
@@ -303,9 +305,9 @@ class EditRowEntry extends StatelessWidget {
     //               Expanded(
     //                 child: Container(
     //                   padding: padding ??
-    //                       EdgeInsets.only(
-    //                         left: 25,
-    //                         right: 10,
+    //                       EdgeInsetsDirectional.only(
+    //                         start: 25,
+    //                         end: 10,
     //                         top: 15,
     //                         bottom: 15,
     //                       ),
@@ -341,7 +343,7 @@ class EditRowEntry extends StatelessWidget {
     //                         color: Colors.transparent,
     //                         borderRadius: 18,
     //                         child: Container(
-    //                             margin: EdgeInsets.only(right: 10),
+    //                             margin: EdgeInsetsDirectional.only(end: 10),
     //                             width: 40,
     //                             height: double.infinity,
     //                             child: Icon(appStateSettings["outlinedIcons"] ? Icons.drag_handle_outlined : Icons.drag_handle_rounded)),
@@ -351,7 +353,7 @@ class EditRowEntry extends StatelessWidget {
     //                   : Opacity(
     //                       opacity: 0.2,
     //                       child: Container(
-    //                         margin: EdgeInsets.only(right: 10),
+    //                         margin: EdgeInsetsDirectional.only(end: 10),
     //                         width: 40,
     //                         height: double.infinity,
     //                         child: Icon(appStateSettings["outlinedIcons"] ? Icons.drag_handle_outlined : Icons.drag_handle_rounded),
@@ -384,7 +386,7 @@ class EditRowEntry extends StatelessWidget {
                 )
               : SizedBox.shrink(),
           Padding(
-            padding: EdgeInsets.symmetric(
+            padding: EdgeInsetsDirectional.symmetric(
                 horizontal: getPlatform() == PlatformOS.isIOS ? 0 : 10,
                 vertical: getPlatform() == PlatformOS.isIOS ? 0 : 5),
             child: ReorderableDelayedDragStartListener(
@@ -431,10 +433,10 @@ class DismissibleEditRowEntry extends StatelessWidget {
             opacity: value ? 0 : 1,
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(borderRadius),
+                borderRadius: BorderRadiusDirectional.circular(borderRadius),
                 color: Colors.red[700],
               ),
-              padding: EdgeInsets.symmetric(horizontal: 15),
+              padding: EdgeInsetsDirectional.symmetric(horizontal: 15),
               alignment: AlignmentDirectional.centerStart,
               child: Icon(
                 appStateSettings["outlinedIcons"]
@@ -449,10 +451,10 @@ class DismissibleEditRowEntry extends StatelessWidget {
             opacity: value ? 0 : 1,
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(borderRadius),
+                borderRadius: BorderRadiusDirectional.circular(borderRadius),
                 color: Colors.red[700],
               ),
-              padding: EdgeInsets.symmetric(horizontal: 15),
+              padding: EdgeInsetsDirectional.symmetric(horizontal: 15),
               alignment: AlignmentDirectional.centerEnd,
               child: Icon(
                 appStateSettings["outlinedIcons"]
@@ -482,7 +484,7 @@ class DismissibleEditRowEntry extends StatelessWidget {
         );
         if (boxShadow.length == 0) {
           return ClipRRect(
-            borderRadius: BorderRadius.circular(borderRadius),
+            borderRadius: BorderRadiusDirectional.circular(borderRadius),
             child: child,
           );
         } else {

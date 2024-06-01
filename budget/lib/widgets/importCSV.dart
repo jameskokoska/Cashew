@@ -252,20 +252,20 @@ class _ImportCSVState extends State<ImportCSV> {
               TableEntry(
                 firstEntry: firstEntry,
                 headers: headers,
-                padding: const EdgeInsets.symmetric(horizontal: 18),
+                padding: const EdgeInsetsDirectional.symmetric(horizontal: 18),
               ),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
+                padding: const EdgeInsetsDirectional.symmetric(
+                    horizontal: 18, vertical: 15),
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
+                      padding: const EdgeInsetsDirectional.only(bottom: 5),
                       child: Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                        padding: EdgeInsetsDirectional.symmetric(
+                            vertical: 10, horizontal: 15),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadiusDirectional.circular(10),
                           color: containerColor,
                         ),
                         child: CustomDateFormatInput(
@@ -282,12 +282,12 @@ class _ImportCSVState extends State<ImportCSV> {
                     ),
                     for (dynamic key in assignedColumns.keys)
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
+                        padding: const EdgeInsetsDirectional.only(bottom: 5),
                         child: Container(
-                          padding: EdgeInsets.symmetric(
+                          padding: EdgeInsetsDirectional.symmetric(
                               vertical: 10, horizontal: 15),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadiusDirectional.circular(10),
                             color: containerColor,
                           ),
                           child: Row(
@@ -372,7 +372,7 @@ class _ImportCSVState extends State<ImportCSV> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18),
+                padding: const EdgeInsetsDirectional.symmetric(horizontal: 18),
                 child: Button(
                   label: "import".tr(),
                   onTap: () async {
@@ -613,7 +613,7 @@ class _ImportCSVState extends State<ImportCSV> {
                 saveSampleCSV(boxContext: boxContext);
               },
               extraWidget: Padding(
-                padding: const EdgeInsets.only(left: 4),
+                padding: const EdgeInsetsDirectional.only(start: 4),
                 child: Icon(
                   appStateSettings["outlinedIcons"]
                       ? Icons.download_outlined
@@ -639,7 +639,7 @@ class _ImportCSVState extends State<ImportCSV> {
               getGoogleSheetTemplate(context);
             },
             extraWidget: Padding(
-              padding: const EdgeInsets.only(left: 4),
+              padding: const EdgeInsetsDirectional.only(start: 4),
               child: Icon(
                 appStateSettings["outlinedIcons"]
                     ? Icons.open_in_new_outlined
@@ -712,7 +712,7 @@ class _CustomDateFormatInputState extends State<CustomDateFormatInput> {
         SizedBox(height: 10),
         TextInput(
           labelText: "date-format".tr(),
-          padding: EdgeInsets.zero,
+          padding: EdgeInsetsDirectional.zero,
           onChanged: (value) {
             setState(() {
               setDateFormat = value;
@@ -723,9 +723,9 @@ class _CustomDateFormatInputState extends State<CustomDateFormatInput> {
         AnimatedExpanded(
           expand: setDateFormat != "",
           child: Padding(
-            padding: const EdgeInsets.only(top: 10, bottom: 5),
+            padding: const EdgeInsetsDirectional.only(top: 10, bottom: 5),
             child: Align(
-              alignment: Alignment.center,
+              alignment: AlignmentDirectional.center,
               child: Wrap(
                 alignment: WrapAlignment.center,
                 crossAxisAlignment: WrapCrossAlignment.center,
@@ -737,7 +737,7 @@ class _CustomDateFormatInputState extends State<CustomDateFormatInput> {
                     borderRadius: 10,
                     filled: true,
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsetsDirectional.all(8.0),
                       child: AnimatedSizeSwitcher(
                         child: TextFont(
                           key: ValueKey(firstDateString),
@@ -748,7 +748,7 @@ class _CustomDateFormatInputState extends State<CustomDateFormatInput> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsetsDirectional.all(8.0),
                     child: Icon(
                       appStateSettings["outlinedIcons"]
                           ? Icons.arrow_forward_outlined
@@ -759,7 +759,7 @@ class _CustomDateFormatInputState extends State<CustomDateFormatInput> {
                     borderRadius: 10,
                     filled: true,
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsetsDirectional.all(8.0),
                       child: AnimatedSizeSwitcher(
                         child: TextFont(
                           key: ValueKey(parsedDateText),

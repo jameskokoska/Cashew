@@ -127,7 +127,7 @@ Future openBottomSheet(
         // headerBuilder: (context, _) {
         //   if (handle) {
         //     return Padding(
-        //       padding: const EdgeInsets.only(bottom: 5.0),
+        //       padding: const EdgeInsetsDirectional.only(bottom: 5.0),
         //       child: Container(
         //         width: 40,
         //         height: 5,
@@ -190,7 +190,7 @@ Future openBottomSheet(
 //   FocusScope.of(context).unfocus();
 //   showModalBottomSheet(
 //     shape: RoundedRectangleBorder(
-//       borderRadius: BorderRadius.circular(16),
+//       borderRadius: BorderRadiusDirectional.circular(16),
 //     ),
 //     isScrollControlled: true,
 //     isDismissible: false,
@@ -198,22 +198,22 @@ Future openBottomSheet(
 //     backgroundColor: Colors.transparent,
 //     builder: (contextBuilder) {
 //       return Padding(
-//         padding: EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
+//         padding: EdgeInsetsDirectional.only(top: MediaQuery.paddingOf(context).top),
 //         child: GestureDetector(
 //           onTap: () {
 //             Navigator.pop(context);
 //           },
 //           child: Align(
-//             alignment: Alignment.bottomCenter,
+//             alignment: AlignmentDirectional.bottomCenter,
 //             child: Container(
-//               padding: EdgeInsets.only(
+//               padding: EdgeInsetsDirectional.only(
 //                 bottom: MediaQuery.of(contextBuilder).viewInsets.bottom,
 //               ),
 //               decoration: BoxDecoration(
 //                 color: getColor(context, "lightDarkAccent"),
-//                 borderRadius: BorderRadius.only(
-//                   topRight: Radius.circular(20),
-//                   topLeft: Radius.circular(20),
+//                 borderRadius: BorderRadiusDirectional.only(
+//                   topend: Radius.circular(20),
+//                   topstart: Radius.circular(20),
 //                 ),
 //               ),
 //               child: child,

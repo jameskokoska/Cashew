@@ -96,24 +96,24 @@ class SelectedTransactionsAppBar extends StatelessWidget {
         List<String> listOfIDs = globalSelectedID.value[pageID] ?? [];
         bool animateIn =
             globalSelectedID.value[pageID] != null && listOfIDs.length > 0;
-        return AnimatedPositioned(
-          left: 0,
-          right: 0,
+        return AnimatedPositionedDirectional(
+          start: 0,
+          end: 0,
           duration: Duration(milliseconds: 500),
           top: animateIn ? 0 : -(MediaQuery.paddingOf(context).top + 80),
           curve: Curves.easeInOutCubic,
           child: Align(
-            alignment: Alignment.topCenter,
+            alignment: AlignmentDirectional.topCenter,
             child: Column(
               children: [
                 Container(
-                  padding: EdgeInsets.only(
+                  padding: EdgeInsetsDirectional.only(
                       top: MediaQuery.paddingOf(context).top + 2),
                   decoration: BoxDecoration(
-                    // borderRadius: BorderRadius.only(
-                    //   bottomLeft: Radius.circular(
+                    // borderRadius: BorderRadiusDirectional.only(
+                    //   bottomstart: Radius.circular(
                     //       getIsFullScreen(context) ? 20 : 10),
-                    //   bottomRight: Radius.circular(
+                    //   bottomend: Radius.circular(
                     //       getIsFullScreen(context) ? 20 : 10),
                     // ),
                     boxShadow: boxShadowCheck(boxShadowSharp(context)),
@@ -123,7 +123,7 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IconButton(
-                        padding: EdgeInsets.all(15),
+                        padding: EdgeInsetsDirectional.all(15),
                         color: Theme.of(context).colorScheme.secondary,
                         icon: Icon(
                           getPlatform() == PlatformOS.isIOS
@@ -154,7 +154,8 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                                   child: Builder(
                                     builder: (context) {
                                       return Transform.translate(
-                                        offset: Offset(-10, 0),
+                                        offset: Offset(-10, 0)
+                                            .withDirectionality(context),
                                         child: Tappable(
                                           color: Colors.transparent,
                                           borderRadius: 15,
@@ -173,7 +174,9 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                                             shareInsteadOfCopy: false,
                                           ),
                                           child: Padding(
-                                            padding: const EdgeInsets.all(10),
+                                            padding:
+                                                const EdgeInsetsDirectional.all(
+                                                    10),
                                             child: TextFont(
                                               text:
                                                   listOfIDs.length.toString() +
@@ -197,7 +200,8 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                                   initialCount: (0),
                                   textBuilder: (number) {
                                     return Transform.translate(
-                                      offset: Offset(10, 0),
+                                      offset: Offset(10, 0)
+                                          .withDirectionality(context),
                                       child: Tappable(
                                         color: Colors.transparent,
                                         borderRadius: 15,
@@ -214,7 +218,9 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                                           );
                                         },
                                         child: Padding(
-                                          padding: const EdgeInsets.all(10),
+                                          padding:
+                                              const EdgeInsetsDirectional.all(
+                                                  10),
                                           child: TextFont(
                                             text: convertToMoney(
                                                 Provider.of<AllWallets>(
@@ -479,7 +485,8 @@ class SelectedTransactionsAppBarMenu extends StatelessWidget {
                                           Expanded(
                                             child: TitleInput(
                                               resizePopupWhenChanged: true,
-                                              padding: EdgeInsets.zero,
+                                              padding:
+                                                  EdgeInsetsDirectional.zero,
                                               setSelectedCategory: (_) {},
                                               setSelectedSubCategory: (_) {},
                                               alsoSearchCategories: false,
@@ -859,7 +866,7 @@ class EditSelectedTransactionsContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
+      padding: const EdgeInsetsDirectional.only(
         bottom: 5,
         top: 5,
       ),
@@ -868,9 +875,10 @@ class EditSelectedTransactionsContainer extends StatelessWidget {
           Expanded(
             child: OutlinedButtonStacked(
               filled: false,
-              alignLeft: true,
+              alignStart: true,
               alignBeside: true,
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+              padding:
+                  EdgeInsetsDirectional.symmetric(horizontal: 20, vertical: 15),
               text: text,
               iconData: iconData,
               iconScale: iconScale,

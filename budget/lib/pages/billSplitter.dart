@@ -225,7 +225,7 @@ class _BillSplitterState extends State<BillSplitter> {
       title: "bill-splitter".tr(),
       actions: [
         IconButton(
-          padding: EdgeInsets.all(15),
+          padding: EdgeInsetsDirectional.all(15),
           tooltip: "info".tr(),
           onPressed: () {
             openPopup(
@@ -265,8 +265,8 @@ class _BillSplitterState extends State<BillSplitter> {
       ),
       listWidgets: [
         Padding(
-          padding:
-              const EdgeInsets.only(top: 20, left: 20.0, right: 20, bottom: 20),
+          padding: const EdgeInsetsDirectional.only(
+              top: 20, start: 20.0, end: 20, bottom: 20),
           child: Builder(
             builder: (context) {
               double totalAccountedFor = 0;
@@ -328,7 +328,7 @@ class _BillSplitterState extends State<BillSplitter> {
                     },
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 3.5),
+                    padding: const EdgeInsetsDirectional.only(bottom: 3.5),
                     child: CountNumber(
                       count: totalCost,
                       duration: Duration(milliseconds: 700),
@@ -354,7 +354,7 @@ class _BillSplitterState extends State<BillSplitter> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 6),
+          padding: const EdgeInsetsDirectional.symmetric(horizontal: 6),
           child: Row(
             children: [
               Expanded(
@@ -365,7 +365,8 @@ class _BillSplitterState extends State<BillSplitter> {
                     duration: Duration(milliseconds: 500),
                     opacity: billSplitterItems.length <= 0 ? 0.5 : 1,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      padding:
+                          const EdgeInsetsDirectional.symmetric(horizontal: 4),
                       child: SettingsContainer(
                         isOutlinedColumn: true,
                         title: "new-bill".tr(),
@@ -614,7 +615,7 @@ class BillSplitterItemEntry extends StatelessWidget {
         AnimatedSize(
           duration: Duration(milliseconds: 300),
           curve: Curves.easeInOut,
-          alignment: Alignment.topCenter,
+          alignment: AlignmentDirectional.topCenter,
           child: EditRowEntry(
               onDelete: () async {
                 return (await deleteBillSplitterItem(billSplitterItem)) ==
@@ -636,19 +637,19 @@ class BillSplitterItemEntry extends StatelessWidget {
               ),
               canReorder: false,
               hideReorder: true,
-              iconAlignment: Alignment.bottomCenter,
+              iconAlignment: AlignmentDirectional.bottomCenter,
               padding: getPlatform() == PlatformOS.isIOS
-                  ? EdgeInsets.only(
+                  ? EdgeInsetsDirectional.only(
                       top: 17,
                       bottom: 0,
-                      left: 25,
-                      right: 5,
+                      start: 25,
+                      end: 5,
                     )
-                  : EdgeInsets.only(
+                  : EdgeInsetsDirectional.only(
                       top: 17,
                       bottom: 0,
-                      left: 25,
-                      right: 25,
+                      start: 25,
+                      end: 25,
                     ),
               currentReorder: false,
               index: billSplitterItemIndex,
@@ -675,7 +676,8 @@ class BillSplitterItemEntry extends StatelessWidget {
                             textColor: errorColor,
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 2),
+                            padding:
+                                const EdgeInsetsDirectional.only(bottom: 2),
                             child: TextFont(
                               text: " / " +
                                   convertToMoney(
@@ -696,9 +698,10 @@ class BillSplitterItemEntry extends StatelessWidget {
                 AnimatedSize(
                   duration: Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
-                  alignment: Alignment.topCenter,
+                  alignment: AlignmentDirectional.topCenter,
                   child: Padding(
-                    padding: EdgeInsets.only(bottom: 17, left: 25, right: 25),
+                    padding: EdgeInsetsDirectional.only(
+                        bottom: 17, start: 25, end: 25),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -741,7 +744,8 @@ class BillSplitterItemEntry extends StatelessWidget {
                                   ),
                                   SizedBox(height: 5),
                                   ClipRRect(
-                                    borderRadius: BorderRadius.circular(100),
+                                    borderRadius:
+                                        BorderRadiusDirectional.circular(100),
                                     child: Stack(
                                       children: [
                                         Container(
@@ -757,7 +761,8 @@ class BillSplitterItemEntry extends StatelessWidget {
                                               Curves.easeInOutCubicEmphasized,
                                           child: ClipRRect(
                                             borderRadius:
-                                                BorderRadius.circular(100),
+                                                BorderRadiusDirectional
+                                                    .circular(100),
                                             child: Container(
                                               color: Theme.of(context)
                                                   .colorScheme
@@ -783,9 +788,9 @@ class BillSplitterItemEntry extends StatelessWidget {
         ),
         getPlatform() == PlatformOS.isIOS
             ? SizedBox.shrink()
-            : Positioned(
+            : PositionedDirectional(
                 top: -11,
-                right: -2,
+                end: -2,
                 child: IconButton(
                   onPressed: () {
                     deleteBillSplitterItem(billSplitterItem);
@@ -795,9 +800,9 @@ class BillSplitterItemEntry extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: dynamicPastel(
                           context, Theme.of(context).colorScheme.error),
-                      borderRadius: BorderRadius.circular(100),
+                      borderRadius: BorderRadiusDirectional.circular(100),
                     ),
-                    padding: EdgeInsets.all(5),
+                    padding: EdgeInsetsDirectional.all(5),
                     child: Icon(
                       appStateSettings["outlinedIcons"]
                           ? Icons.delete_outlined
@@ -896,7 +901,7 @@ class _AddBillItemPageState extends State<AddBillItemPage> {
         underTitleSpace: false,
         child: SelectAmount(
           enableWalletPicker: false,
-          padding: EdgeInsets.symmetric(horizontal: 18),
+          padding: EdgeInsetsDirectional.symmetric(horizontal: 18),
           onlyShowCurrencyIcon: true,
           selectedWalletPk: appStateSettings["selectedWalletPk"],
           amountPassed: billSplitterItem.cost.toString(),
@@ -953,7 +958,7 @@ class _AddBillItemPageState extends State<AddBillItemPage> {
                         billSplitterItem.name = text;
                       },
                       textAlign: TextAlign.center,
-                      padding: EdgeInsets.only(left: 7, right: 7),
+                      padding: EdgeInsetsDirectional.only(start: 7, end: 7),
                       fontSize: getIsFullScreen(context) ? 26 : 25,
                       fontWeight: FontWeight.bold,
                       topContentPadding: kIsWeb ? 6.8 : 0,
@@ -968,7 +973,7 @@ class _AddBillItemPageState extends State<AddBillItemPage> {
               children: [
                 Flexible(
                   child: Padding(
-                    padding: const EdgeInsets.only(bottom: 7.5),
+                    padding: const EdgeInsetsDirectional.only(bottom: 7.5),
                     child: TappableTextEntry(
                       title: convertToMoney(
                         Provider.of<AllWallets>(context),
@@ -980,13 +985,13 @@ class _AddBillItemPageState extends State<AddBillItemPage> {
                         openEnterAmountBottomSheet();
                       },
                       fontSize: 27,
-                      padding: EdgeInsets.zero,
+                      padding: EdgeInsetsDirectional.zero,
                     ),
                   ),
                 ),
                 TextFont(text: "×"),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 7.5),
+                  padding: const EdgeInsetsDirectional.only(bottom: 7.5),
                   child: TappableTextEntry(
                     title: multiplierAmount
                         .toStringAsFixed(2)
@@ -1031,7 +1036,7 @@ class _AddBillItemPageState extends State<AddBillItemPage> {
                       );
                     },
                     fontSize: 27,
-                    padding: EdgeInsets.zero,
+                    padding: EdgeInsetsDirectional.zero,
                   ),
                 ),
               ],
@@ -1040,8 +1045,8 @@ class _AddBillItemPageState extends State<AddBillItemPage> {
             Container(
               decoration: BoxDecoration(
                 borderRadius: getPlatform() == PlatformOS.isIOS
-                    ? BorderRadius.circular(10)
-                    : BorderRadius.circular(20),
+                    ? BorderRadiusDirectional.circular(10)
+                    : BorderRadiusDirectional.circular(20),
                 color: Theme.of(context).colorScheme.secondaryContainer,
               ),
               child: SettingsContainerSwitch(
@@ -1136,7 +1141,7 @@ class _AddBillItemPageState extends State<AddBillItemPage> {
                     );
                   },
                   fontSize: 22,
-                  padding: EdgeInsets.zero,
+                  padding: EdgeInsetsDirectional.zero,
                 );
               },
             ),
@@ -1152,7 +1157,7 @@ class _AddBillItemPageState extends State<AddBillItemPage> {
             ),
           ],
           staticOverlay: Align(
-            alignment: Alignment.bottomCenter,
+            alignment: AlignmentDirectional.bottomCenter,
             child: SaveBottomButton(
               label: widget.billSplitterItem == null
                   ? "add-item".tr()
@@ -1359,7 +1364,7 @@ class SummaryPage extends StatelessWidget {
       title: "summary".tr(),
       dragDownToDismiss: true,
       staticOverlay: Align(
-        alignment: Alignment.bottomCenter,
+        alignment: AlignmentDirectional.bottomCenter,
         child: SaveBottomButton(
           label: "generate-loan-transactions".tr(),
           onTap: () async {
@@ -1454,7 +1459,7 @@ Future<bool> generateLoanTransactionsFromBillSummary(
                   child: TitleInput(
                     focusNode: enterTitleFocus,
                     resizePopupWhenChanged: true,
-                    padding: EdgeInsets.zero,
+                    padding: EdgeInsetsDirectional.zero,
                     setSelectedCategory: (_) {},
                     setSelectedSubCategory: (_) {},
                     alsoSearchCategories: false,
@@ -1610,7 +1615,7 @@ class _SummaryPersonRowEntryState extends State<SummaryPersonRowEntry> {
     return AnimatedSize(
       duration: Duration(milliseconds: 300),
       curve: Curves.easeInOut,
-      alignment: Alignment.topCenter,
+      alignment: AlignmentDirectional.topCenter,
       child: EditRowEntry(
         disableIntrinsicContentHeight: true,
         canDelete: false,
@@ -1622,14 +1627,14 @@ class _SummaryPersonRowEntryState extends State<SummaryPersonRowEntry> {
         openPage: Container(),
         canReorder: false,
         hideReorder: true,
-        padding: EdgeInsets.symmetric(
+        padding: EdgeInsetsDirectional.symmetric(
           vertical: 7,
           horizontal: getPlatform() == PlatformOS.isIOS ? 17 : 7,
         ),
         currentReorder: false,
         index: widget.index,
         content: Padding(
-          padding: EdgeInsets.only(left: 15),
+          padding: EdgeInsetsDirectional.only(start: 15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -1674,7 +1679,7 @@ class _SummaryPersonRowEntryState extends State<SummaryPersonRowEntry> {
                 ],
               ),
               AnimatedSizeSwitcher(
-                sizeAlignment: Alignment.topCenter,
+                sizeAlignment: AlignmentDirectional.topCenter,
                 child: isExpanded == false
                     ? Container(
                         key: ValueKey(1),
@@ -1709,7 +1714,8 @@ class _SummaryPersonRowEntryState extends State<SummaryPersonRowEntry> {
                                     percentOfTotal;
                                 if (amountSpent == 0) percentOfTotal = 0;
                                 return Padding(
-                                  padding: const EdgeInsets.only(right: 15),
+                                  padding:
+                                      const EdgeInsetsDirectional.only(end: 15),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -1735,7 +1741,8 @@ class _SummaryPersonRowEntryState extends State<SummaryPersonRowEntry> {
                                       SizedBox(height: 5),
                                       ClipRRect(
                                         borderRadius:
-                                            BorderRadius.circular(100),
+                                            BorderRadiusDirectional.circular(
+                                                100),
                                         child: Stack(
                                           children: [
                                             Container(
@@ -1751,7 +1758,8 @@ class _SummaryPersonRowEntryState extends State<SummaryPersonRowEntry> {
                                                   .easeInOutCubicEmphasized,
                                               child: ClipRRect(
                                                 borderRadius:
-                                                    BorderRadius.circular(100),
+                                                    BorderRadiusDirectional
+                                                        .circular(100),
                                                 child: Container(
                                                   color: Theme.of(context)
                                                       .colorScheme
@@ -1774,7 +1782,7 @@ class _SummaryPersonRowEntryState extends State<SummaryPersonRowEntry> {
                       ),
               ),
               AnimatedSizeSwitcher(
-                sizeAlignment: Alignment.topCenter,
+                sizeAlignment: AlignmentDirectional.topCenter,
                 child: isExpanded
                     ? Container(
                         height: 10,

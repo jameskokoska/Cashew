@@ -25,6 +25,7 @@ import '../colors.dart';
 import '../functions.dart';
 import 'package:async/async.dart' show StreamZip;
 import 'package:budget/struct/randomConstants.dart';
+import 'dart:ui' as ui;
 
 class BudgetContainer extends StatelessWidget {
   BudgetContainer({
@@ -83,7 +84,7 @@ class BudgetContainer extends StatelessWidget {
             // height: height,
             child: ClipRRect(
               clipBehavior: Clip.antiAlias,
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadiusDirectional.circular(15),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -99,19 +100,22 @@ class BudgetContainer extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(
-                            left: 23, right: 23, bottom: 13, top: 13),
+                        padding: const EdgeInsetsDirectional.only(
+                            start: 23, end: 23, bottom: 13, top: 13),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Container(
-                              width: double.infinity,
-                              child: TextFont(
-                                text: budget.name,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 24,
-                                textAlign: TextAlign.left,
-                              ),
+                            Row(
+                              children: [
+                                Flexible(
+                                  child: TextFont(
+                                    text: budget.name,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 24,
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ),
+                              ],
                             ),
                             budgetAmount - totalSpent >= 0
                                 ? Row(
@@ -146,8 +150,9 @@ class BudgetContainer extends StatelessWidget {
                                       ),
                                       Flexible(
                                         child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              bottom: 1.4),
+                                          padding:
+                                              const EdgeInsetsDirectional.only(
+                                                  bottom: 1.4),
                                           child: Container(
                                             child: TextFont(
                                               text: getBudgetSpentText(
@@ -196,8 +201,9 @@ class BudgetContainer extends StatelessWidget {
                                       ),
                                       Flexible(
                                         child: Container(
-                                          padding: const EdgeInsets.only(
-                                              bottom: 1.4),
+                                          padding:
+                                              const EdgeInsetsDirectional.only(
+                                                  bottom: 1.4),
                                           child: TextFont(
                                             text: getBudgetOverSpentText(
                                                     budget.income) +
@@ -216,9 +222,10 @@ class BudgetContainer extends StatelessWidget {
                         ),
                       ),
                       Align(
-                        alignment: Alignment.topRight,
+                        alignment: AlignmentDirectional.topEnd,
                         child: Container(
-                          padding: EdgeInsets.only(top: 10, right: 10),
+                          padding: EdgeInsetsDirectional.only(
+                              top: 10, end: 10, start: 10),
                           child: budget.reoccurrence == BudgetReoccurence.custom
                               ? SizedBox.shrink()
                               : ButtonIcon(
@@ -256,9 +263,9 @@ class BudgetContainer extends StatelessWidget {
                   ),
                   Padding(
                     padding: intermediatePadding
-                        ? EdgeInsets.only(
-                            left: 15,
-                            right: 15,
+                        ? EdgeInsetsDirectional.only(
+                            start: 15,
+                            end: 15,
                             top: squishInactiveBudgetContainerHeight == true &&
                                     isOutOfRange
                                 ? 8.5
@@ -269,7 +276,7 @@ class BudgetContainer extends StatelessWidget {
                                     ? 0
                                     : 8.5,
                           )
-                        : EdgeInsets.symmetric(horizontal: 15),
+                        : EdgeInsetsDirectional.symmetric(horizontal: 15),
                     child: StreamBuilder<double?>(
                         stream: database.watchTotalOfBudget(
                           allWallets: Provider.of<AllWallets>(context),
@@ -314,9 +321,9 @@ class BudgetContainer extends StatelessWidget {
                     budget: budget,
                     totalAmount: totalSpent,
                     budgetRange: budgetRange,
-                    padding: EdgeInsets.only(
-                      left: 10,
-                      right: 10,
+                    padding: EdgeInsetsDirectional.only(
+                      start: 10,
+                      end: 10,
                       bottom: squishInactiveBudgetContainerHeight == true &&
                               isOutOfRange
                           ? 4
@@ -416,7 +423,7 @@ class DaySpending extends StatelessWidget {
   final bool large;
   final double totalAmount;
   final DateTimeRange budgetRange;
-  final EdgeInsets padding;
+  final EdgeInsetsDirectional padding;
 
   @override
   Widget build(BuildContext context) {
@@ -425,7 +432,7 @@ class DaySpending extends StatelessWidget {
     bool isOutOfRange = budgetRange.end.difference(DateTime.now()).inDays < 0 ||
         budgetRange.start.difference(DateTime.now()).inDays > 0;
     Widget textWidget = Padding(
-      padding: EdgeInsets.symmetric(horizontal: 6),
+      padding: EdgeInsetsDirectional.symmetric(horizontal: 6),
       child: large && isOutOfRange
           ? SizedBox(height: 1)
           : Builder(builder: (context) {
@@ -455,7 +462,7 @@ class DaySpending extends StatelessWidget {
             }),
     );
     return Padding(
-      padding: large && isOutOfRange ? EdgeInsets.zero : padding,
+      padding: large && isOutOfRange ? EdgeInsetsDirectional.zero : padding,
       child: Center(
         child: large
             ? textWidget
@@ -635,7 +642,7 @@ class BudgetTimeline extends StatelessWidget {
         ),
         large
             ? Container(
-                padding: EdgeInsets.only(top: 6),
+                padding: EdgeInsetsDirectional.only(top: 6),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -675,7 +682,7 @@ class BudgetProgress extends StatelessWidget {
     required this.ghostPercent,
     this.large = false,
     this.showToday = true,
-    this.padding = const EdgeInsets.symmetric(horizontal: 8.0),
+    this.padding = const EdgeInsetsDirectional.symmetric(horizontal: 8.0),
     this.enableShake = true,
   }) : super(key: key);
 
@@ -687,7 +694,7 @@ class BudgetProgress extends StatelessWidget {
   final double ghostPercent;
   final bool large;
   final bool showToday;
-  final EdgeInsets padding;
+  final EdgeInsetsDirectional padding;
   final bool enableShake;
 
   Widget getPercentText(Color color) {
@@ -711,7 +718,7 @@ class BudgetProgress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      alignment: Alignment.bottomLeft,
+      alignment: AlignmentDirectional.bottomStart,
       children: [
         ShakeAnimation(
           delay: Duration(milliseconds: 600),
@@ -720,16 +727,16 @@ class BudgetProgress extends StatelessWidget {
             key: ValueKey(1),
             padding: padding,
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(50),
+              borderRadius: BorderRadiusDirectional.circular(50),
               child: Container(
                 height: large ? 24.2 : 19.2,
                 child: Stack(
-                  alignment: Alignment.centerLeft,
+                  alignment: AlignmentDirectional.centerStart,
                   clipBehavior: Clip.antiAlias,
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
+                        borderRadius: BorderRadiusDirectional.circular(50),
                         color: backgroundColor ??
                             (appStateSettings["materialYou"]
                                 ? large
@@ -762,12 +769,14 @@ class BudgetProgress extends StatelessWidget {
                                         : 0.13
                                     : 0.15,
                         child: ClipRRect(
-                          borderRadius: percent < 50
-                              ? BorderRadius.only(
-                                  topRight: Radius.circular(50),
-                                  bottomRight: Radius.circular(50),
-                                )
-                              : BorderRadius.circular(50),
+                          borderRadius: directionalityReverse(context) == -1
+                              ? BorderRadiusDirectional.circular(50)
+                              : (percent < 50
+                                  ? BorderRadiusDirectional.only(
+                                      topEnd: Radius.circular(50),
+                                      bottomEnd: Radius.circular(50),
+                                    )
+                                  : BorderRadiusDirectional.circular(50)),
                           child: Container(
                             child: AnimatedProgress(
                               percent: percent + ghostPercent,
@@ -780,12 +789,14 @@ class BudgetProgress extends StatelessWidget {
                         ),
                       ),
                     ClipRRect(
-                      borderRadius: percent < 50
-                          ? BorderRadius.only(
-                              topRight: Radius.circular(50),
-                              bottomRight: Radius.circular(50),
-                            )
-                          : BorderRadius.circular(50),
+                      borderRadius: directionalityReverse(context) == -1
+                          ? BorderRadiusDirectional.circular(50)
+                          : (percent < 50
+                              ? BorderRadiusDirectional.only(
+                                  topEnd: Radius.circular(50),
+                                  bottomEnd: Radius.circular(50),
+                                )
+                              : BorderRadiusDirectional.circular(50)),
                       child: Container(
                         child: AnimatedProgress(
                           percent: percent,
@@ -891,7 +902,7 @@ class _AnimatedProgressState extends State<AnimatedProgress> {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(0),
+                  borderRadius: BorderRadiusDirectional.circular(0),
                   color: lightenPastel(widget.color, amount: 0.6),
                 ),
               ),
@@ -910,7 +921,7 @@ class _AnimatedProgressState extends State<AnimatedProgress> {
                       : 0,
                   child: Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadiusDirectional.circular(20),
                       color: dynamicPastel(context, widget.color,
                               amountDark: 0.1, amountLight: 0.3)
                           .withOpacity(0.8),
@@ -1009,18 +1020,19 @@ class _TodayIndicatorState extends State<TodayIndicator> {
           (percent - percentThreshold) / (100 - percentThreshold * 2);
     }
     return Stack(
-      alignment: Alignment.bottomCenter,
+      alignment: AlignmentDirectional.bottomCenter,
       children: [
         WidgetSize(
           onChange: (Size size) {
             progressSize = size;
           },
           child: Align(
-            alignment: percent < percentThreshold
-                ? FractionalOffset(0, 0)
-                : indicatorOffsetPercent > 1
-                    ? FractionalOffset(1, 0)
-                    : FractionalOffset(indicatorOffsetPercent, 0),
+            alignment: (percent < percentThreshold
+                    ? FractionalOffset(0, 0)
+                    : indicatorOffsetPercent > 1
+                        ? FractionalOffset(1, 0)
+                        : FractionalOffset(indicatorOffsetPercent, 0))
+                .withDirectionality(context),
             child: Column(
               children: [
                 WidgetSize(
@@ -1034,14 +1046,14 @@ class _TodayIndicatorState extends State<TodayIndicator> {
                     child: SlideFadeTransition(
                       child: Container(
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
+                            borderRadius: BorderRadiusDirectional.circular(6),
                             color:
                                 Theme.of(context).brightness == Brightness.light
                                     ? Color(0xFF1F1F1F)
                                     : getColor(context, "black")),
                         child: Padding(
-                          padding: EdgeInsets.only(
-                              top: 3, right: 5, left: 5, bottom: 3),
+                          padding: EdgeInsetsDirectional.only(
+                              top: 3, end: 5, start: 5, bottom: 3),
                           child: MediaQuery(
                             child: TextFont(
                               textAlign: TextAlign.center,
@@ -1061,11 +1073,12 @@ class _TodayIndicatorState extends State<TodayIndicator> {
                   opacity: 0,
                   child: Container(
                     width: 3,
-                    margin: EdgeInsets.symmetric(horizontal: horizontalMargin),
+                    margin: EdgeInsetsDirectional.symmetric(
+                        horizontal: horizontalMargin),
                     height: widget.large ? 27 : 22,
                     decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.vertical(bottom: Radius.circular(5)),
+                      borderRadius: BorderRadiusDirectional.vertical(
+                          bottom: Radius.circular(5)),
                       color: getColor(context, "black").withOpacity(0.4),
                     ),
                   ),
@@ -1075,14 +1088,17 @@ class _TodayIndicatorState extends State<TodayIndicator> {
           ),
         ),
         Align(
-          alignment: FractionalOffset(percent / 100, 0),
+          alignment:
+              FractionalOffset(percent / 100, 0).withDirectionality(context),
           child: FadeIn(
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: horizontalMargin),
+              margin:
+                  EdgeInsetsDirectional.symmetric(horizontal: horizontalMargin),
               width: 3,
               height: widget.large ? 27 : 22,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.vertical(bottom: Radius.circular(5)),
+                borderRadius: BorderRadiusDirectional.vertical(
+                    bottom: Radius.circular(5)),
                 color: getColor(context, "black").withOpacity(0.4),
               ),
             ),
@@ -1229,9 +1245,9 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
                                 amount: 0.3)
                             .withAlpha(80)
                         : Colors.transparent,
-                    padding: EdgeInsets.only(
-                      left: 20,
-                      right: 25,
+                    padding: EdgeInsetsDirectional.only(
+                      start: 20,
+                      end: 25,
                       top: widget.isLarge ? 8 : 8,
                       bottom: widget.isLarge ? 8 : 8,
                     ),
@@ -1240,7 +1256,7 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
                         // CategoryIcon(
                         //   category: category,
                         //   size: 30,
-                        //   margin: EdgeInsets.zero,
+                        //   margin: EdgeInsetsDirectional.zero,
                         // ),
                         MemberSpendingPercent(
                           displayLetter: getMemberNickname(spender.member)
@@ -1375,9 +1391,9 @@ class MemberSpendingPercent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(alignment: Alignment.center, children: [
+    return Stack(alignment: AlignmentDirectional.center, children: [
       Padding(
-        padding: EdgeInsets.all(insetPadding / 2),
+        padding: EdgeInsetsDirectional.all(insetPadding / 2),
         child: TextFont(
           text: displayLetter,
           fontWeight: FontWeight.bold,
@@ -1421,7 +1437,7 @@ class HorizontalBarChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(90),
+      borderRadius: BorderRadiusDirectional.circular(90),
       child: SizedBox(
         height: 20,
         child: Row(
@@ -1431,7 +1447,8 @@ class HorizontalBarChart extends StatelessWidget {
               Expanded(
                 flex: (data[i].units * 100).toInt(),
                 child: Padding(
-                  padding: EdgeInsets.only(right: i == data.length - 1 ? 0 : 5),
+                  padding: EdgeInsetsDirectional.only(
+                      end: i == data.length - 1 ? 0 : 5),
                   child: Container(
                     color: data[i].color,
                   ),

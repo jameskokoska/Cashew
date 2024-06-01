@@ -83,7 +83,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
         ),
         actions: [
           IconButton(
-            padding: EdgeInsets.all(15),
+            padding: EdgeInsetsDirectional.all(15),
             tooltip: "add-category".tr(),
             onPressed: () {
               pushRoute(
@@ -101,7 +101,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
         slivers: [
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
+              padding: const EdgeInsetsDirectional.only(bottom: 8.0),
               child: TextInput(
                 labelText: "search-categories-placeholder".tr(),
                 icon: appStateSettings["outlinedIcons"]
@@ -194,13 +194,14 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                                 categoriesToShow.length != 1,
                             currentReorder:
                                 currentReorder != -1 && currentReorder != index,
-                            padding: EdgeInsets.symmetric(
+                            padding: EdgeInsetsDirectional.symmetric(
                                 horizontal: 10, vertical: 5),
                             key: ValueKey(category.categoryPk),
                             extraWidgetsBelow: [
                               if (subCategories.length > 0)
                                 Padding(
-                                  padding: const EdgeInsets.only(bottom: 4),
+                                  padding: const EdgeInsetsDirectional.only(
+                                      bottom: 4),
                                   child: SelectChips(
                                     scrollablePositionedList: false,
                                     items: subCategories,
@@ -269,7 +270,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                                           sizePadding: 0,
                                           noBackground: true,
                                           canEditByLongPress: false,
-                                          margin: EdgeInsets.zero,
+                                          margin: EdgeInsetsDirectional.zero,
                                         );
                                       });
                                     },
@@ -399,7 +400,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
 
 class RefreshButton extends StatefulWidget {
   final Function onTap;
-  final EdgeInsets? padding;
+  final EdgeInsetsDirectional? padding;
   final VisualDensity? visualDensity;
   final IconData? customIcon;
   final bool? flipIcon;
@@ -482,7 +483,7 @@ class RefreshButtonState extends State<RefreshButton>
           child: Transform.rotate(
             angle: _tween.evaluate(_animation),
             child: Transform(
-              alignment: Alignment.center,
+              alignment: AlignmentDirectional.center,
               transform: Matrix4.rotationY(widget.flipIcon == true ? pi : 0),
               child: widget.iconOnly == true
                   ? Icon(
@@ -493,7 +494,7 @@ class RefreshButtonState extends State<RefreshButton>
                       color: Theme.of(context).colorScheme.secondary,
                     )
                   : IconButton(
-                      padding: widget.padding ?? EdgeInsets.all(15),
+                      padding: widget.padding ?? EdgeInsetsDirectional.all(15),
                       icon: Icon(widget.customIcon ??
                           (appStateSettings["outlinedIcons"]
                               ? Icons.refresh_outlined

@@ -162,13 +162,13 @@ class MonthSelectorState extends State<MonthSelector> {
                         monthWidth / 2;
                     return Container(
                       color: Theme.of(context).canvasColor,
-                      padding: EdgeInsets.only(
-                        left: isFirst &&
+                      padding: EdgeInsetsDirectional.only(
+                        start: isFirst &&
                                 getDateFromIndex(index)
                                     .isBefore(earliestLatestDateTime.earliest)
                             ? spacePadding
                             : 0,
-                        right: isLast &&
+                        end: isLast &&
                                 getDateFromIndex(index + 1)
                                     .isAfter(earliestLatestDateTime.latest)
                             ? spacePadding
@@ -186,7 +186,8 @@ class MonthSelectorState extends State<MonthSelector> {
                               borderRadius: 10,
                               child: Container(
                                 width: monthWidth,
-                                padding: EdgeInsets.symmetric(horizontal: 5),
+                                padding: EdgeInsetsDirectional.symmetric(
+                                    horizontal: 5),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -251,16 +252,17 @@ class MonthSelectorState extends State<MonthSelector> {
                           ),
                           isToday && !isSelected
                               ? Align(
-                                  alignment: Alignment.bottomRight,
+                                  alignment: AlignmentDirectional.bottomEnd,
                                   child: SizedBox(
                                     width: 100,
                                     child: Center(
                                       heightFactor: 0.5,
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                            topRight: Radius.circular(40),
-                                            topLeft: Radius.circular(40),
+                                          borderRadius:
+                                              BorderRadiusDirectional.only(
+                                            topEnd: Radius.circular(40),
+                                            topStart: Radius.circular(40),
                                           ),
                                           color: appStateSettings["materialYou"]
                                               ? dynamicPastel(
@@ -282,7 +284,7 @@ class MonthSelectorState extends State<MonthSelector> {
                                 )
                               : SizedBox(),
                           Align(
-                            alignment: Alignment.bottomCenter,
+                            alignment: AlignmentDirectional.bottomCenter,
                             child: Container(
                               width: 100,
                               height: 2,
@@ -299,7 +301,7 @@ class MonthSelectorState extends State<MonthSelector> {
                             ),
                           ),
                           Align(
-                            alignment: Alignment.bottomCenter,
+                            alignment: AlignmentDirectional.bottomCenter,
                             child: AnimatedScaleOpacity(
                               duration: Duration(milliseconds: 500),
                               durationOpacity:
@@ -310,9 +312,9 @@ class MonthSelectorState extends State<MonthSelector> {
                                   : Curves.easeOutQuart,
                               child: Container(
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(40),
-                                    topLeft: Radius.circular(40),
+                                  borderRadius: BorderRadiusDirectional.only(
+                                    topEnd: Radius.circular(40),
+                                    topStart: Radius.circular(40),
                                   ),
                                   color: getColor(context, "black"),
                                 ),
@@ -327,16 +329,16 @@ class MonthSelectorState extends State<MonthSelector> {
                   },
                 ),
                 Align(
-                  alignment: Alignment.centerLeft,
+                  alignment: AlignmentDirectional.centerStart,
                   child: AnimatedScaleOpacity(
                     animateIn: showScrollBottom,
                     duration: const Duration(milliseconds: 400),
                     durationOpacity: const Duration(milliseconds: 200),
-                    alignment: Alignment.centerLeft,
+                    alignment: AlignmentDirectional.centerStart,
                     curve: Curves.fastOutSlowIn,
                     child: Padding(
-                      padding:
-                          const EdgeInsets.only(top: 8, bottom: 8, left: 2),
+                      padding: const EdgeInsetsDirectional.only(
+                          top: 8, bottom: 8, start: 2),
                       child: Tappable(
                         borderRadius: 10,
                         color: Theme.of(context).colorScheme.primary,
@@ -366,16 +368,16 @@ class MonthSelectorState extends State<MonthSelector> {
                   ),
                 ),
                 Align(
-                  alignment: Alignment.centerRight,
+                  alignment: AlignmentDirectional.centerEnd,
                   child: AnimatedScaleOpacity(
                     animateIn: showScrollTop,
                     duration: const Duration(milliseconds: 400),
                     durationOpacity: const Duration(milliseconds: 200),
-                    alignment: Alignment.centerRight,
+                    alignment: AlignmentDirectional.centerEnd,
                     curve: Curves.fastOutSlowIn,
                     child: Padding(
-                      padding:
-                          const EdgeInsets.only(top: 8, bottom: 8, right: 2),
+                      padding: const EdgeInsetsDirectional.only(
+                          top: 8, bottom: 8, end: 2),
                       child: Tappable(
                         borderRadius: 10,
                         color: Theme.of(context).colorScheme.primary,

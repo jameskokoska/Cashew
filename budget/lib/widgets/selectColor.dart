@@ -93,8 +93,8 @@ class _SelectColorState extends State<SelectColor> {
       return LinearGradientFadedEdges(
         enableTop: false,
         enableBottom: false,
-        enableLeft: getHorizontalPaddingConstrained(context) > 0,
-        enableRight: getHorizontalPaddingConstrained(context) > 0,
+        enableStart: getHorizontalPaddingConstrained(context) > 0,
+        enableEnd: getHorizontalPaddingConstrained(context) > 0,
         child: ClipRRect(
           child: ListView.builder(
             addAutomaticKeepAlives: true,
@@ -106,13 +106,13 @@ class _SelectColorState extends State<SelectColor> {
               // Custom color as the last color
               color = selectableColorsList[index];
               return Padding(
-                padding: EdgeInsets.only(
-                    left: index == 0 ? 12 : 0,
-                    right: index + 1 == selectableColorsList.length ? 12 : 0),
+                padding: EdgeInsetsDirectional.only(
+                    start: index == 0 ? 12 : 0,
+                    end: index + 1 == selectableColorsList.length ? 12 : 0),
                 child: widget.includeThemeColor && index == 0
                     ? ThemeColorIcon(
                         outline: selectedIndex == 0 && selectedColor == null,
-                        margin: EdgeInsets.all(5),
+                        margin: EdgeInsetsDirectional.all(5),
                         size: 55,
                         onTap: () {
                           widget.setSelectedColor!(null);
@@ -130,7 +130,7 @@ class _SelectColorState extends State<SelectColor> {
                             outline: selectedIndex == -1 ||
                                 selectedIndex ==
                                     selectableColorsList.length - 1,
-                            margin: EdgeInsets.all(5),
+                            margin: EdgeInsetsDirectional.all(5),
                             size: 55,
                             onTap: (colorPassed) {
                               widget.setSelectedColor!(colorPassed);
@@ -141,7 +141,7 @@ class _SelectColorState extends State<SelectColor> {
                             },
                           )
                         : ColorIcon(
-                            margin: EdgeInsets.all(5),
+                            margin: EdgeInsetsDirectional.all(5),
                             color: (widget.supportCustomColors &&
                                     index + 1 == selectableColorsList.length)
                                 ? (selectedColor ?? Colors.transparent)
@@ -174,7 +174,7 @@ class _SelectColorState extends State<SelectColor> {
       );
     }
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
+      padding: const EdgeInsetsDirectional.only(bottom: 8.0),
       child: Column(
         children: [
           widget.useSystemColorPrompt == true && supportsSystemColor()
@@ -222,7 +222,7 @@ class _SelectColorState extends State<SelectColor> {
                             ? ColorIconCustom(
                                 initialSelectedColor:
                                     selectedColor ?? Colors.red,
-                                margin: EdgeInsets.all(5),
+                                margin: EdgeInsetsDirectional.all(5),
                                 size: 55,
                                 onTap: (colorPassed) {
                                   widget.setSelectedColor!(colorPassed);
@@ -243,7 +243,7 @@ class _SelectColorState extends State<SelectColor> {
                                         selectableColorsList.length - 1,
                               )
                             : ColorIcon(
-                                margin: EdgeInsets.all(5),
+                                margin: EdgeInsetsDirectional.all(5),
                                 color: color,
                                 size: 55,
                                 onTap: () {
@@ -290,14 +290,15 @@ class ColorIcon extends StatelessWidget {
   final Color color;
   final double size;
   final VoidCallback? onTap;
-  final EdgeInsets? margin;
+  final EdgeInsetsDirectional? margin;
   final bool outline;
 
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: Duration(milliseconds: 250),
-      margin: margin ?? EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8),
+      margin: margin ??
+          EdgeInsetsDirectional.only(start: 8, end: 8, top: 8, bottom: 8),
       height: size,
       width: size,
       decoration: outline
@@ -307,14 +308,14 @@ class ColorIcon extends StatelessWidget {
                     amountLight: 0.5, amountDark: 0.4, inverse: true),
                 width: 3,
               ),
-              borderRadius: BorderRadius.all(Radius.circular(500)),
+              borderRadius: BorderRadiusDirectional.all(Radius.circular(500)),
             )
           : BoxDecoration(
               border: Border.all(
                 color: Colors.transparent,
                 width: 0,
               ),
-              borderRadius: BorderRadius.all(Radius.circular(500)),
+              borderRadius: BorderRadiusDirectional.all(Radius.circular(500)),
             ),
       child: Tappable(
         color: color,
@@ -337,7 +338,7 @@ class ThemeColorIcon extends StatelessWidget {
 
   final double size;
   final Function()? onTap;
-  final EdgeInsets? margin;
+  final EdgeInsetsDirectional? margin;
   final bool outline;
 
   @override
@@ -346,7 +347,8 @@ class ThemeColorIcon extends StatelessWidget {
       message: "theme-color".tr(),
       child: AnimatedContainer(
         duration: Duration(milliseconds: 250),
-        margin: margin ?? EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8),
+        margin: margin ??
+            EdgeInsetsDirectional.only(start: 8, end: 8, top: 8, bottom: 8),
         height: size,
         width: size,
         decoration: outline
@@ -394,7 +396,7 @@ class ColorIconCustom extends StatefulWidget {
 
   final double size;
   final Function(Color) onTap;
-  final EdgeInsets? margin;
+  final EdgeInsetsDirectional? margin;
   final bool outline;
   final Color initialSelectedColor;
 
@@ -413,7 +415,8 @@ class _ColorIconCustomState extends State<ColorIconCustom> {
       title: "custom-color".tr(),
       outsideExtraWidget: IconButton(
         iconSize: 25,
-        padding: EdgeInsets.all(getPlatform() == PlatformOS.isIOS ? 15 : 20),
+        padding: EdgeInsetsDirectional.all(
+            getPlatform() == PlatformOS.isIOS ? 15 : 20),
         icon: Icon(
           appStateSettings["outlinedIcons"]
               ? Icons.numbers_outlined
@@ -474,7 +477,7 @@ class _ColorIconCustomState extends State<ColorIconCustom> {
         },
         child: Container(
           margin: widget.margin ??
-              EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8),
+              EdgeInsetsDirectional.only(start: 8, end: 8, top: 8, bottom: 8),
           height: widget.size,
           width: widget.size,
           decoration: widget.outline
@@ -484,7 +487,8 @@ class _ColorIconCustomState extends State<ColorIconCustom> {
                         amountLight: 0.5, amountDark: 0.4, inverse: true),
                     width: 3,
                   ),
-                  borderRadius: BorderRadius.all(Radius.circular(500)),
+                  borderRadius:
+                      BorderRadiusDirectional.all(Radius.circular(500)),
                 )
               : BoxDecoration(
                   border: GradientBoxBorder(
@@ -497,7 +501,7 @@ class _ColorIconCustomState extends State<ColorIconCustom> {
                     ]),
                     width: 3,
                   ),
-                  borderRadius: BorderRadius.circular(500),
+                  borderRadius: BorderRadiusDirectional.circular(500),
                 ),
           child: Tappable(
             color: Colors.transparent,
@@ -588,7 +592,7 @@ class _HexColorPickerState extends State<HexColorPicker> {
       autoFocus: true,
       inputFormatters: [ColorCodeFormatter()],
       widgetBeside: Padding(
-        padding: const EdgeInsets.only(left: 12),
+        padding: const EdgeInsetsDirectional.only(start: 12),
         child: AnimatedContainer(
           duration: Duration(milliseconds: 500),
           height: 45,

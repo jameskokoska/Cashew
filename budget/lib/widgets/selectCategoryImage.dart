@@ -92,7 +92,7 @@ class _SelectCategoryImageState extends State<SelectCategoryImage> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
+      padding: const EdgeInsetsDirectional.only(bottom: 8.0),
       child: Column(
         children: [
           context.locale.toString() != "en"
@@ -134,7 +134,7 @@ class _SelectCategoryImageState extends State<SelectCategoryImage> {
                           });
                           bottomSheetControllerGlobal.snapToExtent(0);
                         },
-                        padding: EdgeInsets.all(0),
+                        padding: EdgeInsetsDirectional.all(0),
                         autoFocus: kIsWeb,
                       ),
                       // ),
@@ -173,7 +173,7 @@ class _SelectCategoryImageState extends State<SelectCategoryImage> {
                 if (show)
                   return ImageIcon(
                     sizePadding: 8,
-                    margin: EdgeInsets.all(5),
+                    margin: EdgeInsetsDirectional.all(5),
                     color: Colors.transparent,
                     size: 55,
                     iconPath: "assets/categories/" + image.icon,
@@ -199,7 +199,7 @@ class _SelectCategoryImageState extends State<SelectCategoryImage> {
           ),
           context.locale.toString() == "en"
               ? Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
+                  padding: const EdgeInsetsDirectional.only(top: 8.0),
                   child: UseEmoji(onTap: () {
                     Navigator.pop(context);
                     openEmojiSelectorPopup();
@@ -207,7 +207,7 @@ class _SelectCategoryImageState extends State<SelectCategoryImage> {
                 )
               : SizedBox.shrink(),
           Padding(
-            padding: const EdgeInsets.only(top: 8.0),
+            padding: const EdgeInsetsDirectional.only(top: 8.0),
             child: SuggestIcon(),
           ),
         ],
@@ -227,12 +227,12 @@ class UseEmoji extends StatelessWidget {
       color: Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.7),
       borderRadius: 15,
       child: Padding(
-        padding:
-            const EdgeInsets.only(left: 15, right: 10, top: 12, bottom: 12),
+        padding: const EdgeInsetsDirectional.only(
+            start: 15, end: 10, top: 12, bottom: 12),
         child: Row(
           children: [
             Padding(
-              padding: const EdgeInsets.only(right: 12),
+              padding: const EdgeInsetsDirectional.only(end: 12),
               child: Icon(
                 appStateSettings["outlinedIcons"]
                     ? Icons.emoji_emotions_outlined
@@ -280,12 +280,12 @@ class SuggestIcon extends StatelessWidget {
       color: Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.7),
       borderRadius: 15,
       child: Padding(
-        padding:
-            const EdgeInsets.only(left: 15, right: 10, top: 12, bottom: 12),
+        padding: const EdgeInsetsDirectional.only(
+            start: 15, end: 10, top: 12, bottom: 12),
         child: Row(
           children: [
             Padding(
-              padding: const EdgeInsets.only(right: 12),
+              padding: const EdgeInsetsDirectional.only(end: 12),
               child: Icon(
                 appStateSettings["outlinedIcons"]
                     ? Icons.reviews_outlined
@@ -341,7 +341,7 @@ class _SuggestIconPopupState extends State<SuggestIconPopup> {
             keyboardType: TextInputType.multiline,
             maxLines: null,
             minLines: 3,
-            padding: EdgeInsets.zero,
+            padding: EdgeInsetsDirectional.zero,
             controller: _feedbackController,
             onChanged: (value) {
               setState(() {});
@@ -387,7 +387,7 @@ class ImageIcon extends StatelessWidget {
   final Color color;
   final double size;
   final VoidCallback? onTap;
-  final EdgeInsets? margin;
+  final EdgeInsetsDirectional? margin;
   final double sizePadding;
   final bool outline;
   final String? iconPath;
@@ -396,7 +396,8 @@ class ImageIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: Duration(milliseconds: 250),
-      margin: margin ?? EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8),
+      margin: margin ??
+          EdgeInsetsDirectional.only(start: 8, end: 8, top: 8, bottom: 8),
       height: size,
       width: size,
       decoration: outline
@@ -405,21 +406,21 @@ class ImageIcon extends StatelessWidget {
                 color: Theme.of(context).colorScheme.primary.withOpacity(0.8),
                 width: 2,
               ),
-              borderRadius: BorderRadius.all(Radius.circular(500)),
+              borderRadius: BorderRadiusDirectional.all(Radius.circular(500)),
             )
           : BoxDecoration(
               border: Border.all(
                 color: color,
                 width: 0,
               ),
-              borderRadius: BorderRadius.all(Radius.circular(500)),
+              borderRadius: BorderRadiusDirectional.all(Radius.circular(500)),
             ),
       child: Tappable(
         color: color,
         onTap: onTap,
         borderRadius: 500,
         child: Padding(
-          padding: EdgeInsets.all(sizePadding),
+          padding: EdgeInsetsDirectional.all(sizePadding),
           child: Image(
             image: AssetImage(iconPath ?? ""),
             width: size,

@@ -40,10 +40,10 @@ class PageIndicator extends StatelessWidget {
                         key: ValueKey(index == currentPage),
                         width: 6,
                         height: 6,
-                        margin: EdgeInsets.symmetric(horizontal: 3),
+                        margin: EdgeInsetsDirectional.symmetric(horizontal: 3),
                         decoration: BoxDecoration(
                           color: color,
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadiusDirectional.circular(10),
                         ),
                       ),
                     ),

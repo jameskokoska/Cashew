@@ -72,8 +72,8 @@ class StickyLabelDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: color == null ? Theme.of(context).canvasColor : color,
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-      alignment: Alignment.centerLeft,
+      padding: EdgeInsetsDirectional.symmetric(horizontal: 16, vertical: 5),
+      alignment: AlignmentDirectional.centerStart,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

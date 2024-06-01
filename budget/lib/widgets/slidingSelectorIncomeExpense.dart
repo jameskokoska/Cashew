@@ -20,7 +20,7 @@ class SlidingSelectorIncomeExpense extends StatelessWidget {
   final Function(int) onSelected;
   final bool alternateTheme;
   final bool useHorizontalPaddingConstrained;
-  final EdgeInsets? customPadding;
+  final EdgeInsetsDirectional? customPadding;
   final List<String>? options;
   final int? initialIndex;
 
@@ -30,15 +30,15 @@ class SlidingSelectorIncomeExpense extends StatelessWidget {
         ? BorderRadius.circular(10)
         : BorderRadius.circular(15);
     return Padding(
-      padding: EdgeInsets.symmetric(
+      padding: EdgeInsetsDirectional.symmetric(
           horizontal: useHorizontalPaddingConstrained == false
               ? 0
               : getHorizontalPaddingConstrained(context)),
       child: Padding(
         padding: customPadding ??
             (alternateTheme
-                ? const EdgeInsets.symmetric(horizontal: 20)
-                : const EdgeInsets.symmetric(horizontal: 13)),
+                ? const EdgeInsetsDirectional.symmetric(horizontal: 20)
+                : const EdgeInsetsDirectional.symmetric(horizontal: 13)),
         child: Container(
           decoration: BoxDecoration(
             boxShadow: appStateSettings["materialYou"]
@@ -80,7 +80,8 @@ class SlidingSelectorIncomeExpense extends StatelessWidget {
                       ? [
                           Tab(
                             child: Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
+                              padding:
+                                  const EdgeInsetsDirectional.only(top: 5.0),
                               child: AutoSizeText(
                                 minFontSize: 11,
                                 maxLines: 1,
@@ -95,7 +96,8 @@ class SlidingSelectorIncomeExpense extends StatelessWidget {
                           ),
                           Tab(
                             child: Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
+                              padding:
+                                  const EdgeInsetsDirectional.only(top: 5.0),
                               child: AutoSizeText(
                                 minFontSize: 11,
                                 maxLines: 1,
@@ -110,7 +112,8 @@ class SlidingSelectorIncomeExpense extends StatelessWidget {
                           ),
                           Tab(
                             child: Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
+                              padding:
+                                  const EdgeInsetsDirectional.only(top: 5.0),
                               child: AutoSizeText(
                                 minFontSize: 11,
                                 maxLines: 1,
@@ -128,7 +131,8 @@ class SlidingSelectorIncomeExpense extends StatelessWidget {
                           for (String option in options!)
                             Tab(
                               child: Padding(
-                                padding: const EdgeInsets.only(top: 5.0),
+                                padding:
+                                    const EdgeInsetsDirectional.only(top: 5.0),
                                 child: AutoSizeText(
                                   minFontSize: 11,
                                   maxLines: 1,

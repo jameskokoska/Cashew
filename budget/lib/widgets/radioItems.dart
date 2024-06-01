@@ -77,10 +77,10 @@ class _RadioItemsState<T> extends State<RadioItems<T>> {
               widget.onChanged(item);
             },
             child: ListTile(
-              contentPadding: EdgeInsets.only(
-                  left: 16, right: widget.getEndInfo == null ? 16 : 7),
+              contentPadding: EdgeInsetsDirectional.only(
+                  start: 16, end: widget.getEndInfo == null ? 16 : 7),
               title: Transform.translate(
-                offset: Offset(-12, 0),
+                offset: Offset(-12, 0).withDirectionality(context),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -124,7 +124,7 @@ class _RadioItemsState<T> extends State<RadioItems<T>> {
                     ),
                     if (widget.getEndInfo != null)
                       Padding(
-                        padding: const EdgeInsets.only(left: 3),
+                        padding: const EdgeInsetsDirectional.only(start: 3),
                         child: TextFont(
                           fontSize: noDescription ? 18 : 16,
                           text: widget.getEndInfo == null
@@ -292,7 +292,7 @@ class _CheckItemsState<T> extends State<CheckItems<T>> {
             child: ListTile(
               minVerticalPadding: widget.minVerticalPadding,
               title: Transform.translate(
-                offset: Offset(-12, 0),
+                offset: Offset(-12, 0).withDirectionality(context),
                 child: Row(
                   children: [
                     Expanded(
@@ -312,9 +312,9 @@ class _CheckItemsState<T> extends State<CheckItems<T>> {
                 ),
               ),
               dense: true,
-              contentPadding: EdgeInsets.only(right: 0, left: 16),
+              contentPadding: EdgeInsetsDirectional.only(end: 0, start: 16),
               leading: Padding(
-                padding: const EdgeInsets.only(right: 5),
+                padding: const EdgeInsetsDirectional.only(end: 5),
                 child: selected
                     ? Icon(
                         widget.selectedIcon ?? Icons.check_box,

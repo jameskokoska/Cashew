@@ -41,7 +41,7 @@ class PageFramework extends StatefulWidget {
     this.subtitleAnimationSpeed,
     this.onBottomReached,
     this.pinned = true,
-    this.subtitleAlignment = Alignment.bottomCenter,
+    this.subtitleAlignment = AlignmentDirectional.bottomCenter,
     // this.customTitleBuilder,
     this.onScroll,
     this.floatingActionButton,
@@ -82,7 +82,7 @@ class PageFramework extends StatefulWidget {
   final double? subtitleAnimationSpeed;
   final VoidCallback? onBottomReached;
   final bool pinned;
-  final Alignment subtitleAlignment;
+  final AlignmentGeometry subtitleAlignment;
   // final Function(AnimationController _animationController)? customTitleBuilder;
   final Function(double position)? onScroll;
   final Widget? floatingActionButton;
@@ -210,7 +210,7 @@ class PageFrameworkState extends State<PageFramework>
   // @override
   // void didChangeMetrics() {
   //   // should be changed to the new method:
-  //   // print(EdgeInsets.fromWindowPadding(WidgetsBinding.instance.window.viewInsets,WidgetsBinding.instance.window.devicePixelRatio));
+  //   // print(EdgeInsetsDirectional.fromWindowPadding(WidgetsBinding.instance.window.viewInsets,WidgetsBinding.instance.window.devicePixelRatio));
   //   if (MediaQuery.of(context).viewInsets.bottom < measurement) {
   //     // keyboard closed
   //     _scrollListener();
@@ -417,12 +417,12 @@ class PageFrameworkState extends State<PageFramework>
                               widget.horizontalPadding == 0
                                   ? sliver
                                   : SliverPadding(
-                                      padding: EdgeInsets.symmetric(
+                                      padding: EdgeInsetsDirectional.symmetric(
                                           horizontal: widget.horizontalPadding),
                                       sliver: sliver),
                             widget.listWidgets != null
                                 ? SliverPadding(
-                                    padding: EdgeInsets.symmetric(
+                                    padding: EdgeInsetsDirectional.symmetric(
                                         horizontal: widget.horizontalPadding),
                                     sliver: SliverList(
                                       delegate: SliverChildListDelegate([
@@ -518,14 +518,14 @@ class PageFrameworkState extends State<PageFramework>
         opacity: CurvedAnimation(
             parent: _scrollToTopAnimationController, curve: Curves.easeInOut),
         child: Padding(
-          padding: const EdgeInsets.only(right: 7, bottom: 1),
+          padding: const EdgeInsetsDirectional.only(end: 7, bottom: 1),
           child: Transform.rotate(
             angle: pi / 2,
             child: Material(
               elevation: 10,
               shadowColor:
                   Theme.of(context).colorScheme.shadow.withOpacity(0.8),
-              borderRadius: BorderRadius.circular(
+              borderRadius: BorderRadiusDirectional.circular(
                   getPlatform() == PlatformOS.isIOS ? 10 : 15),
               child: ButtonIcon(
                 icon: appStateSettings["outlinedIcons"]
@@ -568,7 +568,7 @@ class PageFrameworkState extends State<PageFramework>
         opacity: CurvedAnimation(
             parent: _scrollToTopAnimationController, curve: Curves.easeInOut),
         child: Padding(
-          padding: const EdgeInsets.only(right: 7),
+          padding: const EdgeInsetsDirectional.only(end: 7),
           child: Builder(builder: (context) {
             double size = 44;
             double iconPadding = 24;
@@ -580,12 +580,12 @@ class PageFrameworkState extends State<PageFramework>
               elevation: 10,
               shadowColor:
                   Theme.of(context).colorScheme.shadow.withOpacity(0.8),
-              borderRadius: BorderRadius.circular(borderRadius),
+              borderRadius: BorderRadiusDirectional.circular(borderRadius),
               child: Container(
                 height: height,
                 width: size,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
+                  borderRadius: BorderRadiusDirectional.circular(
                       getPlatform() == PlatformOS.isIOS ? 10 : 15),
                   color: Theme.of(context).colorScheme.secondaryContainer,
                 ),
@@ -600,9 +600,9 @@ class PageFrameworkState extends State<PageFramework>
                         borderRadius: borderRadius,
                         onTap: scrollToTop,
                         child: Padding(
-                          padding: EdgeInsets.only(top: iconInset),
+                          padding: EdgeInsetsDirectional.only(top: iconInset),
                           child: Transform.rotate(
-                            angle: pi / 2,
+                            angle: directionalityReverse(context) * pi / 2,
                             child: Icon(
                               appStateSettings["outlinedIcons"]
                                   ? Icons.chevron_left_outlined
@@ -624,9 +624,10 @@ class PageFrameworkState extends State<PageFramework>
                         borderRadius: borderRadius,
                         onTap: scrollToBottom,
                         child: Padding(
-                          padding: EdgeInsets.only(bottom: iconInset),
+                          padding:
+                              EdgeInsetsDirectional.only(bottom: iconInset),
                           child: Transform.rotate(
-                            angle: -pi / 2,
+                            angle: directionalityReverse(context) * -pi / 2,
                             child: Icon(
                               appStateSettings["outlinedIcons"]
                                   ? Icons.chevron_left_outlined
@@ -655,14 +656,10 @@ class PageFrameworkState extends State<PageFramework>
         children: [
           dragDownToDismissScaffold ?? scaffold,
           Align(
-            alignment: directionalityReverse(context) == 1
-                ? Alignment.bottomRight
-                : Alignment.bottomLeft,
+            alignment: AlignmentDirectional.bottomEnd,
             child: Padding(
-              padding: EdgeInsets.only(
-                  bottom: getBottomInsetOfFAB(context),
-                  right: directionalityReverse(context) == 1 ? 15 : 0,
-                  left: directionalityReverse(context) == -1 ? 15 : 0),
+              padding: EdgeInsetsDirectional.only(
+                  bottom: getBottomInsetOfFAB(context), end: 15, start: 15),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -731,7 +728,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
     this.subtitleAnimationSpeed,
     this.onBottomReached,
     this.pinned = true,
-    this.subtitleAlignment = Alignment.bottomCenter,
+    this.subtitleAlignment = AlignmentDirectional.bottomCenter,
     // this.customTitleBuilder,
     this.animationControllerOpacity,
     this.animationControllerShift,
@@ -755,7 +752,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
   final double? subtitleAnimationSpeed;
   final VoidCallback? onBottomReached;
   final bool pinned;
-  final Alignment subtitleAlignment;
+  final AlignmentGeometry subtitleAlignment;
   // final Function(AnimationController _animationController)? customTitleBuilder;
   final AnimationController? animationControllerOpacity;
   final AnimationController? animationControllerShift;
@@ -819,7 +816,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
           ? 0
           : getExpandedHeaderHeight(context, expandedHeight),
       collapsedHeight: collapsedHeight,
-      actions: pushActionsTogether(actions),
+      actions: pushActionsTogether(context, actions),
       flexibleSpace: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
         // print('constraints=' + constraints.toString());
@@ -834,7 +831,8 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
         String titleString = title.capitalizeFirst;
         return FlexibleSpaceBar(
           centerTitle: centeredTitleWithDefault,
-          titlePadding: EdgeInsets.symmetric(vertical: 15, horizontal: 18),
+          titlePadding:
+              EdgeInsetsDirectional.symmetric(vertical: 15, horizontal: 18),
           title: MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
             child: Transform.translate(
@@ -911,12 +909,12 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                           ),
                           child: Align(
                             alignment: centeredTitleWithDefault
-                                ? Alignment.bottomCenter
+                                ? AlignmentDirectional.bottomCenter
                                 : subtitleAlignment,
                             child: Opacity(
                               opacity: 1 - clampDouble(percent, 0, 0.5) * 2,
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(
+                                padding: const EdgeInsetsDirectional.symmetric(
                                     horizontal: 20, vertical: 0),
                                 child: Transform.translate(
                                   offset: Offset(0, -4),
@@ -932,7 +930,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
         );
       }),
       // shape: RoundedRectangleBorder(
-      //   borderRadius: BorderRadius.vertical(
+      //   borderRadius: BorderRadiusDirectional.vertical(
       //     bottom: getWidthNavigationSidebar(context) > 0
       //         ? Radius.circular(0)
       //         : Radius.circular(15),
@@ -945,7 +943,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
       return appBar;
     }
     return SliverPadding(
-      padding: EdgeInsets.only(
+      padding: EdgeInsetsDirectional.only(
           bottom: centeredTitleSmallWithDefault
               ? belowAppBarPaddingWhenCenteredTitleSmall ?? 10
               : 0),
@@ -1081,7 +1079,7 @@ List<Widget> getAppBarBackgroundColorLayers({
         ? Builder(
             builder: (context) {
               Widget container = Align(
-                alignment: Alignment.bottomCenter,
+                alignment: AlignmentDirectional.bottomCenter,
                 child: Container(
                   height: 1.2,
                   color: dynamicPastel(
@@ -1123,14 +1121,14 @@ List<Widget> getAppBarBackgroundColorLayers({
   ];
 }
 
-List<Widget> pushActionsTogether(List<Widget>? actions) {
+List<Widget> pushActionsTogether(BuildContext context, List<Widget>? actions) {
   return (actions ?? []).asMap().entries.map((action) {
     int idx = action.key;
     int length = (actions ?? []).length;
     Widget widget = action.value;
     double offsetX = (length - 1 - idx) * 7;
     return Transform.translate(
-      offset: Offset(offsetX, 0),
+      offset: Offset(offsetX, 0).withDirectionality(context),
       child: widget,
     );
   }).toList();

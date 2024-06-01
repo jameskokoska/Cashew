@@ -155,7 +155,7 @@ class UpcomingOverdueTransactionsState
               )),
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(
+                  padding: EdgeInsetsDirectional.symmetric(
                       horizontal: getHorizontalPaddingConstrained(context)),
                   child: Row(
                     children: [
@@ -180,14 +180,15 @@ class UpcomingOverdueTransactionsState
                               setState(() {});
                             },
                             options: ["all", "upcoming", "overdue"],
-                            customPadding: EdgeInsets.zero,
+                            customPadding: EdgeInsetsDirectional.zero,
                           ),
                         ),
                       ),
                       AnimatedSizeSwitcher(
                         child: searchValue == null
                             ? Padding(
-                                padding: const EdgeInsets.only(left: 7.0),
+                                padding: const EdgeInsetsDirectional.only(
+                                    start: 7.0),
                                 child: ButtonIcon(
                                   key: ValueKey(1),
                                   onTap: () {
@@ -212,12 +213,13 @@ class UpcomingOverdueTransactionsState
               ),
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(
+                  padding: EdgeInsetsDirectional.symmetric(
                       horizontal: getHorizontalPaddingConstrained(context)),
                   child: AnimatedExpanded(
                     expand: searchValue != null,
                     child: Padding(
-                      padding: const EdgeInsets.only(bottom: 4.0, top: 8),
+                      padding:
+                          const EdgeInsetsDirectional.only(bottom: 4.0, top: 8),
                       child: TextInput(
                         labelText: "search-transactions-placeholder".tr(),
                         icon: appStateSettings["outlinedIcons"]
@@ -277,7 +279,8 @@ class UpcomingOverdueTransactionsState
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               HorizontalBreak(
-                                  padding: EdgeInsets.only(top: 4, bottom: 6)),
+                                  padding: EdgeInsetsDirectional.only(
+                                      top: 4, bottom: 6)),
                               TransactionEntry(
                                 aboveWidget: UpcomingTransactionDateHeader(
                                   selectedType: selectedType,
@@ -419,7 +422,7 @@ class CenteredAmountAndNumTransactions extends StatelessWidget {
                     );
                   },
                   child: Padding(
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsetsDirectional.all(10),
                     child: AmountWithColorAndArrow(
                       showIncomeArrow: showIncomeArrow,
                       totalSpent: totalSpent,
@@ -541,7 +544,8 @@ class AutoPaySettingDescription extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 13, bottom: 3, left: 25, right: 25),
+      padding: const EdgeInsetsDirectional.only(
+          top: 13, bottom: 3, start: 25, end: 25),
       child: TextFont(
         text: "auto-pay-description".tr(),
         fontSize: 14,

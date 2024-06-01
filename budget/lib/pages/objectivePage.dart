@@ -214,7 +214,7 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
         children: [
           PageFramework(
             belowAppBarPaddingWhenCenteredTitleSmall: 0,
-            subtitleAlignment: Alignment.bottomLeft,
+            subtitleAlignment: AlignmentDirectional.bottomStart,
             backgroundColor: pageBackgroundColor,
             listID: pageId,
             floatingActionButton: AnimateFABDelayed(
@@ -299,9 +299,10 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                     return Column(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(top: 40, bottom: 5),
+                          padding: const EdgeInsetsDirectional.only(
+                              top: 40, bottom: 5),
                           child: Stack(
-                            alignment: Alignment.center,
+                            alignment: AlignmentDirectional.center,
                             children: [
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -355,7 +356,7 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                     sizePadding: 30,
                                     borderRadius: 100,
                                     canEditByLongPress: false,
-                                    margin: EdgeInsets.zero,
+                                    margin: EdgeInsetsDirectional.zero,
                                     onLongPress: () {
                                       openSelectIconPopup();
                                     },
@@ -410,7 +411,9 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                           },
                                           color: Colors.transparent,
                                           child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                                            padding:
+                                                const EdgeInsetsDirectional.all(
+                                                    8.0),
                                             child: getIsDifferenceOnlyLoan(
                                                     widget.objective)
                                                 ? TextFont(
@@ -457,7 +460,7 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                                       ),
                                                       Padding(
                                                         padding:
-                                                            const EdgeInsets
+                                                            const EdgeInsetsDirectional
                                                                 .only(
                                                                 bottom: 1),
                                                         child: TextFont(
@@ -518,12 +521,12 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                         ),
                         if (getIsDifferenceOnlyLoan(widget.objective) == false)
                           Padding(
-                            padding: EdgeInsets.symmetric(
+                            padding: EdgeInsetsDirectional.symmetric(
                                 horizontal:
                                     getHorizontalPaddingConstrained(context)),
                             child: Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 20.0, left: 20, right: 20),
+                              padding: const EdgeInsetsDirectional.only(
+                                  top: 20.0, start: 20, end: 20),
                               child: Column(
                                 children: [
                                   TextFont(
@@ -549,7 +552,8 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                   ),
                                   if (widget.objective.endDate != null)
                                     Padding(
-                                      padding: const EdgeInsets.only(top: 12),
+                                      padding: const EdgeInsetsDirectional.only(
+                                          top: 12),
                                       child: TextFont(
                                         text: getObjectiveStatus(
                                           context,
@@ -577,10 +581,10 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                 SliverToBoxAdapter(child: SizedBox(height: 20)),
               if (getIsDifferenceOnlyLoan(widget.objective) == false)
                 SliverPadding(
-                  padding: EdgeInsets.only(
+                  padding: EdgeInsetsDirectional.only(
                     top: 5,
-                    left: 20,
-                    right: 20,
+                    start: 20,
+                    end: 20,
                     bottom: 30,
                   ),
                   sliver: SliverToBoxAdapter(
@@ -654,7 +658,7 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
           ),
           IgnorePointer(
             child: Align(
-              alignment: Alignment.topCenter,
+              alignment: AlignmentDirectional.topCenter,
               child: ConfettiWidget(
                 shouldLoop: true,
                 confettiController: confettiController,

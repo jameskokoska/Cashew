@@ -6,10 +6,10 @@ openSnackbar(SnackbarMessage message, {bool postIfQueue = true}) {
   // ScaffoldMessenger.of(context).showSnackBar(
   //   SnackBar(
   //       behavior: SnackBarBehavior.floating,
-  //       margin: EdgeInsets.only(bottom: 14, left: 20, right: 90),
-  //       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+  //       margin: EdgeInsetsDirectional.only(bottom: 14, start: 20, end: 90),
+  //       padding: EdgeInsetsDirectional.symmetric(horizontal: 15, vertical: 12),
   //       shape: RoundedRectangleBorder(
-  //         borderRadius: BorderRadius.circular(15),
+  //         borderRadius: BorderRadiusDirectional.circular(15),
   //       ),
   //       elevation: 5,
   //       content: TextFont(

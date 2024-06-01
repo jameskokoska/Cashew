@@ -159,8 +159,8 @@ class _InitializeBiometricsState extends State<InitializeBiometrics> {
               expand: authResult == AuthResult.error ||
                   authResult == AuthResult.errorBackupRestoreLaunch,
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 18, vertical: 20),
+                padding: const EdgeInsetsDirectional.symmetric(
+                    horizontal: 18, vertical: 20),
                 child: TextFont(
                   text: "biometrics-error-description".tr() +
                       "\n" +

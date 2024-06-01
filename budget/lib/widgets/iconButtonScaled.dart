@@ -8,7 +8,7 @@ class IconButtonScaled extends StatelessWidget {
     required this.iconSize,
     required this.scale,
     required this.onTap,
-    this.padding = const EdgeInsets.all(8.0),
+    this.padding = const EdgeInsetsDirectional.all(8.0),
     super.key,
   });
   final String? tooltip;
@@ -16,14 +16,14 @@ class IconButtonScaled extends StatelessWidget {
   final double iconSize;
   final double scale;
   final VoidCallback onTap;
-  final EdgeInsets padding;
+  final EdgeInsetsDirectional padding;
 
   @override
   Widget build(BuildContext context) {
     Widget widget = Transform.scale(
       scale: scale,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(100),
+        borderRadius: BorderRadiusDirectional.circular(100),
         child: Tappable(
           color: Colors.transparent,
           child: Padding(

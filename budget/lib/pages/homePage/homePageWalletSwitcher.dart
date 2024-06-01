@@ -34,7 +34,7 @@ class HomePageWalletSwitcher extends StatelessWidget {
   Widget build(BuildContext context) {
     return KeepAliveClientMixin(
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 13.0),
+        padding: const EdgeInsetsDirectional.only(bottom: 13.0),
         child: StreamBuilder<List<WalletWithDetails>>(
           stream: database.watchAllWalletsWithDetails(
               homePageWidgetDisplay: HomePageWidgetDisplay.WalletSwitcher),
@@ -74,7 +74,8 @@ class HomePageWalletSwitcher extends StatelessWidget {
                         ),
                         Positioned.fill(
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 6, right: 6),
+                            padding: const EdgeInsetsDirectional.only(
+                                start: 6, end: 6),
                             child: AddButton(
                               onTap: () {
                                 openBottomSheet(
@@ -96,7 +97,7 @@ class HomePageWalletSwitcher extends StatelessWidget {
                   ],
                 ),
                 clipBehavior: Clip.none,
-                padding: EdgeInsets.symmetric(horizontal: 7),
+                padding: EdgeInsetsDirectional.symmetric(horizontal: 7),
               );
             }
             return Container();
@@ -203,9 +204,9 @@ class EditHomePagePinnedWalletsPopup extends StatelessWidget {
                 onTap: () {},
                 height: 50,
                 width: null,
-                margin: const EdgeInsets.only(
-                  left: 13,
-                  right: 13,
+                margin: const EdgeInsetsDirectional.only(
+                  start: 13,
+                  end: 13,
                   bottom: 13,
                   top: 13,
                 ),
@@ -250,8 +251,8 @@ class EditHomePagePinnedWalletsPopup extends StatelessWidget {
             //     child: Column(
             //       children: [
             //         Padding(
-            //           padding: const EdgeInsets.only(
-            //               bottom: 10, left: 15, right: 15, top: 4),
+            //           padding: const EdgeInsetsDirectional.only(
+            //               bottom: 10, start: 15, end: 15, top: 4),
             //           child: TextFont(
             //             text: "customize-period-for-account-totals".tr(),
             //             textAlign: TextAlign.center,
@@ -278,8 +279,8 @@ class EditHomePagePinnedWalletsPopup extends StatelessWidget {
             title: "select-accounts".tr(),
             outsideExtraWidget: IconButton(
               iconSize: 25,
-              padding:
-                  EdgeInsets.all(getPlatform() == PlatformOS.isIOS ? 15 : 20),
+              padding: EdgeInsetsDirectional.all(
+                  getPlatform() == PlatformOS.isIOS ? 15 : 20),
               icon: Icon(
                 appStateSettings["outlinedIcons"]
                     ? Icons.edit_outlined

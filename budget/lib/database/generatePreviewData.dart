@@ -838,15 +838,15 @@ class PreviewDemoWarning extends StatelessWidget {
   Widget build(BuildContext context) {
     return appStateSettings["previewDemo"] == true
         ? Padding(
-            padding:
-                EdgeInsets.only(bottom: MediaQuery.viewPaddingOf(context).top),
+            padding: EdgeInsetsDirectional.only(
+                bottom: MediaQuery.viewPaddingOf(context).top),
             child: Tappable(
               onTap: () async {
                 deletePreviewData(resetOnboard: true);
               },
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding: const EdgeInsetsDirectional.symmetric(
+                    horizontal: 20, vertical: 10),
                 child: TextFont(
                   text: "preview-demo-warning".tr(),
                   textColor: Theme.of(context).colorScheme.onError,
@@ -888,7 +888,7 @@ class PreviewDemoButton extends StatelessWidget {
         },
         text: "preview-demo".tr(),
         extraWidget: Padding(
-          padding: const EdgeInsets.only(left: 5),
+          padding: const EdgeInsetsDirectional.only(start: 5),
           child: Icon(
             Icons.help,
             size: 17,

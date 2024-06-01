@@ -209,7 +209,7 @@ class ActivityPage extends StatelessWidget {
                               Objective? objective =
                                   item.transactionWithCategory?.objective;
                               Widget noTransactionFound = Padding(
-                                padding: EdgeInsets.symmetric(
+                                padding: EdgeInsetsDirectional.symmetric(
                                     horizontal: getHorizontalPaddingConstrained(
                                             context) +
                                         16,
@@ -224,7 +224,8 @@ class ActivityPage extends StatelessWidget {
                                             .withOpacity(0.2),
                                         borderRadius: 5,
                                         child: Padding(
-                                          padding: const EdgeInsets.symmetric(
+                                          padding: const EdgeInsetsDirectional
+                                              .symmetric(
                                               vertical: 8.0, horizontal: 10),
                                           child: TextFont(
                                             text:

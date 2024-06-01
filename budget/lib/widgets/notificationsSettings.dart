@@ -219,10 +219,12 @@ class _UpcomingTransactionsNotificationsSettingsState
             opacity: notificationsEnabled ? 1 : 0,
             duration: Duration(milliseconds: 300),
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              padding:
+                  EdgeInsetsDirectional.symmetric(horizontal: 0, vertical: 0),
+              margin:
+                  EdgeInsetsDirectional.symmetric(horizontal: 20, vertical: 10),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(
+                borderRadius: BorderRadiusDirectional.circular(
                     getPlatform() == PlatformOS.isIOS ? 10 : 15),
                 color: appStateSettings["materialYou"]
                     ? dynamicPastel(context,
@@ -231,7 +233,7 @@ class _UpcomingTransactionsNotificationsSettingsState
                     : getColor(context, "lightDarkAccent"),
               ),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(
+                borderRadius: BorderRadiusDirectional.circular(
                     getPlatform() == PlatformOS.isIOS ? 10 : 15),
                 child: StreamBuilder<List<Transaction>>(
                   stream: database.watchAllOverdueUpcomingTransactions(false),

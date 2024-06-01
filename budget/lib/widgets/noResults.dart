@@ -14,7 +14,7 @@ class NoResults extends StatelessWidget {
   }) : super(key: key);
   final String message;
   final Color? tintColor;
-  final EdgeInsets? padding;
+  final EdgeInsetsDirectional? padding;
   final bool noSearchResultsVariation;
 
   @override
@@ -26,10 +26,10 @@ class NoResults extends StatelessWidget {
         child: Center(
           child: Padding(
             padding: padding ??
-                EdgeInsets.only(
+                EdgeInsetsDirectional.only(
                   top: MediaQuery.sizeOf(context).height * 0.4 > 400 ? 100 : 35,
-                  right: 30,
-                  left: 30,
+                  end: 30,
+                  start: 30,
                 ),
             child: Column(
               children: [

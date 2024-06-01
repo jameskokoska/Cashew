@@ -296,16 +296,16 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
           onPressed: () {
             openWatchCategoriesBottomSheet();
           },
-          padding: EdgeInsets.all(15 - 8),
+          padding: EdgeInsetsDirectional.all(15 - 8),
           icon: AnimatedContainer(
             duration: Duration(milliseconds: 500),
             decoration: BoxDecoration(
               color: selectedCategoryFks.length > 0
                   ? Theme.of(context).colorScheme.tertiary.withOpacity(0.1)
                   : Colors.transparent,
-              borderRadius: BorderRadius.circular(100),
+              borderRadius: BorderRadiusDirectional.circular(100),
             ),
-            padding: EdgeInsets.all(8),
+            padding: EdgeInsetsDirectional.all(8),
             child: Icon(
               appStateSettings["outlinedIcons"]
                   ? Icons.category_outlined
@@ -317,7 +317,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
           ),
         ),
         IconButton(
-          padding: EdgeInsets.all(15),
+          padding: EdgeInsetsDirectional.all(15),
           tooltip: "edit-budget".tr(),
           onPressed: () {
             pushRoute(
@@ -337,7 +337,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
         ),
       ],
       subtitleSize: 10,
-      subtitleAlignment: Alignment.bottomLeft,
+      subtitleAlignment: AlignmentDirectional.bottomStart,
       textColor: getColor(context, "black"),
       dragDownToDismiss: true,
       slivers: [
@@ -350,11 +350,11 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                 Stack(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(
+                      padding: const EdgeInsetsDirectional.symmetric(
                           vertical: 7, horizontal: 0),
                       color: pageBackgroundColor,
                       child: Padding(
-                        padding: const EdgeInsets.only(right: 5),
+                        padding: const EdgeInsetsDirectional.only(end: 5),
                         child: StreamBuilder<Map<String, TransactionCategory>>(
                             stream: database.watchAllCategoriesMapped(),
                             builder: (context, snapshotCategoriesMapped) {
@@ -540,8 +540,8 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                               pageBackgroundColor,
                               pageBackgroundColor.withOpacity(0.0),
                             ],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
+                            begin: AlignmentDirectional.topCenter,
+                            end: AlignmentDirectional.bottomCenter,
                             stops: [0.1, 1],
                           ),
                         ),
@@ -575,8 +575,8 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                           pageBackgroundColor,
                           pageBackgroundColor.withOpacity(0.0),
                         ],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
+                        begin: AlignmentDirectional.topCenter,
+                        end: AlignmentDirectional.bottomCenter,
                         stops: [0.1, 1],
                       ),
                     ),
@@ -602,7 +602,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
               selectedCategoryFks.length > 0
                   ? SliverToBoxAdapter(
                       child: Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
+                        padding: const EdgeInsetsDirectional.only(bottom: 10),
                         child: StreamBuilder<List<double?>>(
                             stream: mergedStreamsBudgetTotal,
                             builder:
@@ -739,8 +739,8 @@ class LoadMorePeriodsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      right: 0,
+    return PositionedDirectional(
+      end: 0,
       top: 0,
       child: Transform.translate(
         offset: Offset(2, -2),
@@ -803,10 +803,10 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
       children: [
         getIsFullScreen(context) == false
             ? SliverPadding(
-                padding: EdgeInsets.only(
+                padding: EdgeInsetsDirectional.only(
                   bottom: 15,
-                  left: getPlatform() == PlatformOS.isIOS ? 0 : 13,
-                  right: getPlatform() == PlatformOS.isIOS ? 0 : 13,
+                  start: getPlatform() == PlatformOS.isIOS ? 0 : 13,
+                  end: getPlatform() == PlatformOS.isIOS ? 0 : 13,
                 ),
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
@@ -842,8 +842,8 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                                     : [BoxShadow(color: Colors.transparent)],
                           ),
                           padding: getPlatform() == PlatformOS.isIOS
-                              ? EdgeInsets.zero
-                              : EdgeInsets.only(
+                              ? EdgeInsetsDirectional.zero
+                              : EdgeInsetsDirectional.only(
                                   bottom: touchedBudgetIndex != null ||
                                           index == widget.amountLoaded - 1
                                       ? 0
@@ -873,8 +873,9 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
               )
             : SliverPadding(
                 padding: getPlatform() == PlatformOS.isIOS
-                    ? EdgeInsets.zero
-                    : EdgeInsets.only(bottom: 15, left: 13, right: 13),
+                    ? EdgeInsetsDirectional.zero
+                    : EdgeInsetsDirectional.only(
+                        bottom: 15, start: 13, end: 13),
                 sliver: SliverGrid(
                   gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 600,
@@ -921,8 +922,8 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                             ),
                             child: Padding(
                               padding: getPlatform() == PlatformOS.isIOS
-                                  ? EdgeInsets.zero
-                                  : EdgeInsets.only(bottom: 13.0),
+                                  ? EdgeInsetsDirectional.zero
+                                  : EdgeInsetsDirectional.only(bottom: 13.0),
                               child: PastBudgetContainer(
                                 budget: widget.budget,
                                 smallBudgetContainer: true,
@@ -945,7 +946,7 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
         SliverToBoxAdapter(
           child: Center(
             child: Padding(
-              padding: EdgeInsets.only(
+              padding: EdgeInsetsDirectional.only(
                 bottom: 30,
                 top: getIsFullScreen(context) == true &&
                         getPlatform() == PlatformOS.isIOS
@@ -1033,13 +1034,14 @@ class PastBudgetContainer extends StatelessWidget {
           totalSpent = absoluteZero(totalSpent);
 
           return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding:
+                EdgeInsetsDirectional.symmetric(horizontal: 20, vertical: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Flexible(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 10),
+                    padding: const EdgeInsetsDirectional.only(start: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -1060,9 +1062,9 @@ class PastBudgetContainer extends StatelessWidget {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(
+                              padding: const EdgeInsetsDirectional.only(
                                 bottom: 2,
-                                left: 5,
+                                start: 5,
                               ),
                               child: TextFont(
                                 text: budgetRange.start.year !=
@@ -1110,7 +1112,8 @@ class PastBudgetContainer extends StatelessWidget {
                                       ),
                                       Padding(
                                         padding:
-                                            const EdgeInsets.only(bottom: 0.5),
+                                            const EdgeInsetsDirectional.only(
+                                                bottom: 0.5),
                                         child: Container(
                                           child: TextFont(
                                             text: getBudgetSpentText(
@@ -1157,7 +1160,8 @@ class PastBudgetContainer extends StatelessWidget {
                                   ),
                                   Flexible(
                                     child: Container(
-                                      padding: const EdgeInsets.only(bottom: 0),
+                                      padding: const EdgeInsetsDirectional.only(
+                                          bottom: 0),
                                       child: TextFont(
                                         text: getBudgetOverSpentText(
                                                 budget.income) +
@@ -1178,10 +1182,10 @@ class PastBudgetContainer extends StatelessWidget {
                 ),
                 SizedBox(width: 20),
                 Stack(
-                  alignment: Alignment.center,
+                  alignment: AlignmentDirectional.center,
                   children: [
                     Padding(
-                      padding: EdgeInsets.all(5 / 2),
+                      padding: EdgeInsetsDirectional.all(5 / 2),
                       child: Container(
                         width: 50,
                         child: CountNumber(
@@ -1307,17 +1311,18 @@ class CategoryAverageSpent extends StatelessWidget {
       onTap: onTap,
       color: Colors.transparent,
       child: Padding(
-        padding: EdgeInsets.symmetric(
+        padding: EdgeInsetsDirectional.symmetric(
           horizontal: getHorizontalPaddingConstrained(context),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          padding: const EdgeInsetsDirectional.symmetric(
+              horizontal: 16, vertical: 4),
           child: Row(
             children: [
               CategoryIcon(
                 category: category,
                 size: 30,
-                margin: EdgeInsets.zero,
+                margin: EdgeInsetsDirectional.zero,
                 borderRadius: 1000,
               ),
               SizedBox(

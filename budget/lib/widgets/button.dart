@@ -18,7 +18,8 @@ class Button extends StatefulWidget {
     required this.onTap,
     this.color,
     this.textColor,
-    this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+    this.padding =
+        const EdgeInsetsDirectional.symmetric(horizontal: 20, vertical: 15),
     this.hasBottomExtraSafeArea = false,
     this.expandToFillBottomExtraSafeArea = false,
     this.icon,
@@ -37,7 +38,7 @@ class Button extends StatefulWidget {
   final VoidCallback onTap;
   final Color? color;
   final Color? textColor;
-  final EdgeInsets padding;
+  final EdgeInsetsDirectional padding;
   final bool hasBottomExtraSafeArea;
   final bool expandToFillBottomExtraSafeArea;
   final IconData? icon;
@@ -87,7 +88,7 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
       textAlign: TextAlign.center,
     );
     return Padding(
-      padding: EdgeInsets.only(
+      padding: EdgeInsetsDirectional.only(
           bottom: widget.hasBottomExtraSafeArea == true &&
                   widget.expandToFillBottomExtraSafeArea == false
               ? MediaQuery.viewPaddingOf(context).bottom
@@ -127,7 +128,7 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
                   ? 10
                   : widget.borderRadius ?? 20,
           child: Padding(
-            padding: EdgeInsets.only(
+            padding: EdgeInsetsDirectional.only(
               bottom: widget.expandToFillBottomExtraSafeArea
                   ? MediaQuery.viewPaddingOf(context).bottom
                   : 0,
@@ -143,7 +144,7 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
                   children: [
                     widget.icon != null
                         ? Padding(
-                            padding: const EdgeInsets.only(right: 6),
+                            padding: const EdgeInsetsDirectional.only(end: 6),
                             child: Icon(
                               widget.icon,
                               size: 21,
@@ -178,7 +179,7 @@ class TappableOpacityButtonBreak extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return HorizontalBreak(
-      padding: EdgeInsets.zero,
+      padding: EdgeInsetsDirectional.zero,
       color: color ??
           (appStateSettings["materialYou"]
               ? Theme.of(context).colorScheme.secondary.withOpacity(0.5)
@@ -213,7 +214,8 @@ class TappableOpacityButton extends StatelessWidget {
       color: color,
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 17),
+        padding:
+            const EdgeInsetsDirectional.symmetric(horizontal: 10, vertical: 17),
         child: TextFont(
           text: label,
           fontSize: fontSize,
@@ -256,7 +258,7 @@ class ButtonIcon extends StatelessWidget {
   final double size;
   final Color? color;
   final Color? iconColor;
-  final EdgeInsets? padding;
+  final EdgeInsetsDirectional? padding;
   final double iconPadding;
   @override
   Widget build(BuildContext context) {

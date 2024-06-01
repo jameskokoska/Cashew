@@ -10,8 +10,8 @@ class AddButton extends StatelessWidget {
   const AddButton({
     Key? key,
     required this.onTap,
-    this.margin = EdgeInsets.zero,
-    this.padding = EdgeInsets.zero,
+    this.margin = EdgeInsetsDirectional.zero,
+    this.padding = EdgeInsetsDirectional.zero,
     this.width = 110,
     this.height = 52,
     this.openPage,
@@ -23,8 +23,8 @@ class AddButton extends StatelessWidget {
   }) : super(key: key);
 
   final VoidCallback onTap;
-  final EdgeInsets margin;
-  final EdgeInsets padding;
+  final EdgeInsetsDirectional margin;
+  final EdgeInsetsDirectional padding;
   final double? width;
   final double? height;
   final double borderRadius;
@@ -50,7 +50,7 @@ class AddButton extends StatelessWidget {
               width: 1.5,
               color: color,
             ),
-            borderRadius: BorderRadius.circular(borderRadius),
+            borderRadius: BorderRadiusDirectional.circular(borderRadius),
           ),
           width: width,
           height: height,
@@ -70,7 +70,7 @@ class AddButton extends StatelessWidget {
               ),
               if (labelUnder != null)
                 Padding(
-                  padding: const EdgeInsets.only(top: 2),
+                  padding: const EdgeInsetsDirectional.only(top: 2),
                   child: TextFont(
                     text: labelUnder ?? "",
                     fontSize: 14,

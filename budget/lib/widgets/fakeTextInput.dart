@@ -10,7 +10,7 @@ class FakeTextInput extends StatelessWidget {
     required this.onTap,
     required this.icon,
     this.label = "",
-    this.edgeInsetsVertical = 13,
+    this.EdgeInsetsDirectionalVertical = 13,
     this.backgroundColor,
     this.content,
   }) : super(key: key);
@@ -18,7 +18,7 @@ class FakeTextInput extends StatelessWidget {
   final VoidCallback onTap;
   final String label;
   final IconData icon;
-  final double edgeInsetsVertical;
+  final double EdgeInsetsDirectionalVertical;
   final Color? backgroundColor;
   final String? content;
 
@@ -32,11 +32,11 @@ class FakeTextInput extends StatelessWidget {
               : getColor(context, "canvasContainer")),
       borderRadius: 15,
       child: Container(
-        margin: EdgeInsets.only(
-            left: 18,
-            top: edgeInsetsVertical,
-            bottom: edgeInsetsVertical,
-            right: 13),
+        margin: EdgeInsetsDirectional.only(
+            start: 18,
+            top: EdgeInsetsDirectionalVertical,
+            bottom: EdgeInsetsDirectionalVertical,
+            end: 13),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

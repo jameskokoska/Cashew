@@ -49,11 +49,11 @@ class HomePageLineGraph extends StatelessWidget {
     );
     return KeepAliveClientMixin(
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 13),
+        padding: const EdgeInsetsDirectional.only(bottom: 13),
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 13),
+          margin: EdgeInsetsDirectional.symmetric(horizontal: 13),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(15)),
+            borderRadius: BorderRadiusDirectional.all(Radius.circular(15)),
             color: getColor(context, "lightDarkAccentHeavyLight"),
             boxShadow: boxShadowCheck(boxShadowGeneral(context)),
           ),

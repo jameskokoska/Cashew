@@ -282,7 +282,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
         underTitleSpace: false,
         child: SelectAmount(
           enableWalletPicker: false,
-          padding: EdgeInsets.symmetric(horizontal: 18),
+          padding: EdgeInsetsDirectional.symmetric(horizontal: 18),
           onlyShowCurrencyIcon: true,
           selectedWalletPk: appStateSettings["selectedWalletPk"],
           amountPassed: initialBalance.toString(),
@@ -309,7 +309,8 @@ class _AddWalletPageState extends State<AddWalletPage> {
     for (int index = 0; index < currencies.keys.length; index++) {
       String key = currencies.keys.toList()[index];
       currencyList.add(Padding(
-        padding: const EdgeInsets.only(left: 18.0, right: 18, bottom: 5),
+        padding:
+            const EdgeInsetsDirectional.only(start: 18.0, end: 18, bottom: 5),
         child: Tappable(
           color: selectedCurrency == key
               ? Theme.of(context).colorScheme.secondaryContainer
@@ -323,7 +324,8 @@ class _AddWalletPageState extends State<AddWalletPage> {
             setSelectedCurrency(key);
           },
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+            padding: const EdgeInsetsDirectional.symmetric(
+                horizontal: 17, vertical: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -451,7 +453,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
             ),
           ],
           staticOverlay: Align(
-            alignment: Alignment.bottomCenter,
+            alignment: AlignmentDirectional.bottomCenter,
             child: selectedTitle == "" || selectedTitle == null
                 ? SaveBottomButton(
                     label: "set-name".tr(),
@@ -476,7 +478,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
           slivers: [
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsetsDirectional.symmetric(horizontal: 20),
                 child: TextInput(
                   autoFocus: kIsWeb && getIsFullScreen(context),
                   focusNode: _titleFocusNode,
@@ -486,7 +488,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                   onChanged: (text) {
                     setSelectedTitle(text);
                   },
-                  padding: EdgeInsets.only(left: 7, right: 7),
+                  padding: EdgeInsetsDirectional.only(start: 7, end: 7),
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
                   topContentPadding: 20,
@@ -515,9 +517,9 @@ class _AddWalletPageState extends State<AddWalletPage> {
                           RoutesToPopAfterDelete.PreventDelete
                   ? SizedBox.shrink()
                   : Padding(
-                      padding: const EdgeInsets.only(
-                        left: 24,
-                        right: 24,
+                      padding: const EdgeInsetsDirectional.only(
+                        start: 24,
+                        end: 24,
                         bottom: 10,
                       ),
                       child: SettingsContainer(
@@ -543,9 +545,9 @@ class _AddWalletPageState extends State<AddWalletPage> {
             if (widget.wallet != null)
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.only(
-                    left: 20,
-                    right: 20,
+                  padding: const EdgeInsetsDirectional.only(
+                    start: 20,
+                    end: 20,
                     bottom: 10,
                   ),
                   child: WidgetSizeBuilder(widgetBuilder: (Size? size) {
@@ -555,8 +557,8 @@ class _AddWalletPageState extends State<AddWalletPage> {
                         children: [
                           Expanded(
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4),
+                              padding: const EdgeInsetsDirectional.symmetric(
+                                  horizontal: 4),
                               child: SettingsContainer(
                                 isOutlinedColumn: true,
                                 isOutlined: true,
@@ -588,8 +590,8 @@ class _AddWalletPageState extends State<AddWalletPage> {
                               1)
                             Expanded(
                               child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 4),
+                                padding: const EdgeInsetsDirectional.symmetric(
+                                    horizontal: 4),
                                 child: SettingsContainer(
                                   isOutlinedColumn: true,
                                   isOutlined: true,
@@ -621,8 +623,8 @@ class _AddWalletPageState extends State<AddWalletPage> {
                             ),
                           Expanded(
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4),
+                              padding: const EdgeInsetsDirectional.symmetric(
+                                  horizontal: 4),
                               child: SettingsContainer(
                                 isOutlinedColumn: true,
                                 isOutlined: true,
@@ -648,17 +650,17 @@ class _AddWalletPageState extends State<AddWalletPage> {
             if (widget.wallet == null)
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.only(
+                  padding: const EdgeInsetsDirectional.only(
                     bottom: 10,
-                    left: 20,
-                    right: 20,
+                    start: 20,
+                    end: 20,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 14),
+                        padding: const EdgeInsetsDirectional.only(bottom: 14),
                         child: TextFont(
                           text: "starting-at".tr() + " ",
                           fontSize: 17,
@@ -688,10 +690,10 @@ class _AddWalletPageState extends State<AddWalletPage> {
                           },
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
-                          internalPadding:
-                              EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-                          padding:
-                              EdgeInsets.symmetric(vertical: 10, horizontal: 3),
+                          internalPadding: EdgeInsetsDirectional.symmetric(
+                              vertical: 2, horizontal: 4),
+                          padding: EdgeInsetsDirectional.symmetric(
+                              vertical: 10, horizontal: 3),
                         ),
                       ),
                     ],
@@ -701,9 +703,9 @@ class _AddWalletPageState extends State<AddWalletPage> {
             if (widget.wallet == null)
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.only(
-                    left: 24,
-                    right: 24,
+                  padding: const EdgeInsetsDirectional.only(
+                    start: 24,
+                    end: 24,
                     bottom: 10,
                   ),
                   child: SettingsContainer(
@@ -733,7 +735,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                   //   addWalletPageKey.currentState?.scrollTo(250);
                   // });
                 },
-                padding: EdgeInsets.symmetric(horizontal: 24),
+                padding: EdgeInsetsDirectional.symmetric(horizontal: 24),
               ),
             ]),
             SliverToBoxAdapter(child: SizedBox(height: 65)),
@@ -786,10 +788,10 @@ class _CorrectBalancePopupState extends State<CorrectBalancePopup> {
                 },
           initialValue: selectedTitle,
           labelText: "transfer-balance".tr(),
-          padding: EdgeInsets.only(bottom: 13),
+          padding: EdgeInsetsDirectional.only(bottom: 13),
         ),
         DateButton(
-          internalPadding: EdgeInsets.only(right: 5),
+          internalPadding: EdgeInsetsDirectional.only(end: 5),
           initialSelectedDate: selectedDateTime ?? DateTime.now(),
           initialSelectedTime: TimeOfDay(
               hour: selectedDateTime?.hour ?? TimeOfDay.now().hour,
@@ -813,8 +815,8 @@ class _CorrectBalancePopupState extends State<CorrectBalancePopup> {
           ? null
           : IconButton(
               iconSize: 25,
-              padding:
-                  EdgeInsets.all(getPlatform() == PlatformOS.isIOS ? 15 : 20),
+              padding: EdgeInsetsDirectional.all(
+                  getPlatform() == PlatformOS.isIOS ? 15 : 20),
               icon: Icon(
                 appStateSettings["outlinedIcons"]
                     ? Icons.edit_outlined
@@ -842,7 +844,7 @@ class _CorrectBalancePopupState extends State<CorrectBalancePopup> {
             children: [
               if (widget.showAllEditDetails)
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 15),
+                  padding: const EdgeInsetsDirectional.only(bottom: 15),
                   child: editTransferDetails,
                 ),
               Wrap(
@@ -864,7 +866,8 @@ class _CorrectBalancePopupState extends State<CorrectBalancePopup> {
                     fontWeight: FontWeight.bold,
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    padding:
+                        const EdgeInsetsDirectional.symmetric(horizontal: 10),
                     child: Icon(
                       appStateSettings["outlinedIcons"]
                           ? Icons.arrow_forward_outlined
@@ -1141,11 +1144,12 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
                     .withOpacity(0.7),
                 width: 2,
               ),
-              borderRadius: BorderRadius.all(Radius.circular(12)),
+              borderRadius: BorderRadiusDirectional.all(Radius.circular(12)),
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            padding: const EdgeInsetsDirectional.symmetric(
+                horizontal: 12, vertical: 8),
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 2),
+              padding: const EdgeInsetsDirectional.only(bottom: 2),
               child: TextFont(
                 text: (wallet?.name ?? "select-account".tr()) +
                     (wallet != null
@@ -1191,10 +1195,10 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
                 },
           initialValue: selectedTitle,
           labelText: "transfer-balance".tr(),
-          padding: EdgeInsets.only(bottom: 13),
+          padding: EdgeInsetsDirectional.only(bottom: 13),
         ),
         DateButton(
-          internalPadding: EdgeInsets.only(right: 5),
+          internalPadding: EdgeInsetsDirectional.only(end: 5),
           initialSelectedDate: selectedDateTime ?? DateTime.now(),
           initialSelectedTime: TimeOfDay(
               hour: selectedDateTime?.hour ?? TimeOfDay.now().hour,
@@ -1216,8 +1220,8 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
           ? null
           : IconButton(
               iconSize: 25,
-              padding:
-                  EdgeInsets.all(getPlatform() == PlatformOS.isIOS ? 15 : 20),
+              padding: EdgeInsetsDirectional.all(
+                  getPlatform() == PlatformOS.isIOS ? 15 : 20),
               icon: Icon(
                 appStateSettings["outlinedIcons"]
                     ? Icons.edit_outlined
@@ -1239,7 +1243,7 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
         children: [
           if (widget.showAllEditDetails)
             Padding(
-              padding: const EdgeInsets.only(bottom: 10),
+              padding: const EdgeInsetsDirectional.only(bottom: 10),
               child: editTransferDetails,
             ),
           SizedBox(height: 13),
@@ -1254,7 +1258,7 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
                 });
               }),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
                 child: Tappable(
                   color: dynamicPastel(
                     context,
@@ -1275,7 +1279,7 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
                     });
                   },
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsetsDirectional.all(8.0),
                     child: AnimatedRotation(
                       duration: Duration(milliseconds: 1200),
                       turns: isNegative ? 0.5 : 1,
@@ -1337,7 +1341,8 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
                       });
                   },
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 11),
+              padding: const EdgeInsetsDirectional.symmetric(
+                  vertical: 7, horizontal: 11),
               child: AnimatedSizeSwitcher(
                 clipBehavior: Clip.none,
                 child: TextFont(
@@ -1394,7 +1399,7 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
           Row(
             children: [
               // Padding(
-              //   padding: const EdgeInsets.only(right: 5),
+              //   padding: const EdgeInsetsDirectional.only(end: 5),
               //   child: Button(
               //     label: transferFee == 0
               //         ? "transfer-fee".tr()
@@ -1415,7 +1420,7 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
               //           hasPadding: false,
               //           underTitleSpace: false,
               //           child: SelectAmount(
-              //             padding: EdgeInsets.symmetric(horizontal: 18),
+              //             padding: EdgeInsetsDirectional.symmetric(horizontal: 18),
               //             onlyShowCurrencyIcon: true,
               //             allowZero: true,
               //             allDecimals: true,

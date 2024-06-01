@@ -130,8 +130,8 @@ class FAB extends StatelessWidget {
                     children: [
                       fabIcon,
                       Padding(
-                        padding:
-                            const EdgeInsets.only(top: 5, bottom: 5, right: 20),
+                        padding: const EdgeInsetsDirectional.only(
+                            top: 5, bottom: 5, end: 20),
                         child: TextFont(
                           text: label ?? "",
                           fontSize: labelSize,

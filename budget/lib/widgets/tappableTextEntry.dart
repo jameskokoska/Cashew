@@ -18,9 +18,9 @@ class TappableTextEntry extends StatelessWidget {
     required this.onTap,
     this.fontSize,
     this.fontWeight,
-    this.padding = const EdgeInsets.symmetric(vertical: 0),
+    this.padding = const EdgeInsetsDirectional.symmetric(vertical: 0),
     this.internalPadding =
-        const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+        const EdgeInsetsDirectional.symmetric(vertical: 6, horizontal: 12),
     this.autoSizeText = false,
     this.showPlaceHolderWhenTextEquals,
     this.disabled = false,
@@ -32,8 +32,8 @@ class TappableTextEntry extends StatelessWidget {
   final String? title;
   final String placeholder;
   final VoidCallback onTap;
-  final EdgeInsets padding;
-  final EdgeInsets internalPadding;
+  final EdgeInsetsDirectional padding;
+  final EdgeInsetsDirectional internalPadding;
   final double? fontSize;
   final FontWeight? fontWeight;
   final bool autoSizeText;
@@ -70,14 +70,14 @@ class TappableTextEntry extends StatelessWidget {
     return Stack(
       children: [
         if (addTappableBackground)
-          Positioned(
+          PositionedDirectional(
             top: padding.top + 3,
             bottom: padding.bottom + 4,
-            right: padding.right - 1,
-            left: padding.left - 1,
+            end: padding.end - 1,
+            start: padding.start - 1,
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadiusDirectional.circular(5),
                 color: (appStateSettings["materialYou"]
                     ? dynamicPastel(context,
                         Theme.of(context).colorScheme.secondaryContainer,
@@ -114,7 +114,7 @@ class TappableTextEntry extends StatelessWidget {
                 ),
                 child: IntrinsicWidth(
                   child: Align(
-                    alignment: Alignment.centerLeft,
+                    alignment: AlignmentDirectional.centerStart,
                     child: customTitleBuilder != null
                         ? customTitleBuilder!(titleBuilder)
                         : titleBuilder(title),

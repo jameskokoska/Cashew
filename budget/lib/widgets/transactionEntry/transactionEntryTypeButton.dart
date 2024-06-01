@@ -35,7 +35,7 @@ class TransactionEntryActionButton extends StatelessWidget {
   final Color iconColor;
   final Color? containerColor;
   final bool allowOpenIntoObjectiveLoanPage;
-  final EdgeInsets padding;
+  final EdgeInsetsDirectional padding;
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +124,7 @@ class ActionButton extends StatelessWidget {
   final Color? containerColor;
   final Color iconColor;
   final IconData iconData;
-  final EdgeInsets padding;
+  final EdgeInsetsDirectional padding;
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +146,7 @@ class ActionButton extends StatelessWidget {
               onTap: onTap,
               borderRadius: 100,
               child: Padding(
-                padding: const EdgeInsets.all(6),
+                padding: const EdgeInsetsDirectional.all(6),
                 child: Icon(
                   iconData,
                   color: dealtWith
@@ -174,15 +174,15 @@ class TransactionEntryTypeButton extends StatelessWidget {
         ? Row(
             children: [
               Padding(
-                padding: const EdgeInsets.only(right: 3.0),
+                padding: const EdgeInsetsDirectional.only(end: 3.0),
                 child: Tappable(
                   color: Colors.transparent,
                   borderRadius: 10,
                   child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 3),
+                    padding: const EdgeInsetsDirectional.symmetric(
+                        vertical: 8, horizontal: 3),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
+                      padding: const EdgeInsetsDirectional.symmetric(
                           vertical: 6, horizontal: 7),
                       decoration: BoxDecoration(
                           color: appStateSettings["materialYou"]
@@ -191,7 +191,8 @@ class TransactionEntryTypeButton extends StatelessWidget {
                                   .primary
                                   .withOpacity(0.1)
                               : getColor(context, "lightDarkAccent"),
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                          borderRadius:
+                              BorderRadiusDirectional.all(Radius.circular(10))),
                       child: TextFont(
                         text: getTransactionActionNameFromType(transaction),
                         fontSize: 14,

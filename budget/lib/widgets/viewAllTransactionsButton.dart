@@ -50,14 +50,15 @@ class LowKeyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
       child: Tappable(
         color: color ??
             (appStateSettings["materialYou"]
                 ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
                 : getColor(context, "lightDarkAccent")),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+          padding: const EdgeInsetsDirectional.symmetric(
+              horizontal: 15, vertical: 8),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [

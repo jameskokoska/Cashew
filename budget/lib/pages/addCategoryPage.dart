@@ -291,7 +291,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
   @override
   Widget build(BuildContext context) {
     Widget balanceCorrectionCategorySettings = Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsetsDirectional.symmetric(horizontal: 15),
       child: Column(
         children: [
           SizedBox(height: 20),
@@ -307,7 +307,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                   .colorScheme
                   .secondaryContainer
                   .withOpacity(0.7),
-              borderRadius: BorderRadius.all(
+              borderRadius: BorderRadiusDirectional.all(
                   Radius.circular(getPlatform() == PlatformOS.isIOS ? 10 : 15)),
             ),
             child: Column(
@@ -331,7 +331,8 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                 IgnorePointer(
                   child: TransactionEntry(
                     useHorizontalPaddingConstrained: false,
-                    customPadding: EdgeInsets.symmetric(horizontal: 8),
+                    customPadding:
+                        EdgeInsetsDirectional.symmetric(horizontal: 8),
                     containerColor: Theme.of(context)
                         .colorScheme
                         .secondaryContainer
@@ -404,7 +405,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                   }),
           subtitleSize:
               widget.mainCategoryPkWhenSubCategory == null ? null : 10,
-          subtitleAlignment: Alignment.bottomLeft,
+          subtitleAlignment: AlignmentDirectional.bottomStart,
           title: widget.category == null
               ? "add-category".tr()
               : "edit-category".tr(),
@@ -431,7 +432,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                     widget.routesToPopAfterDelete !=
                         RoutesToPopAfterDelete.PreventDelete
                 ? IconButton(
-                    padding: EdgeInsets.all(15),
+                    padding: EdgeInsetsDirectional.all(15),
                     tooltip: "delete-category".tr(),
                     onPressed: () {
                       deleteCategoryPopup(
@@ -447,7 +448,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                 : SizedBox.shrink()
           ],
           staticOverlay: Align(
-            alignment: Alignment.bottomCenter,
+            alignment: AlignmentDirectional.bottomCenter,
             child: selectedTitle == "" || selectedTitle == null
                 ? SaveBottomButton(
                     label: "set-name".tr(),
@@ -507,7 +508,8 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                   if (isSubCategory == false &&
                       widget.category?.categoryPk != "0")
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 13),
+                      padding:
+                          const EdgeInsetsDirectional.symmetric(horizontal: 13),
                       child: IncomeExpenseTabSelector(
                         onTabChanged: setSelectedIncome,
                         initialTabIsIncome: selectedIncome,
@@ -547,7 +549,8 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                         color: Colors.transparent,
                         child: Container(
                           height: 126,
-                          padding: const EdgeInsets.only(left: 13, right: 18),
+                          padding: const EdgeInsetsDirectional.only(
+                              start: 13, end: 18),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -580,7 +583,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                       Expanded(
                         child: IntrinsicWidth(
                           child: Padding(
-                            padding: const EdgeInsets.only(right: 20),
+                            padding: const EdgeInsetsDirectional.only(end: 20),
                             child: Builder(builder: (context) {
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -597,7 +600,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                                           userAttemptedToChangeTitlePassed:
                                               true);
                                     },
-                                    padding: EdgeInsets.zero,
+                                    padding: EdgeInsetsDirectional.zero,
                                     fontSize:
                                         getIsFullScreen(context) ? 34 : 27,
                                     fontWeight: FontWeight.bold,
@@ -616,7 +619,9 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                                           : 0,
                                       duration: Duration(milliseconds: 500),
                                       child: Padding(
-                                        padding: const EdgeInsets.only(left: 5),
+                                        padding:
+                                            const EdgeInsetsDirectional.only(
+                                                start: 5),
                                         child: TextFont(
                                           text: "balance-correction".tr(),
                                           fontSize: 15,
@@ -649,9 +654,9 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                               RoutesToPopAfterDelete.PreventDelete
                       ? SizedBox.shrink()
                       : Padding(
-                          padding: EdgeInsets.only(
-                            left: 20,
-                            right: 20,
+                          padding: EdgeInsetsDirectional.only(
+                            start: 20,
+                            end: 20,
                             top: 20,
                           ),
                           child: SettingsContainer(
@@ -689,9 +694,9 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                           isSubCategory == false
                       ? SizedBox.shrink()
                       : Padding(
-                          padding: EdgeInsets.only(
-                            left: 20,
-                            right: 20,
+                          padding: EdgeInsetsDirectional.only(
+                            start: 20,
+                            end: 20,
                             top: 10,
                           ),
                           child: SettingsContainer(
@@ -718,7 +723,8 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                           isSubCategory
                       ? SizedBox.shrink()
                       : Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          padding: const EdgeInsetsDirectional.symmetric(
+                              horizontal: 20),
                           child: TextFont(
                             text: "subcategories".tr(),
                             textColor: getColor(context, "textLight"),
@@ -734,7 +740,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
             if (canSelectIfSubCategoryOrMainCategory())
               SliverToBoxAdapter(
                   child: Padding(
-                padding: const EdgeInsets.only(top: 20),
+                padding: const EdgeInsetsDirectional.only(top: 20),
                 child: SelectIsSubcategory(
                   isMainCategoryWhenCreating: isMainCategoryWhenCreating,
                   onTap: (value) {
@@ -761,9 +767,9 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                           RoutesToPopAfterDelete.PreventDelete)
                     return SliverToBoxAdapter(
                       child: Padding(
-                        padding: EdgeInsets.only(
-                          left: 20,
-                          right: 20,
+                        padding: EdgeInsetsDirectional.only(
+                          start: 20,
+                          end: 20,
                           top: 10,
                           bottom: 8,
                         ),
@@ -805,13 +811,14 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                       TransactionCategory category = subCategories[index];
                       return Padding(
                         key: ValueKey(category.categoryPk),
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        padding: const EdgeInsetsDirectional.symmetric(
+                            horizontal: 4),
                         child: EditRowEntry(
                           index: index,
                           canReorder: subCategories.length != 1,
                           currentReorder:
                               currentReorder != -1 && currentReorder != index,
-                          padding: EdgeInsets.symmetric(
+                          padding: EdgeInsetsDirectional.symmetric(
                             vertical: 7,
                             horizontal:
                                 getPlatform() == PlatformOS.isIOS ? 17 : 7,
@@ -825,7 +832,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                               CategoryIcon(
                                 categoryPk: category.categoryPk,
                                 size: 25,
-                                margin: EdgeInsets.zero,
+                                margin: EdgeInsetsDirectional.zero,
                                 sizePadding: 20,
                                 borderRadius: 1000,
                                 category: category,
@@ -951,9 +958,9 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                                   mainCategoryPkWhenSubCategory:
                                       widget.category!.categoryPk,
                                 ),
-                                margin: EdgeInsets.only(
-                                  left: 13,
-                                  right: 13,
+                                margin: EdgeInsetsDirectional.only(
+                                  start: 13,
+                                  end: 13,
                                   bottom: 6,
                                   top: 5,
                                 ),
@@ -968,7 +975,8 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                   widget.category == null
                       ? SizedBox.shrink()
                       : Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          padding: const EdgeInsetsDirectional.symmetric(
+                              horizontal: 20),
                           child: TextFont(
                             text: "associated-titles".tr(),
                             textColor: getColor(context, "textLight"),
@@ -981,7 +989,8 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                   widget.category == null
                       ? SizedBox.shrink()
                       : Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          padding: const EdgeInsetsDirectional.symmetric(
+                              horizontal: 20),
                           child: TextFont(
                             text: "associated-titles-description".tr(),
                             textColor: getColor(context, "textLight"),
@@ -998,9 +1007,9 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                           children: [
                             Expanded(
                               child: AddButton(
-                                  margin: EdgeInsets.only(
-                                    left: 15,
-                                    right: 15,
+                                  margin: EdgeInsetsDirectional.only(
+                                    start: 15,
+                                    end: 15,
                                     bottom: 9,
                                     top: 4,
                                   ),
@@ -1066,8 +1075,8 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                                       TransactionAssociatedTitle
                                           associatedTitle = snapshot.data![i];
                                       return Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 15),
+                                        padding: const EdgeInsetsDirectional
+                                            .symmetric(horizontal: 15),
                                         child: AssociatedTitleContainer(
                                           title: associatedTitle,
                                           setTitle: (text) async {
@@ -1130,7 +1139,7 @@ class AssociatedTitleContainer extends StatelessWidget {
         : getColor(context, "lightDarkAccent");
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
+      padding: const EdgeInsetsDirectional.only(bottom: 8.0),
       child: Tappable(
         onTap: () {
           openBottomSheet(
@@ -1158,8 +1167,8 @@ class AssociatedTitleContainer extends StatelessWidget {
           children: [
             Expanded(
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+                padding: const EdgeInsetsDirectional.symmetric(
+                    horizontal: 25, vertical: 15),
                 child: TextFont(
                   text: title.title,
                   fontSize: 16.5,
@@ -1177,7 +1186,7 @@ class AssociatedTitleContainer extends StatelessWidget {
               borderRadius: 15,
               color: backgroundColor,
               child: Padding(
-                padding: const EdgeInsets.all(14),
+                padding: const EdgeInsetsDirectional.all(14),
                 child: Icon(
                   appStateSettings["outlinedIcons"]
                       ? Icons.close_outlined
@@ -1206,7 +1215,7 @@ class AssociatedTitleContainer extends StatelessWidget {
 //       onTap: onTap,
 //       borderRadius: 10,
 //       child: Padding(
-//         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+//         padding: const EdgeInsetsDirectional.symmetric(horizontal: 20, vertical: 6),
 //         child: Row(
 //           children: [
 //             ButtonIcon(
@@ -1245,7 +1254,7 @@ class SelectIsSubcategory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsetsDirectional.symmetric(horizontal: 20),
       child: Column(
         children: [
           Row(
@@ -1253,9 +1262,10 @@ class SelectIsSubcategory extends StatelessWidget {
               Expanded(
                 child: OutlinedButtonStacked(
                   filled: isMainCategoryWhenCreating,
-                  alignLeft: true,
+                  alignStart: true,
                   alignBeside: true,
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  padding: EdgeInsetsDirectional.symmetric(
+                      horizontal: 20, vertical: 20),
                   text: "main-category".tr(),
                   iconData: appStateSettings["outlinedIcons"]
                       ? Icons.category_outlined
@@ -1274,9 +1284,10 @@ class SelectIsSubcategory extends StatelessWidget {
                 child: OutlinedButtonStacked(
                   filled: !isMainCategoryWhenCreating,
                   transitionWhenFilled: false,
-                  alignLeft: true,
+                  alignStart: true,
                   alignBeside: true,
-                  padding: EdgeInsets.only(left: 20, right: 12, top: 15),
+                  padding:
+                      EdgeInsetsDirectional.only(start: 20, end: 12, top: 15),
                   text: "subcategory".tr(),
                   iconData: appStateSettings["outlinedIcons"]
                       ? Icons.move_to_inbox_outlined
@@ -1302,11 +1313,13 @@ class SelectIsSubcategory extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 1),
+                        padding: const EdgeInsetsDirectional.symmetric(
+                            horizontal: 1),
                         child: ClipRRect(
                           child: SelectCategory(
                             horizontalList: true,
-                            listPadding: EdgeInsets.symmetric(horizontal: 10),
+                            listPadding:
+                                EdgeInsetsDirectional.symmetric(horizontal: 10),
                             addButton: false,
                             setSelectedCategory: (category) {
                               setMainCategoryPkForSubcategoryWhenCreating(
@@ -1319,7 +1332,7 @@ class SelectIsSubcategory extends StatelessWidget {
                       )
                     ],
                   ),
-                  afterWidgetPadding: EdgeInsets.only(bottom: 20),
+                  afterWidgetPadding: EdgeInsetsDirectional.only(bottom: 20),
                 ),
               ),
             ],
@@ -1348,7 +1361,8 @@ class SampleSubcategoriesPopup extends StatelessWidget {
           SizedBox(height: 10),
           OutlinedContainer(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+              padding: const EdgeInsetsDirectional.symmetric(
+                  horizontal: 10, vertical: 3),
               child: Column(
                 children: [
                   FakeCategoryEntryPlaceholder(
@@ -1383,7 +1397,8 @@ class SampleSubcategoriesPopup extends StatelessWidget {
           SizedBox(height: 10),
           OutlinedContainer(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+              padding: const EdgeInsetsDirectional.symmetric(
+                  horizontal: 10, vertical: 3),
               child: Column(
                 children: [
                   FakeCategoryEntryPlaceholder(
@@ -1418,7 +1433,8 @@ class SampleSubcategoriesPopup extends StatelessWidget {
           SizedBox(height: 10),
           OutlinedContainer(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+              padding: const EdgeInsetsDirectional.symmetric(
+                  horizontal: 10, vertical: 3),
               child: Column(
                 children: [
                   FakeCategoryEntryPlaceholder(
@@ -1453,7 +1469,8 @@ class SampleSubcategoriesPopup extends StatelessWidget {
           SizedBox(height: 10),
           OutlinedContainer(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+              padding: const EdgeInsetsDirectional.symmetric(
+                  horizontal: 10, vertical: 3),
               child: Column(
                 children: [
                   FakeCategoryEntryPlaceholder(
@@ -1525,10 +1542,10 @@ class FakeCategoryEntryPlaceholder extends StatelessWidget {
     );
     if (showAsSubcategory) {
       return Padding(
-        padding: EdgeInsets.only(
+        padding: EdgeInsetsDirectional.only(
           bottom: 10,
-          left: 5,
-          right: 5,
+          start: 5,
+          end: 5,
         ),
         child: Tappable(
           color:
@@ -1536,7 +1553,7 @@ class FakeCategoryEntryPlaceholder extends StatelessWidget {
           borderRadius: 10,
           onTap: () {},
           child: Padding(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsetsDirectional.all(12),
             child: Column(
               children: [
                 categoryIcon,

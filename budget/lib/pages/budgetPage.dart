@@ -157,7 +157,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
               boxShadow: boxShadowCheck(
                 boxShadowGeneral(context),
               ),
-              borderRadius: BorderRadius.circular(200)),
+              borderRadius: BorderRadiusDirectional.circular(200)),
           child: PieChartWrapper(
             pieChartDisplayStateKey: _pieChartDisplayStateKey,
             data: dataFilterUnassignedTransactions,
@@ -293,7 +293,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                 }
               },
             ),
-            subtitleAlignment: Alignment.bottomLeft,
+            subtitleAlignment: AlignmentDirectional.bottomStart,
             subtitleSize: 10,
             backgroundColor: pageBackgroundColor,
             listID: pageId,
@@ -551,20 +551,21 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                           child: Column(
                             children: [
                               Transform.translate(
-                                offset: Offset(0, -10),
+                                offset:
+                                    Offset(0, -10).withDirectionality(context),
                                 child: WidgetSize(
                                   onChange: (Size size) {
                                     budgetHeaderHeight = size.height - 20;
                                   },
                                   child: Container(
-                                    padding: EdgeInsets.only(
+                                    padding: EdgeInsetsDirectional.only(
                                       top: 10,
                                       bottom: 22,
-                                      left: 22,
-                                      right: 22,
+                                      start: 22,
+                                      end: 22,
                                     ),
                                     decoration: BoxDecoration(
-                                      // borderRadius: BorderRadius.vertical(
+                                      // borderRadius: BorderRadiusDirectional.vertical(
                                       //     bottom: Radius.circular(10)),
                                       color: Theme.of(context)
                                           .colorScheme
@@ -573,7 +574,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                     child: Column(
                                       children: [
                                         Transform.scale(
-                                          alignment: Alignment.bottomCenter,
+                                          alignment:
+                                              AlignmentDirectional.bottomCenter,
                                           scale: 1500,
                                           child: Container(
                                             height: 10,
@@ -584,7 +586,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                           ),
                                         ),
                                         Padding(
-                                          padding: EdgeInsets.symmetric(
+                                          padding:
+                                              EdgeInsetsDirectional.symmetric(
                                             horizontal:
                                                 getHorizontalPaddingConstrained(
                                                     context),
@@ -656,8 +659,10 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                                 totalAmount: s.totalSpent,
                                                 large: true,
                                                 budgetRange: budgetRange,
-                                                padding: const EdgeInsets.only(
-                                                    top: 15, bottom: 0),
+                                                padding:
+                                                    const EdgeInsetsDirectional
+                                                        .only(
+                                                        top: 15, bottom: 0),
                                               ),
                                       ],
                                     ),
@@ -702,7 +707,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                 expand: selectedCategory == null &&
                                     extraCategoriesCountWithSpendingLimit > 0,
                                 child: Padding(
-                                  padding: const EdgeInsets.only(bottom: 15),
+                                  padding: const EdgeInsetsDirectional.only(
+                                      bottom: 15),
                                   child: AnimatedSizeSwitcher(
                                     child: Center(
                                       key: ValueKey(
@@ -720,7 +726,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                         extraWidgetAtBeginning: true,
                                         extraWidget: Padding(
                                           padding:
-                                              const EdgeInsets.only(right: 3),
+                                              const EdgeInsetsDirectional.only(
+                                                  end: 3),
                                           child: Transform.scale(
                                             scale: 1.6,
                                             child: Icon(
@@ -759,8 +766,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                   expand: selectedCategory != null,
                   child: Padding(
                     key: ValueKey(1),
-                    padding: const EdgeInsets.only(
-                        left: 13, right: 15, top: 5, bottom: 15),
+                    padding: const EdgeInsetsDirectional.only(
+                        start: 13, end: 15, top: 5, bottom: 15),
                     child: Center(
                       child: TextFont(
                         text: "transactions-for-selected-category".tr(),
@@ -776,11 +783,12 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
               ),
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.only(bottom: 13),
+                  padding: const EdgeInsetsDirectional.only(bottom: 13),
                   child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 13),
+                    margin: EdgeInsetsDirectional.symmetric(horizontal: 13),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      borderRadius:
+                          BorderRadiusDirectional.all(Radius.circular(15)),
                       color: appStateSettings["materialYou"]
                           ? dynamicPastel(context,
                               Theme.of(context).colorScheme.secondaryContainer,
@@ -829,7 +837,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                         widget.isPastBudget == false &&
                         widget.isPastBudgetButCurrentPeriod == false
                     ? Padding(
-                        padding: const EdgeInsets.only(top: 20),
+                        padding: const EdgeInsetsDirectional.only(top: 20),
                         child: ExtraInfoButton(
                           onTap: () {
                             pushRoute(
@@ -875,8 +883,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                 child: widget.budget.sharedDateUpdated == null
                     ? SizedBox.shrink()
                     : Padding(
-                        padding: const EdgeInsets.only(
-                            left: 10, right: 10, bottom: 0),
+                        padding: const EdgeInsetsDirectional.only(
+                            start: 10, end: 10, bottom: 0),
                         child: TextFont(
                           text: "synced".tr() +
                               " " +
@@ -960,7 +968,7 @@ class BudgetLineGraph extends StatefulWidget {
     required this.budgetRange,
     this.showPastSpending = true,
     this.showIfNone = true,
-    this.padding = EdgeInsets.zero,
+    this.padding = EdgeInsetsDirectional.zero,
     super.key,
   });
 
@@ -971,7 +979,7 @@ class BudgetLineGraph extends StatefulWidget {
   final DateTimeRange budgetRange;
   final bool showPastSpending;
   final bool showIfNone;
-  final EdgeInsets padding;
+  final EdgeInsetsDirectional padding;
 
   @override
   State<BudgetLineGraph> createState() => _BudgetLineGraphState();
@@ -1168,11 +1176,11 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
               ),
               if (widget.isPastBudget == false &&
                   widget.budgetRange.end.isAfter(DateTime.now()))
-                Positioned(
-                  right: 0,
+                PositionedDirectional(
+                  end: 0,
                   top: 0,
                   child: Transform.translate(
-                    offset: Offset(5, -5),
+                    offset: Offset(5, -5).withDirectionality(context),
                     child: Tooltip(
                       message: showCompressedView
                           ? "view-all-days".tr()
@@ -1292,7 +1300,7 @@ class _TotalSpentState extends State<TotalSpent> {
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.only(bottom: 1.5),
+                      padding: const EdgeInsetsDirectional.only(bottom: 1.5),
                       child: TextFont(
                         text: getBudgetSpentText(widget.budget.income) +
                             convertToMoney(
@@ -1334,7 +1342,7 @@ class _TotalSpentState extends State<TotalSpent> {
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.only(bottom: 1.5),
+                      padding: const EdgeInsetsDirectional.only(bottom: 1.5),
                       child: TextFont(
                         text: getBudgetOverSpentText(widget.budget.income) +
                             convertToMoney(

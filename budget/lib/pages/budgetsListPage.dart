@@ -54,7 +54,7 @@ class BudgetsListPageState extends State<BudgetsListPage>
           : 0,
       actions: [
         IconButton(
-          padding: EdgeInsets.all(15),
+          padding: EdgeInsetsDirectional.all(15),
           tooltip: "edit-budgets".tr(),
           onPressed: () {
             pushRoute(
@@ -71,7 +71,7 @@ class BudgetsListPageState extends State<BudgetsListPage>
         ),
         if (getIsFullScreen(context))
           IconButton(
-            padding: EdgeInsets.all(15),
+            padding: EdgeInsetsDirectional.all(15),
             tooltip: "add-budget".tr(),
             onPressed: () {
               pushRoute(
@@ -94,7 +94,8 @@ class BudgetsListPageState extends State<BudgetsListPage>
           builder: (context, snapshot) {
             if (snapshot.hasData && (snapshot.data ?? []).length <= 0) {
               return SliverPadding(
-                padding: EdgeInsets.symmetric(vertical: 7, horizontal: 13),
+                padding: EdgeInsetsDirectional.symmetric(
+                    vertical: 7, horizontal: 13),
                 sliver: SliverToBoxAdapter(
                   child: AddButton(
                     onTap: () {},
@@ -109,7 +110,8 @@ class BudgetsListPageState extends State<BudgetsListPage>
             }
             if (snapshot.hasData) {
               return SliverPadding(
-                padding: EdgeInsets.symmetric(vertical: 7, horizontal: 13),
+                padding: EdgeInsetsDirectional.symmetric(
+                    vertical: 7, horizontal: 13),
                 sliver: enableDoubleColumn(context)
                     ? SliverGrid(
                         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
@@ -152,7 +154,8 @@ class BudgetsListPageState extends State<BudgetsListPage>
                               );
                             } else {
                               return Padding(
-                                padding: const EdgeInsets.only(bottom: 16.0),
+                                padding: const EdgeInsetsDirectional.only(
+                                    bottom: 16.0),
                                 child: BudgetContainer(
                                   budget: snapshot.data![index],
                                   squishInactiveBudgetContainerHeight: true,

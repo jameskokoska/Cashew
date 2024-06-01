@@ -201,7 +201,7 @@ class _ColorPickerState extends State<ColorPicker> {
             color: _shadedColor,
             shape: BoxShape.circle,
           ),
-          margin: EdgeInsets.only(bottom: 5),
+          margin: EdgeInsetsDirectional.only(bottom: 5),
         ),
         Center(
           child: GestureDetector(
@@ -231,12 +231,12 @@ class _ColorPickerState extends State<ColorPicker> {
             //This outside padding makes it much easier to grab the   slider because the gesture detector has
             // the extra padding to recognize gestures inside of
             child: Padding(
-              padding: EdgeInsets.all(15),
+              padding: EdgeInsetsDirectional.all(15),
               child: Container(
                 width: widget.width,
                 height: 15,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadiusDirectional.circular(15),
                   gradient: LinearGradient(colors: _colors),
                 ),
                 child: AnimatedScale(
@@ -282,12 +282,12 @@ class _ColorPickerState extends State<ColorPicker> {
             //This outside padding makes it much easier to grab the slider because the gesture detector has
             // the extra padding to recognize gestures inside of
             child: Padding(
-              padding: EdgeInsets.all(15),
+              padding: EdgeInsetsDirectional.all(15),
               child: Container(
                 width: widget.width,
                 height: 15,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadiusDirectional.circular(15),
                   gradient: LinearGradient(
                       colors: [Colors.black, _currentColor, Colors.white]),
                 ),

@@ -174,7 +174,7 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
                   onChanged: (text) {
                     setSelectedTitle(text);
                   },
-                  padding: EdgeInsets.only(left: 7, right: 7),
+                  padding: EdgeInsetsDirectional.only(start: 7, end: 7),
                   fontSize: getIsFullScreen(context) ? 25 : 23,
                   fontWeight: FontWeight.bold,
                   topContentPadding: 0,

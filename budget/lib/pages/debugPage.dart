@@ -48,7 +48,7 @@ class DebugPage extends StatelessWidget {
         fontSize: 20,
         maxLines: 5,
       ),
-      subtitleAlignment: Alignment.bottomLeft,
+      subtitleAlignment: AlignmentDirectional.bottomStart,
       subtitleSize: 10,
       listWidgets: [
         SettingsContainerSwitch(
@@ -368,7 +368,8 @@ class DebugPage extends StatelessWidget {
           icon: Icons.calculate,
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 8.0, left: 13, right: 13),
+          padding:
+              const EdgeInsetsDirectional.only(top: 8.0, start: 13, end: 13),
           child: TextFont(text: "Animation Scale"),
         ),
         SliderSelector(
@@ -424,14 +425,15 @@ class DebugPage extends StatelessWidget {
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           return SliverPadding(
-                            padding: EdgeInsets.symmetric(
+                            padding: EdgeInsetsDirectional.symmetric(
                                 vertical: 7, horizontal: 13),
                             sliver: SliverList(
                               delegate: SliverChildBuilderDelegate(
                                 (BuildContext context, int index) {
                                   DeleteLog deletelog = snapshot.data![index];
                                   return Padding(
-                                    padding: const EdgeInsets.only(bottom: 4),
+                                    padding: const EdgeInsetsDirectional.only(
+                                        bottom: 4),
                                     child: TextFont(
                                       text: (index + 1).toString() +
                                           ") " +
@@ -579,7 +581,7 @@ class DebugPage extends StatelessWidget {
             color: Theme.of(context).colorScheme.onBackground,
             name: "onBackground"),
         Container(
-          margin: EdgeInsets.all(10),
+          margin: EdgeInsetsDirectional.all(10),
           height: 1,
           color: Colors.grey,
         ),
@@ -593,7 +595,7 @@ class DebugPage extends StatelessWidget {
             color: Theme.of(context).colorScheme.onPrimaryContainer,
             name: "onPrimaryContainer"),
         Container(
-          margin: EdgeInsets.all(10),
+          margin: EdgeInsetsDirectional.all(10),
           height: 1,
           color: Colors.grey,
         ),
@@ -609,7 +611,7 @@ class DebugPage extends StatelessWidget {
             color: Theme.of(context).colorScheme.onSecondaryContainer,
             name: "onSecondaryContainer"),
         Container(
-          margin: EdgeInsets.all(10),
+          margin: EdgeInsetsDirectional.all(10),
           height: 1,
           color: Colors.grey,
         ),
@@ -625,7 +627,7 @@ class DebugPage extends StatelessWidget {
             color: Theme.of(context).colorScheme.onTertiaryContainer,
             name: "onTertiaryContainer"),
         Container(
-          margin: EdgeInsets.all(10),
+          margin: EdgeInsetsDirectional.all(10),
           height: 1,
           color: Colors.grey,
         ),

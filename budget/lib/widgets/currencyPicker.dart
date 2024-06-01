@@ -23,7 +23,7 @@ class CurrencyPicker extends StatefulWidget {
   final Widget? extraButton;
   final Function? onHasFocus;
   final String? initialCurrency;
-  final EdgeInsets? padding;
+  final EdgeInsetsDirectional? padding;
 
   @override
   State<CurrencyPicker> createState() => _CurrencyPickerState();
@@ -118,7 +118,7 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: widget.padding ?? EdgeInsets.symmetric(horizontal: 8),
+      padding: widget.padding ?? EdgeInsetsDirectional.symmetric(horizontal: 8),
       child: Column(
         children: [
           Row(
@@ -138,8 +138,8 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                       searchCurrencies(text);
                     },
                     padding: widget.extraButton != null
-                        ? EdgeInsets.only(left: 18)
-                        : EdgeInsets.zero,
+                        ? EdgeInsetsDirectional.only(start: 18)
+                        : EdgeInsetsDirectional.zero,
                   ),
                 ),
               ),
@@ -175,7 +175,7 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
           searchText != "" || viewAll == true
               ? SizedBox.shrink()
               : Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  padding: const EdgeInsetsDirectional.symmetric(vertical: 15),
                   child: LowKeyButton(
                     onTap: () {
                       setState(() {
@@ -187,7 +187,7 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                 ),
           currencies.length <= 0
               ? Padding(
-                  padding: const EdgeInsets.only(bottom: 15),
+                  padding: const EdgeInsetsDirectional.only(bottom: 15),
                   child: NoResults(
                     message: "no-currencies-found".tr(),
                   ),
@@ -253,7 +253,7 @@ class CurrencyItem extends StatelessWidget {
                 : getColor(context, "lightDarkAccent"),
         child: AnimatedContainer(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(
+            borderRadius: BorderRadiusDirectional.circular(
                 getPlatform() == PlatformOS.isIOS ? 10 : 15),
             border: Border.all(
               width: appStateSettings["materialYou"] ? 2 : 0,
@@ -266,7 +266,7 @@ class CurrencyItem extends StatelessWidget {
           child: ConstrainedBox(
             constraints: BoxConstraints(minWidth: 100, minHeight: 100),
             child: Padding(
-              padding: const EdgeInsets.all(13),
+              padding: const EdgeInsetsDirectional.all(13),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [

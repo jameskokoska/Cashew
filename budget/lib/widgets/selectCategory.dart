@@ -45,7 +45,7 @@ class SelectCategory extends StatefulWidget {
     this.header,
     this.horizontalListViewHeight = 100,
     this.forceSelectAllToFalse = false,
-    this.listPadding = const EdgeInsets.symmetric(horizontal: 20),
+    this.listPadding = const EdgeInsetsDirectional.symmetric(horizontal: 20),
     this.selectedIncome,
   }) : super(key: key);
   final Function(TransactionCategory)? setSelectedCategory;
@@ -70,7 +70,7 @@ class SelectCategory extends StatefulWidget {
   final List<Widget>? header;
   final double horizontalListViewHeight;
   final bool forceSelectAllToFalse;
-  final EdgeInsets listPadding;
+  final EdgeInsetsDirectional listPadding;
   final bool? selectedIncome;
 
   @override
@@ -257,13 +257,14 @@ class _SelectCategoryState extends State<SelectCategory> {
                           ? SizedBox.shrink()
                           : Padding(
                               key: ValueKey(2),
-                              padding: const EdgeInsets.only(
+                              padding: const EdgeInsetsDirectional.only(
                                 bottom: 21,
                                 top: 8,
                               ),
                               child: AddButton(
                                 onTap: () {},
-                                margin: EdgeInsets.symmetric(horizontal: 7),
+                                margin: EdgeInsetsDirectional.symmetric(
+                                    horizontal: 7),
                                 openPage: AddCategoryPage(
                                     routesToPopAfterDelete:
                                         RoutesToPopAfterDelete.None,
@@ -317,7 +318,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                     categoryPk: category.categoryPk,
                     size: size,
                     sizePadding: 24,
-                    margin: EdgeInsets.zero,
+                    margin: EdgeInsetsDirectional.zero,
                     label: widget.labelIcon,
                     onTap: () {
                       if (widget.nextWithCategory != null) {
@@ -356,7 +357,8 @@ class _SelectCategoryState extends State<SelectCategory> {
             );
           }
           return Padding(
-            padding: const EdgeInsets.only(bottom: 8.0, left: 10, right: 10),
+            padding: const EdgeInsetsDirectional.only(
+                bottom: 8.0, start: 10, end: 10),
             child: Column(
               children: [
                 AnimatedSizeSwitcher(
@@ -375,7 +377,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                       );
                     },
                     childAspectRatio: 0.96,
-                    padding: EdgeInsets.only(top: 5),
+                    padding: EdgeInsetsDirectional.only(top: 5),
                     controller: _scrollController,
                     crossAxisSpacing: 0,
                     mainAxisSpacing: 5,
@@ -389,7 +391,8 @@ class _SelectCategoryState extends State<SelectCategory> {
                     footer: [
                       if (widget.addButton != false)
                         Padding(
-                          padding: const EdgeInsets.only(left: 7.5, right: 7.5),
+                          padding: const EdgeInsetsDirectional.only(
+                              start: 7.5, end: 7.5),
                           child: Column(
                             children: [
                               LayoutBuilder(
@@ -494,14 +497,14 @@ class _SelectCategoryState extends State<SelectCategory> {
                 //           .toList(),
                 //       Padding(
                 //         key: ValueKey(2),
-                //         padding: const EdgeInsets.only(
+                //         padding: const EdgeInsetsDirectional.only(
                 //           top: 8,
-                //           right: 8,
-                //           left: 8,
+                //           end: 8,
+                //           start: 8,
                 //         ),
                 //         child: AddButton(
                 //           onTap: () {},
-                //           padding: EdgeInsets.zero,
+                //           padding: EdgeInsetsDirectional.zero,
                 //           openPage: AddCategoryPage(
                 //           ),
                 //           width: size + 20,
@@ -565,10 +568,10 @@ class SelectedCategoryHorizontalExtraButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       key: ValueKey(1),
-      padding: EdgeInsets.only(
+      padding: EdgeInsetsDirectional.only(
         top: 8,
-        left: 8,
-        right: 8,
+        start: 8,
+        end: 8,
       ),
       child: Column(
         children: [
@@ -586,14 +589,16 @@ class SelectedCategoryHorizontalExtraButton extends StatelessWidget {
                             amountLight: 0.5, amountDark: 0.4, inverse: true),
                         width: 3,
                       ),
-                      borderRadius: BorderRadius.all(Radius.circular(18)),
+                      borderRadius:
+                          BorderRadiusDirectional.all(Radius.circular(18)),
                     )
                   : BoxDecoration(
                       border: Border.all(
                         color: Colors.transparent,
                         width: 0,
                       ),
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      borderRadius:
+                          BorderRadiusDirectional.all(Radius.circular(15)),
                     ),
               width: 70,
               height: 70,
@@ -606,7 +611,7 @@ class SelectedCategoryHorizontalExtraButton extends StatelessWidget {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: 4),
+            margin: EdgeInsetsDirectional.only(top: 4),
             width: 60,
             child: Center(
               child: TextFont(

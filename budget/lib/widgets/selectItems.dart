@@ -110,7 +110,7 @@ class _SelectItemsState extends State<SelectItems> {
               },
               child: ListTile(
                 title: Transform.translate(
-                  offset: Offset(-12, 0),
+                  offset: Offset(-12, 0).withDirectionality(context),
                   child: TextFont(
                       fontSize: 18,
                       text: widget.displayFilter == null
@@ -121,7 +121,7 @@ class _SelectItemsState extends State<SelectItems> {
                 leading: widget.checkboxCustomIconUnselected != null &&
                         widget.checkboxCustomIconSelected != null
                     ? Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
+                        padding: const EdgeInsetsDirectional.only(end: 8.0),
                         child: ScaledAnimatedSwitcher(
                           keyToWatch: selected.toString(),
                           duration: Duration(milliseconds: 400),

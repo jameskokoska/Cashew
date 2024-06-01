@@ -34,7 +34,7 @@ class DateDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(
+      padding: EdgeInsetsDirectional.symmetric(
         horizontal: useHorizontalPaddingConstrained == false
             ? 0
             : getHorizontalPaddingConstrained(context),

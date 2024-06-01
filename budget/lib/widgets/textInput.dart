@@ -70,7 +70,7 @@ class TextInput extends StatelessWidget {
   final VoidCallback? onTap;
   final bool obscureText;
   final IconData? icon;
-  final EdgeInsets padding;
+  final EdgeInsetsDirectional padding;
   final bool autoFocus;
   final VoidCallback? onEditingComplete;
   final String? initialValue;
@@ -107,7 +107,7 @@ class TextInput extends StatelessWidget {
     this.onTap,
     this.obscureText = false,
     this.icon,
-    this.padding = const EdgeInsets.only(left: 18.0, right: 18),
+    this.padding = const EdgeInsetsDirectional.only(start: 18.0, end: 18),
     this.autoFocus = false,
     this.onEditingComplete,
     this.initialValue,
@@ -151,7 +151,7 @@ class TextInput extends StatelessWidget {
                         ? Theme.of(context).colorScheme.secondaryContainer
                         : getColor(context, "canvasContainer")),
             borderRadius: borderRadius ??
-                BorderRadius.circular(
+                BorderRadiusDirectional.circular(
                     getPlatform() == PlatformOS.isIOS ? 8 : 15),
           ),
           child: Center(
@@ -205,9 +205,9 @@ class TextInput extends StatelessWidget {
                 alignLabelWithHint: true,
                 prefix: prefix != null ? TextFont(text: prefix ?? "") : null,
                 suffix: suffix != null ? TextFont(text: suffix ?? "") : null,
-                contentPadding: EdgeInsets.only(
-                  left: bubbly == false ? (kIsWeb ? 8 + 5 : 8) : 18,
-                  right: (kIsWeb ? paddingRight + 5 : paddingRight),
+                contentPadding: EdgeInsetsDirectional.only(
+                  start: bubbly == false ? (kIsWeb ? 8 + 5 : 8) : 18,
+                  end: (kIsWeb ? paddingRight + 5 : paddingRight),
                   top: topContentPadding != null
                       ? topContentPadding ?? 0
                       : (bubbly == false ? 15 : 18),
@@ -222,7 +222,8 @@ class TextInput extends StatelessWidget {
                 suffixIcon: bubbly == false || icon == null
                     ? null
                     : Padding(
-                        padding: const EdgeInsets.only(right: 13.0, left: 5),
+                        padding: const EdgeInsetsDirectional.only(
+                            end: 13.0, start: 5),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.end,

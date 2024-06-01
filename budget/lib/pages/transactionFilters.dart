@@ -983,7 +983,7 @@ class _TransactionFiltersSelectionState
 
         SizedBox(height: 5),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsetsDirectional.symmetric(horizontal: 20),
           child: Column(
             children: [
               TitleInput(
@@ -991,7 +991,7 @@ class _TransactionFiltersSelectionState
                 resizePopupWhenChanged: false,
                 titleInputController: titleContainsController,
                 titleInputScrollController: titleContainsScrollController,
-                padding: EdgeInsets.zero,
+                padding: EdgeInsetsDirectional.zero,
                 setSelectedCategory: (_) {},
                 setSelectedSubCategory: (_) {},
                 alsoSearchCategories: false,
@@ -1051,7 +1051,7 @@ class _TransactionFiltersSelectionState
               SizedBox(height: 7),
               TextInput(
                 maxLines: 5,
-                padding: EdgeInsets.zero,
+                padding: EdgeInsetsDirectional.zero,
                 labelText: "notes-contain".tr() + "...",
                 onChanged: (value) {
                   if (value.trim() == "") {
@@ -1070,7 +1070,8 @@ class _TransactionFiltersSelectionState
         ),
 
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          padding: const EdgeInsetsDirectional.symmetric(
+              horizontal: 20, vertical: 10),
           child: Row(
             children: [
               Flexible(
@@ -1109,14 +1110,14 @@ class AppliedFilterChips extends StatelessWidget {
     required this.openFiltersSelection,
     required this.clearSearchFilters,
     this.openSelectDate,
-    this.padding = const EdgeInsets.only(bottom: 8.0),
+    this.padding = const EdgeInsetsDirectional.only(bottom: 8.0),
     super.key,
   });
   final SearchFilters searchFilters;
   final Function openFiltersSelection;
   final Function clearSearchFilters;
   final Function? openSelectDate;
-  final EdgeInsets padding;
+  final EdgeInsetsDirectional padding;
 
   Future<List<Widget>> getSearchFilterWidgets(BuildContext context) async {
     AllWallets allWallets = Provider.of<AllWallets>(context);
@@ -1383,7 +1384,7 @@ class AppliedFilterChips extends StatelessWidget {
                 ? Padding(
                     padding: padding,
                     child: SingleChildScrollView(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      padding: EdgeInsetsDirectional.symmetric(horizontal: 16),
                       scrollDirection: Axis.horizontal,
                       child: AnimatedSizeSwitcher(
                         clipBehavior: Clip.none,

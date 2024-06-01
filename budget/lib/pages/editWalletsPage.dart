@@ -87,7 +87,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
         ),
         actions: [
           IconButton(
-            padding: EdgeInsets.all(15),
+            padding: EdgeInsetsDirectional.all(15),
             tooltip: "add-account".tr(),
             onPressed: () {
               pushRoute(
@@ -105,7 +105,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
         slivers: [
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
+              padding: const EdgeInsetsDirectional.only(bottom: 8.0),
               child: Focus(
                 onFocusChange: (value) {
                   setState(() {
@@ -258,16 +258,18 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                                 child: appStateSettings["selectedWalletPk"] ==
                                         wallet.walletPk
                                     ? Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 1, right: 5),
+                                        padding:
+                                            const EdgeInsetsDirectional.only(
+                                                top: 1, end: 5),
                                         child: TransactionTag(
-                                          padding: const EdgeInsets.symmetric(
+                                          padding: const EdgeInsetsDirectional
+                                              .symmetric(
                                               horizontal: 7, vertical: 1.1),
                                           color: Theme.of(context)
                                               .colorScheme
                                               .primary,
                                           name: "primary-default".tr(),
-                                          margin: EdgeInsets.zero,
+                                          margin: EdgeInsetsDirectional.zero,
                                         ),
                                       )
                                     : Container(),
@@ -500,7 +502,7 @@ Future<TransactionWallet?> selectWalletPopup(
                   removeWalletPks.contains(w.wallet.walletPk));
             if (walletsWithoutOneDeleted.isEmpty) {
               return Padding(
-                padding: const EdgeInsets.only(bottom: 15),
+                padding: const EdgeInsetsDirectional.only(bottom: 15),
                 child: NoResults(message: "no-accounts-found".tr()),
               );
             }
@@ -654,7 +656,8 @@ class PrimaryCurrencySetting extends StatelessWidget {
         color: Theme.of(context).colorScheme.secondaryContainer,
         borderRadius: 10,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          padding: const EdgeInsetsDirectional.symmetric(
+              horizontal: 16, vertical: 10),
           child: Builder(builder: (context) {
             return TextFont(
               text: (Provider.of<AllWallets>(context)

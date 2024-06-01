@@ -26,7 +26,7 @@ class ProgressBar extends StatelessWidget {
               decoration: BoxDecoration(
                 color: getColor(context, "lightDarkAccentHeavy"),
                 shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(100),
+                borderRadius: BorderRadiusDirectional.circular(100),
               ),
             ),
             AnimatedContainer(
@@ -36,7 +36,7 @@ class ProgressBar extends StatelessWidget {
               decoration: BoxDecoration(
                 color: color,
                 shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(100),
+                borderRadius: BorderRadiusDirectional.circular(100),
               ),
             ),
           ],

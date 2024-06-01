@@ -70,15 +70,15 @@ class _HomePageObjectivesState extends State<HomePageObjectives> {
                     labelUnder: widget.objectiveType == ObjectiveType.goal
                         ? "goal".tr()
                         : "long-term-loan".tr(),
-                    margin:
-                        const EdgeInsets.only(left: 13, right: 13, bottom: 13),
+                    margin: const EdgeInsetsDirectional.only(
+                        start: 13, end: 13, bottom: 13),
                     icon: Icons.format_list_bulleted_add,
                   );
                 }
                 // if (snapshot.data!.length == 1) {
                 //   return Padding(
-                //     padding: const EdgeInsets.only(
-                //         left: 13, right: 13, bottom: 13),
+                //     padding: const EdgeInsetsDirectional.only(
+                //         start: 13, end: 13, bottom: 13),
                 //     child: BudgetContainer(
                 //       budget: snapshot.data![0],
                 //     ),
@@ -90,7 +90,8 @@ class _HomePageObjectivesState extends State<HomePageObjectives> {
                             getIsDifferenceOnlyLoan(objective) == false)
                         .map((Objective objective) {
                       return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 3),
+                        padding: const EdgeInsetsDirectional.symmetric(
+                            horizontal: 3),
                         child: ObjectiveContainer(
                           objective: objective,
                           index: 0,
@@ -104,7 +105,7 @@ class _HomePageObjectivesState extends State<HomePageObjectives> {
                 List<Widget> objectiveItems = [
                   ...objectiveContainers,
                   Padding(
-                    padding: const EdgeInsets.only(left: 3, right: 3),
+                    padding: const EdgeInsetsDirectional.only(start: 3, end: 3),
                     child: AddButton(
                       onTap: () {
                         openBottomSheet(
@@ -118,7 +119,7 @@ class _HomePageObjectivesState extends State<HomePageObjectives> {
                       },
                       height: null,
                       width: null,
-                      margin: EdgeInsets.all(0),
+                      margin: EdgeInsetsDirectional.all(0),
                       labelUnder: widget.objectiveType == ObjectiveType.goal
                           ? "goal".tr()
                           : "loan".tr(),
@@ -150,7 +151,7 @@ class _HomePageObjectivesState extends State<HomePageObjectives> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 13),
+                      padding: const EdgeInsetsDirectional.only(bottom: 13),
                       child: getIsFullScreen(context)
                           ? SizedBox(
                               height: height,
@@ -161,14 +162,15 @@ class _HomePageObjectivesState extends State<HomePageObjectives> {
                                 children: [
                                   for (Widget widget in objectiveItems)
                                     Padding(
-                                      padding: const EdgeInsets.only(right: 7),
+                                      padding: const EdgeInsetsDirectional.only(
+                                          end: 7),
                                       child: SizedBox(
                                         width: 400,
                                         child: widget,
                                       ),
                                     )
                                 ],
-                                padding: EdgeInsets.symmetric(
+                                padding: EdgeInsetsDirectional.symmetric(
                                   horizontal: 10,
                                 ),
                               ),
@@ -222,15 +224,17 @@ class _HomePageObjectivesState extends State<HomePageObjectives> {
                   ];
 
                   return Padding(
-                    padding:
-                        const EdgeInsets.only(bottom: 13, left: 13, right: 13),
+                    padding: const EdgeInsetsDirectional.only(
+                        bottom: 13, start: 13, end: 13),
                     child: Container(
                       decoration: BoxDecoration(
                         boxShadow: boxShadowCheck(boxShadowGeneral(context)),
-                        borderRadius: BorderRadius.circular(borderRadius),
+                        borderRadius:
+                            BorderRadiusDirectional.circular(borderRadius),
                       ),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(borderRadius),
+                        borderRadius:
+                            BorderRadiusDirectional.circular(borderRadius),
                         child: Tappable(
                           color: getColor(context, "lightDarkAccentHeavyLight"),
                           borderRadius: borderRadius,
@@ -287,8 +291,8 @@ class EditHomePagePinnedGoalsPopup extends StatelessWidget {
               : "select-loans".tr(),
           outsideExtraWidget: IconButton(
             iconSize: 25,
-            padding:
-                EdgeInsets.all(getPlatform() == PlatformOS.isIOS ? 15 : 20),
+            padding: EdgeInsetsDirectional.all(
+                getPlatform() == PlatformOS.isIOS ? 15 : 20),
             icon: Icon(
               appStateSettings["outlinedIcons"]
                   ? Icons.edit_outlined
@@ -307,7 +311,7 @@ class EditHomePagePinnedGoalsPopup extends StatelessWidget {
             children: [
               if (showGoalsTotalLabelSetting)
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadiusDirectional.circular(15),
                   child: TotalSpentToggle(isForGoalTotal: true),
                 ),
               if (allObjectives.length <= 0)
@@ -381,9 +385,9 @@ class EditHomePagePinnedGoalsPopup extends StatelessWidget {
                   onTap: () {},
                   height: 50,
                   width: null,
-                  margin: const EdgeInsets.only(
-                    left: 13,
-                    right: 13,
+                  margin: const EdgeInsetsDirectional.only(
+                    start: 13,
+                    end: 13,
                     bottom: 13,
                     top: 13,
                   ),

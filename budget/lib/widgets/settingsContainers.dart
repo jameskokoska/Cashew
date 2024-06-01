@@ -118,7 +118,7 @@ class _SettingsContainerSwitchState extends State<SettingsContainerSwitch> {
         title: widget.title,
         description: description,
         afterWidget: Padding(
-          padding: const EdgeInsets.only(left: 5),
+          padding: const EdgeInsetsDirectional.only(start: 5),
           child: PlatformSwitch(
             value: value,
             onTap: toggleSwitch,
@@ -198,8 +198,8 @@ class SettingsContainerOpenPage extends StatelessWidget {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Padding(
       padding: isOutlined == false || isOutlined == null
-          ? EdgeInsets.zero
-          : EdgeInsets.only(top: 5, bottom: 5, left: 4, right: 4),
+          ? EdgeInsetsDirectional.zero
+          : EdgeInsetsDirectional.only(top: 5, bottom: 5, start: 4, end: 4),
       child: OpenContainerNavigation(
         onClosed: onClosed,
         onOpen: onOpen,
@@ -312,7 +312,7 @@ class _SettingsContainerDropdownState extends State<SettingsContainerDropdown> {
         _dropdownKey!.currentState!.openDropdown();
       },
       afterWidget: Padding(
-        padding: const EdgeInsets.only(left: 10),
+        padding: const EdgeInsetsDirectional.only(start: 10),
         child: DropdownSelect(
           key: _dropdownKey,
           compact: true,
@@ -375,11 +375,11 @@ class SettingsContainerOutlined extends StatelessWidget {
                 : getColor(context, "lightDarkAccentHeavy")),
             width: 2,
           ),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadiusDirectional.circular(10),
         ),
-        padding: EdgeInsets.only(
-          left: horizontalPadding ?? 3,
-          right: horizontalPadding ?? 3,
+        padding: EdgeInsetsDirectional.only(
+          start: horizontalPadding ?? 3,
+          end: horizontalPadding ?? 3,
           top: verticalPadding ?? 14,
           bottom: verticalPadding ?? 14,
         ),
@@ -449,11 +449,11 @@ class SettingsContainerOutlined extends StatelessWidget {
                 : getColor(context, "lightDarkAccentHeavy")),
             width: 2,
           ),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadiusDirectional.circular(10),
         ),
-        padding: EdgeInsets.only(
-          left: horizontalPadding ?? 13,
-          right: horizontalPadding ?? 4,
+        padding: EdgeInsetsDirectional.only(
+          start: horizontalPadding ?? 13,
+          end: horizontalPadding ?? 4,
           top: verticalPadding ?? 14,
           bottom: verticalPadding ?? 14,
         ),
@@ -466,8 +466,8 @@ class SettingsContainerOutlined extends StatelessWidget {
             icon == null
                 ? SizedBox.shrink()
                 : Padding(
-                    padding: EdgeInsets.only(
-                        right: 8 +
+                    padding: EdgeInsetsDirectional.only(
+                        end: 8 +
                             defaultIconSize -
                             (iconSize ?? defaultIconSize)),
                     child: Transform.scale(
@@ -484,7 +484,7 @@ class SettingsContainerOutlined extends StatelessWidget {
                 ? Expanded(child: textContent)
                 : Flexible(
                     child: Padding(
-                      padding: const EdgeInsets.only(right: 10),
+                      padding: const EdgeInsetsDirectional.only(end: 10),
                       child: textContent,
                     ),
                   ),
@@ -548,7 +548,7 @@ class SettingsContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(
+      borderRadius: BorderRadiusDirectional.circular(
           (enableBorderRadius || getIsFullScreen(context)) && isOutlined != true
               ? getPlatform() == PlatformOS.isIOS
                   ? 10
@@ -574,7 +574,7 @@ class SettingsContainer extends StatelessWidget {
               onTap: onTap,
               onLongPress: onLongPress,
               child: Padding(
-                padding: EdgeInsets.symmetric(
+                padding: EdgeInsetsDirectional.symmetric(
                   horizontal: horizontalPadding ?? 18,
                   // (enableBorderRadius &&
                   //         getWidthNavigationSidebar(context) <= 0 &&
@@ -593,7 +593,8 @@ class SettingsContainer extends StatelessWidget {
                           icon == null
                               ? SizedBox.shrink()
                               : Padding(
-                                  padding: const EdgeInsets.only(right: 16),
+                                  padding:
+                                      const EdgeInsetsDirectional.only(end: 16),
                                   child: ScaledAnimatedSwitcher(
                                     keyToWatch: icon.toString(),
                                     child: Transform.scale(
@@ -635,7 +636,8 @@ class SettingsContainer extends StatelessWidget {
                                       if (description != null)
                                         Padding(
                                           padding:
-                                              const EdgeInsets.only(top: 3),
+                                              const EdgeInsetsDirectional.only(
+                                                  top: 3),
                                           child: AnimatedSizeSwitcher(
                                             child: TextFont(
                                               key: ValueKey(
@@ -675,9 +677,9 @@ class SettingsHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(
-        left: 63,
-        right: 63,
+      padding: EdgeInsetsDirectional.only(
+        start: 63,
+        end: 63,
         top: 15,
         bottom: 7,
       ),

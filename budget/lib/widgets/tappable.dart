@@ -55,7 +55,8 @@ class Tappable extends StatelessWidget {
     Widget tappable = Material(
       color: color ?? Theme.of(context).canvasColor,
       type: type,
-      borderRadius: customBorderRadius ?? BorderRadius.circular(borderRadius),
+      borderRadius:
+          customBorderRadius ?? BorderRadiusDirectional.circular(borderRadius),
       child: InkWell(
         splashFactory: kIsWeb
             ? InkRipple.splashFactory

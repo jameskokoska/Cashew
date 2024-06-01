@@ -2492,7 +2492,7 @@ List<Widget>? getChangelogPointsWidgets(BuildContext context,
         }
 
         changelogPoints.add(Padding(
-          padding: const EdgeInsets.only(bottom: 5, top: 3),
+          padding: const EdgeInsetsDirectional.only(bottom: 5, top: 3),
           child: TextFont(
             text: string.replaceAll("< ", ""),
             fontSize: 25,
@@ -2518,7 +2518,7 @@ List<Widget>? getChangelogPointsWidgets(BuildContext context,
         ));
       } else if (string.trim() != "end") {
         changelogPoints.add(Padding(
-          padding: const EdgeInsets.only(bottom: 5.5),
+          padding: const EdgeInsetsDirectional.only(bottom: 5.5),
           child: TextFont(
             text: string,
             fontSize: 16.5,
@@ -2575,7 +2575,7 @@ List<Widget>? getAllMajorChangeWidgetsForVersion(BuildContext context,
     SizedBox(height: 5),
     for (MajorChanges majorChange in (majorChanges[version] ?? []))
       Padding(
-        padding: const EdgeInsets.only(
+        padding: const EdgeInsetsDirectional.only(
           bottom: 5,
           top: 5,
         ),
@@ -2584,9 +2584,10 @@ List<Widget>? getAllMajorChangeWidgetsForVersion(BuildContext context,
             Expanded(
               child: OutlinedButtonStacked(
                 filled: false,
-                alignLeft: true,
+                alignStart: true,
                 alignBeside: true,
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                padding: EdgeInsetsDirectional.symmetric(
+                    horizontal: 20, vertical: 20),
                 text: majorChange.title.tr(),
                 iconData: majorChange.icon,
                 onTap: majorChange.onTap == null

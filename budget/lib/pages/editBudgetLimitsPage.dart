@@ -51,7 +51,7 @@ class _EditBudgetLimitsPageState extends State<EditBudgetLimitsPage> {
       slivers: [
         SliverToBoxAdapter(
           child: Padding(
-            padding: EdgeInsets.symmetric(
+            padding: EdgeInsetsDirectional.symmetric(
                 horizontal: getHorizontalPaddingConstrained(context)),
             child: SettingsContainerDropdown(
               title: widget.budget.income == true

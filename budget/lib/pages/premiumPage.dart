@@ -73,7 +73,7 @@ class PremiumPage extends StatelessWidget {
                 children: [
                   Center(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
+                      padding: const EdgeInsetsDirectional.symmetric(
                           horizontal: 20, vertical: 30),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -106,8 +106,8 @@ class PremiumPage extends StatelessWidget {
                                       MediaQuery.sizeOf(context).height *
                                           0.028),
                               Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                padding: const EdgeInsetsDirectional.symmetric(
+                                    horizontal: 8.0),
                                 child: IntrinsicWidth(
                                   child: Column(
                                     children: [
@@ -171,7 +171,8 @@ class PremiumPage extends StatelessWidget {
                             Opacity(
                               opacity: 0.7,
                               child: Padding(
-                                padding: const EdgeInsets.only(top: 4),
+                                padding:
+                                    const EdgeInsetsDirectional.only(top: 4),
                                 child: Tappable(
                                   onTap: () async {
                                     var result = await openPopupCustom(
@@ -191,8 +192,9 @@ class PremiumPage extends StatelessWidget {
                                       .withOpacity(0.5),
                                   borderRadius: 15,
                                   child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 13, vertical: 9),
+                                    padding:
+                                        const EdgeInsetsDirectional.symmetric(
+                                            horizontal: 13, vertical: 9),
                                     child: TextFont(
                                       text: "continue-for-free".tr(),
                                       fontSize: 13.5,
@@ -207,7 +209,7 @@ class PremiumPage extends StatelessWidget {
                     ),
                   ),
                   Align(
-                    alignment: Alignment.topLeft,
+                    alignment: AlignmentDirectional.topStart,
                     child: Padding(
                       padding: EdgeInsets.only(
                         left: MediaQuery.viewPaddingOf(context).left,
@@ -215,7 +217,7 @@ class PremiumPage extends StatelessWidget {
                         right: MediaQuery.viewPaddingOf(context).right,
                       ),
                       child: IconButton(
-                        padding: EdgeInsets.all(15),
+                        padding: EdgeInsetsDirectional.all(15),
                         icon: Icon(
                           getPlatform() == PlatformOS.isIOS
                               ? appStateSettings["outlinedIcons"]
@@ -250,7 +252,7 @@ class PremiumPage extends StatelessWidget {
             children: [
               Container(color: Colors.black),
               ClipRRect(
-                borderRadius: BorderRadius.circular(
+                borderRadius: BorderRadiusDirectional.circular(
                   enableSubscriptionAboutBanner ? 23 : 0,
                 ),
                 child: premiumPageWidget,
@@ -271,7 +273,7 @@ class PremiumPage extends StatelessWidget {
                     },
                     color: Colors.transparent,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
+                      padding: const EdgeInsetsDirectional.symmetric(
                           horizontal: 15, vertical: 10),
                       child: TextFont(
                         text: "",
@@ -408,7 +410,7 @@ class _FreePremiumMessageState extends State<FreePremiumMessage> {
         AnimatedExpanded(
           expand: !(timerUp),
           child: Padding(
-            padding: const EdgeInsets.only(top: 8.0),
+            padding: const EdgeInsetsDirectional.only(top: 8.0),
             child: Button(
               fontSize: 14,
               expandedLayout: true,
@@ -447,11 +449,11 @@ class CashewProBanner extends StatelessWidget {
         ),
         SizedBox(width: 2),
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 5),
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+          margin: EdgeInsetsDirectional.symmetric(horizontal: 5),
+          padding: EdgeInsetsDirectional.symmetric(horizontal: 12, vertical: 5),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.primary,
-            borderRadius: BorderRadius.circular(100),
+            borderRadius: BorderRadiusDirectional.circular(100),
             boxShadow: boxShadowGeneral(context),
           ),
           child: TextFont(
@@ -508,7 +510,7 @@ class ManageSubscription extends StatelessWidget {
       ).withOpacity(0.45),
       borderRadius: 15,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 35, vertical: 15),
+        padding: EdgeInsetsDirectional.symmetric(horizontal: 35, vertical: 15),
         child: Column(
           children: [
             appStateSettings["purchaseID"] == productIDs["lifetime"]
@@ -531,7 +533,8 @@ class ManageSubscription extends StatelessWidget {
             appStateSettings["purchaseID"] == productIDs["lifetime"]
                 ? SizedBox.shrink()
                 : Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    padding: EdgeInsetsDirectional.symmetric(
+                        horizontal: 10, vertical: 4),
                     child: Tappable(
                       borderRadius: 15,
                       color: dynamicPastel(
@@ -544,8 +547,8 @@ class ManageSubscription extends StatelessWidget {
                         openManagePurchase();
                       },
                       child: Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 6, horizontal: 13),
+                        padding: EdgeInsetsDirectional.symmetric(
+                            vertical: 6, horizontal: 13),
                         child: TextFont(
                           text: "manage".tr(),
                           fontSize: 12,
@@ -848,7 +851,7 @@ class ProductsState extends State<Products> {
                       forceDark: true,
                     )
               : Padding(
-                  padding: EdgeInsets.symmetric(
+                  padding: EdgeInsetsDirectional.symmetric(
                       horizontal:
                           getHorizontalPaddingConstrained(context) + 28),
                   child: ConstrainedBox(
@@ -856,7 +859,7 @@ class ProductsState extends State<Products> {
                     child: Column(
                       children: [
                         ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadiusDirectional.circular(20),
                           child: FlashingContainer(
                             isAnimating: animateHighlightProducts,
                             backgroundColor:
@@ -897,7 +900,8 @@ class ProductsState extends State<Products> {
                                                       productIDs["yearly"]]!
                                                   .price,
                                               extraPadding:
-                                                  EdgeInsets.only(top: 13 / 2),
+                                                  EdgeInsetsDirectional.only(
+                                                      top: 13 / 2),
                                               onTap: () {
                                                 InAppPurchase.instance
                                                     .buyNonConsumable(
@@ -943,7 +947,8 @@ class ProductsState extends State<Products> {
                                                   productIDs["lifetime"]]!
                                               .price,
                                           extraPadding:
-                                              EdgeInsets.only(bottom: 13 / 2),
+                                              EdgeInsetsDirectional.only(
+                                                  bottom: 13 / 2),
                                           onTap: () {
                                             InAppPurchase.instance
                                                 .buyNonConsumable(
@@ -960,8 +965,8 @@ class ProductsState extends State<Products> {
                           ),
                         ),
                         Padding(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          padding: EdgeInsetsDirectional.symmetric(
+                              horizontal: 10, vertical: 4),
                           child: Tappable(
                             borderRadius: 15,
                             color: dynamicPastel(
@@ -974,7 +979,7 @@ class ProductsState extends State<Products> {
                               restorePurchases(context);
                             },
                             child: Container(
-                              padding: EdgeInsets.symmetric(
+                              padding: EdgeInsetsDirectional.symmetric(
                                   vertical: 6, horizontal: 13),
                               child: TextFont(
                                 text: "restore-purchases".tr(),
@@ -1007,16 +1012,16 @@ class SubscriptionFeature extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsetsDirectional.only(bottom: 10),
       child: Row(
         children: [
           Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(100),
+              borderRadius: BorderRadiusDirectional.circular(100),
               color: Theme.of(context).colorScheme.primary,
               boxShadow: boxShadowGeneral(context),
             ),
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsetsDirectional.all(10),
             child: Icon(
               iconData,
               size: 23,
@@ -1065,7 +1070,7 @@ class SubscriptionOption extends StatelessWidget {
   final String price;
   final String? originalPrice;
   final VoidCallback onTap;
-  final EdgeInsets? extraPadding;
+  final EdgeInsetsDirectional? extraPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -1077,10 +1082,10 @@ class SubscriptionOption extends StatelessWidget {
             color: Colors.transparent,
             borderRadius: 0,
             child: Padding(
-              padding: extraPadding ?? EdgeInsets.zero,
+              padding: extraPadding ?? EdgeInsetsDirectional.zero,
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 26, vertical: 13),
+                padding: const EdgeInsetsDirectional.symmetric(
+                    horizontal: 26, vertical: 13),
                 child: Wrap(
                   alignment: WrapAlignment.spaceBetween,
                   direction: Axis.horizontal,
@@ -1158,7 +1163,7 @@ class LockedFeature extends StatelessWidget {
     Widget child = IgnorePointer(child: this.child);
     if (showLock)
       child = Stack(
-        alignment: Alignment.center,
+        alignment: AlignmentDirectional.center,
         children: [
           IgnorePointer(child: this.child),
           Icon(appStateSettings["outlinedIcons"]
@@ -1229,7 +1234,7 @@ class _FadeOutAndLockFeatureState extends State<FadeOutAndLockFeature> {
       borderRadius: 15,
       onTap: openPremiumPopup,
       child: Stack(
-        alignment: Alignment.center,
+        alignment: AlignmentDirectional.center,
         children: [
           IgnorePointer(
             child: AnimatedOpacity(
@@ -1284,8 +1289,8 @@ class PremiumBackground extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           tileMode: TileMode.mirror,
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+          begin: AlignmentDirectional.topStart,
+          end: AlignmentDirectional.bottomEnd,
           colors: [
             dynamicPastel(
                 context,
@@ -1363,8 +1368,8 @@ class PremiumBanner extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           boxShadow: boxShadowSharp(context),
-          borderRadius: BorderRadius.circular(borderRadius)),
-      margin: const EdgeInsets.symmetric(horizontal: 9, vertical: 0),
+          borderRadius: BorderRadiusDirectional.circular(borderRadius)),
+      margin: const EdgeInsetsDirectional.symmetric(horizontal: 9, vertical: 0),
       child: OpenContainerNavigation(
         borderRadius: borderRadius,
         openPage: PremiumPage(canDismiss: true, popRouteWithPurchase: false),
@@ -1382,7 +1387,7 @@ class PremiumBanner extends StatelessWidget {
                 openContainer();
             },
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadiusDirectional.circular(15),
               child: IntrinsicHeight(
                 child: Stack(
                   children: [
@@ -1397,8 +1402,8 @@ class PremiumBanner extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(
-                          left: 25, right: 17, top: 17, bottom: 17),
+                      padding: const EdgeInsetsDirectional.only(
+                          start: 25, end: 17, top: 17, bottom: 17),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -1413,16 +1418,20 @@ class PremiumBanner extends StatelessWidget {
                                     CashewProBanner(),
                                     purchased
                                         ? Container(
-                                            margin: EdgeInsets.symmetric(
-                                                horizontal: 5),
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 12, vertical: 5),
+                                            margin:
+                                                EdgeInsetsDirectional.symmetric(
+                                                    horizontal: 5),
+                                            padding:
+                                                EdgeInsetsDirectional.symmetric(
+                                                    horizontal: 12,
+                                                    vertical: 5),
                                             decoration: BoxDecoration(
                                               color: Theme.of(context)
                                                   .colorScheme
                                                   .secondaryContainer,
                                               borderRadius:
-                                                  BorderRadius.circular(100),
+                                                  BorderRadiusDirectional
+                                                      .circular(100),
                                               boxShadow:
                                                   boxShadowGeneral(context),
                                             ),

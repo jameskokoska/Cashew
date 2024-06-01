@@ -187,15 +187,16 @@ class CycleTypeEntry extends StatelessWidget {
       duration: Duration(milliseconds: 500),
       opacity: isSelected ? 1 : 0.5,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 6),
+        padding: const EdgeInsetsDirectional.symmetric(vertical: 6),
         child: Row(
           children: [
             Expanded(
               child: OutlinedButtonStacked(
                 filled: isSelected,
-                alignLeft: true,
+                alignStart: true,
                 alignBeside: true,
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                padding: EdgeInsetsDirectional.symmetric(
+                    horizontal: 20, vertical: 20),
                 text: title,
                 iconData: icon,
                 onTap: () {
@@ -361,16 +362,16 @@ class _CyclePeriodSelectionState extends State<CyclePeriodSelection> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10),
+          padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
           child: Wrap(
             crossAxisAlignment: WrapCrossAlignment.end,
             alignment: WrapAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.only(
+                padding: const EdgeInsetsDirectional.only(
                   bottom: 15,
-                  right: 10,
-                  left: 10,
+                  end: 10,
+                  start: 10,
                 ),
                 child: TextFont(
                   text: "every".tr(),
@@ -389,10 +390,10 @@ class _CyclePeriodSelectionState extends State<CyclePeriodSelection> {
                       },
                       fontSize: 25,
                       fontWeight: FontWeight.bold,
-                      internalPadding:
-                          EdgeInsets.symmetric(vertical: 4, horizontal: 9),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 3),
+                      internalPadding: EdgeInsetsDirectional.symmetric(
+                          vertical: 4, horizontal: 9),
+                      padding: EdgeInsetsDirectional.symmetric(
+                          vertical: 10, horizontal: 3),
                     ),
                     TappableTextEntry(
                       title: selectedRecurrenceDisplay
@@ -406,10 +407,10 @@ class _CyclePeriodSelectionState extends State<CyclePeriodSelection> {
                       },
                       fontSize: 25,
                       fontWeight: FontWeight.bold,
-                      internalPadding:
-                          EdgeInsets.symmetric(vertical: 4, horizontal: 5),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 3),
+                      internalPadding: EdgeInsetsDirectional.symmetric(
+                          vertical: 4, horizontal: 5),
+                      padding: EdgeInsetsDirectional.symmetric(
+                          vertical: 10, horizontal: 3),
                     ),
                   ],
                 ),
@@ -418,7 +419,7 @@ class _CyclePeriodSelectionState extends State<CyclePeriodSelection> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
           child: Tappable(
             onTap: () {
               selectStartDate(context);
@@ -426,7 +427,8 @@ class _CyclePeriodSelectionState extends State<CyclePeriodSelection> {
             color: Colors.transparent,
             borderRadius: 15,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+              padding:
+                  EdgeInsetsDirectional.symmetric(horizontal: 5, vertical: 8),
               child: Center(
                 child: Wrap(
                   crossAxisAlignment: WrapCrossAlignment.end,
@@ -434,7 +436,7 @@ class _CyclePeriodSelectionState extends State<CyclePeriodSelection> {
                   alignment: WrapAlignment.center,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 5.8),
+                      padding: const EdgeInsetsDirectional.only(bottom: 5.8),
                       child: TextFont(
                         text: "beginning".tr() + " ",
                         fontSize: 20,
@@ -447,10 +449,10 @@ class _CyclePeriodSelectionState extends State<CyclePeriodSelection> {
                         onTap: () {},
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
-                        internalPadding:
-                            EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-                        padding:
-                            EdgeInsets.symmetric(vertical: 0, horizontal: 5),
+                        internalPadding: EdgeInsetsDirectional.symmetric(
+                            vertical: 2, horizontal: 4),
+                        padding: EdgeInsetsDirectional.symmetric(
+                            vertical: 0, horizontal: 5),
                       ),
                     ),
                   ],
@@ -481,7 +483,7 @@ class _CyclePeriodSelectionState extends State<CyclePeriodSelection> {
             DateTime.now(),
           );
           return Padding(
-            padding: const EdgeInsets.only(
+            padding: const EdgeInsetsDirectional.only(
               bottom: 0,
               top: 15,
             ),
@@ -716,7 +718,7 @@ class _PastDaysSelectionState extends State<PastDaysSelection> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10),
+          padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -734,9 +736,10 @@ class _PastDaysSelectionState extends State<PastDaysSelection> {
                   },
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
-                  internalPadding:
-                      EdgeInsets.symmetric(vertical: 4, horizontal: 9),
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 3),
+                  internalPadding: EdgeInsetsDirectional.symmetric(
+                      vertical: 4, horizontal: 9),
+                  padding: EdgeInsetsDirectional.symmetric(
+                      vertical: 10, horizontal: 3),
                 ),
               ),
               TextFont(

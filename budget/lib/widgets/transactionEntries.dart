@@ -116,7 +116,7 @@ class TransactionEntries extends StatelessWidget {
   final bool includeDateDivider;
   final bool allowSelect;
   final bool showObjectivePercentage;
-  final EdgeInsets? noResultsPadding;
+  final EdgeInsetsDirectional? noResultsPadding;
   final Widget? noResultsExtraWidget;
   final Widget? totalCashFlowExtraWidget;
   final int? limitPerDay;
@@ -483,9 +483,9 @@ class TransactionEntries extends StatelessWidget {
                 Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(
-                        left: 10,
-                        right: 10,
+                      padding: const EdgeInsetsDirectional.only(
+                        start: 10,
+                        end: 10,
                         top: 13,
                         bottom: 8,
                       ),
@@ -518,8 +518,8 @@ class TransactionEntries extends StatelessWidget {
           Widget futureTransactionsDivider = enableFutureTransactionsDivider
               ? Padding(
                   padding: enableSpendingSummary
-                      ? const EdgeInsets.only(top: 5)
-                      : EdgeInsets.zero,
+                      ? const EdgeInsetsDirectional.only(top: 5)
+                      : EdgeInsetsDirectional.zero,
                   child: FutureTransactionsDivider(
                     listID: listID,
                     futureTransactionPks: futureTransactionPks,
@@ -594,7 +594,7 @@ class TransactionEntries extends StatelessWidget {
               children: widgetsOut,
               shrinkWrap: true,
               physics: ClampingScrollPhysics(),
-              padding: EdgeInsets.zero,
+              padding: EdgeInsetsDirectional.zero,
             );
           }
         } else {
@@ -702,21 +702,22 @@ class PastTransactionsDivider extends StatelessWidget {
           return AnimatedPadding(
             duration: const Duration(milliseconds: 425),
             curve: Curves.fastOutSlowIn,
-            padding: EdgeInsets.only(
+            padding: EdgeInsetsDirectional.only(
               top: globalCollapsedFutureID.value[listID ?? "0"] == true ? 0 : 8,
             ),
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 3),
+              padding: const EdgeInsetsDirectional.only(bottom: 3),
               child: Tappable(
                 color: color,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(
+                  padding: EdgeInsetsDirectional.symmetric(
                     horizontal: useHorizontalPaddingConstrained == false
                         ? 0
                         : getHorizontalPaddingConstrained(context),
                   ),
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: EdgeInsetsDirectional.symmetric(
+                        horizontal: 16, vertical: 8),
                     child: Row(
                       children: [
                         Expanded(
@@ -756,20 +757,20 @@ class FutureTransactionsDivider extends StatelessWidget {
             amountDark: 0.5, amountLight: 0)
         : getColor(context, "canvasContainer");
     return Padding(
-      padding: const EdgeInsets.only(bottom: 3),
+      padding: const EdgeInsetsDirectional.only(bottom: 3),
       child: Tappable(
         onTap: () {
           toggleFutureTransactionsSection(listID);
         },
         color: color,
         child: Padding(
-          padding: EdgeInsets.symmetric(
+          padding: EdgeInsetsDirectional.symmetric(
             horizontal: useHorizontalPaddingConstrained == false
                 ? 0
                 : getHorizontalPaddingConstrained(context),
           ),
           child: Padding(
-            padding: EdgeInsets.only(left: 16),
+            padding: EdgeInsetsDirectional.only(start: 16),
             child: ValueListenableBuilder(
                 valueListenable: globalCollapsedFutureID
                     .select((controller) => controller.value[listID ?? "0"]),
@@ -844,8 +845,8 @@ class FutureTransactionsDivider extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(
-                            top: 2, bottom: 2, left: 8, right: 2),
+                        padding: const EdgeInsetsDirectional.only(
+                            top: 2, bottom: 2, start: 8, end: 2),
                         child: Tappable(
                           onTap: () {
                             toggleFutureTransactionsSection(listID);
@@ -859,7 +860,8 @@ class FutureTransactionsDivider extends StatelessWidget {
                                   : 0.2),
                           borderRadius: 5,
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            padding: const EdgeInsetsDirectional.symmetric(
+                                horizontal: 10),
                             child: AnimatedRotation(
                               turns: globalCollapsedFutureID
                                           .value[listID ?? "0"] ==
@@ -932,7 +934,7 @@ class TransactionsEntriesSpendingSummary extends StatelessWidget {
       axis: Axis.vertical,
       expand: show,
       child: Padding(
-        padding: EdgeInsets.symmetric(
+        padding: EdgeInsetsDirectional.symmetric(
           horizontal: getHorizontalPaddingConstrained(context) + 13,
           vertical: 5,
         ),
@@ -955,7 +957,8 @@ class TransactionsEntriesSpendingSummary extends StatelessWidget {
               },
               onLongPress: onLongPress,
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                padding: const EdgeInsetsDirectional.symmetric(
+                    vertical: 5, horizontal: 5),
                 child: Row(
                   children: [
                     Expanded(

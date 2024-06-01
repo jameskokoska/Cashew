@@ -64,7 +64,7 @@ import 'dart:async';
 //                       duration: Duration(milliseconds: 100));
 //                 });
 //               },
-//               padding: EdgeInsets.symmetric(
+//               padding: EdgeInsetsDirectional.symmetric(
 //                   vertical: 7,
 //                   horizontal:
 //                       getPlatform() == PlatformOS.isIOS ? 17 : 7),
@@ -79,7 +79,7 @@ import 'dart:async';
 //                   CategoryIcon(
 //                     categoryPk: associatedTitle.categoryFk,
 //                     size: 25,
-//                     margin: EdgeInsets.zero,
+//                     margin: EdgeInsetsDirectional.zero,
 //                     sizePadding: 20,
 //                     borderRadius: 1000,
 //                     category: mappedCategoriesSnapshot

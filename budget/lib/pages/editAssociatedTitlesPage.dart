@@ -81,7 +81,7 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
         ),
         actions: [
           IconButton(
-            padding: EdgeInsets.all(15),
+            padding: EdgeInsetsDirectional.all(15),
             tooltip: "add-title".tr(),
             onPressed: () {
               openBottomSheet(
@@ -98,7 +98,7 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
         slivers: [
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
+              padding: const EdgeInsetsDirectional.only(bottom: 8.0),
               child: Focus(
                 onFocusChange: (value) {
                   setState(() {
@@ -182,7 +182,7 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
                       canReorder: searchValue == "" &&
                           (snapshot.data ?? []).length != 1,
                       onTap: onTap,
-                      padding: EdgeInsets.symmetric(
+                      padding: EdgeInsetsDirectional.symmetric(
                           vertical: 7,
                           horizontal:
                               getPlatform() == PlatformOS.isIOS ? 17 : 7),
@@ -197,7 +197,7 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
                           CategoryIcon(
                             categoryPk: associatedTitle.categoryFk,
                             size: 25,
-                            margin: EdgeInsets.zero,
+                            margin: EdgeInsetsDirectional.zero,
                             sizePadding: 20,
                             borderRadius: 1000,
                             category: titles[index].category,

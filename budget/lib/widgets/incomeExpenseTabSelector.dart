@@ -100,8 +100,9 @@ class _IncomeExpenseTabSelectorState extends State<IncomeExpenseTabSelector>
   Widget build(BuildContext context) {
     Widget tabSelector = ClipRRect(
       borderRadius: widget.hasBorderRadius
-          ? BorderRadius.circular(getPlatform() == PlatformOS.isIOS ? 10 : 15)
-          : BorderRadius.zero,
+          ? BorderRadiusDirectional.circular(
+              getPlatform() == PlatformOS.isIOS ? 10 : 15)
+          : BorderRadiusDirectional.zero,
       child: Material(
         color: widget.unselectedColor == null
             ? appStateSettings["materialYou"]
@@ -195,7 +196,7 @@ class ExpenseIncomeSelectorLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget content = Center(
       child: Padding(
-        padding: const EdgeInsets.only(top: 2),
+        padding: const EdgeInsetsDirectional.only(top: 2),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -217,7 +218,7 @@ class ExpenseIncomeSelectorLabel extends StatelessWidget {
               ),
             if (customIcon != null)
               Padding(
-                padding: const EdgeInsets.only(right: 5),
+                padding: const EdgeInsetsDirectional.only(end: 5),
                 child: customIcon!,
               ),
             Flexible(
@@ -278,12 +279,12 @@ class _IncomeExpenseButtonSelectorState
   Widget build(BuildContext context) {
     double borderRadius = getPlatform() == PlatformOS.isIOS ? 10 : 15;
     return Padding(
-      padding: const EdgeInsets.only(left: 18, right: 18, bottom: 13),
+      padding: const EdgeInsetsDirectional.only(start: 18, end: 18, bottom: 13),
       child: Row(
         children: [
           Expanded(
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(borderRadius),
+              borderRadius: BorderRadiusDirectional.circular(borderRadius),
               child: Tappable(
                 onTap: () {
                   if (selectedIncome == false) {
@@ -301,7 +302,7 @@ class _IncomeExpenseButtonSelectorState
                 child: OutlinedContainer(
                   filled: selectedIncome == false,
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsetsDirectional.all(8.0),
                     child: ExpenseIncomeSelectorLabel(
                       selectedIncome: false,
                       showIcons: true,
@@ -315,7 +316,7 @@ class _IncomeExpenseButtonSelectorState
           SizedBox(width: 13),
           Expanded(
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(borderRadius),
+              borderRadius: BorderRadiusDirectional.circular(borderRadius),
               child: Tappable(
                 onTap: () {
                   if (selectedIncome == true) {
@@ -333,7 +334,7 @@ class _IncomeExpenseButtonSelectorState
                 child: OutlinedContainer(
                   filled: selectedIncome == true,
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsetsDirectional.all(8.0),
                     child: ExpenseIncomeSelectorLabel(
                       selectedIncome: true,
                       showIcons: true,

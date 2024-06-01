@@ -14,13 +14,13 @@ class SelectDateRange extends StatefulWidget {
     required this.initialEndDate,
     required this.onSelectedStartDate,
     required this.onSelectedEndDate,
-    this.padding = const EdgeInsets.symmetric(vertical: 10),
+    this.padding = const EdgeInsetsDirectional.symmetric(vertical: 10),
   });
   final DateTime? initialStartDate;
   final DateTime? initialEndDate;
   final Function(DateTime?) onSelectedStartDate;
   final Function(DateTime?) onSelectedEndDate;
-  final EdgeInsets padding;
+  final EdgeInsetsDirectional padding;
 
   @override
   State<SelectDateRange> createState() => _SelectDateRangeState();
@@ -63,9 +63,10 @@ class _SelectDateRangeState extends State<SelectDateRange> {
                   },
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
-                  internalPadding:
-                      EdgeInsets.symmetric(vertical: 5, horizontal: 4),
-                  padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+                  internalPadding: EdgeInsetsDirectional.symmetric(
+                      vertical: 5, horizontal: 4),
+                  padding: EdgeInsetsDirectional.symmetric(
+                      vertical: 3, horizontal: 5),
                 ),
               ),
             ],
@@ -76,7 +77,7 @@ class _SelectDateRangeState extends State<SelectDateRange> {
               AnimatedExpanded(
                 expand: selectedEndDate != null,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 5, bottom: 0),
+                  padding: const EdgeInsetsDirectional.only(top: 5, bottom: 0),
                   child: Icon(
                     Icons.arrow_downward_rounded,
                     size: 25,
@@ -115,9 +116,10 @@ class _SelectDateRangeState extends State<SelectDateRange> {
                   },
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
-                  internalPadding:
-                      EdgeInsets.symmetric(vertical: 5, horizontal: 4),
-                  padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+                  internalPadding: EdgeInsetsDirectional.symmetric(
+                      vertical: 5, horizontal: 4),
+                  padding: EdgeInsetsDirectional.symmetric(
+                      vertical: 3, horizontal: 5),
                 ),
               ),
               AnimatedSizeSwitcher(

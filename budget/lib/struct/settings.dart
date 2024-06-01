@@ -261,7 +261,7 @@ void openLanguagePicker(BuildContext context) {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsetsDirectional.only(bottom: 10),
             child: TranslationsHelp(),
           ),
           RadioItems(
@@ -329,12 +329,13 @@ class TranslationsHelp extends StatelessWidget {
           Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.7),
       borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+        padding:
+            const EdgeInsetsDirectional.symmetric(horizontal: 15, vertical: 12),
         child: Row(
           children: [
             if (showIcon)
               Padding(
-                padding: const EdgeInsets.only(right: 12),
+                padding: const EdgeInsetsDirectional.only(end: 12),
                 child: Icon(
                   appStateSettings["outlinedIcons"]
                       ? Icons.connect_without_contact_outlined
