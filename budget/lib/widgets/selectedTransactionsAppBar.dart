@@ -52,7 +52,7 @@ class SelectedTransactionsAppBar extends StatelessWidget {
       bool shareInsteadOfCopy = false}) async {
     AllWallets allWallets = Provider.of<AllWallets>(context, listen: false);
     List<Transaction> transactions =
-        await database.getTransactionsFromPk(selectedTransactionPks);
+        await database.getTransactionsSortedFromPk(selectedTransactionPks);
     List<String> transactionOutput = [];
     for (Transaction transaction in transactions) {
       String name = await getTransactionLabel(transaction);

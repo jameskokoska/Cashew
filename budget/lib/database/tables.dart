@@ -7087,6 +7087,14 @@ class FinanceDatabase extends _$FinanceDatabase {
         .get();
   }
 
+  Future<List<Transaction>> getTransactionsSortedFromPk(
+      List<String> transactionPks) {
+    return (select(transactions)
+          ..where((t) => t.transactionPk.isIn(transactionPks))
+          ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)]))
+        .get();
+  }
+
   // when a change is made we can listen to it, debounce and sync after debounce timer
   // this is handled in navigationFramework
   Stream<dynamic> watchAllForAutoSync() {
