@@ -27,7 +27,7 @@ List<MapEntry<String, Transaction>> recentlyDeletedTransactions = [];
 
 void addTransactionToRecentlyDeleted(Transaction transaction,
     {bool save = true}) {
-  if (recentlyDeletedTransactions.length >= 50) {
+  while (recentlyDeletedTransactions.length >= 50) {
     recentlyDeletedTransactions.removeAt(0);
   }
   recentlyDeletedTransactions
