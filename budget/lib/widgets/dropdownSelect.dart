@@ -292,6 +292,7 @@ class CustomPopupMenuButton extends StatelessWidget {
                   height: 0,
                   value: menuItem.id,
                   child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
                     onLongPress: menuItem.actionOnLongPress == null
                         ? null
                         : () {
@@ -300,7 +301,6 @@ class CustomPopupMenuButton extends StatelessWidget {
                           },
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      color: Colors.transparent, // Need this for the hit-box
                       constraints:
                           BoxConstraints(minHeight: kMinInteractiveDimension),
                       child: Row(
