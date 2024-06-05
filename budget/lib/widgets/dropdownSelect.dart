@@ -291,17 +291,18 @@ class CustomPopupMenuButton extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   height: 0,
                   value: menuItem.id,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    constraints:
-                        BoxConstraints(minHeight: kMinInteractiveDimension),
-                    child: GestureDetector(
-                      onLongPress: menuItem.actionOnLongPress == null
-                          ? null
-                          : () {
-                              Navigator.maybePop(context);
-                              menuItem.actionOnLongPress!();
-                            },
+                  child: GestureDetector(
+                    onLongPress: menuItem.actionOnLongPress == null
+                        ? null
+                        : () {
+                            Navigator.maybePop(context);
+                            menuItem.actionOnLongPress!();
+                          },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      color: Colors.transparent, // Need this for the hit-box
+                      constraints:
+                          BoxConstraints(minHeight: kMinInteractiveDimension),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
