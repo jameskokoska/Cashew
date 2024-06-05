@@ -1597,6 +1597,13 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                         duplicateTransaction(context,
                                             widget.transaction!.transactionPk);
                                       },
+                                      onLongPress: () async {
+                                        bool result = await addTransaction();
+                                        if (result) Navigator.of(context).pop();
+                                        duplicateTransaction(context,
+                                            widget.transaction!.transactionPk,
+                                            useCurrentDate: true);
+                                      },
                                       color: Theme.of(context)
                                           .colorScheme
                                           .secondaryContainer,

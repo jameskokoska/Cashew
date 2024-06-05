@@ -131,7 +131,8 @@ class DropdownItemMenu {
   final String id;
   final String label;
   final IconData icon;
-  final Function action;
+  final VoidCallback action;
+  final VoidCallback? actionOnLongPress;
   final double? iconScale;
   final bool selected;
 
@@ -140,6 +141,7 @@ class DropdownItemMenu {
     required this.label,
     required this.icon,
     required this.action,
+    this.actionOnLongPress,
     this.iconScale,
     this.selected = false,
   });
@@ -184,25 +186,28 @@ class CustomPopupMenuButton extends StatelessWidget {
               ),
             ),
           ),
-          IconButton(
-              padding: EdgeInsetsDirectional.all(buttonPadding),
-              onPressed: () {
-                menuItem.action();
-              },
-              icon: Transform.scale(
-                scale: items[0].iconScale ?? 1,
-                child: Icon(
-                  menuItem.icon,
-                  color: dynamicPastel(
-                    context,
-                    Theme.of(context).colorScheme.onSecondaryContainer,
+          GestureDetector(
+            onLongPress: menuItem.actionOnLongPress,
+            child: IconButton(
+                padding: EdgeInsetsDirectional.all(buttonPadding),
+                onPressed: () {
+                  menuItem.action();
+                },
+                icon: Transform.scale(
+                  scale: items[0].iconScale ?? 1,
+                  child: Icon(
+                    menuItem.icon,
+                    color: dynamicPastel(
+                      context,
+                      Theme.of(context).colorScheme.onSecondaryContainer,
+                    ),
                   ),
                 ),
-              ),
-              color: dynamicPastel(
-                context,
-                Theme.of(context).colorScheme.onSecondaryContainer,
-              )),
+                color: dynamicPastel(
+                  context,
+                  Theme.of(context).colorScheme.onSecondaryContainer,
+                )),
+          ),
         ],
       ),
     );
@@ -281,47 +286,62 @@ class CustomPopupMenuButton extends StatelessWidget {
               ),
             ),
             itemBuilder: (BuildContext context) {
-              return itemsFiltered.map((item) {
+              return itemsFiltered.map((menuItem) {
                 return PopupMenuItem<String>(
-                  value: item.id,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Stack(
-                        alignment: AlignmentDirectional.center,
+                  padding: EdgeInsets.zero,
+                  height: 0,
+                  value: menuItem.id,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    constraints:
+                        BoxConstraints(minHeight: kMinInteractiveDimension),
+                    child: GestureDetector(
+                      onLongPress: menuItem.actionOnLongPress == null
+                          ? null
+                          : () {
+                              Navigator.maybePop(context);
+                              menuItem.actionOnLongPress!();
+                            },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          BreathingWidget(
-                            duration: Duration(milliseconds: 700),
-                            endScale: 1.2,
-                            child: Transform.scale(
-                              scale: 1.5,
-                              child: Container(
-                                height: 20,
-                                width: 20,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: item.selected
-                                      ? Theme.of(context)
-                                          .colorScheme
-                                          .secondaryContainer
-                                      : null,
+                          Stack(
+                            alignment: AlignmentDirectional.center,
+                            children: [
+                              BreathingWidget(
+                                duration: Duration(milliseconds: 700),
+                                endScale: 1.2,
+                                child: Transform.scale(
+                                  scale: 1.5,
+                                  child: Container(
+                                    height: 20,
+                                    width: 20,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: menuItem.selected
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .secondaryContainer
+                                          : null,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
+                              Transform.scale(
+                                scale: menuItem.iconScale ?? 1,
+                                child: Icon(menuItem.icon),
+                              ),
+                            ],
                           ),
-                          Transform.scale(
-                            scale: item.iconScale ?? 1,
-                            child: Icon(item.icon),
+                          SizedBox(width: 9),
+                          TextFont(
+                            text: menuItem.label,
+                            fontSize: 14.5,
                           ),
                         ],
                       ),
-                      SizedBox(width: 9),
-                      TextFont(
-                        text: item.label,
-                        fontSize: 14.5,
-                      ),
-                    ],
+                    ),
                   ),
                 );
               }).toList();

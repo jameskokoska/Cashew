@@ -272,6 +272,48 @@ class SelectedTransactionsAppBarMenu extends StatelessWidget {
   final bool enableSettleAllButton;
   final List<String> selectedTransactionPks;
 
+  Future duplicateTransactions(BuildContext context,
+      {bool duplicateForNow = false}) async {
+    bool showDetailedSnackbarMessage = selectedTransactionPks.length <= 1;
+    for (int i = 0; i < selectedTransactionPks.length; i++) {
+      await duplicateTransaction(
+        context,
+        selectedTransactionPks[i],
+        showDuplicatedMessage: showDetailedSnackbarMessage,
+        useCurrentDate: duplicateForNow,
+      );
+    }
+    if (showDetailedSnackbarMessage == false) {
+      if (duplicateForNow) {
+        openSnackbar(
+          SnackbarMessage(
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.file_copy_outlined
+                : Icons.file_copy_rounded,
+            title: "created-copy-for-current-time".tr(),
+            description: selectedTransactionPks.length.toString() +
+                " " +
+                "transactions".tr().toLowerCase(),
+          ),
+        );
+      } else {
+        openSnackbar(
+          SnackbarMessage(
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.file_copy_outlined
+                : Icons.file_copy_rounded,
+            title: "created-copy".tr(),
+            description: selectedTransactionPks.length.toString() +
+                " " +
+                "transactions".tr().toLowerCase(),
+          ),
+        );
+      }
+    }
+    globalSelectedID.value[pageID] = [];
+    globalSelectedID.notifyListeners();
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Objective>>(
@@ -389,36 +431,14 @@ class SelectedTransactionsAppBarMenu extends StatelessWidget {
                             ? Icons.file_copy_outlined
                             : Icons.file_copy_rounded,
                         iconScale: 0.97,
-                        action: () async {
-                          bool showDetailedSnackbarMessage =
-                              selectedTransactionPks.length <= 1;
-                          for (int i = 0;
-                              i < selectedTransactionPks.length;
-                              i++) {
-                            await duplicateTransaction(
-                              context,
-                              selectedTransactionPks[i],
-                              showDuplicatedMessage:
-                                  showDetailedSnackbarMessage,
-                            );
-                          }
-                          if (showDetailedSnackbarMessage == false) {
-                            openSnackbar(
-                              SnackbarMessage(
-                                icon: appStateSettings["outlinedIcons"]
-                                    ? Icons.file_copy_outlined
-                                    : Icons.file_copy_rounded,
-                                title: "created-copy".tr(),
-                                description:
-                                    selectedTransactionPks.length.toString() +
-                                        " " +
-                                        "transactions".tr().toLowerCase(),
-                              ),
-                            );
-                          }
-                          globalSelectedID.value[pageID] = [];
-                          globalSelectedID.notifyListeners();
-                        },
+                        actionOnLongPress: () async => duplicateTransactions(
+                          context,
+                          duplicateForNow: true,
+                        ),
+                        action: () async => duplicateTransactions(
+                          context,
+                          duplicateForNow: false,
+                        ),
                       ),
                     DropdownItemMenu(
                       id: "edit",
@@ -935,14 +955,26 @@ Future duplicateTransaction(
         (await database.getCategoryInstance(transaction.categoryFk)).name;
   }
   if (showDuplicatedMessage) {
-    openSnackbar(
-      SnackbarMessage(
-        icon: appStateSettings["outlinedIcons"]
-            ? Icons.file_copy_outlined
-            : Icons.file_copy_rounded,
-        title: "created-copy".tr(),
-        description: "copied".tr() + " " + transactionName,
-      ),
-    );
+    if (useCurrentDate) {
+      openSnackbar(
+        SnackbarMessage(
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.file_copy_outlined
+              : Icons.file_copy_rounded,
+          title: "created-copy-for-current-time".tr(),
+          description: "copied".tr() + " " + transactionName,
+        ),
+      );
+    } else {
+      openSnackbar(
+        SnackbarMessage(
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.file_copy_outlined
+              : Icons.file_copy_rounded,
+          title: "created-copy".tr(),
+          description: "copied".tr() + " " + transactionName,
+        ),
+      );
+    }
   }
 }

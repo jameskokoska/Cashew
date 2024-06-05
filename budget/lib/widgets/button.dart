@@ -16,6 +16,7 @@ class Button extends StatefulWidget {
     // this.height,
     this.fontSize = 15,
     required this.onTap,
+    this.onLongPress,
     this.color,
     this.textColor,
     this.padding =
@@ -36,6 +37,7 @@ class Button extends StatefulWidget {
   // final double? height;
   final double fontSize;
   final VoidCallback onTap;
+  final VoidCallback? onLongPress;
   final Color? color;
   final Color? textColor;
   final EdgeInsetsDirectional padding;
@@ -123,6 +125,7 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
             if (widget.disabled == true && widget.onDisabled != null)
               widget.onDisabled!();
           },
+          onLongPress: widget.onLongPress,
           borderRadius:
               getPlatform() == PlatformOS.isIOS && widget.borderRadius == null
                   ? 10
