@@ -1151,5 +1151,6 @@
   "transaction-restored": "Transakcia obnovená",
   "error-restoring": "Chyba pri obnovovaní",
   "expand-all-with-spending-goals": "Rozbaľte všetko pomocou cieľov výdavkov",
-  "collapse-empty-categories": "Zbaliť prázdne kategórie"
+  "collapse-empty-categories": "Zbaliť prázdne kategórie",
+  "created-copy-for-current-time": "Vytvorená kópia pre aktuálny čas"
 }

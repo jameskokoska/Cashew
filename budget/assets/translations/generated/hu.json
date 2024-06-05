@@ -1151,5 +1151,6 @@
   "transaction-restored": "Tranzakció visszaállítva",
   "error-restoring": "Hiba a visszaállítás során",
   "expand-all-with-spending-goals": "Bontsa ki az összeset a költési célokkal",
-  "collapse-empty-categories": "Üres kategóriák összecsukása"
+  "collapse-empty-categories": "Üres kategóriák összecsukása",
+  "created-copy-for-current-time": "Létrehozva az aktuális időre vonatkozó másolatot"
 }

@@ -1151,5 +1151,6 @@
   "transaction-restored": "વ્યવહાર પુનઃસ્થાપિત",
   "error-restoring": "પુનઃસ્થાપિત કરવામાં ભૂલ",
   "expand-all-with-spending-goals": "ખર્ચના લક્ષ્યો સાથે બધાને વિસ્તૃત કરો",
-  "collapse-empty-categories": "ખાલી શ્રેણીઓ સંકુચિત કરો"
+  "collapse-empty-categories": "ખાલી શ્રેણીઓ સંકુચિત કરો",
+  "created-copy-for-current-time": "વર્તમાન સમય માટે નકલ બનાવી"
 }

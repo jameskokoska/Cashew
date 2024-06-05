@@ -1151,5 +1151,6 @@
   "transaction-restored": "تمت استعادة المعاملة",
   "error-restoring": "خطأ في الاستعادة",
   "expand-all-with-spending-goals": "قم بتوسيع الكل مع أهداف الإنفاق",
-  "collapse-empty-categories": "طي الفئات الفارغة"
+  "collapse-empty-categories": "طي الفئات الفارغة",
+  "created-copy-for-current-time": "نسخة تم إنشاؤها للوقت الحالي"
 }

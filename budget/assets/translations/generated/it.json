@@ -1151,5 +1151,6 @@
   "transaction-restored": "Transazione ripristinata",
   "error-restoring": "Errore durante il ripristino",
   "expand-all-with-spending-goals": "Espandi tutto con obiettivi di spesa",
-  "collapse-empty-categories": "Comprimi le categorie vuote"
+  "collapse-empty-categories": "Comprimi le categorie vuote",
+  "created-copy-for-current-time": "Copia creata per l'ora corrente"
 }

@@ -1151,5 +1151,6 @@
   "transaction-restored": "Transaktion gendannet",
   "error-restoring": "Fejl ved gendannelse",
   "expand-all-with-spending-goals": "Udvid alle med forbrugsmål",
-  "collapse-empty-categories": "Skjul tomme kategorier"
+  "collapse-empty-categories": "Skjul tomme kategorier",
+  "created-copy-for-current-time": "Oprettet kopi til aktuelt tidspunkt"
 }

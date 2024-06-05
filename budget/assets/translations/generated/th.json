@@ -1151,5 +1151,6 @@
   "transaction-restored": "กู้คืนธุรกรรมแล้ว",
   "error-restoring": "เกิดข้อผิดพลาดในการกู้คืน",
   "expand-all-with-spending-goals": "ขยายทั้งหมดด้วยเป้าหมายการใช้จ่าย",
-  "collapse-empty-categories": "ยุบหมวดหมู่ที่ว่างเปล่า"
+  "collapse-empty-categories": "ยุบหมวดหมู่ที่ว่างเปล่า",
+  "created-copy-for-current-time": "สร้างสำเนาสำหรับเวลาปัจจุบัน"
 }

@@ -1151,5 +1151,6 @@
   "transaction-restored": "लेन-देन बहाल",
   "error-restoring": "पुनर्स्थापित करने में त्रुटि",
   "expand-all-with-spending-goals": "व्यय लक्ष्यों के साथ सभी का विस्तार करें",
-  "collapse-empty-categories": "खाली श्रेणियाँ संक्षिप्त करें"
+  "collapse-empty-categories": "खाली श्रेणियाँ संक्षिप्त करें",
+  "created-copy-for-current-time": "वर्तमान समय के लिए प्रतिलिपि बनाई गई"
 }

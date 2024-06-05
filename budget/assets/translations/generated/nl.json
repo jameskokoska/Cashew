@@ -1151,5 +1151,6 @@
   "transaction-restored": "Transactie hersteld",
   "error-restoring": "Fout bij herstellen",
   "expand-all-with-spending-goals": "Breid alles uit met bestedingsdoelen",
-  "collapse-empty-categories": "Lege categorieën samenvouwen"
+  "collapse-empty-categories": "Lege categorieën samenvouwen",
+  "created-copy-for-current-time": "Kopie gemaakt voor huidige tijd"
 }

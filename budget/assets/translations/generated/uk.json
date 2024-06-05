@@ -1151,5 +1151,6 @@
   "transaction-restored": "Транзакцію відновлено",
   "error-restoring": "Помилка відновлення",
   "expand-all-with-spending-goals": "Розгорнути все з цілями витрат",
-  "collapse-empty-categories": "Згорнути порожні категорії"
+  "collapse-empty-categories": "Згорнути порожні категорії",
+  "created-copy-for-current-time": "Створена копія для поточного часу"
 }

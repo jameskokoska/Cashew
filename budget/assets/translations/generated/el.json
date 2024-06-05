@@ -1151,5 +1151,6 @@
   "transaction-restored": "Η συναλλαγή αποκαταστάθηκε",
   "error-restoring": "Σφάλμα επαναφοράς",
   "expand-all-with-spending-goals": "Επέκταση όλων με στόχους δαπανών",
-  "collapse-empty-categories": "Σύμπτυξη κενών κατηγοριών"
+  "collapse-empty-categories": "Σύμπτυξη κενών κατηγοριών",
+  "created-copy-for-current-time": "Δημιουργήθηκε αντίγραφο για την τρέχουσα ώρα"
 }

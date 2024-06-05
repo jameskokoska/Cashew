@@ -1151,5 +1151,6 @@
   "transaction-restored": "거래가 복원되었습니다.",
   "error-restoring": "복원 중 오류가 발생했습니다.",
   "expand-all-with-spending-goals": "지출 목표로 모두 확장",
-  "collapse-empty-categories": "빈 카테고리 접기"
+  "collapse-empty-categories": "빈 카테고리 접기",
+  "created-copy-for-current-time": "현재 시간에 대한 복사본이 생성되었습니다."
 }

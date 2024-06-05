@@ -1151,5 +1151,6 @@
   "transaction-restored": "Transaktion wiederhergestellt",
   "error-restoring": "Fehler beim Wiederherstellen",
   "expand-all-with-spending-goals": "Erweitern Sie alles mit Ausgabenzielen",
-  "collapse-empty-categories": "Leere Kategorien ausblenden"
+  "collapse-empty-categories": "Leere Kategorien ausblenden",
+  "created-copy-for-current-time": "Kopie für aktuelle Zeit erstellt"
 }

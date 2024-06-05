@@ -1151,5 +1151,6 @@
   "transaction-restored": "లావాదేవీ పునరుద్ధరించబడింది",
   "error-restoring": "పునరుద్ధరించడంలో లోపం",
   "expand-all-with-spending-goals": "ఖర్చు లక్ష్యాలతో అన్నింటినీ విస్తరించండి",
-  "collapse-empty-categories": "ఖాళీ వర్గాలను కుదించు"
+  "collapse-empty-categories": "ఖాళీ వర్గాలను కుదించు",
+  "created-copy-for-current-time": "ప్రస్తుత సమయానికి కాపీ సృష్టించబడింది"
 }

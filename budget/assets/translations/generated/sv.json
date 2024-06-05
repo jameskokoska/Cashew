@@ -1151,5 +1151,6 @@
   "transaction-restored": "Transaktionen återställd",
   "error-restoring": "Fel vid återställning",
   "expand-all-with-spending-goals": "Utöka alla med utgiftsmål",
-  "collapse-empty-categories": "Komprimera tomma kategorier"
+  "collapse-empty-categories": "Komprimera tomma kategorier",
+  "created-copy-for-current-time": "Skapat kopia för aktuell tid"
 }

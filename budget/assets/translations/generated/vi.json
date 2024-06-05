@@ -1151,5 +1151,6 @@
   "transaction-restored": "Đã khôi phục giao dịch",
   "error-restoring": "Lỗi khi khôi phục",
   "expand-all-with-spending-goals": "Mở rộng tất cả với mục tiêu chi tiêu",
-  "collapse-empty-categories": "Thu gọn các danh mục trống"
+  "collapse-empty-categories": "Thu gọn các danh mục trống",
+  "created-copy-for-current-time": "Đã tạo bản sao cho thời gian hiện tại"
 }

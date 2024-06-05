@@ -1151,5 +1151,6 @@
   "transaction-restored": "Tapahtuma palautettu",
   "error-restoring": "Virhe palauttamisessa",
   "expand-all-with-spending-goals": "Laajenna kaikki kulutustavoitteilla",
-  "collapse-empty-categories": "Kutista tyhjät luokat"
+  "collapse-empty-categories": "Kutista tyhjät luokat",
+  "created-copy-for-current-time": "Luotu kopio nykyiselle ajalle"
 }

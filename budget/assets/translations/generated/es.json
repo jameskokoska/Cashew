@@ -1151,5 +1151,6 @@
   "transaction-restored": "Transacción restaurada",
   "error-restoring": "Error al restaurar",
   "expand-all-with-spending-goals": "Amplíe todo con objetivos de gasto",
-  "collapse-empty-categories": "Contraer categorías vacías"
+  "collapse-empty-categories": "Contraer categorías vacías",
+  "created-copy-for-current-time": "Copia creada para la hora actual"
 }

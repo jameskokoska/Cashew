@@ -1151,5 +1151,6 @@
   "transaction-restored": "Tranzacție restaurată",
   "error-restoring": "Eroare la restaurare",
   "expand-all-with-spending-goals": "Extindeți totul cu obiective de cheltuieli",
-  "collapse-empty-categories": "Restrângeți categoriile goale"
+  "collapse-empty-categories": "Restrângeți categoriile goale",
+  "created-copy-for-current-time": "Copie creată pentru ora curentă"
 }

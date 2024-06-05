@@ -1151,5 +1151,6 @@
   "transaction-restored": "Transaction Restored",
   "error-restoring": "Error Restoring",
   "expand-all-with-spending-goals": "Expand All With Spending Goals",
-  "collapse-empty-categories": "Collapse Empty Categories"
+  "collapse-empty-categories": "Collapse Empty Categories",
+  "created-copy-for-current-time": "Created Copy For Current Time"
 }

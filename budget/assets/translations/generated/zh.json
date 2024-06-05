@@ -1151,5 +1151,6 @@
   "transaction-restored": "交易已恢复",
   "error-restoring": "错误恢复",
   "expand-all-with-spending-goals": "扩大支出目标",
-  "collapse-empty-categories": "折叠空类别"
+  "collapse-empty-categories": "折叠空类别",
+  "created-copy-for-current-time": "已为当前时间创建副本"
 }

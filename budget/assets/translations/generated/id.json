@@ -1151,5 +1151,6 @@
   "transaction-restored": "Transaksi Dipulihkan",
   "error-restoring": "Kesalahan Memulihkan",
   "expand-all-with-spending-goals": "Perluas Semua Dengan Tujuan Pengeluaran",
-  "collapse-empty-categories": "Ciutkan Kategori Kosong"
+  "collapse-empty-categories": "Ciutkan Kategori Kosong",
+  "created-copy-for-current-time": "Salinan yang Dibuat Untuk Waktu Saat Ini"
 }
