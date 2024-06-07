@@ -168,7 +168,12 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
   late List<Widget> pages;
   late List<Widget> pagesExtended;
 
-  int currentPage = 0;
+  int currentPage = int.tryParse(
+          navBarIconsData[appStateSettings["customNavBarShortcut0"]]
+                  ?.navigationIndexedStackIndex
+                  .toString() ??
+              "") ??
+      0;
   int previousPage = 0;
 
   void changePage(int page, {bool switchNavbar = true}) {

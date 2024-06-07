@@ -38,8 +38,12 @@ class BottomNavBarState extends State<BottomNavBar> {
     int navigationIndex = index;
 
     try {
-      // Index 1 and 2 can be customized
-      if (index == 1) {
+      // Index 0, 1 and 2 can be customized
+      if (index == 0) {
+        navigationIndex =
+            navBarIconsData[appStateSettings["customNavBarShortcut0"]]!
+                .navigationIndexedStackIndex;
+      } else if (index == 1) {
         navigationIndex =
             navBarIconsData[appStateSettings["customNavBarShortcut1"]]!
                 .navigationIndexedStackIndex;
@@ -53,7 +57,7 @@ class BottomNavBarState extends State<BottomNavBar> {
     }
 
     if (index == selectedIndex && allowReApply == false) {
-      if (index == 0) homePageStateKey.currentState?.scrollToTop();
+      if (navigationIndex == 0) homePageStateKey.currentState?.scrollToTop();
       if (navigationIndex == 1)
         transactionsListPageStateKey.currentState?.scrollToTop();
       if (navigationIndex == 2)
@@ -113,17 +117,20 @@ class BottomNavBarState extends State<BottomNavBar> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      GestureDetector(
-                        onLongPress: () {
-                          HapticFeedback.heavyImpact();
-                          pushRoute(context, EditHomePage());
+                      CustomizableNavigationBarIcon(
+                        shortcutAppSettingKey: "customNavBarShortcut0",
+                        afterSet: () {
+                          onItemTapped(0, allowReApply: true);
                         },
-                        child: NavBarIcon(
-                          onItemTapped: onItemTapped,
-                          icon: navBarIconsData["home"]!.iconData,
-                          index: 0,
-                          currentIndex: selectedIndex,
-                        ),
+                        navigationBarIconBuilder: (NavBarIconData iconData) {
+                          return NavBarIcon(
+                            icon: iconData.iconData,
+                            customIconScale: iconData.iconScale,
+                            onItemTapped: onItemTapped,
+                            index: 0,
+                            currentIndex: selectedIndex,
+                          );
+                        },
                       ),
                       CustomizableNavigationBarIcon(
                         shortcutAppSettingKey: "customNavBarShortcut1",
@@ -211,16 +218,21 @@ class BottomNavBarState extends State<BottomNavBar> {
         child: NavigationBar(
           animationDuration: Duration(milliseconds: 1000),
           destinations: [
-            GestureDetector(
-              onLongPress: () {
-                HapticFeedback.heavyImpact();
-                pushRoute(context, EditHomePage());
+            CustomizableNavigationBarIcon(
+              shortcutAppSettingKey: "customNavBarShortcut0",
+              afterSet: () {
+                onItemTapped(0, allowReApply: true);
               },
-              child: NavigationDestination(
-                icon: Icon(navBarIconsData["home"]!.iconData),
-                label: navBarIconsData["home"]!.label.tr(),
-                tooltip: "",
-              ),
+              navigationBarIconBuilder: (NavBarIconData iconData) {
+                return NavigationDestination(
+                  icon: Icon(iconData.iconData, size: iconData.iconSize),
+                  label: iconData.label.tr().length > 15 &&
+                          iconData.labelShort != null
+                      ? (iconData.labelShort ?? "").tr()
+                      : iconData.label.tr(),
+                  tooltip: "",
+                );
+              },
             ),
             CustomizableNavigationBarIcon(
               shortcutAppSettingKey: "customNavBarShortcut1",
@@ -280,6 +292,14 @@ class CustomizableNavigationBarIcon extends StatelessWidget {
   final VoidCallback afterSet;
   @override
   Widget build(BuildContext context) {
+    NavBarIconData navBarIconData;
+    if (navBarIconsData.containsKey(appStateSettings[shortcutAppSettingKey])) {
+      navBarIconData =
+          navBarIconsData[appStateSettings[shortcutAppSettingKey]]!;
+    } else {
+      navBarIconData = navBarIconsData["home"]!;
+    }
+
     return GestureDetector(
       onLongPress: () async {
         HapticFeedback.heavyImpact();
@@ -301,8 +321,7 @@ class CustomizableNavigationBarIcon extends StatelessWidget {
           afterSet();
         }
       },
-      child: navigationBarIconBuilder(
-          navBarIconsData[appStateSettings[shortcutAppSettingKey]]!),
+      child: navigationBarIconBuilder(navBarIconData),
     );
   }
 }
@@ -315,6 +334,13 @@ class SelectNavBarShortcutPopup extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        NavBarShortcutSelection(
+          shortcutAppSettingKey: shortcutAppSettingKey,
+          navBarIconDataKey: "home",
+          onSettings: () {
+            pushRoute(context, EditHomePage());
+          },
+        ),
         NavBarShortcutSelection(
           shortcutAppSettingKey: shortcutAppSettingKey,
           navBarIconDataKey: "transactions",

@@ -278,7 +278,9 @@ class MorePages extends StatelessWidget {
                   child: SettingsContainerOpenPage(
                     isOutlinedColumn: true,
                     // If budget page not pinned to home, open budget list page
-                    openPage: appStateSettings["customNavBarShortcut1"] !=
+                    openPage: appStateSettings["customNavBarShortcut0"] !=
+                                "budgets" &&
+                            appStateSettings["customNavBarShortcut1"] !=
                                 "budgets" &&
                             appStateSettings["customNavBarShortcut2"] !=
                                 "budgets"

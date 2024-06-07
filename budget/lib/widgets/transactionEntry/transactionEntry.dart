@@ -649,6 +649,7 @@ class TransactionEntry extends StatelessWidget {
                               openContainer();
                             },
                             child: AnimatedContainer(
+                              clipBehavior: Clip.none,
                               duration: const Duration(seconds: 1),
                               curve: Curves.easeInOutCubicEmphasized,
                               padding: EdgeInsetsDirectional.only(
