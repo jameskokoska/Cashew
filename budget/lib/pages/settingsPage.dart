@@ -50,6 +50,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
+import 'package:flutter/services.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:provider/provider.dart';
 import '../functions.dart';
@@ -1474,6 +1475,9 @@ class _NumberPadFormatSettingPopupState
               setState(() {});
             },
           ),
+          NumberPadHapticFeedbackSetting(
+            enableBorderRadius: true,
+          ),
           HorizontalBreak(),
           SizedBox(height: 10),
           NumberPadFormatPicker(),
@@ -1615,6 +1619,31 @@ class ExtraZerosButtonSetting extends StatelessWidget {
       getLabel: (item) {
         if (item == "") return "none".tr().capitalizeFirst;
         return item;
+      },
+    );
+  }
+}
+
+class NumberPadHapticFeedbackSetting extends StatelessWidget {
+  const NumberPadHapticFeedbackSetting(
+      {this.enableBorderRadius = false, super.key});
+  final bool enableBorderRadius;
+  @override
+  Widget build(BuildContext context) {
+    return SettingsContainerSwitch(
+      enableBorderRadius: enableBorderRadius,
+      title: "haptic-feedback".tr(),
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.vibration_outlined
+          : Symbols.vibration_rounded,
+      initialValue: appStateSettings["numberPadHapticFeedback"] == true,
+      onSwitched: (value) async {
+        if (value == true) HapticFeedback.heavyImpact();
+        await updateSettings(
+          "numberPadHapticFeedback",
+          value,
+          updateGlobalState: false,
+        );
       },
     );
   }

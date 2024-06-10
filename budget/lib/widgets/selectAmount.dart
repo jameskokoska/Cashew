@@ -292,7 +292,13 @@ class _SelectAmountState extends State<SelectAmount> {
     super.dispose();
   }
 
-  addToAmount(String input) {
+  void addToAmount(String input) {
+    if (appStateSettings["numberPadHapticFeedback"] == true) {
+      if (includesOperations(input, false))
+        HapticFeedback.mediumImpact();
+      else
+        HapticFeedback.selectionClick();
+    }
     // bottomSheetControllerGlobal.snapToExtent(0);
     String amountClone = amount;
     if (input == "." &&
@@ -349,6 +355,9 @@ class _SelectAmountState extends State<SelectAmount> {
   }
 
   void removeToAmount() {
+    if (appStateSettings["numberPadHapticFeedback"] == true) {
+      HapticFeedback.mediumImpact();
+    }
     // bottomSheetControllerGlobal.snapToExtent(0);
     setState(() {
       if (amount.length > 0) {
@@ -1423,7 +1432,11 @@ class _SelectAmountValueState extends State<SelectAmountValue> {
     super.dispose();
   }
 
-  addToAmount(String input) {
+  void addToAmount(String input) {
+    if (appStateSettings["numberPadHapticFeedback"] == true) {
+      HapticFeedback.selectionClick();
+    }
+
     if (input == "." && widget.enableDecimal == false) return;
     String amountClone = amount;
     if (input == "." && amount.contains(".")) {
@@ -1448,6 +1461,9 @@ class _SelectAmountValueState extends State<SelectAmountValue> {
   }
 
   void removeToAmount() {
+    if (appStateSettings["numberPadHapticFeedback"] == true) {
+      HapticFeedback.mediumImpact();
+    }
     setState(() {
       if (amount.length > 0) {
         amount = amount.substring(0, amount.length - 1);
