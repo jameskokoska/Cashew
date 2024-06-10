@@ -596,7 +596,7 @@
   "cannot-remove-default-account": "无法删除默认账户",
   "cannot-remove": "无法移除",
   "installment": "分期",
-  "net-worth": "净值",
+  "net-worth": "结余",
   "goals": "目标",
   "edit-goals": "编辑目标",
   "savings-goal": "存款目标",
@@ -674,11 +674,11 @@
   "select-type": "选择类型",
   "create-budget": "创建预算",
   "no-goals-found": "找不到目标。",
-  "net-worth-settings": "净值设置",
+  "net-worth-settings": "结余设置",
   "transfer-balance": "转移余额",
   "withdraw-amount": "提取余额",
   "transferred-balance": "已转账余额",
-  "net-total": "总净值",
+  "net-total": "总结余",
   "all-accounts": "所有账户",
   "transfer-amount": "转移金额",
   "change-currency": "更改货币",
@@ -1152,5 +1152,6 @@
   "error-restoring": "错误恢复",
   "expand-all-with-spending-goals": "扩大支出目标",
   "collapse-empty-categories": "折叠空类别",
-  "created-copy-for-current-time": "已为当前时间创建副本"
+  "created-copy-for-current-time": "已为当前时间创建副本",
+  "haptic-feedback": "触觉反馈"
 }

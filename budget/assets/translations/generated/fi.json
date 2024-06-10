@@ -1152,5 +1152,6 @@
   "error-restoring": "Virhe palauttamisessa",
   "expand-all-with-spending-goals": "Laajenna kaikki kulutustavoitteilla",
   "collapse-empty-categories": "Kutista tyhjät luokat",
-  "created-copy-for-current-time": "Luotu kopio nykyiselle ajalle"
+  "created-copy-for-current-time": "Luotu kopio nykyiselle ajalle",
+  "haptic-feedback": "Haptinen palaute"
 }

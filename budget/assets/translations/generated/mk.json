@@ -202,5 +202,6 @@
   "error-restoring": "Грешка при враќање",
   "expand-all-with-spending-goals": "Проширете ги сите со цели за трошење",
   "collapse-empty-categories": "Собери ги празните категории",
-  "created-copy-for-current-time": "Создадена копија за тековно време"
+  "created-copy-for-current-time": "Создадена копија за тековно време",
+  "haptic-feedback": "Хаптички повратни информации"
 }

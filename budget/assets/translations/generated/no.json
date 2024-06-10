@@ -1152,5 +1152,6 @@
   "error-restoring": "Feil ved gjenoppretting",
   "expand-all-with-spending-goals": "Utvid alle med forbruksmål",
   "collapse-empty-categories": "Skjul tomme kategorier",
-  "created-copy-for-current-time": "Opprettet kopi for gjeldende tid"
+  "created-copy-for-current-time": "Opprettet kopi for gjeldende tid",
+  "haptic-feedback": "Haptisk tilbakemelding"
 }

@@ -1152,5 +1152,6 @@
   "error-restoring": "পুনরুদ্ধার করার সময় ত্রুটি৷",
   "expand-all-with-spending-goals": "ব্যয়ের লক্ষ্য সহ সমস্ত প্রসারিত করুন",
   "collapse-empty-categories": "খালি বিভাগগুলিকে সঙ্কুচিত করুন৷",
-  "created-copy-for-current-time": "বর্তমান সময়ের জন্য কপি তৈরি করা হয়েছে"
+  "created-copy-for-current-time": "বর্তমান সময়ের জন্য কপি তৈরি করা হয়েছে",
+  "haptic-feedback": "হ্যাপটিক প্রতিক্রিয়া"
 }

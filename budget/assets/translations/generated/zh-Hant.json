@@ -1152,5 +1152,6 @@
   "error-restoring": "錯誤恢復",
   "expand-all-with-spending-goals": "擴大支出目標",
   "collapse-empty-categories": "折疊空類別",
-  "created-copy-for-current-time": "已為目前時間建立副本"
+  "created-copy-for-current-time": "已為目前時間建立副本",
+  "haptic-feedback": "觸覺回饋"
 }

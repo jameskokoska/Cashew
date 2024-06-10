@@ -1152,5 +1152,6 @@
   "error-restoring": "خطا در بازیابی",
   "expand-all-with-spending-goals": "همه چیز را با اهداف هزینه گسترش دهید",
   "collapse-empty-categories": "جمع کردن دسته‌های خالی",
-  "created-copy-for-current-time": "کپی برای زمان فعلی ایجاد شد"
+  "created-copy-for-current-time": "کپی برای زمان فعلی ایجاد شد",
+  "haptic-feedback": "بازخورد لمسی"
 }

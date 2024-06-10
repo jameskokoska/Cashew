@@ -70,7 +70,7 @@
   "onboarding-info-1": "הזן את העסקאות היומיות שלך כדי לקבל תובנות עמוקות לגבי הרגלי ההוצאות שלך.",
   "onboarding-title-2": "הגדרת תקציב",
   "onboarding-info-2-1": "ניתן בכל עת לערוך זאת בהמשך.",
-  "onboarding-title-3": "ברוך הבא ל {אפליקציה}!",
+  "onboarding-title-3": "ברוך הבא ל {app}!",
   "sign-in-with-google": "כניסה עם גוגל",
   "onboarding-info-3": "שמור את הנתונים שלך מגובים וסנכרן עם Google Drive.",
   "continue-without-sign-in": "המשך ללא כניסה",
@@ -197,7 +197,7 @@
   "paid": "שולם",
   "not-paid": "לא שלום",
   "discard-changes": "ביטול שינויים?",
-  "discard-changes-description": "האם בטוח שברצונך למחוק את השינויים.",
+  "discard-changes-description": "בטוח שברצונך למחוק את השינויים.",
   "discard": "מחיקה",
   "changelog": "יומן שינויים",
   "view-changelog": "יומן שינויים",
@@ -707,7 +707,7 @@
   "backup-your-data-reminder": "גבה את הנתונים שלך",
   "backup-your-data-reminder-description": "גיבוי אוטומטית את הנתונים שלך עם",
   "later": "יותר מאוחר",
-  "homepage-banner": "דף הבית באנר",
+  "homepage-banner": "באנר דף הבית",
   "username-banner": "באנר של שם משתמש",
   "major-change-9": "גיבויים מקומיים",
   "major-change-9-1": "יבוא/יצוא גיבויים של קבצי נתונים מלאים בהגדרות",
@@ -960,7 +960,7 @@
   "to-pay": "לשלם",
   "to-collect": "לאסוף",
   "major-change-17": "הלוואות לטווח הארוך",
-  "major-change-17-1": "עקוב אחר השאלון והשאיל כסף על תקופה של החזר רב",
+  "major-change-17-1": "מעקב אחרי כסף מושאל ומלווה לאורך תקופה ומספר תשלומים",
   "amount-collected": "סכום שנאסף",
   "amount-settled": "הסכום התיישב",
   "right-panel": "לוח ימני",
@@ -1152,5 +1152,6 @@
   "error-restoring": "שגיאה בשחזור",
   "expand-all-with-spending-goals": "הרחב הכל עם יעדי הוצאות",
   "collapse-empty-categories": "כווץ קטגוריות ריקות",
-  "created-copy-for-current-time": "נוצר עותק לזמן נוכחי"
+  "created-copy-for-current-time": "נוצר עותק לזמן נוכחי",
+  "haptic-feedback": "משוב הפטי"
 }

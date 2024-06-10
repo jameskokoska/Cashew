@@ -1152,5 +1152,6 @@
   "error-restoring": "Chyba při obnovování",
   "expand-all-with-spending-goals": "Rozbalte vše pomocí cílů útraty",
   "collapse-empty-categories": "Sbalit prázdné kategorie",
-  "created-copy-for-current-time": "Vytvořená kopie pro aktuální čas"
+  "created-copy-for-current-time": "Vytvořená kopie pro aktuální čas",
+  "haptic-feedback": "Hmatová zpětná vazba"
 }

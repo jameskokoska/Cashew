@@ -1152,5 +1152,6 @@
   "error-restoring": "Błąd przywracania",
   "expand-all-with-spending-goals": "Rozwiń wszystko z celami wydatków",
   "collapse-empty-categories": "Zwiń puste kategorie",
-  "created-copy-for-current-time": "Utworzono kopię dla bieżącego czasu"
+  "created-copy-for-current-time": "Utworzono kopię dla bieżącego czasu",
+  "haptic-feedback": "Informacje zwrotne dotykowe"
 }

@@ -1152,5 +1152,6 @@
   "error-restoring": "Восстановление ошибки",
   "expand-all-with-spending-goals": "Расширьте все с помощью целей по расходам",
   "collapse-empty-categories": "Свернуть пустые категории",
-  "created-copy-for-current-time": "Создана копия для текущего времени"
+  "created-copy-for-current-time": "Создана копия для текущего времени",
+  "haptic-feedback": "Тактильная обратная связь"
 }

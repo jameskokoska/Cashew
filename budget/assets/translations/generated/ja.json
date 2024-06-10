@@ -1152,5 +1152,6 @@
   "error-restoring": "復元エラー",
   "expand-all-with-spending-goals": "支出目標を設定してすべてを拡張する",
   "collapse-empty-categories": "空のカテゴリを折りたたむ",
-  "created-copy-for-current-time": "現在の時間に作成されたコピー"
+  "created-copy-for-current-time": "現在の時間に作成されたコピー",
+  "haptic-feedback": "触覚フィードバック"
 }

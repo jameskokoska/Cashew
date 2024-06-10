@@ -1152,5 +1152,6 @@
   "error-restoring": "Geri Yükleme Hatası",
   "expand-all-with-spending-goals": "Harcama Hedefleriyle Tümünü Genişletin",
   "collapse-empty-categories": "Boş Kategorileri Daralt",
-  "created-copy-for-current-time": "Geçerli Zaman İçin Oluşturulan Kopya"
+  "created-copy-for-current-time": "Geçerli Zaman İçin Oluşturulan Kopya",
+  "haptic-feedback": "Dokunsal geribildirim"
 }

@@ -1152,5 +1152,6 @@
   "error-restoring": "Hitilafu katika Kurejesha",
   "expand-all-with-spending-goals": "Panua Yote Kwa Malengo ya Matumizi",
   "collapse-empty-categories": "Kunja Aina Tupu",
-  "created-copy-for-current-time": "Imeunda Nakala kwa Wakati wa Sasa"
+  "created-copy-for-current-time": "Imeunda Nakala kwa Wakati wa Sasa",
+  "haptic-feedback": "Maoni ya Haptic"
 }

@@ -1152,5 +1152,6 @@
   "error-restoring": "Erreur de restauration",
   "expand-all-with-spending-goals": "Développez tout avec des objectifs de dépenses",
   "collapse-empty-categories": "Réduire les catégories vides",
-  "created-copy-for-current-time": "Copie créée pour l'heure actuelle"
+  "created-copy-for-current-time": "Copie créée pour l'heure actuelle",
+  "haptic-feedback": "Retour haptique"
 }

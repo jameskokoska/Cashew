@@ -1152,5 +1152,6 @@
   "error-restoring": "خطأ في الاستعادة",
   "expand-all-with-spending-goals": "قم بتوسيع الكل مع أهداف الإنفاق",
   "collapse-empty-categories": "طي الفئات الفارغة",
-  "created-copy-for-current-time": "نسخة تم إنشاؤها للوقت الحالي"
+  "created-copy-for-current-time": "نسخة تم إنشاؤها للوقت الحالي",
+  "haptic-feedback": "ردود الفعل اللمسية"
 }

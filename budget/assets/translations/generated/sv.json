@@ -1152,5 +1152,6 @@
   "error-restoring": "Fel vid återställning",
   "expand-all-with-spending-goals": "Utöka alla med utgiftsmål",
   "collapse-empty-categories": "Komprimera tomma kategorier",
-  "created-copy-for-current-time": "Skapat kopia för aktuell tid"
+  "created-copy-for-current-time": "Skapat kopia för aktuell tid",
+  "haptic-feedback": "Haptisk återkoppling"
 }

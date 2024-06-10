@@ -1152,5 +1152,6 @@
   "error-restoring": "पुनर्संचयित करताना त्रुटी",
   "expand-all-with-spending-goals": "खर्चाच्या उद्दिष्टांसह सर्व विस्तृत करा",
   "collapse-empty-categories": "रिक्त श्रेणी संकुचित करा",
-  "created-copy-for-current-time": "वर्तमान वेळेसाठी प्रत तयार केली"
+  "created-copy-for-current-time": "वर्तमान वेळेसाठी प्रत तयार केली",
+  "haptic-feedback": "हॅप्टिक फीडबॅक"
 }

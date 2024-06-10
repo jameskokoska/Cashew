@@ -1152,5 +1152,6 @@
   "error-restoring": "Еррор Ресторинг",
   "expand-all-with-spending-goals": "Проширите све помоћу циљева потрошње",
   "collapse-empty-categories": "Скупи празне категорије",
-  "created-copy-for-current-time": "Направљена копија за тренутно време"
+  "created-copy-for-current-time": "Направљена копија за тренутно време",
+  "haptic-feedback": "Хаптиц Феедбацк"
 }

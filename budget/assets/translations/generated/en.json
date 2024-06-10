@@ -1152,5 +1152,6 @@
   "error-restoring": "Error Restoring",
   "expand-all-with-spending-goals": "Expand All With Spending Goals",
   "collapse-empty-categories": "Collapse Empty Categories",
-  "created-copy-for-current-time": "Created Copy For Current Time"
+  "created-copy-for-current-time": "Created Copy For Current Time",
+  "haptic-feedback": "Haptic Feedback"
 }

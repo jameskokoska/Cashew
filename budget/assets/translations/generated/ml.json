@@ -1152,5 +1152,6 @@
   "error-restoring": "പുനഃസ്ഥാപിക്കുന്നതിൽ പിശക്",
   "expand-all-with-spending-goals": "ചെലവ് ലക്ഷ്യങ്ങൾ ഉപയോഗിച്ച് എല്ലാം വികസിപ്പിക്കുക",
   "collapse-empty-categories": "ശൂന്യമായ വിഭാഗങ്ങൾ ചുരുക്കുക",
-  "created-copy-for-current-time": "നിലവിലെ സമയത്തേക്കുള്ള പകർപ്പ് സൃഷ്ടിച്ചു"
+  "created-copy-for-current-time": "നിലവിലെ സമയത്തേക്കുള്ള പകർപ്പ് സൃഷ്ടിച്ചു",
+  "haptic-feedback": "ഹാപ്റ്റിക് ഫീഡ്ബാക്ക്"
 }

@@ -1152,5 +1152,6 @@
   "error-restoring": "Eroare la restaurare",
   "expand-all-with-spending-goals": "Extindeți totul cu obiective de cheltuieli",
   "collapse-empty-categories": "Restrângeți categoriile goale",
-  "created-copy-for-current-time": "Copie creată pentru ora curentă"
+  "created-copy-for-current-time": "Copie creată pentru ora curentă",
+  "haptic-feedback": "Feedback-ul haptic"
 }

@@ -1152,5 +1152,6 @@
   "error-restoring": "Грешка при възстановяване",
   "expand-all-with-spending-goals": "Разгънете всички с цели на разходите",
   "collapse-empty-categories": "Свиване на празните категории",
-  "created-copy-for-current-time": "Създадено копие за текущо време"
+  "created-copy-for-current-time": "Създадено копие за текущо време",
+  "haptic-feedback": "Хаптична обратна връзка"
 }
