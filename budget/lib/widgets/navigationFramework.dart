@@ -74,7 +74,10 @@ import 'package:provider/provider.dart';
 // import 'package:feature_discovery/feature_discovery.dart';
 
 class PageNavigationFramework extends StatefulWidget {
-  const PageNavigationFramework({Key? key}) : super(key: key);
+  const PageNavigationFramework(
+      {Key? key, required this.widthSideNavigationBar})
+      : super(key: key);
+  final double widthSideNavigationBar;
 
   //PageNavigationFramework.changePage(context, 0);
   static void changePage(BuildContext context, page,
@@ -105,7 +108,6 @@ GlobalKey<UpcomingOverdueTransactionsState>
 GlobalKey<CreditDebtTransactionsState> creditDebtTransactionsKey = GlobalKey();
 GlobalKey<ProductsState> purchasesStateKey = GlobalKey();
 GlobalKey<AccountsPageState> accountsPageStateKey = GlobalKey();
-GlobalKey<BottomNavBarState> navbarStateKey = GlobalKey();
 GlobalKey<NavigationSidebarState> sidebarStateKey = GlobalKey();
 GlobalKey<GlobalLoadingProgressState> loadingProgressKey = GlobalKey();
 GlobalKey<GlobalLoadingIndeterminateState> loadingIndeterminateKey =
@@ -168,18 +170,18 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
   late List<Widget> pages;
   late List<Widget> pagesExtended;
 
-  int currentPage = int.tryParse(
-          navBarIconsData[appStateSettings["customNavBarShortcut0"]]
+  late int currentPage = widget.widthSideNavigationBar <= 0
+      ? (int.tryParse(navBarIconsData[appStateSettings["customNavBarShortcut0"]]
                   ?.navigationIndexedStackIndex
                   .toString() ??
               "") ??
-      0;
+          0)
+      : 0;
   int previousPage = 0;
 
   void changePage(int page, {bool switchNavbar = true}) {
     if (switchNavbar) {
       sidebarStateKey.currentState?.setSelectedIndex(page);
-      navbarStateKey.currentState?.setSelectedIndex(page >= 3 ? 3 : page);
     }
     setState(() {
       previousPage = currentPage;
@@ -193,6 +195,8 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
 
     // Functions to run after entire UI loaded
     Future.delayed(Duration.zero, () async {
+      sidebarStateKey.currentState?.setSelectedIndex(currentPage);
+
       SystemChrome.setSystemUIOverlayStyle(getSystemUiOverlayStyle(
           Theme.of(context).extension<AppColors>(),
           Theme.of(context).brightness));
@@ -342,7 +346,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
           ),
           extendBody: false,
           bottomNavigationBar: BottomNavBar(
-            key: navbarStateKey,
+            currentNavigationStackedIndex: currentPage,
             onChanged: (index) {
               changePage(index);
             },

@@ -24,75 +24,96 @@ import 'package:budget/colors.dart';
 import 'package:flutter/services.dart';
 
 class BottomNavBar extends StatefulWidget {
-  const BottomNavBar({required this.onChanged, Key? key}) : super(key: key);
+  const BottomNavBar(
+      {required this.onChanged,
+      required this.currentNavigationStackedIndex,
+      Key? key})
+      : super(key: key);
   final Function(int) onChanged;
+
+  // current
+  final int currentNavigationStackedIndex;
 
   @override
   State<BottomNavBar> createState() => BottomNavBarState();
 }
 
 class BottomNavBarState extends State<BottomNavBar> {
-  int selectedIndex = 0;
+  void onItemTapped(int indexOfNavigationBar, {bool allowReApply = false}) {
+    int navigationStackedIndex =
+        getNavigationStackedIndexFromBarIndex(indexOfNavigationBar);
 
-  void onItemTapped(int index, {bool allowReApply = false}) {
-    int navigationIndex = index;
-
-    try {
-      // Index 0, 1 and 2 can be customized
-      if (index == 0) {
-        navigationIndex =
-            navBarIconsData[appStateSettings["customNavBarShortcut0"]]!
-                .navigationIndexedStackIndex;
-      } else if (index == 1) {
-        navigationIndex =
-            navBarIconsData[appStateSettings["customNavBarShortcut1"]]!
-                .navigationIndexedStackIndex;
-      } else if (index == 2) {
-        navigationIndex =
-            navBarIconsData[appStateSettings["customNavBarShortcut2"]]!
-                .navigationIndexedStackIndex;
-      }
-    } catch (e) {
-      print(e.toString() + " Problem accessing the navigation index");
-    }
-
-    if (index == selectedIndex && allowReApply == false) {
-      if (navigationIndex == 0) homePageStateKey.currentState?.scrollToTop();
-      if (navigationIndex == 1)
+    if (navigationStackedIndex == widget.currentNavigationStackedIndex &&
+        allowReApply == false) {
+      if (navigationStackedIndex == 0)
+        homePageStateKey.currentState?.scrollToTop();
+      if (navigationStackedIndex == 1)
         transactionsListPageStateKey.currentState?.scrollToTop();
-      if (navigationIndex == 2)
+      if (navigationStackedIndex == 2)
         budgetsListPageStateKey.currentState?.scrollToTop();
-      if (index == 3) settingsPageStateKey.currentState?.scrollToTop();
-      if (navigationIndex == 5)
+      if (navigationStackedIndex == 3)
+        settingsPageStateKey.currentState?.scrollToTop();
+      if (navigationStackedIndex == 5)
         subscriptionsPageStateKey.currentState?.scrollToTop();
-      if (navigationIndex == 7)
+      if (navigationStackedIndex == 7)
         walletDetailsAllSpendingPageStateKey.currentState?.scrollToTop();
-      if (navigationIndex == 14)
+      if (navigationStackedIndex == 14)
         objectivesListPageStateKey.currentState?.scrollToTop();
-      if (navigationIndex == 16)
+      if (navigationStackedIndex == 16)
         upcomingOverdueTransactionsStateKey.currentState?.scrollToTop();
-      if (navigationIndex == 17)
+      if (navigationStackedIndex == 17)
         creditDebtTransactionsKey.currentState?.scrollToTop();
     } else {
-      // We need to change to the navigation index, however the selectedIndex remains unchanged
-      // Since the selectedIndex is the index of the selected navigation bar entry
-      widget.onChanged(navigationIndex);
-      setState(() {
-        selectedIndex = index;
-      });
+      // We need to change to the navigation index
+      widget.onChanged(navigationStackedIndex);
     }
     FocusScope.of(context).unfocus(); //remove keyboard focus on any input boxes
   }
 
-  void setSelectedIndex(index) {
-    setState(() {
-      selectedIndex = index;
-    });
-    FocusScope.of(context).unfocus();
+  int getNavigationStackedIndexFromBarIndex(int barIndex) {
+    if (barIndex == 0) {
+      return navBarIconsData[appStateSettings["customNavBarShortcut0"]]
+              ?.navigationIndexedStackIndex ??
+          0;
+    } else if (barIndex == 1) {
+      return navBarIconsData[appStateSettings["customNavBarShortcut1"]]
+              ?.navigationIndexedStackIndex ??
+          1;
+    } else if (barIndex == 2) {
+      return navBarIconsData[appStateSettings["customNavBarShortcut2"]]
+              ?.navigationIndexedStackIndex ??
+          2;
+    } else {
+      return 3;
+    }
+  }
+
+  int getNavigationBarIndexFromStackedIndex(int stackedIndex) {
+    if (stackedIndex ==
+        (navBarIconsData[appStateSettings["customNavBarShortcut0"]]
+                ?.navigationIndexedStackIndex ??
+            0))
+      return 0;
+    else if (stackedIndex ==
+        (navBarIconsData[appStateSettings["customNavBarShortcut1"]]
+                ?.navigationIndexedStackIndex ??
+            1))
+      return 1;
+    else if (stackedIndex ==
+        (navBarIconsData[appStateSettings["customNavBarShortcut2"]]
+                ?.navigationIndexedStackIndex ??
+            2))
+      return 2;
+    else
+      return 3;
   }
 
   @override
   Widget build(BuildContext context) {
+    // The index of the actual navigation bar, this is not the navigation stack index
+    int navigationBarIndex = getNavigationBarIndexFromStackedIndex(
+        widget.currentNavigationStackedIndex);
+
     if (getIsFullScreen(context)) return SizedBox.shrink();
     if (getPlatform() == PlatformOS.isIOS) {
       return Container(
@@ -127,8 +148,8 @@ class BottomNavBarState extends State<BottomNavBar> {
                             icon: iconData.iconData,
                             customIconScale: iconData.iconScale,
                             onItemTapped: onItemTapped,
-                            index: 0,
-                            currentIndex: selectedIndex,
+                            navigationBarIndex: 0,
+                            currentNavigationBarIndex: navigationBarIndex,
                           );
                         },
                       ),
@@ -142,8 +163,8 @@ class BottomNavBarState extends State<BottomNavBar> {
                             icon: iconData.iconData,
                             customIconScale: iconData.iconScale,
                             onItemTapped: onItemTapped,
-                            index: 1,
-                            currentIndex: selectedIndex,
+                            navigationBarIndex: 1,
+                            currentNavigationBarIndex: navigationBarIndex,
                           );
                         },
                       ),
@@ -157,16 +178,16 @@ class BottomNavBarState extends State<BottomNavBar> {
                             icon: iconData.iconData,
                             customIconScale: iconData.iconScale,
                             onItemTapped: onItemTapped,
-                            index: 2,
-                            currentIndex: selectedIndex,
+                            navigationBarIndex: 2,
+                            currentNavigationBarIndex: navigationBarIndex,
                           );
                         },
                       ),
                       NavBarIcon(
                         onItemTapped: onItemTapped,
                         icon: navBarIconsData["more"]!.iconData,
-                        index: 3,
-                        currentIndex: selectedIndex,
+                        navigationBarIndex: 3,
+                        currentNavigationBarIndex: navigationBarIndex,
                       ),
                     ],
                   ),
@@ -272,8 +293,10 @@ class BottomNavBarState extends State<BottomNavBar> {
               tooltip: "",
             ),
           ],
-          selectedIndex: selectedIndex,
-          onDestinationSelected: onItemTapped,
+          selectedIndex: navigationBarIndex,
+          onDestinationSelected: (value) {
+            onItemTapped(value);
+          },
         ),
       ),
     );
@@ -487,20 +510,20 @@ class NavBarIcon extends StatelessWidget {
   const NavBarIcon({
     required this.onItemTapped,
     required this.icon,
-    required this.index,
-    required this.currentIndex,
+    required this.navigationBarIndex,
+    required this.currentNavigationBarIndex,
     this.customIconScale = 1,
     super.key,
   });
   final Function(int index) onItemTapped;
   final IconData icon;
-  final int index;
-  final int currentIndex;
+  final int navigationBarIndex;
+  final int currentNavigationBarIndex;
   final double customIconScale;
 
   @override
   Widget build(BuildContext context) {
-    bool selected = currentIndex == index;
+    bool selected = navigationBarIndex == currentNavigationBarIndex;
     return Stack(
       alignment: AlignmentDirectional.center,
       children: [
@@ -542,7 +565,7 @@ class NavBarIcon extends StatelessWidget {
             ),
           ),
           onPressed: () {
-            onItemTapped(index);
+            onItemTapped(navigationBarIndex);
           },
         ),
       ],

@@ -42,6 +42,8 @@ String getChangelogString() {
     Manual adding/editing of associated title can be configured to subcategory
     Long pressing duplicate transaction creates a duplicate at the current date and time
     Add hint text about editing homepage sections
+    Added haptic feedback setting to numpad
+    First tab can now be customized
     Fix associated titles order priority when recommending title
     Fix upcoming transactions not marked as paid when notification activated
     Fix if decimal precision limit empty when entering amount, default to 2 instead of 0

@@ -171,7 +171,10 @@ class App extends StatelessWidget {
           },
           child: appStateSettings["hasOnboarded"] != true
               ? OnBoardingPage(key: ValueKey("Onboarding"))
-              : PageNavigationFramework(key: pageNavigationFrameworkKey)),
+              : PageNavigationFramework(
+                  key: pageNavigationFrameworkKey,
+                  widthSideNavigationBar: getWidthNavigationSidebar(context),
+                )),
       builder: (context, child) {
         if (kReleaseMode) {
           ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
