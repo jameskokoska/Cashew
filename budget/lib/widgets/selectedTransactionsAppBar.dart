@@ -1,6 +1,7 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
@@ -945,10 +946,15 @@ Future duplicateTransaction(
   transaction = transaction.copyWith(
     dateCreated: transaction.dateCreated.add(Duration(seconds: 1)),
   );
-  await database.createOrUpdateTransaction(
+  int? rowId = await database.createOrUpdateTransaction(
     transaction,
     insert: true,
   );
+  Transaction? transactionJustAdded = null;
+  if (rowId != null) {
+    transactionJustAdded = await database.getTransactionFromRowId(rowId);
+    flashTransaction(transactionJustAdded.transactionPk);
+  }
   String transactionName = transaction.name;
   if (transactionName.trim() == "") {
     transactionName =
@@ -963,6 +969,17 @@ Future duplicateTransaction(
               : Icons.file_copy_rounded,
           title: "created-copy-for-current-time".tr(),
           description: "copied".tr() + " " + transactionName,
+          onTap: () {
+            if (navigatorKey.currentContext != null &&
+                transactionJustAdded != null)
+              pushRoute(
+                navigatorKey.currentContext!,
+                AddTransactionPage(
+                  routesToPopAfterDelete: RoutesToPopAfterDelete.One,
+                  transaction: transactionJustAdded,
+                ),
+              );
+          },
         ),
       );
     } else {
@@ -973,6 +990,17 @@ Future duplicateTransaction(
               : Icons.file_copy_rounded,
           title: "created-copy".tr(),
           description: "copied".tr() + " " + transactionName,
+          onTap: () {
+            if (navigatorKey.currentContext != null &&
+                transactionJustAdded != null)
+              pushRoute(
+                navigatorKey.currentContext!,
+                AddTransactionPage(
+                  routesToPopAfterDelete: RoutesToPopAfterDelete.One,
+                  transaction: transactionJustAdded,
+                ),
+              );
+          },
         ),
       );
     }
