@@ -153,7 +153,7 @@ Changes and progress about development is all heavily documented in GitHub [comm
 
 ## App Links
 
-Only supported in the Android and Web App versions as of now. Deep links allow direct navigation and automation of actions using application URLs. Some examples are below:
+Only supported in the Android and Web App versions as of now. App links allow direct navigation and automation of actions using application URLs. Some examples are below:
 
 ### Examples (for Android)
 
@@ -182,7 +182,6 @@ See `JSON List of Transactions` below to view how the link is formatted.
 | Routes for Android                          | Routes for Web App                             |
 | ------------------------------------------- | ---------------------------------------------- |
 | `https://cashewapp.web.app/[Endpoint here]` | `https://budget-track.web.app/[Endpoint here]` |
-| `cashew://budget.app/[Endpoint here]`       |                                                |
 
 ### Endpoints
 
@@ -193,15 +192,15 @@ See `JSON List of Transactions` below to view how the link is formatted.
 
 ### Parameters
 
-| Parameter     | Description                                                                                                                                                                                                         | Required | Default         |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | --------------- |
-| `amount`      | The amount of the transaction. If negative, it represents an expense; if positive, it represents income.                                                                                                            | No       | 0               |
-| `title`       | The title of the transaction. If an associated title is found and the category is not set, the associated title's category will be used.                                                                            | No       | Empty string    |
-| `notes`       | The notes associated with the transaction.                                                                                                                                                                          | No       | Empty string    |
-| `date`        | The date of the transaction. Supported string formats can be found in the `getCommonDateFormats()` method [here](https://github.com/jameskokoska/Cashew/blob/5.2.3%2B328/budget/lib/struct/commonDateFormats.dart). | No       | Current time    |
-| `category`    | The name of the category to add the transaction to. Executes a name search, takes the first entry, not case sensitive.                                                                                              | No       | Prompt user     |
-| `subcategory` | The name of the subcategory to add the transaction to. If provided, it overwrites the category if a subcategory is found under a main category. Executes a name search, takes the first entry, not case sensitive.  | No       | None            |
-| `account`     | The name of the account. Executes a name search, takes the first entry, not case sensitive.                                                                                                                         | No       | Primary account |
+| Parameter     | Description                                                                                                                                                                                                                                                                                          | Required | Default         |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | --------------- |
+| `amount`      | The amount of the transaction. If negative, it represents an expense; if positive, it represents income.                                                                                                                                                                                             | No       | 0               |
+| `title`       | The title of the transaction. If an associated title is found and the category is not set, the associated title's category will be used.                                                                                                                                                             | No       | Empty string    |
+| `notes`       | The notes associated with the transaction.                                                                                                                                                                                                                                                           | No       | Empty string    |
+| `date`        | The date of the transaction. Supported string formats can be found in the `getCommonDateFormats()` method [here](https://github.com/jameskokoska/Cashew/blob/5.2.3%2B328/budget/lib/struct/commonDateFormats.dart).                                                                                  | No       | Current time    |
+| `category`    | The name of the category to add the transaction to. Executes a name search, takes the first entry, not case sensitive.                                                                                                                                                                               | No       | Prompt user     |
+| `subcategory` | The name of the subcategory to add the transaction to. If provided, it overwrites the category if a subcategory is found under a main category. Executes a name search, takes the first entry, not case sensitive.                                                                                   | No       | None            |
+| `account`     | The name of the account. Executes a name search, takes the first entry, not case sensitive.                                                                                                                                                                                                          | No       | Primary account |
 | `JSON`        | A list of JSON objects of transactions. If provided, Cashew will import a list/multiple transactions at once. Each JSON object in the list can use any of the aforementioned parameters. The JSON object should be keyed with `transactions` followed by the list of objects. See the example below. | No       | None            |
 
 <details> 
@@ -213,32 +212,33 @@ The following is a list of all and additional (not fully supported) parameters t
 
 **Standalone parameters:** only this parameter will be used, all other parameters will be ignored.
 
-Deep link parsing can be found [here](https://github.com/jameskokoska/Cashew/blob/main/budget/lib/widgets/util/deepLinks.dart).
+App link parsing can be found [here](https://github.com/jameskokoska/Cashew/blob/main/budget/lib/widgets/util/deepLinks.dart).
 
-| Class         | Parameter     | Description                                                                                                                                                                                                         | Required | Default         | Standalone      |
-| ------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | --------------- | --------------- |
-| a             | `messageToParse` | Uses a scanner template to parse the passed in message. Only `date` or `dateCreated` can be passed along with this standalone parameter. All other fields will be constructed by the scanner template. Scanner templates are not enabled in Cashew by default. To enable this feature, enable `Notification Transactions` debug feature.   | None       | None               | Yes              |
-| b             | `JSON`        | Description in the above table.                                                                                                                                                                                     | No       | None            | Yes              |
-| c             | `subcategoryPk` | The primary key of the subcategory entry within the database.                                                                                                                                                     | No       | None            |
-| c             | `subcategory` | Description in the above table.                                                                                                                                                                                     | No       | None            |
-| c             | `categoryPk`  | The primary key of the category entry within the database.                                                                                                                                                          | No       | Prompt user     |
-| c             | `category`    | Description in the above table.                                                                                                                                                                                     | No       | Prompt user     |
-| d             | `walletPk`    | The primary key of the wallet entry within the database.                                                                                                                                                            | No       | Primary account |
-| d             | `account`     | Description in the above table.                                                                                                                                                                                     | No       | Primary account |
-| d             | `wallet`      | Same as `account`.                                                                                                                                                                                                  | No       | Primary account |
-| e             | `date`        | Description in the above table.                                                                                                                                                                                     | No       | Current time    |
-| e             | `dateCreated` | Same as `date`.                                                                                                                                                                                                     | No       | Current time    |
-| d             | `amount`      | Description in the above table.                                                                                                                                                                                     | No       | 0               |
-| f             | `title`       | Description in the above table.                                                                                                                                                                                     | No       | Empty string    |
-| f             | `name`        | Same as `title`.                                                                                                                                                                                                    | No       | Empty string    |
-| g             | `notes`       | Description in the above table.                                                                                                                                                                                     | No       | Empty string    |
-| g             | `note`        | Same as `notes`.                                                                                                                                                                                                    | No       | Empty string    |
+| Class | Parameter        | Description                                                                                                                                                                                                                                                                                                                              | Required | Default         | Standalone |
+| ----- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | --------------- | ---------- |
+| a     | `messageToParse` | Uses a scanner template to parse the passed in message. Only `date` or `dateCreated` can be passed along with this standalone parameter. All other fields will be constructed by the scanner template. Scanner templates are not enabled in Cashew by default. To enable this feature, enable `Notification Transactions` debug feature. | None     | None            | Yes        |
+| b     | `JSON`           | Description in the above table.                                                                                                                                                                                                                                                                                                          | No       | None            | Yes        |
+| c     | `subcategoryPk`  | The primary key of the subcategory entry within the database.                                                                                                                                                                                                                                                                            | No       | None            |
+| c     | `subcategory`    | Description in the above table.                                                                                                                                                                                                                                                                                                          | No       | None            |
+| c     | `categoryPk`     | The primary key of the category entry within the database.                                                                                                                                                                                                                                                                               | No       | Prompt user     |
+| c     | `category`       | Description in the above table.                                                                                                                                                                                                                                                                                                          | No       | Prompt user     |
+| d     | `walletPk`       | The primary key of the wallet entry within the database.                                                                                                                                                                                                                                                                                 | No       | Primary account |
+| d     | `account`        | Description in the above table.                                                                                                                                                                                                                                                                                                          | No       | Primary account |
+| d     | `wallet`         | Same as `account`.                                                                                                                                                                                                                                                                                                                       | No       | Primary account |
+| e     | `date`           | Description in the above table.                                                                                                                                                                                                                                                                                                          | No       | Current time    |
+| e     | `dateCreated`    | Same as `date`.                                                                                                                                                                                                                                                                                                                          | No       | Current time    |
+| f     | `amount`         | Description in the above table.                                                                                                                                                                                                                                                                                                          | No       | 0               |
+| g     | `title`          | Description in the above table.                                                                                                                                                                                                                                                                                                          | No       | Empty string    |
+| g     | `name`           | Same as `title`.                                                                                                                                                                                                                                                                                                                         | No       | Empty string    |
+| h     | `notes`          | Description in the above table.                                                                                                                                                                                                                                                                                                          | No       | Empty string    |
+| h     | `note`           | Same as `notes`.                                                                                                                                                                                                                                                                                                                         | No       | Empty string    |
 
 </details>
 
-
 ### JSON List of Transactions
+
 The input JSON for `addTransaction` and `addTransactionRoute` should follow the following format:
+
 ```JSON
 {
   "transactions":[
@@ -248,7 +248,9 @@ The input JSON for `addTransaction` and `addTransactionRoute` should follow the 
   ]
 }
 ```
+
 As an example:
+
 ```JSON
 {
   "transactions": [
@@ -268,8 +270,6 @@ As an example:
 Don't forget to encode the JSON in the URL as JSON uses invalid URI characters. Once encoded, the output link would look something like:
 
 > https://cashewapp.web.app/addTransaction?JSON=%7B%22transactions%22%3A%5B%7B%22amount%22%3A%22-100%22%2C%20%22notes%22%3A%22This%20is%20a%20note%22%2C%20%22category%22%3A%22Shopping%22%7D%2C%7B%22amount%22%3A%22-150%22%2C%20%22notes%22%3A%22This%20is%20a%20note%202%22%7D%5D%7D
-
-
 
 ### Testing
 
