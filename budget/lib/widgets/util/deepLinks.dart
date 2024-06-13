@@ -11,6 +11,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/globalSnackbar.dart';
 import 'package:budget/widgets/importCSV.dart';
+import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
@@ -344,10 +345,65 @@ Future executeAppLink(BuildContext? context, Uri uri,
           if (onDebug != null) onDebug(res);
         }
       }
-
       break;
+
+    // Ensures we can see other pages of the Cashew website
+    // Such as the FAQ
+    // default:
+    //   if (context != null)
+    //     pushRoute(
+    //       context,
+    //       WebView(initialPageUri: uri),
+    //     );
   }
 }
+
+// class WebView extends StatefulWidget {
+//   const WebView({super.key, required this.initialPageUri});
+//   final Uri initialPageUri;
+
+//   @override
+//   State<WebView> createState() => _WebViewState();
+// }
+
+// class _WebViewState extends State<WebView> {
+//   late final WebViewController controller;
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     controller = WebViewController()
+//       ..setNavigationDelegate(
+//         NavigationDelegate(
+//           onPageStarted: (String url) {
+//             loadingIndeterminateKey.currentState?.setVisibility(true);
+//           },
+//           onPageFinished: (String url) {
+//             loadingIndeterminateKey.currentState?.setVisibility(false);
+//           },
+//           onNavigationRequest: (NavigationRequest request) {
+//             if (request.url.startsWith('https://cashewapp.web.app/')) {
+//               return NavigationDecision.navigate;
+//             } else {
+//               openUrl(request.url);
+//               return NavigationDecision.prevent;
+//             }
+//           },
+//         ),
+//       )
+//       ..loadRequest(
+//         widget.initialPageUri,
+//       );
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(),
+//       body: WebViewWidget(controller: controller),
+//     );
+//   }
+// }
 
 double getAmountFromParams(Map<String, String?> params) {
   return double.tryParse(params["amount"] ?? "0") ?? 0;

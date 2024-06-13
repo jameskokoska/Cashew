@@ -45,17 +45,12 @@
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
 
-            <!-- Deep Link sample -->
-            <intent-filter>
+            <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <!-- Add optional android:host to distinguish your app
-                     from others in case of conflicting scheme name -->
-                <data android:scheme="cashew" android:host="budget.app" />
-                <!-- cashew://budget.app -->
-                <data android:scheme="https" android:host="cashewapp.web.app" />
-                <!-- https://cashewapp.web.app -->
+                <data android:scheme="https" android:host="cashewapp.web.app" android:pathPrefix="/addTransaction"/>
+                <data android:scheme="https" android:host="cashewapp.web.app" android:pathPrefix="/addTransactionRoute"/>
             </intent-filter>
 
             <!-- Specifies an Android theme to apply to this Activity as soon as
