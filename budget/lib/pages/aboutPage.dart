@@ -570,7 +570,14 @@ class AboutPage extends StatelessWidget {
         ),
         TranslationInfoBox(
           title: "Portuguese",
-          list: ["Alexander G.", "Jean J.", "João P.", "Junior M.", "Leandro"],
+          list: [
+            "Alexander G.",
+            "Jean J.",
+            "João P.",
+            "Junior M.",
+            "Leandro",
+            "Xavier B."
+          ],
         ),
         TranslationInfoBox(
           title: "Bulgarian",
