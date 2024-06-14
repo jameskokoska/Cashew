@@ -68,6 +68,7 @@ class PageFramework extends StatefulWidget {
     this.customScrollViewBuilder,
     this.bodyBuilder,
     this.scrollController,
+    this.selectedTransactionsAppBar,
   }) : super(key: key);
 
   final String title;
@@ -113,6 +114,7 @@ class PageFramework extends StatefulWidget {
   final Widget Function(ScrollController scrollController,
       ScrollPhysics? scrollPhysics, Widget sliverAppBar)? bodyBuilder;
   final ScrollController? scrollController;
+  final Widget? selectedTransactionsAppBar;
 
   @override
   State<PageFramework> createState() => PageFrameworkState();
@@ -218,7 +220,7 @@ class PageFrameworkState extends State<PageFramework>
   //   measurement = MediaQuery.of(context).viewInsets.bottom;
   // }
 
-  _scrollListener() {
+  void _scrollListener() {
     if (widget.onScroll != null) {
       widget.onScroll!(_scrollController.offset);
     }
@@ -449,7 +451,7 @@ class PageFrameworkState extends State<PageFramework>
                           ],
                         ),
                 ),
-                widget.overlay ?? SizedBox.shrink(),
+                if (widget.overlay != null) widget.overlay ?? SizedBox.shrink(),
               ],
             ),
     );
@@ -462,34 +464,30 @@ class PageFrameworkState extends State<PageFramework>
         behavior: HitTestBehavior.opaque,
         child: Stack(
           children: [
-            Stack(
-              children: [
-                if (widget.transparentAppBar != true)
-                  ...getAppBarBackgroundColorLayers(
-                    animationControllerOpacity: _animationControllerOpacity,
-                    percent: null,
-                    appBarBackgroundColor: widget.appBarBackgroundColor,
-                    appBarBackgroundColorStart:
-                        widget.appBarBackgroundColorStart,
-                    centeredTitle: centeredTitle,
-                    centeredTitleSmall: centeredTitleSmall,
-                    context: context,
-                  ),
-                AnimatedBuilder(
-                  animation: _animationControllerDragY,
-                  builder: (_, child) {
-                    return Transform.translate(
-                      offset: Offset(
-                          0,
-                          _animationControllerDragY.value *
-                              ((1 + 1 - _animationControllerDragY.value) * 50)),
-                      child: scaffold,
-                    );
-                  },
-                ),
-                widget.staticOverlay ?? SizedBox.shrink(),
-              ],
+            if (widget.transparentAppBar != true)
+              ...getAppBarBackgroundColorLayers(
+                animationControllerOpacity: _animationControllerOpacity,
+                percent: null,
+                appBarBackgroundColor: widget.appBarBackgroundColor,
+                appBarBackgroundColorStart: widget.appBarBackgroundColorStart,
+                centeredTitle: centeredTitle,
+                centeredTitleSmall: centeredTitleSmall,
+                context: context,
+              ),
+            AnimatedBuilder(
+              animation: _animationControllerDragY,
+              builder: (_, child) {
+                return Transform.translate(
+                  offset: Offset(
+                      0,
+                      _animationControllerDragY.value *
+                          ((1 + 1 - _animationControllerDragY.value) * 50)),
+                  child: scaffold,
+                );
+              },
             ),
+            if (widget.staticOverlay != null)
+              widget.staticOverlay ?? SizedBox.shrink(),
           ],
         ),
       );
@@ -694,6 +692,14 @@ class PageFrameworkState extends State<PageFramework>
       child: child,
     );
 
+    if (widget.selectedTransactionsAppBar != null)
+      child = Stack(
+        children: [
+          child,
+          widget.selectedTransactionsAppBar ?? SizedBox.shrink(),
+        ],
+      );
+
     Widget childListener = ValueListenableBuilder(
       valueListenable: callRefreshToPages,
       builder: (context, callRefreshToPagesValue, _) {
@@ -704,7 +710,7 @@ class PageFrameworkState extends State<PageFramework>
       },
     );
 
-    if (widget.backButton == false) {
+    if (backButtonEnabled == false) {
       return PullDownToRefreshSync(
         child: childListener,
         scrollController: _scrollController,

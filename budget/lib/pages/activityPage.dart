@@ -150,183 +150,172 @@ class ActivityPage extends StatelessWidget {
           return true;
         }
       },
-      child: Stack(
-        children: [
-          PageFramework(
-            dragDownToDismiss: true,
-            title: "activity-log".tr(),
-            listID: pageId,
-            floatingActionButton: AnimateFABDelayed(
-              fab: AddFAB(
-                tooltip: "add-transaction".tr(),
-                openPage: AddTransactionPage(
-                  routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-                ),
-              ),
+      child: PageFramework(
+        dragDownToDismiss: true,
+        title: "activity-log".tr(),
+        listID: pageId,
+        floatingActionButton: AnimateFABDelayed(
+          fab: AddFAB(
+            tooltip: "add-transaction".tr(),
+            openPage: AddTransactionPage(
+              routesToPopAfterDelete: RoutesToPopAfterDelete.None,
             ),
-            slivers: [
-              StreamBuilder<List<TransactionActivityLog>>(
-                stream: database.watchAllTransactionActivityLog(limit: 30),
-                builder: (context, snapshot1) {
-                  return Container(
-                    child: StreamBuilder<List<TransactionActivityLog>>(
-                      stream: database.watchAllTransactionDeleteActivityLog(
-                          limit: 30),
-                      builder: (context, snapshot2) {
-                        // print(snapshot1.data);
-                        // print(snapshot2.data);
-                        if (snapshot1.hasData == false &&
-                            snapshot2.hasData == false) {
-                          return SliverToBoxAdapter();
-                        }
-                        List<TransactionActivityLog> activityLogList = [
-                          ...(snapshot1.data ?? []),
-                          ...(snapshot2.data ?? [])
-                        ]..sort((a, b) => b.dateTime.compareTo(a.dateTime));
-                        if (activityLogList.length <= 0) {
-                          return SliverToBoxAdapter(
-                            child: Center(
-                              child: NoResults(
-                                  message: "no-transactions-found".tr()),
-                            ),
-                          );
-                        }
-                        return SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                            childCount: activityLogList.length,
-                            (BuildContext context, int index) {
-                              TransactionActivityLog item =
-                                  activityLogList[index];
-                              bool wasADeletedTransaction =
-                                  item.deleteLog != null;
-                              Transaction? transaction = item.transaction;
-                              TransactionCategory? category =
-                                  item.transactionWithCategory?.category;
-                              TransactionCategory? subCategory =
-                                  item.transactionWithCategory?.subCategory;
-                              Budget? budget =
-                                  item.transactionWithCategory?.budget;
-                              Objective? objective =
-                                  item.transactionWithCategory?.objective;
-                              Widget noTransactionFound = Padding(
-                                padding: EdgeInsetsDirectional.symmetric(
-                                    horizontal: getHorizontalPaddingConstrained(
-                                            context) +
+          ),
+        ),
+        slivers: [
+          StreamBuilder<List<TransactionActivityLog>>(
+            stream: database.watchAllTransactionActivityLog(limit: 30),
+            builder: (context, snapshot1) {
+              return Container(
+                child: StreamBuilder<List<TransactionActivityLog>>(
+                  stream:
+                      database.watchAllTransactionDeleteActivityLog(limit: 30),
+                  builder: (context, snapshot2) {
+                    // print(snapshot1.data);
+                    // print(snapshot2.data);
+                    if (snapshot1.hasData == false &&
+                        snapshot2.hasData == false) {
+                      return SliverToBoxAdapter();
+                    }
+                    List<TransactionActivityLog> activityLogList = [
+                      ...(snapshot1.data ?? []),
+                      ...(snapshot2.data ?? [])
+                    ]..sort((a, b) => b.dateTime.compareTo(a.dateTime));
+                    if (activityLogList.length <= 0) {
+                      return SliverToBoxAdapter(
+                        child: Center(
+                          child:
+                              NoResults(message: "no-transactions-found".tr()),
+                        ),
+                      );
+                    }
+                    return SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        childCount: activityLogList.length,
+                        (BuildContext context, int index) {
+                          TransactionActivityLog item = activityLogList[index];
+                          bool wasADeletedTransaction = item.deleteLog != null;
+                          Transaction? transaction = item.transaction;
+                          TransactionCategory? category =
+                              item.transactionWithCategory?.category;
+                          TransactionCategory? subCategory =
+                              item.transactionWithCategory?.subCategory;
+                          Budget? budget = item.transactionWithCategory?.budget;
+                          Objective? objective =
+                              item.transactionWithCategory?.objective;
+                          Widget noTransactionFound = Padding(
+                            padding: EdgeInsetsDirectional.symmetric(
+                                horizontal:
+                                    getHorizontalPaddingConstrained(context) +
                                         16,
-                                    vertical: 5),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Tappable(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondaryContainer
-                                            .withOpacity(0.2),
-                                        borderRadius: 5,
-                                        child: Padding(
-                                          padding: const EdgeInsetsDirectional
-                                              .symmetric(
+                                vertical: 5),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Tappable(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .secondaryContainer
+                                        .withOpacity(0.2),
+                                    borderRadius: 5,
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsetsDirectional.symmetric(
                                               vertical: 8.0, horizontal: 10),
-                                          child: TextFont(
-                                            text:
-                                                "transaction-no-longer-available"
-                                                    .tr(),
-                                            textColor:
-                                                getColor(context, "textLight"),
-                                            fontSize: 15,
-                                            maxLines: 2,
-                                          ),
-                                        ),
+                                      child: TextFont(
+                                        text: "transaction-no-longer-available"
+                                            .tr(),
+                                        textColor:
+                                            getColor(context, "textLight"),
+                                        fontSize: 15,
+                                        maxLines: 2,
                                       ),
                                     ),
-                                  ],
-                                ),
-                              );
-                              Widget transactionEntry = transaction != null
-                                  ? Tappable(
-                                      color: Colors.transparent,
-                                      // Disable required for iOS so we can still use the pointer
-                                      disable: wasADeletedTransaction == false,
-                                      onTap: wasADeletedTransaction
-                                          ? () {
-                                              if (wasADeletedTransaction &&
-                                                  item.deleteLog != null &&
-                                                  item.transaction != null)
-                                                restoreTransaction(
-                                                  context,
-                                                  item.deleteLog!,
-                                                  item.transaction!,
-                                                );
-                                            }
-                                          : null,
-
-                                      child: Opacity(
-                                        opacity:
-                                            wasADeletedTransaction ? 0.4 : 1,
-                                        child: IgnorePointer(
-                                          ignoring: wasADeletedTransaction,
-                                          child: TransactionEntry(
-                                            containerColor:
-                                                wasADeletedTransaction
-                                                    ? Colors.transparent
-                                                    : null,
-                                            openPage: AddTransactionPage(
-                                              transaction: transaction,
-                                              routesToPopAfterDelete:
-                                                  RoutesToPopAfterDelete.One,
-                                            ),
-                                            transaction: transaction,
-                                            category: category,
-                                            subCategory: subCategory,
-                                            budget: budget,
-                                            objective: objective,
-                                            listID: pageId,
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : SizedBox.shrink();
-                              return Column(
-                                key: ValueKey(
-                                    (item.transaction?.transactionPk ?? "") +
-                                        (item.deleteLog?.deleteLogPk ?? "")),
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  DateDivider(
-                                    date: transaction?.dateCreated ??
-                                        item.dateTime,
-                                    maxLines: 2,
-                                    afterDate: " • " +
-                                        (wasADeletedTransaction
-                                                ? "deleted"
-                                                : "modified")
-                                            .tr()
-                                            .capitalizeFirst +
-                                        " " +
-                                        getTimeAgo(item.dateTime),
                                   ),
-                                  transaction == null
-                                      ? noTransactionFound
-                                      : transactionEntry,
-                                ],
-                              );
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                },
-              ),
-              SliverToBoxAdapter(
-                child: SizedBox(height: 75),
-              ),
-            ],
+                                ),
+                              ],
+                            ),
+                          );
+                          Widget transactionEntry = transaction != null
+                              ? Tappable(
+                                  color: Colors.transparent,
+                                  // Disable required for iOS so we can still use the pointer
+                                  disable: wasADeletedTransaction == false,
+                                  onTap: wasADeletedTransaction
+                                      ? () {
+                                          if (wasADeletedTransaction &&
+                                              item.deleteLog != null &&
+                                              item.transaction != null)
+                                            restoreTransaction(
+                                              context,
+                                              item.deleteLog!,
+                                              item.transaction!,
+                                            );
+                                        }
+                                      : null,
+
+                                  child: Opacity(
+                                    opacity: wasADeletedTransaction ? 0.4 : 1,
+                                    child: IgnorePointer(
+                                      ignoring: wasADeletedTransaction,
+                                      child: TransactionEntry(
+                                        containerColor: wasADeletedTransaction
+                                            ? Colors.transparent
+                                            : null,
+                                        openPage: AddTransactionPage(
+                                          transaction: transaction,
+                                          routesToPopAfterDelete:
+                                              RoutesToPopAfterDelete.One,
+                                        ),
+                                        transaction: transaction,
+                                        category: category,
+                                        subCategory: subCategory,
+                                        budget: budget,
+                                        objective: objective,
+                                        listID: pageId,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : SizedBox.shrink();
+                          return Column(
+                            key: ValueKey(
+                                (item.transaction?.transactionPk ?? "") +
+                                    (item.deleteLog?.deleteLogPk ?? "")),
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              DateDivider(
+                                date: transaction?.dateCreated ?? item.dateTime,
+                                maxLines: 2,
+                                afterDate: " • " +
+                                    (wasADeletedTransaction
+                                            ? "deleted"
+                                            : "modified")
+                                        .tr()
+                                        .capitalizeFirst +
+                                    " " +
+                                    getTimeAgo(item.dateTime),
+                              ),
+                              transaction == null
+                                  ? noTransactionFound
+                                  : transactionEntry,
+                            ],
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
+              );
+            },
           ),
-          SelectedTransactionsAppBar(
-            pageID: pageId,
+          SliverToBoxAdapter(
+            child: SizedBox(height: 75),
           ),
         ],
+        selectedTransactionsAppBar: SelectedTransactionsAppBar(
+          pageID: pageId,
+        ),
       ),
     );
   }

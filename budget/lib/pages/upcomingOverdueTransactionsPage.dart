@@ -71,248 +71,240 @@ class UpcomingOverdueTransactionsState
           return true;
         }
       },
-      child: Stack(
-        children: [
-          PageFramework(
-            key: pageState,
-            resizeToAvoidBottomInset: true,
-            floatingActionButton: AnimateFABDelayed(
-              enabled: overdueTransactions == null,
-              fab: AnimateFABDelayed(
-                fab: AddFAB(
-                  tooltip: "add-upcoming".tr(),
-                  openPage: AddTransactionPage(
-                    selectedType: TransactionSpecialType.upcoming,
-                    routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+      child: PageFramework(
+        key: pageState,
+        resizeToAvoidBottomInset: true,
+        floatingActionButton: AnimateFABDelayed(
+          enabled: overdueTransactions == null,
+          fab: AnimateFABDelayed(
+            fab: AddFAB(
+              tooltip: "add-upcoming".tr(),
+              openPage: AddTransactionPage(
+                selectedType: TransactionSpecialType.upcoming,
+                routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+              ),
+            ),
+          ),
+        ),
+        listID: pageId,
+        title: "scheduled".tr(),
+        dragDownToDismiss: true,
+        actions: [
+          CustomPopupMenuButton(
+            showButtons: enableDoubleColumn(context),
+            keepOutFirst: true,
+            items: [
+              DropdownItemMenu(
+                id: "settings",
+                label: "settings".tr(),
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.settings_outlined
+                    : Icons.settings_rounded,
+                action: () {
+                  openBottomSheet(
+                      context,
+                      PopupFramework(
+                        hasPadding: false,
+                        child: UpcomingOverdueSettings(),
+                      ));
+                },
+              ),
+            ],
+          ),
+        ],
+        slivers: [
+          SliverToBoxAdapter(
+              child: AnimatedSizeSwitcher(
+            child: overdueTransactions == null
+                ? TotalUpcomingHeaderPeriodSwitcher(
+                    transactionListStream:
+                        database.watchAllOverdueUpcomingTransactions(
+                            overdueTransactions,
+                            searchString: searchValue),
+                    selectedType: selectedType,
+                    setSelectedType: (chosenType) {
+                      setState(() {
+                        selectedType = chosenType;
+                      });
+                    },
+                    selectedSubtitleTranslation: (selectedType) {
+                      return selectedType == SelectedSubscriptionsType.yearly
+                          ? "yearly-upcoming".tr()
+                          : selectedType == SelectedSubscriptionsType.monthly
+                              ? "monthly-upcoming".tr()
+                              : "total-upcoming".tr();
+                    },
+                  )
+                : CenteredAmountAndNumTransactions(
+                    totalWithCountStream:
+                        database.watchTotalWithCountOfUpcomingOverdue(
+                      allWallets: Provider.of<AllWallets>(context),
+                      isOverdueTransactions: overdueTransactions,
+                      searchString: searchValue,
+                    ),
+                    textColor: overdueTransactions == null
+                        ? getColor(context, "black")
+                        : overdueTransactions == true
+                            ? getColor(context, "unPaidOverdue")
+                            : getColor(context, "unPaidUpcoming"),
+                  ),
+          )),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsetsDirectional.symmetric(
+                  horizontal: getHorizontalPaddingConstrained(context)),
+              child: Row(
+                children: [
+                  SizedBox(width: 13),
+                  Flexible(
+                    child: AnimatedSize(
+                      clipBehavior: Clip.none,
+                      duration: Duration(milliseconds: 500),
+                      child: SlidingSelectorIncomeExpense(
+                        useHorizontalPaddingConstrained: false,
+                        initialIndex: overdueTransactions == null
+                            ? 0
+                            : overdueTransactions == false
+                                ? 1
+                                : 2,
+                        onSelected: (int index) {
+                          if (index == 1)
+                            overdueTransactions = null;
+                          else if (index == 2)
+                            overdueTransactions = false;
+                          else if (index == 3) overdueTransactions = true;
+                          setState(() {});
+                        },
+                        options: ["all", "upcoming", "overdue"],
+                        customPadding: EdgeInsetsDirectional.zero,
+                      ),
+                    ),
+                  ),
+                  AnimatedSizeSwitcher(
+                    child: searchValue == null
+                        ? Padding(
+                            padding:
+                                const EdgeInsetsDirectional.only(start: 7.0),
+                            child: ButtonIcon(
+                              key: ValueKey(1),
+                              onTap: () {
+                                setState(() {
+                                  searchValue = "";
+                                });
+                                _searchFocusNode.requestFocus();
+                              },
+                              icon: appStateSettings["outlinedIcons"]
+                                  ? Icons.search_outlined
+                                  : Icons.search_rounded,
+                            ),
+                          )
+                        : Container(
+                            key: ValueKey(2),
+                          ),
+                  ),
+                  SizedBox(width: 13),
+                ],
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsetsDirectional.symmetric(
+                  horizontal: getHorizontalPaddingConstrained(context)),
+              child: AnimatedExpanded(
+                expand: searchValue != null,
+                child: Padding(
+                  padding:
+                      const EdgeInsetsDirectional.only(bottom: 4.0, top: 8),
+                  child: TextInput(
+                    labelText: "search-transactions-placeholder".tr(),
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.search_outlined
+                        : Icons.search_rounded,
+                    focusNode: _searchFocusNode,
+                    onSubmitted: (value) {
+                      setState(() {
+                        searchValue = value == "" ? null : value;
+                      });
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        searchValue = value == "" ? null : value;
+                      });
+                    },
+                    autoFocus: false,
                   ),
                 ),
               ),
             ),
-            listID: pageId,
-            title: "scheduled".tr(),
-            dragDownToDismiss: true,
-            actions: [
-              CustomPopupMenuButton(
-                showButtons: enableDoubleColumn(context),
-                keepOutFirst: true,
-                items: [
-                  DropdownItemMenu(
-                    id: "settings",
-                    label: "settings".tr(),
-                    icon: appStateSettings["outlinedIcons"]
-                        ? Icons.settings_outlined
-                        : Icons.settings_rounded,
-                    action: () {
-                      openBottomSheet(
-                          context,
-                          PopupFramework(
-                            hasPadding: false,
-                            child: UpcomingOverdueSettings(),
-                          ));
-                    },
-                  ),
-                ],
-              ),
-            ],
-            slivers: [
-              SliverToBoxAdapter(
-                  child: AnimatedSizeSwitcher(
-                child: overdueTransactions == null
-                    ? TotalUpcomingHeaderPeriodSwitcher(
-                        transactionListStream:
-                            database.watchAllOverdueUpcomingTransactions(
-                                overdueTransactions,
-                                searchString: searchValue),
-                        selectedType: selectedType,
-                        setSelectedType: (chosenType) {
-                          setState(() {
-                            selectedType = chosenType;
-                          });
-                        },
-                        selectedSubtitleTranslation: (selectedType) {
-                          return selectedType ==
-                                  SelectedSubscriptionsType.yearly
-                              ? "yearly-upcoming".tr()
-                              : selectedType ==
-                                      SelectedSubscriptionsType.monthly
-                                  ? "monthly-upcoming".tr()
-                                  : "total-upcoming".tr();
-                        },
-                      )
-                    : CenteredAmountAndNumTransactions(
-                        totalWithCountStream:
-                            database.watchTotalWithCountOfUpcomingOverdue(
-                          allWallets: Provider.of<AllWallets>(context),
-                          isOverdueTransactions: overdueTransactions,
-                          searchString: searchValue,
-                        ),
-                        textColor: overdueTransactions == null
-                            ? getColor(context, "black")
-                            : overdueTransactions == true
-                                ? getColor(context, "unPaidOverdue")
-                                : getColor(context, "unPaidUpcoming"),
-                      ),
-              )),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsetsDirectional.symmetric(
-                      horizontal: getHorizontalPaddingConstrained(context)),
-                  child: Row(
-                    children: [
-                      SizedBox(width: 13),
-                      Flexible(
-                        child: AnimatedSize(
-                          clipBehavior: Clip.none,
-                          duration: Duration(milliseconds: 500),
-                          child: SlidingSelectorIncomeExpense(
-                            useHorizontalPaddingConstrained: false,
-                            initialIndex: overdueTransactions == null
-                                ? 0
-                                : overdueTransactions == false
-                                    ? 1
-                                    : 2,
-                            onSelected: (int index) {
-                              if (index == 1)
-                                overdueTransactions = null;
-                              else if (index == 2)
-                                overdueTransactions = false;
-                              else if (index == 3) overdueTransactions = true;
-                              setState(() {});
-                            },
-                            options: ["all", "upcoming", "overdue"],
-                            customPadding: EdgeInsetsDirectional.zero,
-                          ),
-                        ),
-                      ),
-                      AnimatedSizeSwitcher(
-                        child: searchValue == null
-                            ? Padding(
-                                padding: const EdgeInsetsDirectional.only(
-                                    start: 7.0),
-                                child: ButtonIcon(
-                                  key: ValueKey(1),
-                                  onTap: () {
-                                    setState(() {
-                                      searchValue = "";
-                                    });
-                                    _searchFocusNode.requestFocus();
-                                  },
-                                  icon: appStateSettings["outlinedIcons"]
-                                      ? Icons.search_outlined
-                                      : Icons.search_rounded,
-                                ),
-                              )
-                            : Container(
-                                key: ValueKey(2),
-                              ),
-                      ),
-                      SizedBox(width: 13),
-                    ],
-                  ),
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsetsDirectional.symmetric(
-                      horizontal: getHorizontalPaddingConstrained(context)),
-                  child: AnimatedExpanded(
-                    expand: searchValue != null,
-                    child: Padding(
-                      padding:
-                          const EdgeInsetsDirectional.only(bottom: 4.0, top: 8),
-                      child: TextInput(
-                        labelText: "search-transactions-placeholder".tr(),
-                        icon: appStateSettings["outlinedIcons"]
-                            ? Icons.search_outlined
-                            : Icons.search_rounded,
-                        focusNode: _searchFocusNode,
-                        onSubmitted: (value) {
-                          setState(() {
-                            searchValue = value == "" ? null : value;
-                          });
-                        },
-                        onChanged: (value) {
-                          setState(() {
-                            searchValue = value == "" ? null : value;
-                          });
-                        },
-                        autoFocus: false,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: SizedBox(height: 15),
-              ),
-              StreamBuilder<List<Transaction>>(
-                stream: database.watchAllOverdueUpcomingTransactions(
-                    overdueTransactions,
-                    searchString: searchValue),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    if (snapshot.data!.length <= 0) {
-                      return SliverToBoxAdapter(
-                        child: Center(
-                          child:
-                              NoResults(message: "no-transactions-found".tr()),
-                        ),
-                      );
-                    }
-                    return SliverImplicitlyAnimatedList<Transaction>(
-                      items: snapshot.data!,
-                      areItemsTheSame: (a, b) =>
-                          a.transactionPk == b.transactionPk,
-                      insertDuration: Duration(milliseconds: 500),
-                      removeDuration: Duration(milliseconds: 500),
-                      updateDuration: Duration(milliseconds: 500),
-                      itemBuilder: (BuildContext context,
-                          Animation<double> animation,
-                          Transaction item,
-                          int index) {
-                        return SizeFadeTransition(
-                          sizeFraction: 0.7,
-                          curve: Curves.easeInOut,
-                          animation: animation,
-                          child: Column(
-                            key: ValueKey(item.transactionPk),
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              HorizontalBreak(
-                                  padding: EdgeInsetsDirectional.only(
-                                      top: 4, bottom: 6)),
-                              TransactionEntry(
-                                aboveWidget: UpcomingTransactionDateHeader(
-                                  selectedType: selectedType,
-                                  transaction: item,
-                                ),
-                                openPage: AddTransactionPage(
-                                  transaction: item,
-                                  routesToPopAfterDelete:
-                                      RoutesToPopAfterDelete.One,
-                                ),
-                                transaction: item,
-                                listID: pageId,
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  } else {
-                    return SliverToBoxAdapter();
-                  }
-                },
-              ),
-              SliverToBoxAdapter(
-                child: SizedBox(height: 75),
-              ),
-            ],
           ),
-          SelectedTransactionsAppBar(
-            pageID: pageId,
+          SliverToBoxAdapter(
+            child: SizedBox(height: 15),
+          ),
+          StreamBuilder<List<Transaction>>(
+            stream: database.watchAllOverdueUpcomingTransactions(
+                overdueTransactions,
+                searchString: searchValue),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.data!.length <= 0) {
+                  return SliverToBoxAdapter(
+                    child: Center(
+                      child: NoResults(message: "no-transactions-found".tr()),
+                    ),
+                  );
+                }
+                return SliverImplicitlyAnimatedList<Transaction>(
+                  items: snapshot.data!,
+                  areItemsTheSame: (a, b) => a.transactionPk == b.transactionPk,
+                  insertDuration: Duration(milliseconds: 500),
+                  removeDuration: Duration(milliseconds: 500),
+                  updateDuration: Duration(milliseconds: 500),
+                  itemBuilder: (BuildContext context,
+                      Animation<double> animation,
+                      Transaction item,
+                      int index) {
+                    return SizeFadeTransition(
+                      sizeFraction: 0.7,
+                      curve: Curves.easeInOut,
+                      animation: animation,
+                      child: Column(
+                        key: ValueKey(item.transactionPk),
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          HorizontalBreak(
+                              padding: EdgeInsetsDirectional.only(
+                                  top: 4, bottom: 6)),
+                          TransactionEntry(
+                            aboveWidget: UpcomingTransactionDateHeader(
+                              selectedType: selectedType,
+                              transaction: item,
+                            ),
+                            openPage: AddTransactionPage(
+                              transaction: item,
+                              routesToPopAfterDelete:
+                                  RoutesToPopAfterDelete.One,
+                            ),
+                            transaction: item,
+                            listID: pageId,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              } else {
+                return SliverToBoxAdapter();
+              }
+            },
+          ),
+          SliverToBoxAdapter(
+            child: SizedBox(height: 75),
           ),
         ],
+        selectedTransactionsAppBar: SelectedTransactionsAppBar(
+          pageID: pageId,
+        ),
       ),
     );
   }

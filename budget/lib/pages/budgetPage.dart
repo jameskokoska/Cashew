@@ -249,591 +249,562 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
           return true;
         }
       },
-      child: Stack(
-        children: [
-          PageFramework(
-            belowAppBarPaddingWhenCenteredTitleSmall: 0,
-            subtitle: StreamBuilder<List<CategoryWithTotal>>(
-              stream: database
-                  .watchTotalSpentInEachCategoryInTimeRangeFromCategories(
-                allWallets: Provider.of<AllWallets>(context),
-                start: budgetRange.start,
-                end: budgetRange.end,
-                categoryFks: widget.budget.categoryFks,
-                categoryFksExclude: widget.budget.categoryFksExclude,
-                budgetTransactionFilters:
-                    widget.budget.budgetTransactionFilters,
-                memberTransactionFilters:
-                    widget.budget.memberTransactionFilters,
-                member: selectedMember,
-                onlyShowTransactionsBelongingToBudgetPk:
-                    widget.budget.sharedKey != null ||
-                            widget.budget.addedTransactionsOnly == true
-                        ? widget.budget.budgetPk
-                        : null,
+      child: PageFramework(
+        belowAppBarPaddingWhenCenteredTitleSmall: 0,
+        subtitle: StreamBuilder<List<CategoryWithTotal>>(
+          stream:
+              database.watchTotalSpentInEachCategoryInTimeRangeFromCategories(
+            allWallets: Provider.of<AllWallets>(context),
+            start: budgetRange.start,
+            end: budgetRange.end,
+            categoryFks: widget.budget.categoryFks,
+            categoryFksExclude: widget.budget.categoryFksExclude,
+            budgetTransactionFilters: widget.budget.budgetTransactionFilters,
+            memberTransactionFilters: widget.budget.memberTransactionFilters,
+            member: selectedMember,
+            onlyShowTransactionsBelongingToBudgetPk:
+                widget.budget.sharedKey != null ||
+                        widget.budget.addedTransactionsOnly == true
+                    ? widget.budget.budgetPk
+                    : null,
+            budget: widget.budget,
+          ),
+          builder: (context, snapshot) {
+            double totalSpent = 0;
+            if (snapshot.hasData) {
+              snapshot.data!.forEach((category) {
+                totalSpent = totalSpent + category.total;
+              });
+              totalSpent = totalSpent * determineBudgetPolarity(widget.budget);
+            }
+
+            if (snapshot.hasData) {
+              return TotalSpent(
                 budget: widget.budget,
-              ),
-              builder: (context, snapshot) {
-                double totalSpent = 0;
-                if (snapshot.hasData) {
-                  snapshot.data!.forEach((category) {
-                    totalSpent = totalSpent + category.total;
-                  });
-                  totalSpent =
-                      totalSpent * determineBudgetPolarity(widget.budget);
-                }
-
-                if (snapshot.hasData) {
-                  return TotalSpent(
-                    budget: widget.budget,
-                    totalSpent: totalSpent,
-                  );
-                } else {
-                  return SizedBox.shrink();
-                }
-              },
+                totalSpent: totalSpent,
+              );
+            } else {
+              return SizedBox.shrink();
+            }
+          },
+        ),
+        subtitleAlignment: AlignmentDirectional.bottomStart,
+        subtitleSize: 10,
+        backgroundColor: pageBackgroundColor,
+        listID: pageId,
+        floatingActionButton: AnimateFABDelayed(
+          fab: AddFAB(
+            tooltip: "add-transaction".tr(),
+            openPage: AddTransactionPage(
+              selectedBudget: widget.budget.sharedKey != null ||
+                      widget.budget.addedTransactionsOnly == true
+                  ? widget.budget
+                  : null,
+              routesToPopAfterDelete: RoutesToPopAfterDelete.One,
             ),
-            subtitleAlignment: AlignmentDirectional.bottomStart,
-            subtitleSize: 10,
-            backgroundColor: pageBackgroundColor,
-            listID: pageId,
-            floatingActionButton: AnimateFABDelayed(
-              fab: AddFAB(
-                tooltip: "add-transaction".tr(),
-                openPage: AddTransactionPage(
-                  selectedBudget: widget.budget.sharedKey != null ||
-                          widget.budget.addedTransactionsOnly == true
-                      ? widget.budget
-                      : null,
-                  routesToPopAfterDelete: RoutesToPopAfterDelete.One,
-                ),
-                color: Theme.of(context).colorScheme.secondary,
-                colorIcon: Theme.of(context).colorScheme.onSecondary,
-              ),
-            ),
-            actions: [
-              CustomPopupMenuButton(
-                showButtons: enableDoubleColumn(context),
-                keepOutFirst: true,
-                items: [
-                  DropdownItemMenu(
-                    id: "edit-budget",
-                    label: "edit-budget".tr(),
-                    icon: appStateSettings["outlinedIcons"]
-                        ? Icons.edit_outlined
-                        : Icons.edit_rounded,
-                    action: () {
-                      pushRoute(
-                        context,
-                        AddBudgetPage(
-                          budget: widget.budget,
-                          routesToPopAfterDelete: RoutesToPopAfterDelete.All,
-                        ),
-                      );
-                    },
-                  ),
-                  if (widget.budget.reoccurrence != BudgetReoccurence.custom &&
-                      widget.isPastBudget == false &&
-                      widget.isPastBudgetButCurrentPeriod == false)
-                    DropdownItemMenu(
-                      id: "budget-history",
-                      label: "budget-history".tr(),
-                      icon: appStateSettings["outlinedIcons"]
-                          ? Icons.history_outlined
-                          : Icons.history_rounded,
-                      action: () {
-                        pushRoute(
-                          context,
-                          PastBudgetsPage(budgetPk: widget.budget.budgetPk),
-                        );
-                      },
+            color: Theme.of(context).colorScheme.secondary,
+            colorIcon: Theme.of(context).colorScheme.onSecondary,
+          ),
+        ),
+        actions: [
+          CustomPopupMenuButton(
+            showButtons: enableDoubleColumn(context),
+            keepOutFirst: true,
+            items: [
+              DropdownItemMenu(
+                id: "edit-budget",
+                label: "edit-budget".tr(),
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.edit_outlined
+                    : Icons.edit_rounded,
+                action: () {
+                  pushRoute(
+                    context,
+                    AddBudgetPage(
+                      budget: widget.budget,
+                      routesToPopAfterDelete: RoutesToPopAfterDelete.All,
                     ),
-                  // DropdownItemMenu(
-                  //   id: "spending-goals",
-                  //   label: widget.budget.income == true
-                  //    ? "saving-goals".tr()
-                  //    : "spending-goals".tr(),
-                  //   icon: appStateSettings["outlinedIcons"]
-                  //       ? Icons.fact_check_outlined
-                  //       : Icons.fact_check_rounded,
-                  //   action: () {
-                  //     pushRoute(
-                  //       context,
-                  //       EditBudgetLimitsPage(
-                  //         budget: widget.budget,
-                  //       ),
-                  //     );
-                  //   },
-                  // ),
-                ],
+                  );
+                },
               ),
+              if (widget.budget.reoccurrence != BudgetReoccurence.custom &&
+                  widget.isPastBudget == false &&
+                  widget.isPastBudgetButCurrentPeriod == false)
+                DropdownItemMenu(
+                  id: "budget-history",
+                  label: "budget-history".tr(),
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Icons.history_outlined
+                      : Icons.history_rounded,
+                  action: () {
+                    pushRoute(
+                      context,
+                      PastBudgetsPage(budgetPk: widget.budget.budgetPk),
+                    );
+                  },
+                ),
+              // DropdownItemMenu(
+              //   id: "spending-goals",
+              //   label: widget.budget.income == true
+              //    ? "saving-goals".tr()
+              //    : "spending-goals".tr(),
+              //   icon: appStateSettings["outlinedIcons"]
+              //       ? Icons.fact_check_outlined
+              //       : Icons.fact_check_rounded,
+              //   action: () {
+              //     pushRoute(
+              //       context,
+              //       EditBudgetLimitsPage(
+              //         budget: widget.budget,
+              //       ),
+              //     );
+              //   },
+              // ),
             ],
-            title: widget.budget.name,
-            appBarBackgroundColor:
-                Theme.of(context).colorScheme.secondaryContainer,
-            appBarBackgroundColorStart:
-                Theme.of(context).colorScheme.secondaryContainer,
-            textColor: getColor(context, "black"),
-            dragDownToDismiss: true,
-            slivers: [
-              StreamBuilder<List<CategoryWithTotal>>(
-                  stream: database.watchAllCategoryLimitsInBudgetWithCategory(
-                      widget.budget.budgetPk),
-                  builder: (context, allCategoryLimitsSnap) {
-                    return StreamBuilder<List<CategoryWithTotal>>(
-                      stream: database
-                          .watchTotalSpentInEachCategoryInTimeRangeFromCategories(
-                        allWallets: Provider.of<AllWallets>(context),
-                        start: budgetRange.start,
-                        end: budgetRange.end,
-                        categoryFks: widget.budget.categoryFks,
-                        categoryFksExclude: widget.budget.categoryFksExclude,
-                        budgetTransactionFilters:
-                            widget.budget.budgetTransactionFilters,
-                        memberTransactionFilters:
-                            widget.budget.memberTransactionFilters,
-                        member: selectedMember,
-                        onlyShowTransactionsBelongingToBudgetPk:
-                            widget.budget.sharedKey != null ||
-                                    widget.budget.addedTransactionsOnly == true
-                                ? widget.budget.budgetPk
-                                : null,
-                        budget: widget.budget,
-                        // Set to countUnassignedTransactons: false for the pie chart
-                        //  includeAllSubCategories: showAllSubcategories,
-                        // If implementing pie chart summary for subcategories, also need to implement ability to tap a subcategory from the pie chart
-                        countUnassignedTransactions: true,
-                        includeAllSubCategories: true,
-                      ),
-                      builder: (context, categoryWithTotalsSnap) {
-                        //Ensure the main category always gets bundled in
-                        List<CategoryWithTotal> allCategoryLimits =
-                            (allCategoryLimitsSnap.data ?? []).where((c) {
-                          if (c.categoryBudgetLimit != null) {
-                            return true;
-                          }
-                          return (allCategoryLimitsSnap.data ?? []).any(
-                              (other) =>
-                                  other.categoryBudgetLimit != null &&
-                                  other.category.mainCategoryPk ==
-                                      c.category.categoryPk);
-                        }).toList();
+          ),
+        ],
+        title: widget.budget.name,
+        appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+        appBarBackgroundColorStart:
+            Theme.of(context).colorScheme.secondaryContainer,
+        textColor: getColor(context, "black"),
+        dragDownToDismiss: true,
+        slivers: [
+          StreamBuilder<List<CategoryWithTotal>>(
+              stream: database.watchAllCategoryLimitsInBudgetWithCategory(
+                  widget.budget.budgetPk),
+              builder: (context, allCategoryLimitsSnap) {
+                return StreamBuilder<List<CategoryWithTotal>>(
+                  stream: database
+                      .watchTotalSpentInEachCategoryInTimeRangeFromCategories(
+                    allWallets: Provider.of<AllWallets>(context),
+                    start: budgetRange.start,
+                    end: budgetRange.end,
+                    categoryFks: widget.budget.categoryFks,
+                    categoryFksExclude: widget.budget.categoryFksExclude,
+                    budgetTransactionFilters:
+                        widget.budget.budgetTransactionFilters,
+                    memberTransactionFilters:
+                        widget.budget.memberTransactionFilters,
+                    member: selectedMember,
+                    onlyShowTransactionsBelongingToBudgetPk:
+                        widget.budget.sharedKey != null ||
+                                widget.budget.addedTransactionsOnly == true
+                            ? widget.budget.budgetPk
+                            : null,
+                    budget: widget.budget,
+                    // Set to countUnassignedTransactons: false for the pie chart
+                    //  includeAllSubCategories: showAllSubcategories,
+                    // If implementing pie chart summary for subcategories, also need to implement ability to tap a subcategory from the pie chart
+                    countUnassignedTransactions: true,
+                    includeAllSubCategories: true,
+                  ),
+                  builder: (context, categoryWithTotalsSnap) {
+                    //Ensure the main category always gets bundled in
+                    List<CategoryWithTotal> allCategoryLimits =
+                        (allCategoryLimitsSnap.data ?? []).where((c) {
+                      if (c.categoryBudgetLimit != null) {
+                        return true;
+                      }
+                      return (allCategoryLimitsSnap.data ?? []).any((other) =>
+                          other.categoryBudgetLimit != null &&
+                          other.category.mainCategoryPk ==
+                              c.category.categoryPk);
+                    }).toList();
 
-                        // Remove all duplicates
-                        Set<String> existingCategoryPks =
-                            (categoryWithTotalsSnap.data ?? [])
-                                .map((c) => c.category.categoryPk)
-                                .toSet();
-                        List<CategoryWithTotal> categoryWithTotals = [
-                          ...(categoryWithTotalsSnap.data ?? []),
-                          ...(allCategoryLimits).where((c) =>
-                              !existingCategoryPks
-                                  .contains(c.category.categoryPk)),
-                        ];
+                    // Remove all duplicates
+                    Set<String> existingCategoryPks =
+                        (categoryWithTotalsSnap.data ?? [])
+                            .map((c) => c.category.categoryPk)
+                            .toSet();
+                    List<CategoryWithTotal> categoryWithTotals = [
+                      ...(categoryWithTotalsSnap.data ?? []),
+                      ...(allCategoryLimits).where((c) =>
+                          !existingCategoryPks.contains(c.category.categoryPk)),
+                    ];
 
-                        //Count number of categories that have a spending limit, but no spending
-                        int extraCategoriesCountWithSpendingLimit =
-                            (allCategoryLimits)
-                                .where((c) => !existingCategoryPks
-                                    .contains(c.category.categoryPk))
-                                .length;
+                    //Count number of categories that have a spending limit, but no spending
+                    int extraCategoriesCountWithSpendingLimit =
+                        (allCategoryLimits)
+                            .where((c) => !existingCategoryPks
+                                .contains(c.category.categoryPk))
+                            .length;
 
-                        TotalSpentCategoriesSummary s =
-                            watchTotalSpentInTimeRangeHelper(
-                          dataInput: categoryWithTotals,
-                          showAllSubcategories: showAllSubcategories,
-                          multiplyTotalBy:
-                              determineBudgetPolarity(widget.budget),
+                    TotalSpentCategoriesSummary s =
+                        watchTotalSpentInTimeRangeHelper(
+                      dataInput: categoryWithTotals,
+                      showAllSubcategories: showAllSubcategories,
+                      multiplyTotalBy: determineBudgetPolarity(widget.budget),
+                    );
+                    List<Widget> categoryEntries = [];
+                    double totalSpentPercent = 45 / 360;
+                    categoryWithTotals.asMap().forEach(
+                      (index, category) {
+                        categoryEntries.add(
+                          CategoryEntry(
+                            alwaysHide:
+                                showAllCategoriesWithCategoryLimit == false &&
+                                    category.transactionCount == -1,
+                            percentageOffset: totalSpentPercent,
+                            getPercentageAfterText: (double categorySpent) {
+                              if (widget.budget.income == true) {
+                                return categorySpent < 0 &&
+                                        showIncomeExpenseIcons
+                                    ? "of-total".tr().toLowerCase()
+                                    : "of-saving".tr().toLowerCase();
+                              } else {
+                                return categorySpent > 0 &&
+                                        showIncomeExpenseIcons
+                                    ? "of-total".tr().toLowerCase()
+                                    : "of-spending".tr().toLowerCase();
+                              }
+                            },
+                            selectedSubCategoryPk: selectedCategory?.categoryPk,
+                            expandSubcategories: showAllSubcategories ||
+                                category.category.categoryPk ==
+                                    selectedCategory?.categoryPk ||
+                                category.category.categoryPk ==
+                                    selectedCategory?.mainCategoryPk,
+                            subcategoriesWithTotalMap:
+                                s.subCategorySpendingIndexedByMainCategoryPk,
+                            todayPercent: todayPercent,
+                            overSpentColor: category.total > 0
+                                ? getColor(context, "incomeAmount")
+                                : getColor(context, "expenseAmount"),
+                            showIncomeExpenseIcons: showIncomeExpenseIcons,
+                            onLongPress: (TransactionCategory category,
+                                CategoryBudgetLimit? categoryBudgetLimit) {
+                              enterCategoryLimitPopup(
+                                context,
+                                category,
+                                categoryBudgetLimit,
+                                widget.budget.budgetPk,
+                                (p0) => null,
+                                widget.budget.isAbsoluteSpendingLimit,
+                              );
+                            },
+                            isAbsoluteSpendingLimit:
+                                widget.budget.isAbsoluteSpendingLimit,
+                            budgetLimit: budgetAmount,
+                            categoryBudgetLimit: category.categoryBudgetLimit,
+                            category: category.category,
+                            totalSpent: s.totalSpent,
+                            transactionCount: category.transactionCount,
+                            categorySpent: showIncomeExpenseIcons == true
+                                ? category.total
+                                : category.total.abs(),
+                            onTap: (TransactionCategory tappedCategory, _) {
+                              if (selectedCategory?.categoryPk ==
+                                  tappedCategory.categoryPk) {
+                                setState(() {
+                                  selectedCategory = null;
+                                });
+                                _pieChartDisplayStateKey.currentState
+                                    ?.setTouchedIndex(-1);
+                              } else {
+                                if (showAllSubcategories ||
+                                    tappedCategory.mainCategoryPk == null) {
+                                  setState(() {
+                                    selectedCategory = tappedCategory;
+                                  });
+                                  _pieChartDisplayStateKey.currentState
+                                      ?.setTouchedCategoryPk(
+                                          tappedCategory.categoryPk);
+                                } else {
+                                  // We are tapping a subcategoryEntry and it is not in the pie chart
+                                  // because showAllSubcategories is false and mainCategoryPk is not null
+                                  setState(() {
+                                    selectedCategory = tappedCategory;
+                                  });
+                                  _pieChartDisplayStateKey.currentState
+                                      ?.setTouchedCategoryPk(
+                                          tappedCategory.mainCategoryPk);
+                                }
+                              }
+                            },
+                            selected: category.category.categoryPk ==
+                                    selectedCategory?.mainCategoryPk ||
+                                selectedCategory?.categoryPk ==
+                                    category.category.categoryPk,
+                            allSelected: selectedCategory == null,
+                          ),
                         );
-                        List<Widget> categoryEntries = [];
-                        double totalSpentPercent = 45 / 360;
-                        categoryWithTotals.asMap().forEach(
-                          (index, category) {
-                            categoryEntries.add(
-                              CategoryEntry(
-                                alwaysHide:
-                                    showAllCategoriesWithCategoryLimit ==
-                                            false &&
-                                        category.transactionCount == -1,
-                                percentageOffset: totalSpentPercent,
-                                getPercentageAfterText: (double categorySpent) {
-                                  if (widget.budget.income == true) {
-                                    return categorySpent < 0 &&
-                                            showIncomeExpenseIcons
-                                        ? "of-total".tr().toLowerCase()
-                                        : "of-saving".tr().toLowerCase();
-                                  } else {
-                                    return categorySpent > 0 &&
-                                            showIncomeExpenseIcons
-                                        ? "of-total".tr().toLowerCase()
-                                        : "of-spending".tr().toLowerCase();
-                                  }
-                                },
-                                selectedSubCategoryPk:
-                                    selectedCategory?.categoryPk,
-                                expandSubcategories: showAllSubcategories ||
-                                    category.category.categoryPk ==
-                                        selectedCategory?.categoryPk ||
-                                    category.category.categoryPk ==
-                                        selectedCategory?.mainCategoryPk,
-                                subcategoriesWithTotalMap: s
-                                    .subCategorySpendingIndexedByMainCategoryPk,
-                                todayPercent: todayPercent,
-                                overSpentColor: category.total > 0
-                                    ? getColor(context, "incomeAmount")
-                                    : getColor(context, "expenseAmount"),
-                                showIncomeExpenseIcons: showIncomeExpenseIcons,
-                                onLongPress: (TransactionCategory category,
-                                    CategoryBudgetLimit? categoryBudgetLimit) {
-                                  enterCategoryLimitPopup(
-                                    context,
-                                    category,
-                                    categoryBudgetLimit,
-                                    widget.budget.budgetPk,
-                                    (p0) => null,
-                                    widget.budget.isAbsoluteSpendingLimit,
-                                  );
-                                },
-                                isAbsoluteSpendingLimit:
-                                    widget.budget.isAbsoluteSpendingLimit,
-                                budgetLimit: budgetAmount,
-                                categoryBudgetLimit:
-                                    category.categoryBudgetLimit,
-                                category: category.category,
-                                totalSpent: s.totalSpent,
-                                transactionCount: category.transactionCount,
-                                categorySpent: showIncomeExpenseIcons == true
-                                    ? category.total
-                                    : category.total.abs(),
-                                onTap: (TransactionCategory tappedCategory, _) {
-                                  if (selectedCategory?.categoryPk ==
-                                      tappedCategory.categoryPk) {
+                        if (s.totalSpent != 0)
+                          totalSpentPercent +=
+                              category.total.abs() / s.totalSpent;
+                      },
+                    );
+                    // print(s.totalSpent);
+                    return SliverToBoxAdapter(
+                      child: Column(
+                        children: [
+                          Transform.translate(
+                            offset: Offset(0, -10).withDirectionality(context),
+                            child: WidgetSize(
+                              onChange: (Size size) {
+                                budgetHeaderHeight = size.height - 20;
+                              },
+                              child: Container(
+                                padding: EdgeInsetsDirectional.only(
+                                  top: 10,
+                                  bottom: 22,
+                                  start: 22,
+                                  end: 22,
+                                ),
+                                decoration: BoxDecoration(
+                                  // borderRadius: BorderRadiusDirectional.vertical(
+                                  //     bottom: Radius.circular(10)),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .secondaryContainer,
+                                ),
+                                child: Column(
+                                  children: [
+                                    Transform.scale(
+                                      alignment:
+                                          AlignmentDirectional.bottomCenter,
+                                      scale: 1500,
+                                      child: Container(
+                                        height: 10,
+                                        width: 100,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondaryContainer,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.symmetric(
+                                        horizontal:
+                                            getHorizontalPaddingConstrained(
+                                                context),
+                                      ),
+                                      child: StreamBuilder<double?>(
+                                        stream: database.watchTotalOfBudget(
+                                          allWallets:
+                                              Provider.of<AllWallets>(context),
+                                          start: budgetRange.start,
+                                          end: budgetRange.end,
+                                          categoryFks:
+                                              widget.budget.categoryFks,
+                                          categoryFksExclude:
+                                              widget.budget.categoryFksExclude,
+                                          budgetTransactionFilters: widget
+                                              .budget.budgetTransactionFilters,
+                                          memberTransactionFilters: widget
+                                              .budget.memberTransactionFilters,
+                                          member: selectedMember,
+                                          onlyShowTransactionsBelongingToBudgetPk:
+                                              widget.budget.sharedKey != null ||
+                                                      widget.budget
+                                                              .addedTransactionsOnly ==
+                                                          true
+                                                  ? widget.budget.budgetPk
+                                                  : null,
+                                          budget: widget.budget,
+                                          searchFilters: SearchFilters(
+                                              paidStatus: [PaidStatus.notPaid]),
+                                          paidOnly: false,
+                                        ),
+                                        builder: (context, snapshot) {
+                                          return BudgetTimeline(
+                                            dateForRange: dateForRange,
+                                            budget: widget.budget,
+                                            large: true,
+                                            percent: budgetAmount == 0
+                                                ? 0
+                                                : s.totalSpent /
+                                                    budgetAmount *
+                                                    100,
+                                            yourPercent: 0,
+                                            todayPercent:
+                                                widget.isPastBudget == true
+                                                    ? -1
+                                                    : todayPercent,
+                                            ghostPercent: budgetAmount == 0
+                                                ? 0
+                                                : (((snapshot.data ?? 0) *
+                                                            determineBudgetPolarity(
+                                                                widget
+                                                                    .budget)) /
+                                                        budgetAmount) *
+                                                    100,
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    widget.isPastBudget == true
+                                        ? SizedBox.shrink()
+                                        : DaySpending(
+                                            budget: widget.budget,
+                                            totalAmount: s.totalSpent,
+                                            large: true,
+                                            budgetRange: budgetRange,
+                                            padding: const EdgeInsetsDirectional
+                                                .only(top: 15, bottom: 0),
+                                          ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          appStateSettings["sharedBudgets"]
+                              ? BudgetSpenderSummary(
+                                  budget: widget.budget,
+                                  budgetRange: budgetRange,
+                                  setSelectedMember: (member) {
                                     setState(() {
+                                      selectedMember = member;
                                       selectedCategory = null;
                                     });
                                     _pieChartDisplayStateKey.currentState
                                         ?.setTouchedIndex(-1);
-                                  } else {
-                                    if (showAllSubcategories ||
-                                        tappedCategory.mainCategoryPk == null) {
-                                      setState(() {
-                                        selectedCategory = tappedCategory;
-                                      });
-                                      _pieChartDisplayStateKey.currentState
-                                          ?.setTouchedCategoryPk(
-                                              tappedCategory.categoryPk);
-                                    } else {
-                                      // We are tapping a subcategoryEntry and it is not in the pie chart
-                                      // because showAllSubcategories is false and mainCategoryPk is not null
-                                      setState(() {
-                                        selectedCategory = tappedCategory;
-                                      });
-                                      _pieChartDisplayStateKey.currentState
-                                          ?.setTouchedCategoryPk(
-                                              tappedCategory.mainCategoryPk);
-                                    }
-                                  }
-                                },
-                                selected: category.category.categoryPk ==
-                                        selectedCategory?.mainCategoryPk ||
-                                    selectedCategory?.categoryPk ==
-                                        category.category.categoryPk,
-                                allSelected: selectedCategory == null,
-                              ),
-                            );
-                            if (s.totalSpent != 0)
-                              totalSpentPercent +=
-                                  category.total.abs() / s.totalSpent;
-                          },
-                        );
-                        // print(s.totalSpent);
-                        return SliverToBoxAdapter(
-                          child: Column(
-                            children: [
-                              Transform.translate(
-                                offset:
-                                    Offset(0, -10).withDirectionality(context),
-                                child: WidgetSize(
-                                  onChange: (Size size) {
-                                    budgetHeaderHeight = size.height - 20;
                                   },
-                                  child: Container(
-                                    padding: EdgeInsetsDirectional.only(
-                                      top: 10,
-                                      bottom: 22,
-                                      start: 22,
-                                      end: 22,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      // borderRadius: BorderRadiusDirectional.vertical(
-                                      //     bottom: Radius.circular(10)),
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondaryContainer,
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Transform.scale(
-                                          alignment:
-                                              AlignmentDirectional.bottomCenter,
-                                          scale: 1500,
-                                          child: Container(
-                                            height: 10,
-                                            width: 100,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .secondaryContainer,
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.symmetric(
-                                            horizontal:
-                                                getHorizontalPaddingConstrained(
-                                                    context),
-                                          ),
-                                          child: StreamBuilder<double?>(
-                                            stream: database.watchTotalOfBudget(
-                                              allWallets:
-                                                  Provider.of<AllWallets>(
-                                                      context),
-                                              start: budgetRange.start,
-                                              end: budgetRange.end,
-                                              categoryFks:
-                                                  widget.budget.categoryFks,
-                                              categoryFksExclude: widget
-                                                  .budget.categoryFksExclude,
-                                              budgetTransactionFilters: widget
-                                                  .budget
-                                                  .budgetTransactionFilters,
-                                              memberTransactionFilters: widget
-                                                  .budget
-                                                  .memberTransactionFilters,
-                                              member: selectedMember,
-                                              onlyShowTransactionsBelongingToBudgetPk:
-                                                  widget.budget.sharedKey !=
-                                                              null ||
-                                                          widget.budget
-                                                                  .addedTransactionsOnly ==
-                                                              true
-                                                      ? widget.budget.budgetPk
-                                                      : null,
-                                              budget: widget.budget,
-                                              searchFilters: SearchFilters(
-                                                  paidStatus: [
-                                                    PaidStatus.notPaid
-                                                  ]),
-                                              paidOnly: false,
-                                            ),
-                                            builder: (context, snapshot) {
-                                              return BudgetTimeline(
-                                                dateForRange: dateForRange,
-                                                budget: widget.budget,
-                                                large: true,
-                                                percent: budgetAmount == 0
-                                                    ? 0
-                                                    : s.totalSpent /
-                                                        budgetAmount *
-                                                        100,
-                                                yourPercent: 0,
-                                                todayPercent:
-                                                    widget.isPastBudget == true
-                                                        ? -1
-                                                        : todayPercent,
-                                                ghostPercent: budgetAmount == 0
-                                                    ? 0
-                                                    : (((snapshot.data ?? 0) *
-                                                                determineBudgetPolarity(
-                                                                    widget
-                                                                        .budget)) /
-                                                            budgetAmount) *
-                                                        100,
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                        widget.isPastBudget == true
-                                            ? SizedBox.shrink()
-                                            : DaySpending(
-                                                budget: widget.budget,
-                                                totalAmount: s.totalSpent,
-                                                large: true,
-                                                budgetRange: budgetRange,
-                                                padding:
-                                                    const EdgeInsetsDirectional
-                                                        .only(
-                                                        top: 15, bottom: 0),
-                                              ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              appStateSettings["sharedBudgets"]
-                                  ? BudgetSpenderSummary(
-                                      budget: widget.budget,
-                                      budgetRange: budgetRange,
-                                      setSelectedMember: (member) {
-                                        setState(() {
-                                          selectedMember = member;
-                                          selectedCategory = null;
-                                        });
-                                        _pieChartDisplayStateKey.currentState
-                                            ?.setTouchedIndex(-1);
-                                      },
-                                    )
-                                  : SizedBox.shrink(),
-                              if (categoryWithTotals.length > 0)
-                                SizedBox(height: 30),
+                                )
+                              : SizedBox.shrink(),
+                          if (categoryWithTotals.length > 0)
+                            SizedBox(height: 30),
 
-                              if (categoryWithTotals.length > 0)
-                                pieChart(
-                                  budgetRange: budgetRange,
-                                  totalSpent: s.totalSpent,
-                                  showAllSubcategories: showAllSubcategories,
-                                  toggleAllSubCategories:
-                                      toggleAllSubcategories,
-                                  dataFilterUnassignedTransactions:
-                                      s.dataFilterUnassignedTransactions,
-                                  hasSubCategories: s.hasSubCategories,
-                                  pageBackgroundColor: pageBackgroundColor,
-                                ),
-                              // if (snapshot.data!.length > 0)
-                              //   SizedBox(height: 35),
-                              ...categoryEntries,
-                              if (categoryWithTotals.length > 0)
-                                SizedBox(height: 15),
-                              AnimatedExpanded(
-                                expand: selectedCategory == null &&
-                                    extraCategoriesCountWithSpendingLimit > 0,
-                                child: Padding(
-                                  padding: const EdgeInsetsDirectional.only(
-                                      bottom: 15),
-                                  child: AnimatedSizeSwitcher(
-                                    child: Center(
-                                      key: ValueKey(
-                                          "showAllCategoriesWithCategoryLimit" +
-                                              showAllCategoriesWithCategoryLimit
-                                                  .toString()),
-                                      child: LowKeyButton(
-                                        onTap: () {
-                                          toggleShowAllCategoriesWithCategoryLimit();
-                                        },
-                                        text: showAllCategoriesWithCategoryLimit
-                                            ? "collapse-empty-categories".tr()
-                                            : "expand-all-with-spending-goals"
-                                                .tr(),
-                                        extraWidgetAtBeginning: true,
-                                        extraWidget: Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.only(
-                                                  end: 3),
-                                          child: Transform.scale(
-                                            scale: 1.6,
-                                            child: Icon(
-                                              showAllCategoriesWithCategoryLimit
-                                                  ? appStateSettings[
-                                                          "outlinedIcons"]
-                                                      ? Icons
-                                                          .arrow_drop_up_outlined
-                                                      : Icons
-                                                          .arrow_drop_up_rounded
-                                                  : appStateSettings[
-                                                          "outlinedIcons"]
-                                                      ? Icons
-                                                          .arrow_drop_down_outlined
-                                                      : Icons
-                                                          .arrow_drop_down_rounded,
-                                              size: 15,
-                                              color: getColor(context, "black")
-                                                  .withOpacity(0.5),
-                                            ),
-                                          ),
+                          if (categoryWithTotals.length > 0)
+                            pieChart(
+                              budgetRange: budgetRange,
+                              totalSpent: s.totalSpent,
+                              showAllSubcategories: showAllSubcategories,
+                              toggleAllSubCategories: toggleAllSubcategories,
+                              dataFilterUnassignedTransactions:
+                                  s.dataFilterUnassignedTransactions,
+                              hasSubCategories: s.hasSubCategories,
+                              pageBackgroundColor: pageBackgroundColor,
+                            ),
+                          // if (snapshot.data!.length > 0)
+                          //   SizedBox(height: 35),
+                          ...categoryEntries,
+                          if (categoryWithTotals.length > 0)
+                            SizedBox(height: 15),
+                          AnimatedExpanded(
+                            expand: selectedCategory == null &&
+                                extraCategoriesCountWithSpendingLimit > 0,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsetsDirectional.only(bottom: 15),
+                              child: AnimatedSizeSwitcher(
+                                child: Center(
+                                  key: ValueKey(
+                                      "showAllCategoriesWithCategoryLimit" +
+                                          showAllCategoriesWithCategoryLimit
+                                              .toString()),
+                                  child: LowKeyButton(
+                                    onTap: () {
+                                      toggleShowAllCategoriesWithCategoryLimit();
+                                    },
+                                    text: showAllCategoriesWithCategoryLimit
+                                        ? "collapse-empty-categories".tr()
+                                        : "expand-all-with-spending-goals".tr(),
+                                    extraWidgetAtBeginning: true,
+                                    extraWidget: Padding(
+                                      padding: const EdgeInsetsDirectional.only(
+                                          end: 3),
+                                      child: Transform.scale(
+                                        scale: 1.6,
+                                        child: Icon(
+                                          showAllCategoriesWithCategoryLimit
+                                              ? appStateSettings[
+                                                      "outlinedIcons"]
+                                                  ? Icons.arrow_drop_up_outlined
+                                                  : Icons.arrow_drop_up_rounded
+                                              : appStateSettings[
+                                                      "outlinedIcons"]
+                                                  ? Icons
+                                                      .arrow_drop_down_outlined
+                                                  : Icons
+                                                      .arrow_drop_down_rounded,
+                                          size: 15,
+                                          color: getColor(context, "black")
+                                              .withOpacity(0.5),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ],
+                            ),
                           ),
-                        );
-                      },
-                    );
-                  }),
-              SliverToBoxAdapter(
-                child: AnimatedExpanded(
-                  expand: selectedCategory != null,
-                  child: Padding(
-                    key: ValueKey(1),
-                    padding: const EdgeInsetsDirectional.only(
-                        start: 13, end: 15, top: 5, bottom: 15),
-                    child: Center(
-                      child: TextFont(
-                        text: "transactions-for-selected-category".tr(),
-                        maxLines: 10,
-                        textAlign: TextAlign.center,
-                        fontSize: 13,
-                        textColor: getColor(context, "textLight"),
-                        // fontWeight: FontWeight.bold,
+                        ],
                       ),
-                    ),
+                    );
+                  },
+                );
+              }),
+          SliverToBoxAdapter(
+            child: AnimatedExpanded(
+              expand: selectedCategory != null,
+              child: Padding(
+                key: ValueKey(1),
+                padding: const EdgeInsetsDirectional.only(
+                    start: 13, end: 15, top: 5, bottom: 15),
+                child: Center(
+                  child: TextFont(
+                    text: "transactions-for-selected-category".tr(),
+                    maxLines: 10,
+                    textAlign: TextAlign.center,
+                    fontSize: 13,
+                    textColor: getColor(context, "textLight"),
+                    // fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsetsDirectional.only(bottom: 13),
-                  child: Container(
-                    margin: EdgeInsetsDirectional.symmetric(horizontal: 13),
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadiusDirectional.all(Radius.circular(15)),
-                      color: appStateSettings["materialYou"]
-                          ? dynamicPastel(context,
-                              Theme.of(context).colorScheme.secondaryContainer,
-                              amount: 0.5)
-                          : getColor(context, "lightDarkAccentHeavyLight"),
-                      boxShadow: boxShadowCheck(boxShadowGeneral(context)),
-                    ),
-                    child: BudgetLineGraph(
-                      budget: widget.budget,
-                      dateForRange: dateForRange,
-                      isPastBudget: widget.isPastBudget,
-                      selectedCategory: selectedCategory,
-                      budgetRange: budgetRange,
-                      showIfNone: false,
-                    ),
-                  ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsetsDirectional.only(bottom: 13),
+              child: Container(
+                margin: EdgeInsetsDirectional.symmetric(horizontal: 13),
+                decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadiusDirectional.all(Radius.circular(15)),
+                  color: appStateSettings["materialYou"]
+                      ? dynamicPastel(context,
+                          Theme.of(context).colorScheme.secondaryContainer,
+                          amount: 0.5)
+                      : getColor(context, "lightDarkAccentHeavyLight"),
+                  boxShadow: boxShadowCheck(boxShadowGeneral(context)),
+                ),
+                child: BudgetLineGraph(
+                  budget: widget.budget,
+                  dateForRange: dateForRange,
+                  isPastBudget: widget.isPastBudget,
+                  selectedCategory: selectedCategory,
+                  budgetRange: budgetRange,
+                  showIfNone: false,
                 ),
               ),
-              TransactionEntries(
-                budgetRange.start,
-                budgetRange.end,
-                categoryFks: selectedCategory != null
-                    ? [selectedCategory!.categoryPk]
-                    : widget.budget.categoryFks,
-                categoryFksExclude: selectedCategory != null
-                    ? null
-                    : widget.budget.categoryFksExclude,
-                listID: pageId,
-                budgetTransactionFilters:
-                    widget.budget.budgetTransactionFilters,
-                memberTransactionFilters:
-                    widget.budget.memberTransactionFilters,
-                member: selectedMember,
-                onlyShowTransactionsBelongingToBudgetPk:
-                    widget.budget.sharedKey != null ||
-                            widget.budget.addedTransactionsOnly == true
-                        ? widget.budget.budgetPk
-                        : null,
-                walletFks: widget.budget.walletFks ?? [],
-                budget: widget.budget,
-                dateDividerColor: pageBackgroundColor,
-                transactionBackgroundColor: pageBackgroundColor,
-                categoryTintColor: Theme.of(context).colorScheme.primary,
-                noResultsExtraWidget: widget.budget.reoccurrence !=
-                            BudgetReoccurence.custom &&
+            ),
+          ),
+          TransactionEntries(
+            budgetRange.start,
+            budgetRange.end,
+            categoryFks: selectedCategory != null
+                ? [selectedCategory!.categoryPk]
+                : widget.budget.categoryFks,
+            categoryFksExclude: selectedCategory != null
+                ? null
+                : widget.budget.categoryFksExclude,
+            listID: pageId,
+            budgetTransactionFilters: widget.budget.budgetTransactionFilters,
+            memberTransactionFilters: widget.budget.memberTransactionFilters,
+            member: selectedMember,
+            onlyShowTransactionsBelongingToBudgetPk:
+                widget.budget.sharedKey != null ||
+                        widget.budget.addedTransactionsOnly == true
+                    ? widget.budget.budgetPk
+                    : null,
+            walletFks: widget.budget.walletFks ?? [],
+            budget: widget.budget,
+            dateDividerColor: pageBackgroundColor,
+            transactionBackgroundColor: pageBackgroundColor,
+            categoryTintColor: Theme.of(context).colorScheme.primary,
+            noResultsExtraWidget:
+                widget.budget.reoccurrence != BudgetReoccurence.custom &&
                         widget.isPastBudget == false &&
                         widget.isPastBudgetButCurrentPeriod == false
                     ? Padding(
@@ -873,45 +844,43 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                         ),
                       )
                     : SizedBox.shrink(),
-                showTotalCashFlow: true,
-                showExcludedBudgetTag: (Transaction transaction) =>
-                    transaction.budgetFksExclude
-                        ?.contains(widget.budget.budgetPk) ==
-                    true,
-              ),
-              SliverToBoxAdapter(
-                child: widget.budget.sharedDateUpdated == null
-                    ? SizedBox.shrink()
-                    : Padding(
-                        padding: const EdgeInsetsDirectional.only(
-                            start: 10, end: 10, bottom: 0),
-                        child: TextFont(
-                          text: "synced".tr() +
-                              " " +
-                              getTimeAgo(
-                                widget.budget.sharedDateUpdated!,
-                              ).toLowerCase() +
-                              "\n Created by " +
-                              getMemberNickname(
-                                  (widget.budget.sharedMembers ?? [""])[0]),
-                          fontSize: 13,
-                          textColor: getColor(context, "textLight"),
-                          textAlign: TextAlign.center,
-                          maxLines: 4,
-                        ),
-                      ),
-              ),
-              // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
-              SliverToBoxAdapter(
-                child: Container(height: 1, color: pageBackgroundColor),
-              ),
-              SliverToBoxAdapter(child: SizedBox(height: 45))
-            ],
+            showTotalCashFlow: true,
+            showExcludedBudgetTag: (Transaction transaction) =>
+                transaction.budgetFksExclude
+                    ?.contains(widget.budget.budgetPk) ==
+                true,
           ),
-          SelectedTransactionsAppBar(
-            pageID: pageId,
+          SliverToBoxAdapter(
+            child: widget.budget.sharedDateUpdated == null
+                ? SizedBox.shrink()
+                : Padding(
+                    padding: const EdgeInsetsDirectional.only(
+                        start: 10, end: 10, bottom: 0),
+                    child: TextFont(
+                      text: "synced".tr() +
+                          " " +
+                          getTimeAgo(
+                            widget.budget.sharedDateUpdated!,
+                          ).toLowerCase() +
+                          "\n Created by " +
+                          getMemberNickname(
+                              (widget.budget.sharedMembers ?? [""])[0]),
+                      fontSize: 13,
+                      textColor: getColor(context, "textLight"),
+                      textAlign: TextAlign.center,
+                      maxLines: 4,
+                    ),
+                  ),
           ),
+          // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
+          SliverToBoxAdapter(
+            child: Container(height: 1, color: pageBackgroundColor),
+          ),
+          SliverToBoxAdapter(child: SizedBox(height: 45))
         ],
+        selectedTransactionsAppBar: SelectedTransactionsAppBar(
+          pageID: pageId,
+        ),
       ),
     );
   }

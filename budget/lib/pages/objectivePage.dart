@@ -652,9 +652,9 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
               ),
               SliverToBoxAdapter(child: SizedBox(height: 45))
             ],
-          ),
-          SelectedTransactionsAppBar(
-            pageID: pageId,
+            selectedTransactionsAppBar: SelectedTransactionsAppBar(
+              pageID: pageId,
+            ),
           ),
           IgnorePointer(
             child: Align(

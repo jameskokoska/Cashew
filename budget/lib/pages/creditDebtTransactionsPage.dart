@@ -320,264 +320,250 @@ class CreditDebtTransactionsState extends State<CreditDebtTransactions>
           return true;
         }
       },
-      child: Stack(
-        children: [
-          StreamBuilder<List<Objective?>>(
-              stream: database.watchAllObjectives(
-                objectiveType: ObjectiveType.loan,
-                hideArchived: true,
-                showDifferenceLoans: null,
-              ),
-              builder: (context, allLoanObjectivesSnapshot) {
-                return PageFramework(
-                  key: pageState,
-                  scrollController: _scrollController,
-                  resizeToAvoidBottomInset: true,
-                  actions: [
-                    (allLoanObjectivesSnapshot.data?.length ?? 0) <= 0
-                        ? StreamBuilder<List<Objective?>>(
-                            stream: database.watchAllObjectives(
-                                objectiveType: ObjectiveType.loan,
-                                hideArchived: false,
-                                showDifferenceLoans: null,
-                                limit: 1),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData == false)
-                                return SizedBox.shrink();
-                              if ((snapshot.data?.length ?? 0) <= 0)
-                                return SizedBox.shrink();
-                              return CustomPopupMenuButton(
-                                showButtons: enableDoubleColumn(context),
-                                keepOutFirst: true,
-                                items: [
-                                  DropdownItemMenu(
-                                    id: "edit-loans",
-                                    label: "edit".tr(),
-                                    icon: appStateSettings["outlinedIcons"]
-                                        ? Icons.edit_outlined
-                                        : Icons.edit_rounded,
-                                    action: () {
-                                      pushRoute(
-                                        context,
-                                        EditObjectivesPage(
-                                          objectiveType: ObjectiveType.loan,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          )
-                        : SizedBox.shrink(),
-                  ],
-                  floatingActionButton: AnimateFABDelayed(
-                    enabled: true,
-                    fab: AddFAB(
-                      tooltip: isCredit == true || isCredit == null
-                          ? "add-credit".tr()
-                          : "add-debt".tr(),
-                      onTap: () {
-                        openBottomSheet(
-                          context,
-                          AddLoanPopup(
-                            selectedTransactionType:
-                                isCredit == true || isCredit == null
-                                    ? TransactionSpecialType.credit
-                                    : TransactionSpecialType.debt,
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  listID: pageId,
-                  title: "loans".tr(),
-                  dragDownToDismiss: true,
-                  bodyBuilder: (scrollController, scrollPhysics, sliverAppBar) {
-                    if (allLoanObjectivesSnapshot.hasData == false)
-                      return SizedBox.shrink();
-                    if ((allLoanObjectivesSnapshot.data?.length ?? 0) <= 0) {
-                      numberLongTerm = 0;
-                      _tabController.index = 0;
-                      return CustomScrollView(
-                        controller: _scrollController,
-                        slivers: [
-                          sliverAppBar,
-                          ...loanInfoAppBar,
-                          ...oneTimeLoanList(false)
-                        ],
-                      );
-                    }
-                    // Set the tab to long term if none were added previously, but one was added
-                    if (numberLongTerm == 0) {
-                      _tabController.index = 1;
-                      numberLongTerm =
-                          allLoanObjectivesSnapshot.data?.length ?? 0;
-                    }
-                    return NestedScrollView(
-                      controller: _scrollController,
-                      headerSliverBuilder: (BuildContext contextHeader,
-                          bool innerBoxIsScrolled) {
-                        return <Widget>[
-                          SliverOverlapAbsorber(
-                            handle:
-                                NestedScrollView.sliverOverlapAbsorberHandleFor(
-                                    contextHeader),
-                            sliver: MultiSliver(
-                              children: [
-                                sliverAppBar,
-                                SliverToBoxAdapter(
-                                  child: Padding(
-                                    padding:
-                                        EdgeInsetsDirectional.only(bottom: 13),
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.symmetric(
-                                        horizontal:
-                                            getHorizontalPaddingConstrained(
-                                                  context,
-                                                  enabled: enableDoubleColumn(
-                                                          context) ==
-                                                      false,
-                                                ) +
-                                                13,
-                                      ),
-                                      child: Padding(
-                                        padding:
-                                            EdgeInsetsDirectional.symmetric(
-                                          horizontal:
-                                              getHorizontalPaddingConstrained(
-                                                  context),
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                              child: IncomeExpenseTabSelector(
-                                                hasBorderRadius: true,
-                                                onTabChanged: (_) {},
-                                                initialTabIsIncome: false,
-                                                showIcons: false,
-                                                tabController: _tabController,
-                                                expenseLabel: "one-time".tr(),
-                                                expenseCustomIcon: Icon(
-                                                  appStateSettings[
-                                                          "outlinedIcons"]
-                                                      ? Icons
-                                                          .event_available_outlined
-                                                      : Icons
-                                                          .event_available_rounded,
-                                                ),
-                                                incomeLabel: "long-term".tr(),
-                                                incomeCustomIcon: Icon(
-                                                  appStateSettings[
-                                                          "outlinedIcons"]
-                                                      ? Icons.av_timer_outlined
-                                                      : Icons.av_timer_rounded,
-                                                ),
-                                              ),
-                                            ),
-                                            AnimatedBuilder(
-                                              animation:
-                                                  _tabController.animation!,
-                                              builder: (BuildContext context,
-                                                  Widget? child) {
-                                                return ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadiusDirectional
-                                                          .circular(15),
-                                                  child: SizeTransition(
-                                                    sizeFactor: _tabController
-                                                        .animation!,
-                                                    axis: Axis.horizontal,
-                                                    child: FadeTransition(
-                                                      opacity: _tabController
-                                                          .animation!,
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsetsDirectional
-                                                                .only(start: 7),
-                                                        child: ButtonIcon(
-                                                          size: 48,
-                                                          iconPadding: 25,
-                                                          key: ValueKey(2),
-                                                          onTap: () {
-                                                            pushRoute(
-                                                              context,
-                                                              EditObjectivesPage(
-                                                                objectiveType:
-                                                                    ObjectiveType
-                                                                        .loan,
-                                                              ),
-                                                            );
-                                                          },
-                                                          icon: appStateSettings[
-                                                                  "outlinedIcons"]
-                                                              ? Icons
-                                                                  .edit_outlined
-                                                              : Icons
-                                                                  .edit_rounded,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+      child: StreamBuilder<List<Objective?>>(
+          stream: database.watchAllObjectives(
+            objectiveType: ObjectiveType.loan,
+            hideArchived: true,
+            showDifferenceLoans: null,
+          ),
+          builder: (context, allLoanObjectivesSnapshot) {
+            return PageFramework(
+              key: pageState,
+              scrollController: _scrollController,
+              resizeToAvoidBottomInset: true,
+              actions: [
+                (allLoanObjectivesSnapshot.data?.length ?? 0) <= 0
+                    ? StreamBuilder<List<Objective?>>(
+                        stream: database.watchAllObjectives(
+                            objectiveType: ObjectiveType.loan,
+                            hideArchived: false,
+                            showDifferenceLoans: null,
+                            limit: 1),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData == false)
+                            return SizedBox.shrink();
+                          if ((snapshot.data?.length ?? 0) <= 0)
+                            return SizedBox.shrink();
+                          return CustomPopupMenuButton(
+                            showButtons: enableDoubleColumn(context),
+                            keepOutFirst: true,
+                            items: [
+                              DropdownItemMenu(
+                                id: "edit-loans",
+                                label: "edit".tr(),
+                                icon: appStateSettings["outlinedIcons"]
+                                    ? Icons.edit_outlined
+                                    : Icons.edit_rounded,
+                                action: () {
+                                  pushRoute(
+                                    context,
+                                    EditObjectivesPage(
+                                      objectiveType: ObjectiveType.loan,
                                     ),
-                                  ),
-                                ),
-                                ...loanInfoAppBar,
-                              ],
-                            ),
-                          ),
-                        ];
-                      },
-                      body: Builder(
-                        builder: (contextPageView) {
-                          return TabBarView(
-                            controller: _tabController,
-                            children: [
-                              CustomScrollView(
-                                slivers: [
-                                  SliverPinnedOverlapInjector(
-                                    handle: NestedScrollView
-                                        .sliverOverlapAbsorberHandleFor(
-                                      contextPageView,
-                                    ),
-                                  ),
-                                  ...oneTimeLoanList(true)
-                                ],
-                              ),
-                              CustomScrollView(
-                                slivers: [
-                                  SliverPinnedOverlapInjector(
-                                    handle: NestedScrollView
-                                        .sliverOverlapAbsorberHandleFor(
-                                      contextPageView,
-                                    ),
-                                  ),
-                                  ObjectiveListDifferenceLoan(
-                                    searchFor: searchValue,
-                                  ),
-                                  ...longTermLoansList
-                                ],
+                                  );
+                                },
                               ),
                             ],
                           );
                         },
+                      )
+                    : SizedBox.shrink(),
+              ],
+              floatingActionButton: AnimateFABDelayed(
+                enabled: true,
+                fab: AddFAB(
+                  tooltip: isCredit == true || isCredit == null
+                      ? "add-credit".tr()
+                      : "add-debt".tr(),
+                  onTap: () {
+                    openBottomSheet(
+                      context,
+                      AddLoanPopup(
+                        selectedTransactionType:
+                            isCredit == true || isCredit == null
+                                ? TransactionSpecialType.credit
+                                : TransactionSpecialType.debt,
                       ),
                     );
                   },
+                ),
+              ),
+              listID: pageId,
+              title: "loans".tr(),
+              dragDownToDismiss: true,
+              bodyBuilder: (scrollController, scrollPhysics, sliverAppBar) {
+                if (allLoanObjectivesSnapshot.hasData == false)
+                  return SizedBox.shrink();
+                if ((allLoanObjectivesSnapshot.data?.length ?? 0) <= 0) {
+                  numberLongTerm = 0;
+                  _tabController.index = 0;
+                  return CustomScrollView(
+                    controller: _scrollController,
+                    slivers: [
+                      sliverAppBar,
+                      ...loanInfoAppBar,
+                      ...oneTimeLoanList(false)
+                    ],
+                  );
+                }
+                // Set the tab to long term if none were added previously, but one was added
+                if (numberLongTerm == 0) {
+                  _tabController.index = 1;
+                  numberLongTerm = allLoanObjectivesSnapshot.data?.length ?? 0;
+                }
+                return NestedScrollView(
+                  controller: _scrollController,
+                  headerSliverBuilder:
+                      (BuildContext contextHeader, bool innerBoxIsScrolled) {
+                    return <Widget>[
+                      SliverOverlapAbsorber(
+                        handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                            contextHeader),
+                        sliver: MultiSliver(
+                          children: [
+                            sliverAppBar,
+                            SliverToBoxAdapter(
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.only(bottom: 13),
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.symmetric(
+                                    horizontal: getHorizontalPaddingConstrained(
+                                          context,
+                                          enabled:
+                                              enableDoubleColumn(context) ==
+                                                  false,
+                                        ) +
+                                        13,
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.symmetric(
+                                      horizontal:
+                                          getHorizontalPaddingConstrained(
+                                              context),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: IncomeExpenseTabSelector(
+                                            hasBorderRadius: true,
+                                            onTabChanged: (_) {},
+                                            initialTabIsIncome: false,
+                                            showIcons: false,
+                                            tabController: _tabController,
+                                            expenseLabel: "one-time".tr(),
+                                            expenseCustomIcon: Icon(
+                                              appStateSettings["outlinedIcons"]
+                                                  ? Icons
+                                                      .event_available_outlined
+                                                  : Icons
+                                                      .event_available_rounded,
+                                            ),
+                                            incomeLabel: "long-term".tr(),
+                                            incomeCustomIcon: Icon(
+                                              appStateSettings["outlinedIcons"]
+                                                  ? Icons.av_timer_outlined
+                                                  : Icons.av_timer_rounded,
+                                            ),
+                                          ),
+                                        ),
+                                        AnimatedBuilder(
+                                          animation: _tabController.animation!,
+                                          builder: (BuildContext context,
+                                              Widget? child) {
+                                            return ClipRRect(
+                                              borderRadius:
+                                                  BorderRadiusDirectional
+                                                      .circular(15),
+                                              child: SizeTransition(
+                                                sizeFactor:
+                                                    _tabController.animation!,
+                                                axis: Axis.horizontal,
+                                                child: FadeTransition(
+                                                  opacity:
+                                                      _tabController.animation!,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsetsDirectional
+                                                            .only(start: 7),
+                                                    child: ButtonIcon(
+                                                      size: 48,
+                                                      iconPadding: 25,
+                                                      key: ValueKey(2),
+                                                      onTap: () {
+                                                        pushRoute(
+                                                          context,
+                                                          EditObjectivesPage(
+                                                            objectiveType:
+                                                                ObjectiveType
+                                                                    .loan,
+                                                          ),
+                                                        );
+                                                      },
+                                                      icon: appStateSettings[
+                                                              "outlinedIcons"]
+                                                          ? Icons.edit_outlined
+                                                          : Icons.edit_rounded,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            ...loanInfoAppBar,
+                          ],
+                        ),
+                      ),
+                    ];
+                  },
+                  body: Builder(
+                    builder: (contextPageView) {
+                      return TabBarView(
+                        controller: _tabController,
+                        children: [
+                          CustomScrollView(
+                            slivers: [
+                              SliverPinnedOverlapInjector(
+                                handle: NestedScrollView
+                                    .sliverOverlapAbsorberHandleFor(
+                                  contextPageView,
+                                ),
+                              ),
+                              ...oneTimeLoanList(true)
+                            ],
+                          ),
+                          CustomScrollView(
+                            slivers: [
+                              SliverPinnedOverlapInjector(
+                                handle: NestedScrollView
+                                    .sliverOverlapAbsorberHandleFor(
+                                  contextPageView,
+                                ),
+                              ),
+                              ObjectiveListDifferenceLoan(
+                                searchFor: searchValue,
+                              ),
+                              ...longTermLoansList
+                            ],
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                 );
-              }),
-          SelectedTransactionsAppBar(
-            pageID: pageId,
-            enableSettleAllButton: true,
-          ),
-        ],
-      ),
+              },
+              selectedTransactionsAppBar: SelectedTransactionsAppBar(
+                pageID: pageId,
+                enableSettleAllButton: true,
+              ),
+            );
+          }),
     );
   }
 }

@@ -63,120 +63,116 @@ class SubscriptionsPageState extends State<SubscriptionsPage> {
           return true;
         }
       },
-      child: Stack(
-        children: [
-          PageFramework(
-            key: pageState,
-            listID: "Subscriptions",
-            floatingActionButton: AnimateFABDelayed(
-              fab: AddFAB(
-                tooltip: "add-subscription".tr(),
-                openPage: AddTransactionPage(
-                  selectedType: TransactionSpecialType.subscription,
-                  routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-                ),
-              ),
+      child: PageFramework(
+        key: pageState,
+        listID: "Subscriptions",
+        floatingActionButton: AnimateFABDelayed(
+          fab: AddFAB(
+            tooltip: "add-subscription".tr(),
+            openPage: AddTransactionPage(
+              selectedType: TransactionSpecialType.subscription,
+              routesToPopAfterDelete: RoutesToPopAfterDelete.None,
             ),
-            dragDownToDismiss: true,
-            title: "subscriptions".tr(),
-            actions: [
-              CustomPopupMenuButton(
-                showButtons: enableDoubleColumn(context),
-                keepOutFirst: true,
-                items: [
-                  DropdownItemMenu(
-                    id: "settings",
-                    label: "settings".tr(),
-                    icon: appStateSettings["outlinedIcons"]
-                        ? Icons.settings_outlined
-                        : Icons.settings_rounded,
-                    action: () {
-                      openBottomSheet(
-                        context,
-                        PopupFramework(
-                          hasPadding: false,
-                          child: SubscriptionSettings(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ],
-            slivers: [
-              SliverToBoxAdapter(
-                child: TotalUpcomingHeaderPeriodSwitcher(
-                  transactionListStream: database.getAllSubscriptions().$1,
-                  selectedType: selectedType,
-                  setSelectedType: (chosenType) {
-                    setState(() {
-                      selectedType = chosenType;
-                    });
-                  },
-                  selectedSubtitleTranslation: (selectedType) {
-                    return selectedType == SelectedSubscriptionsType.yearly
-                        ? "yearly-subscriptions".tr()
-                        : selectedType == SelectedSubscriptionsType.monthly
-                            ? "monthly-subscriptions".tr()
-                            : "total-subscriptions".tr();
-                  },
-                ),
-              ),
-              StreamBuilder<List<Transaction>>(
-                stream: database.getAllSubscriptions().$1,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    if (snapshot.data!.length <= 0) {
-                      return SliverToBoxAdapter(
-                          child: NoResults(
-                              padding: const EdgeInsetsDirectional.only(
-                                top: 15,
-                                end: 30,
-                                start: 30,
-                              ),
-                              message: "no-subscription-transactions".tr()));
-                    }
-                    return SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                          Transaction transaction = snapshot.data![index];
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              HorizontalBreak(
-                                  padding: EdgeInsetsDirectional.only(
-                                      top: 4, bottom: 6)),
-                              TransactionEntry(
-                                aboveWidget: UpcomingTransactionDateHeader(
-                                  selectedType: selectedType,
-                                  transaction: transaction,
-                                ),
-                                openPage: AddTransactionPage(
-                                  transaction: transaction,
-                                  routesToPopAfterDelete:
-                                      RoutesToPopAfterDelete.One,
-                                ),
-                                transaction: transaction,
-                                listID: "Subscriptions",
-                              ),
-                            ],
-                          );
-                        },
-                        childCount: snapshot.data?.length,
-                      ),
-                    );
-                  } else {
-                    return SliverToBoxAdapter();
-                  }
+          ),
+        ),
+        dragDownToDismiss: true,
+        title: "subscriptions".tr(),
+        actions: [
+          CustomPopupMenuButton(
+            showButtons: enableDoubleColumn(context),
+            keepOutFirst: true,
+            items: [
+              DropdownItemMenu(
+                id: "settings",
+                label: "settings".tr(),
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.settings_outlined
+                    : Icons.settings_rounded,
+                action: () {
+                  openBottomSheet(
+                    context,
+                    PopupFramework(
+                      hasPadding: false,
+                      child: SubscriptionSettings(),
+                    ),
+                  );
                 },
               ),
-              SliverToBoxAdapter(child: SizedBox(height: 55)),
             ],
           ),
-          SelectedTransactionsAppBar(
-            pageID: "Subscriptions",
-          ),
         ],
+        slivers: [
+          SliverToBoxAdapter(
+            child: TotalUpcomingHeaderPeriodSwitcher(
+              transactionListStream: database.getAllSubscriptions().$1,
+              selectedType: selectedType,
+              setSelectedType: (chosenType) {
+                setState(() {
+                  selectedType = chosenType;
+                });
+              },
+              selectedSubtitleTranslation: (selectedType) {
+                return selectedType == SelectedSubscriptionsType.yearly
+                    ? "yearly-subscriptions".tr()
+                    : selectedType == SelectedSubscriptionsType.monthly
+                        ? "monthly-subscriptions".tr()
+                        : "total-subscriptions".tr();
+              },
+            ),
+          ),
+          StreamBuilder<List<Transaction>>(
+            stream: database.getAllSubscriptions().$1,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.data!.length <= 0) {
+                  return SliverToBoxAdapter(
+                      child: NoResults(
+                          padding: const EdgeInsetsDirectional.only(
+                            top: 15,
+                            end: 30,
+                            start: 30,
+                          ),
+                          message: "no-subscription-transactions".tr()));
+                }
+                return SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      Transaction transaction = snapshot.data![index];
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          HorizontalBreak(
+                              padding: EdgeInsetsDirectional.only(
+                                  top: 4, bottom: 6)),
+                          TransactionEntry(
+                            aboveWidget: UpcomingTransactionDateHeader(
+                              selectedType: selectedType,
+                              transaction: transaction,
+                            ),
+                            openPage: AddTransactionPage(
+                              transaction: transaction,
+                              routesToPopAfterDelete:
+                                  RoutesToPopAfterDelete.One,
+                            ),
+                            transaction: transaction,
+                            listID: "Subscriptions",
+                          ),
+                        ],
+                      );
+                    },
+                    childCount: snapshot.data?.length,
+                  ),
+                );
+              } else {
+                return SliverToBoxAdapter();
+              }
+            },
+          ),
+          SliverToBoxAdapter(child: SizedBox(height: 55)),
+        ],
+        selectedTransactionsAppBar: SelectedTransactionsAppBar(
+          pageID: "Subscriptions",
+        ),
       ),
     );
   }

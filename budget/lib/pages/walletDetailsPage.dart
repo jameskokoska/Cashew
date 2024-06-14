@@ -1247,434 +1247,417 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
           return true;
         }
       },
-      child: Stack(
-        children: [
-          PageFramework(
-            appBarBackgroundColor:
-                enableDoubleColumn(context) == true && widget.wallet == null
-                    ? Theme.of(context).colorScheme.secondaryContainer
-                    : null,
-            appBarBackgroundColorStart:
-                enableDoubleColumn(context) == true && widget.wallet == null
-                    ? Theme.of(context).colorScheme.secondaryContainer
-                    : null,
-            backgroundColor: Theme.of(context).canvasColor,
-            scrollController: _scrollController,
-            key: pageState,
-            listID: listID,
-            floatingActionButton: AnimateFABDelayed(
-              fab: AddFAB(
-                tooltip: "add-transaction".tr(),
-                openPage: AddTransactionPage(
-                  routesToPopAfterDelete: RoutesToPopAfterDelete.One,
+      child: PageFramework(
+        appBarBackgroundColor:
+            enableDoubleColumn(context) == true && widget.wallet == null
+                ? Theme.of(context).colorScheme.secondaryContainer
+                : null,
+        appBarBackgroundColorStart:
+            enableDoubleColumn(context) == true && widget.wallet == null
+                ? Theme.of(context).colorScheme.secondaryContainer
+                : null,
+        backgroundColor: Theme.of(context).canvasColor,
+        scrollController: _scrollController,
+        key: pageState,
+        listID: listID,
+        floatingActionButton: AnimateFABDelayed(
+          fab: AddFAB(
+            tooltip: "add-transaction".tr(),
+            openPage: AddTransactionPage(
+              routesToPopAfterDelete: RoutesToPopAfterDelete.One,
+            ),
+          ),
+        ),
+        title:
+            widget.wallet == null ? "all-spending".tr() : widget.wallet!.name,
+        actions: [
+          if (widget.wallet != null)
+            CustomPopupMenuButton(
+              showButtons: enableDoubleColumn(context),
+              keepOutFirst: true,
+              items: [
+                DropdownItemMenu(
+                  id: "edit-account",
+                  label: "edit-account".tr(),
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Icons.edit_outlined
+                      : Icons.edit_rounded,
+                  action: () {
+                    pushRoute(
+                      context,
+                      AddWalletPage(
+                        wallet: widget.wallet,
+                        routesToPopAfterDelete: RoutesToPopAfterDelete.All,
+                      ),
+                    );
+                  },
                 ),
+                DropdownItemMenu(
+                  id: "correct-total-balance",
+                  label: "correct-total-balance".tr(),
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Icons.library_add_outlined
+                      : Icons.library_add_rounded,
+                  action: () {
+                    openBottomSheet(
+                      context,
+                      fullSnap: true,
+                      CorrectBalancePopup(wallet: widget.wallet!),
+                    );
+                  },
+                ),
+                DropdownItemMenu(
+                  id: "transfer-balance",
+                  label: "transfer-balance".tr(),
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Icons.compare_arrows_outlined
+                      : Icons.compare_arrows_rounded,
+                  action: () {
+                    openBottomSheet(
+                      context,
+                      fullSnap: true,
+                      TransferBalancePopup(
+                          wallet: widget.wallet!, allowEditWallet: false),
+                    );
+                  },
+                ),
+              ],
+            ),
+          if (widget.wallet == null)
+            AppBarIconAppear(
+              scrollController: _scrollController,
+              child: CustomPopupMenuButton(
+                showButtons: true,
+                keepOutFirst: true,
+                items: [
+                  // DropdownItemMenu(
+                  //   id: "select-period",
+                  //   label: "select-period-tooltip".tr(),
+                  //   icon: appStateSettings["outlinedIcons"]
+                  //       ? Icons.timelapse_outlined
+                  //       : Icons.timelapse_rounded,
+                  //   action: () async {
+                  //     selectAllSpendingPeriod();
+                  //   },
+                  // ),
+                  DropdownItemMenu(
+                    id: "filters",
+                    label: "filters".tr(),
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.filter_alt_outlined
+                        : Icons.filter_alt_rounded,
+                    action: () async {
+                      selectAllSpendingFilters();
+                    },
+                    selected:
+                        searchFilters?.isClear(ignoreDateTimeRange: true) ==
+                            false,
+                  ),
+                ],
               ),
             ),
-            title: widget.wallet == null
-                ? "all-spending".tr()
-                : widget.wallet!.name,
-            actions: [
-              if (widget.wallet != null)
-                CustomPopupMenuButton(
-                  showButtons: enableDoubleColumn(context),
-                  keepOutFirst: true,
-                  items: [
-                    DropdownItemMenu(
-                      id: "edit-account",
-                      label: "edit-account".tr(),
-                      icon: appStateSettings["outlinedIcons"]
-                          ? Icons.edit_outlined
-                          : Icons.edit_rounded,
-                      action: () {
-                        pushRoute(
-                          context,
-                          AddWalletPage(
-                            wallet: widget.wallet,
-                            routesToPopAfterDelete: RoutesToPopAfterDelete.All,
+        ],
+        dragDownToDismiss: true,
+        bodyBuilder: (scrollController, scrollPhysics, sliverAppBar) {
+          if (widget.wallet == null && enableDoubleColumn(context)) {
+            double heightOfBanner = 56;
+            double topPaddingOfBanner = MediaQuery.viewPaddingOf(context).top;
+            double totalHeaderHeight = heightOfBanner + topPaddingOfBanner;
+            return Column(
+              children: [
+                Stack(
+                  alignment: AlignmentDirectional.centerEnd,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Container(
+                            height: totalHeaderHeight,
+                            padding: EdgeInsetsDirectional.only(
+                                top: topPaddingOfBanner),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .secondaryContainer,
+                            child: Center(
+                              child: TextFont(
+                                text: "all-spending".tr(),
+                                textColor: Theme.of(context)
+                                    .colorScheme
+                                    .onSecondaryContainer,
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
                           ),
-                        );
-                      },
+                        ),
+                      ],
                     ),
-                    DropdownItemMenu(
-                      id: "correct-total-balance",
-                      label: "correct-total-balance".tr(),
-                      icon: appStateSettings["outlinedIcons"]
-                          ? Icons.library_add_outlined
-                          : Icons.library_add_rounded,
-                      action: () {
-                        openBottomSheet(
-                          context,
-                          fullSnap: true,
-                          CorrectBalancePopup(wallet: widget.wallet!),
-                        );
-                      },
+                    PositionedDirectional(
+                      top: topPaddingOfBanner + 5,
+                      end: 55,
+                      child: historySettingsButtonAlwaysShow,
                     ),
-                    DropdownItemMenu(
-                      id: "transfer-balance",
-                      label: "transfer-balance".tr(),
-                      icon: appStateSettings["outlinedIcons"]
-                          ? Icons.compare_arrows_outlined
-                          : Icons.compare_arrows_rounded,
-                      action: () {
-                        openBottomSheet(
-                          context,
-                          fullSnap: true,
-                          TransferBalancePopup(
-                              wallet: widget.wallet!, allowEditWallet: false),
-                        );
-                      },
+                    PositionedDirectional(
+                      top: topPaddingOfBanner + 5,
+                      end: 10,
+                      child: selectFiltersButton,
                     ),
                   ],
                 ),
-              if (widget.wallet == null)
-                AppBarIconAppear(
-                  scrollController: _scrollController,
-                  child: CustomPopupMenuButton(
-                    showButtons: true,
-                    keepOutFirst: true,
-                    items: [
-                      // DropdownItemMenu(
-                      //   id: "select-period",
-                      //   label: "select-period-tooltip".tr(),
-                      //   icon: appStateSettings["outlinedIcons"]
-                      //       ? Icons.timelapse_outlined
-                      //       : Icons.timelapse_rounded,
-                      //   action: () async {
-                      //     selectAllSpendingPeriod();
-                      //   },
-                      // ),
-                      DropdownItemMenu(
-                        id: "filters",
-                        label: "filters".tr(),
-                        icon: appStateSettings["outlinedIcons"]
-                            ? Icons.filter_alt_outlined
-                            : Icons.filter_alt_rounded,
-                        action: () async {
-                          selectAllSpendingFilters();
-                        },
-                        selected:
-                            searchFilters?.isClear(ignoreDateTimeRange: true) ==
-                                false,
+                ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: 1800),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          height: MediaQuery.sizeOf(context).height -
+                              totalHeaderHeight,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Flexible(
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(maxWidth: 700),
+                                  child: SwipeToSelectTransactions(
+                                    listID: listID,
+                                    child: ScrollbarWrap(
+                                      child: CustomScrollView(
+                                        controller: _scrollController,
+                                        slivers: [
+                                          SliverToBoxAdapter(
+                                              child: SizedBox(height: 20)),
+                                          SliverToBoxAdapter(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .symmetric(
+                                                      horizontal: 13),
+                                              child: Stack(
+                                                alignment:
+                                                    AlignmentDirectional.center,
+                                                children: [
+                                                  selectedTabCurrent,
+                                                  selectedTabPeriodSelected(
+                                                    () {
+                                                      selectAllSpendingPeriod(
+                                                          onlyShowCycleOption:
+                                                              false);
+                                                    },
+                                                  ),
+                                                  PositionedDirectional(
+                                                    end: 0,
+                                                    child:
+                                                        clearSelectedPeriodButton,
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          SliverToBoxAdapter(
+                                            child: appliedFilterChipsWidget,
+                                          ),
+                                          ...currentTabPage,
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Flexible(
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(maxWidth: 700),
+                                  child: SwipeToSelectTransactions(
+                                    listID: listID,
+                                    child: ScrollbarWrap(
+                                      child: CustomScrollView(
+                                        slivers: [
+                                          SliverToBoxAdapter(
+                                              child: SizedBox(height: 20)),
+                                          SliverToBoxAdapter(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .symmetric(
+                                                      horizontal: 13),
+                                              child: selectedTabHistory,
+                                            ),
+                                          ),
+                                          ...historyTabPage,
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
-            ],
-            dragDownToDismiss: true,
-            bodyBuilder: (scrollController, scrollPhysics, sliverAppBar) {
-              if (widget.wallet == null && enableDoubleColumn(context)) {
-                double heightOfBanner = 56;
-                double topPaddingOfBanner =
-                    MediaQuery.viewPaddingOf(context).top;
-                double totalHeaderHeight = heightOfBanner + topPaddingOfBanner;
-                return Column(
-                  children: [
-                    Stack(
-                      alignment: AlignmentDirectional.centerEnd,
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: Container(
-                                height: totalHeaderHeight,
-                                padding: EdgeInsetsDirectional.only(
-                                    top: topPaddingOfBanner),
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .secondaryContainer,
-                                child: Center(
-                                  child: TextFont(
-                                    text: "all-spending".tr(),
-                                    textColor: Theme.of(context)
-                                        .colorScheme
-                                        .onSecondaryContainer,
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                    textAlign: TextAlign.center,
-                                  ),
+              ],
+            );
+          }
+          return Stack(
+            children: [
+              NestedScrollView(
+                controller: _scrollController,
+                headerSliverBuilder:
+                    (BuildContext contextHeader, bool innerBoxIsScrolled) {
+                  return <Widget>[
+                    SliverOverlapAbsorber(
+                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                          contextHeader),
+                      sliver: MultiSliver(
+                        children: [
+                          sliverAppBar,
+                          if (widget.wallet != null)
+                            SliverToBoxAdapter(
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.symmetric(
+                                  horizontal:
+                                      getHorizontalPaddingConstrained(context),
+                                ),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsetsDirectional.only(top: 8),
+                                  child: totalNetContainer,
                                 ),
                               ),
                             ),
-                          ],
-                        ),
-                        PositionedDirectional(
-                          top: topPaddingOfBanner + 5,
-                          end: 55,
-                          child: historySettingsButtonAlwaysShow,
-                        ),
-                        PositionedDirectional(
-                          top: topPaddingOfBanner + 5,
-                          end: 10,
-                          child: selectFiltersButton,
-                        ),
-                      ],
+                          if (widget.wallet == null)
+                            SliverToBoxAdapter(
+                                child: tabDateFilterSelectorHeader),
+                          if (searchFilters != null && widget.wallet == null)
+                            SliverToBoxAdapter(child: appliedFilterChipsWidget),
+                        ],
+                      ),
                     ),
-                    ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 1800),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              height: MediaQuery.sizeOf(context).height -
-                                  totalHeaderHeight,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Flexible(
-                                    child: ConstrainedBox(
-                                      constraints:
-                                          BoxConstraints(maxWidth: 700),
-                                      child: SwipeToSelectTransactions(
-                                        listID: listID,
-                                        child: ScrollbarWrap(
-                                          child: CustomScrollView(
-                                            controller: _scrollController,
-                                            slivers: [
-                                              SliverToBoxAdapter(
-                                                  child: SizedBox(height: 20)),
-                                              SliverToBoxAdapter(
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsetsDirectional
-                                                          .symmetric(
-                                                          horizontal: 13),
-                                                  child: Stack(
-                                                    alignment:
-                                                        AlignmentDirectional
-                                                            .center,
-                                                    children: [
-                                                      selectedTabCurrent,
-                                                      selectedTabPeriodSelected(
-                                                        () {
-                                                          selectAllSpendingPeriod(
-                                                              onlyShowCycleOption:
-                                                                  false);
-                                                        },
-                                                      ),
-                                                      PositionedDirectional(
-                                                        end: 0,
-                                                        child:
-                                                            clearSelectedPeriodButton,
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                              SliverToBoxAdapter(
-                                                child: appliedFilterChipsWidget,
-                                              ),
-                                              ...currentTabPage,
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                  ];
+                },
+                body: Builder(
+                  builder: (contextPageView) {
+                    return TabBarView(
+                      controller: _tabController,
+                      children: [
+                        SwipeToSelectTransactions(
+                          listID: listID,
+                          child: ScrollbarWrap(
+                            child: CustomScrollView(
+                              slivers: [
+                                SliverPinnedOverlapInjector(
+                                  handle: NestedScrollView
+                                      .sliverOverlapAbsorberHandleFor(
+                                          contextPageView),
+                                ),
+                                ...currentTabPage,
+                              ],
+                            ),
+                          ),
+                        ),
+                        if (widget.wallet == null)
+                          SwipeToSelectTransactions(
+                            listID: listID,
+                            child: ScrollbarWrap(
+                              child: CustomScrollView(
+                                slivers: [
+                                  SliverPinnedOverlapInjector(
+                                    handle: NestedScrollView
+                                        .sliverOverlapAbsorberHandleFor(
+                                            contextPageView),
                                   ),
-                                  Flexible(
-                                    child: ConstrainedBox(
-                                      constraints:
-                                          BoxConstraints(maxWidth: 700),
-                                      child: SwipeToSelectTransactions(
-                                        listID: listID,
-                                        child: ScrollbarWrap(
-                                          child: CustomScrollView(
-                                            slivers: [
-                                              SliverToBoxAdapter(
-                                                  child: SizedBox(height: 20)),
-                                              SliverToBoxAdapter(
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsetsDirectional
-                                                          .symmetric(
-                                                          horizontal: 13),
-                                                  child: selectedTabHistory,
-                                                ),
-                                              ),
-                                              ...historyTabPage,
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                  ...historyTabPage,
                                 ],
+                              ),
+                            ),
+                          ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+              // Selected period dropdown switcher
+              AnimatedBuilder(
+                animation: _tabController.animation!,
+                builder: (BuildContext context, Widget? child) {
+                  double animationProgress = _tabController.animation!.value;
+                  return SelectedPeriodAppBar(
+                    scrollController: _scrollController,
+                    forceHide: selectedDateTimeRange == null,
+                    animationProgress: animationProgress,
+                    selectPeriodContent: Padding(
+                      padding:
+                          const EdgeInsetsDirectional.only(bottom: 3, top: 3),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsetsDirectional.symmetric(
+                                horizontal: 10),
+                            child: IconButtonScaled(
+                              iconData: appStateSettings["outlinedIcons"]
+                                  ? Icons.chevron_left_outlined
+                                  : Icons.chevron_left_rounded,
+                              iconSize: 18,
+                              scale: 1,
+                              onTap: () {
+                                changeSelectedDateRange(-1);
+                              },
+                            ),
+                          ),
+                          Flexible(
+                            child: AnimatedSizeSwitcher(
+                              child: TextFont(
+                                key: ValueKey(timeRangeString),
+                                text: timeRangeString,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                textAlign: TextAlign.center,
+                                textColor: Theme.of(context)
+                                    .colorScheme
+                                    .onSecondaryContainer,
+                                maxLines: 2,
+                              ),
+                            ),
+                          ),
+                          IgnorePointer(
+                            ignoring: selectedDateTimeRangeIndex == 0,
+                            child: AnimatedOpacity(
+                              duration: Duration(milliseconds: 200),
+                              opacity:
+                                  selectedDateTimeRangeIndex == 0 ? 0.5 : 1,
+                              child: Padding(
+                                padding: const EdgeInsetsDirectional.symmetric(
+                                    horizontal: 10),
+                                child: IconButtonScaled(
+                                  iconData: appStateSettings["outlinedIcons"]
+                                      ? Icons.chevron_right_outlined
+                                      : Icons.chevron_right_rounded,
+                                  iconSize: 18,
+                                  scale: 1,
+                                  onTap: () {
+                                    changeSelectedDateRange(1);
+                                  },
+                                ),
                               ),
                             ),
                           ),
                         ],
                       ),
                     ),
-                  ],
-                );
-              }
-              return Stack(
-                children: [
-                  NestedScrollView(
-                    controller: _scrollController,
-                    headerSliverBuilder:
-                        (BuildContext contextHeader, bool innerBoxIsScrolled) {
-                      return <Widget>[
-                        SliverOverlapAbsorber(
-                          handle:
-                              NestedScrollView.sliverOverlapAbsorberHandleFor(
-                                  contextHeader),
-                          sliver: MultiSliver(
-                            children: [
-                              sliverAppBar,
-                              if (widget.wallet != null)
-                                SliverToBoxAdapter(
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.symmetric(
-                                      horizontal:
-                                          getHorizontalPaddingConstrained(
-                                              context),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsetsDirectional.only(
-                                          top: 8),
-                                      child: totalNetContainer,
-                                    ),
-                                  ),
-                                ),
-                              if (widget.wallet == null)
-                                SliverToBoxAdapter(
-                                    child: tabDateFilterSelectorHeader),
-                              if (searchFilters != null &&
-                                  widget.wallet == null)
-                                SliverToBoxAdapter(
-                                    child: appliedFilterChipsWidget),
-                            ],
-                          ),
-                        ),
-                      ];
-                    },
-                    body: Builder(
-                      builder: (contextPageView) {
-                        return TabBarView(
-                          controller: _tabController,
-                          children: [
-                            SwipeToSelectTransactions(
-                              listID: listID,
-                              child: ScrollbarWrap(
-                                child: CustomScrollView(
-                                  slivers: [
-                                    SliverPinnedOverlapInjector(
-                                      handle: NestedScrollView
-                                          .sliverOverlapAbsorberHandleFor(
-                                              contextPageView),
-                                    ),
-                                    ...currentTabPage,
-                                  ],
-                                ),
-                              ),
-                            ),
-                            if (widget.wallet == null)
-                              SwipeToSelectTransactions(
-                                listID: listID,
-                                child: ScrollbarWrap(
-                                  child: CustomScrollView(
-                                    slivers: [
-                                      SliverPinnedOverlapInjector(
-                                        handle: NestedScrollView
-                                            .sliverOverlapAbsorberHandleFor(
-                                                contextPageView),
-                                      ),
-                                      ...historyTabPage,
-                                    ],
-                                  ),
-                                ),
-                              ),
-                          ],
-                        );
-                      },
-                    ),
-                  ),
-                  // Selected period dropdown switcher
-                  AnimatedBuilder(
-                    animation: _tabController.animation!,
-                    builder: (BuildContext context, Widget? child) {
-                      double animationProgress =
-                          _tabController.animation!.value;
-                      return SelectedPeriodAppBar(
-                        scrollController: _scrollController,
-                        forceHide: selectedDateTimeRange == null,
-                        animationProgress: animationProgress,
-                        selectPeriodContent: Padding(
-                          padding: const EdgeInsetsDirectional.only(
-                              bottom: 3, top: 3),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsetsDirectional.symmetric(
-                                    horizontal: 10),
-                                child: IconButtonScaled(
-                                  iconData: appStateSettings["outlinedIcons"]
-                                      ? Icons.chevron_left_outlined
-                                      : Icons.chevron_left_rounded,
-                                  iconSize: 18,
-                                  scale: 1,
-                                  onTap: () {
-                                    changeSelectedDateRange(-1);
-                                  },
-                                ),
-                              ),
-                              Flexible(
-                                child: AnimatedSizeSwitcher(
-                                  child: TextFont(
-                                    key: ValueKey(timeRangeString),
-                                    text: timeRangeString,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                    textAlign: TextAlign.center,
-                                    textColor: Theme.of(context)
-                                        .colorScheme
-                                        .onSecondaryContainer,
-                                    maxLines: 2,
-                                  ),
-                                ),
-                              ),
-                              IgnorePointer(
-                                ignoring: selectedDateTimeRangeIndex == 0,
-                                child: AnimatedOpacity(
-                                  duration: Duration(milliseconds: 200),
-                                  opacity:
-                                      selectedDateTimeRangeIndex == 0 ? 0.5 : 1,
-                                  child: Padding(
-                                    padding:
-                                        const EdgeInsetsDirectional.symmetric(
-                                            horizontal: 10),
-                                    child: IconButtonScaled(
-                                      iconData:
-                                          appStateSettings["outlinedIcons"]
-                                              ? Icons.chevron_right_outlined
-                                              : Icons.chevron_right_rounded,
-                                      iconSize: 18,
-                                      scale: 1,
-                                      onTap: () {
-                                        changeSelectedDateRange(1);
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              );
-            },
-          ),
-          SelectedTransactionsAppBar(
-            pageID: listID,
-          ),
-        ],
+                  );
+                },
+              ),
+            ],
+          );
+        },
+        selectedTransactionsAppBar: SelectedTransactionsAppBar(
+          pageID: listID,
+        ),
       ),
     );
   }
