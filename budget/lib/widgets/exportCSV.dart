@@ -27,6 +27,7 @@ import 'package:csv/csv.dart';
 import 'package:flutter_charset_detector/flutter_charset_detector.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:universal_html/html.dart' as html;
 import 'dart:io';
 import 'package:budget/struct/randomConstants.dart';
@@ -47,65 +48,16 @@ Future saveCSV(
   );
 }
 
-Map<String, String> convertStringToMap(String inputString,
-    {List<String> keysToIgnore = const [],
-    List<String>? keysToShow,
-    Map<String, String> keysToReplace = const {}}) {
-  // Find the index of the first "(" character
-  final startIndex = inputString.indexOf("(");
-
-  if (startIndex != -1) {
-    // Remove everything before the first "(" character, including it
-    inputString = inputString.substring(startIndex + 1);
-
-    // Remove the last character ")"
-    inputString = inputString.substring(0, inputString.length - 1);
-
-    // Split by comma and space
-    List<String> parts = inputString.split(", ");
-
-    // Create a Map to store key-value pairs
-    Map<String, String> resultMap = {};
-
-    // Iterate through the parts and split each part by ": "
-    for (String part in parts) {
-      // print(part);
-      List<String> keyValue = part.split(": ");
-      if (keyValue.length >= 2) {
-        String key = keyValue[0].trim();
-        if (keysToShow != null && keysToShow.contains(key) == false) continue;
-        if (keysToIgnore.contains(key)) continue;
-        if (keysToReplace.keys.contains(key) && keysToReplace[key] != null)
-          key = keysToReplace[key] ?? "";
-        String value = keyValue[1].trim();
-
-        // Remove the key from the string
-        int index = part.indexOf(": ");
-        if (index != -1) {
-          value = part.substring(index);
-          value = value.replaceFirst(": ", "");
-        }
-
-        if (value == "null") value = "";
-
-        resultMap[key] = value;
-      }
-    }
-
-    return resultMap;
-  } else {
-    if (keysToShow != null) {
-      Map<String, String> out = {};
-      for (String keyIteration in keysToShow) {
-        String key = keyIteration;
-        if (keysToReplace.keys.contains(key) && keysToReplace[key] != null)
-          key = keysToReplace[key] ?? "";
-        out[key] = "";
-      }
-      return out;
-    }
-    return {};
+Map<String, String> createRowOutput(
+  TransactionWithCategory transactionWithCategory,
+  Map<String, String Function(TransactionWithCategory)> lookups,
+) {
+  Map<String, String> output = {};
+  for (String key in lookups.keys) {
+    String entry = lookups[key]!(transactionWithCategory);
+    output[key] = entry;
   }
+  return output;
 }
 
 class ExportCSV extends StatelessWidget {
@@ -118,97 +70,51 @@ class ExportCSV extends StatelessWidget {
           .getAllTransactionsWithCategoryWalletBudgetObjectiveSubCategory(
               (tbl) => tbl.paid.equals(true));
       for (TransactionWithCategory transactionWithCategory in transactions) {
-        String inputTransactionString =
-            transactionWithCategory.transaction.toString();
-        String inputCategoryString =
-            transactionWithCategory.category.toString();
-        String inputWalletString = transactionWithCategory.wallet.toString();
-        String inputBudgetString = transactionWithCategory.budget.toString();
-        String inputObjectiveString =
-            transactionWithCategory.objective.toString();
-        String inputSubcategoryString =
-            transactionWithCategory.subCategory.toString();
-        Map<String, String> merged = {
-          ...convertStringToMap(
-            inputTransactionString,
-            keysToShow: [
-              "name",
-              "amount",
-              "note",
-              "dateCreated",
-              "income",
-              "type",
-            ],
-            keysToReplace: {
-              "dateCreated": "date",
-            },
-          ),
-          ...convertStringToMap(
-            inputCategoryString,
-            keysToShow: [
-              "name",
-              "colour",
-              "iconName",
-              "emojiIconName",
-            ],
-            keysToReplace: {
-              "dateCreated": "categoryDateCreated",
-              "name": "category name",
-              "colour": "color",
-              "emojiIconName": "emoji",
-            },
-          ),
-          ...convertStringToMap(
-            inputSubcategoryString,
-            keysToShow: [
-              "name",
-            ],
-            keysToReplace: {
-              "name": "subcategory",
-            },
-          ),
-          ...convertStringToMap(
-            inputWalletString,
-            keysToIgnore: [
-              "walletPk",
-              "dateTimeModified",
-              "dateCreated",
-              "colour",
-              "order",
-              "iconName",
-              "decimals",
-              "homePageWidgetDisplay",
-              "currencyFormat",
-            ],
-            keysToReplace: {
-              "name": "account", //"walletName"
-            },
-          ),
-          ...convertStringToMap(
-            inputBudgetString,
-            keysToShow: [
-              "name",
-            ],
-            keysToReplace: {
-              "name": "budget",
-            },
-          ),
-          ...convertStringToMap(
-            inputObjectiveString,
-            keysToShow: [
-              "name",
-            ],
-            keysToReplace: {
-              "name": "objective",
-            },
-          ),
+        Map<
+            String,
+            String Function(
+                TransactionWithCategory transactionWithCategory)> lookups = {
+          "account": (transactionWithCategory) =>
+              transactionWithCategory.wallet?.name ?? "",
+          "amount": (transactionWithCategory) =>
+              transactionWithCategory.transaction.amount.toString(),
+          "currency": (transactionWithCategory) =>
+              (transactionWithCategory.wallet?.currency ?? "").allCaps,
+          "title": (transactionWithCategory) =>
+              transactionWithCategory.transaction.name,
+          "note": (transactionWithCategory) =>
+              transactionWithCategory.transaction.note,
+          "date": (transactionWithCategory) =>
+              transactionWithCategory.transaction.dateCreated.toString(),
+          "income": (transactionWithCategory) =>
+              transactionWithCategory.transaction.income.toString(),
+          "type": (transactionWithCategory) =>
+              transactionWithCategory.transaction.type.toString(),
+          "category name": (transactionWithCategory) =>
+              transactionWithCategory.category.name,
+          "subcategory name": (transactionWithCategory) =>
+              transactionWithCategory.subCategory?.name ?? "",
+          "color": (transactionWithCategory) =>
+              transactionWithCategory.category.colour ?? "",
+          "icon": (transactionWithCategory) =>
+              transactionWithCategory.category.iconName ?? "",
+          "emoji": (transactionWithCategory) =>
+              transactionWithCategory.category.emojiIconName ?? "",
+          "budget": (transactionWithCategory) =>
+              transactionWithCategory.budget?.name ?? "",
+          "objective": (transactionWithCategory) =>
+              transactionWithCategory.objective?.name ?? "",
         };
-        output.add(merged);
+        Map<String, String> outMap =
+            createRowOutput(transactionWithCategory, lookups);
+
+        output.add(outMap);
       }
 
       List<List<dynamic>> csvData = [];
       csvData.add(output.first.keys.toList()); // Add first row headers
       csvData.addAll(output.map((map) => map.values.toList()));
+      // print(csvData);
       String csv = ListToCsvConverter().convert(csvData);
 
       String fileName = "cashew-" +
