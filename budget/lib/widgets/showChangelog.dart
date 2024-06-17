@@ -44,6 +44,7 @@ String getChangelogString() {
     Add hint text about editing homepage sections
     Added haptic feedback setting to numpad
     First tab can now be customized
+    Fix CSV export for entries with a comma
     Fix associated titles order priority when recommending title
     Fix upcoming transactions not marked as paid when notification activated
     Fix if decimal precision limit empty when entering amount, default to 2 instead of 0
