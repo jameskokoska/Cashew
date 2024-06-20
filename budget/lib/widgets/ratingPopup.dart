@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:budget/functions.dart';
+import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/firebaseAuthGlobal.dart';
 import 'package:budget/struct/languageMap.dart';
 import 'package:budget/struct/settings.dart';
@@ -76,21 +77,58 @@ class _RatingPopupState extends State<RatingPopup> {
                 : getColor(context, "starYellow"),
           ),
           SizedBox(height: 15),
-          TextInput(
-            labelText: "feedback-suggestions-questions".tr(),
-            keyboardType: TextInputType.multiline,
-            maxLines: null,
-            minLines: 3,
-            padding: EdgeInsetsDirectional.zero,
-            controller: _feedbackController,
-            onChanged: (value) {
-              if (writingFeedback == false) {
-                setState(() {
-                  writingFeedback = true;
-                });
-                bottomSheetControllerGlobal.snapToExtent(0);
-              }
-            },
+          ClipRRect(
+            borderRadius: BorderRadiusDirectional.circular(
+                getPlatform() == PlatformOS.isIOS ? 8 : 15),
+            child: Column(
+              children: [
+                TextInput(
+                  borderRadius: BorderRadius.zero,
+                  padding: EdgeInsetsDirectional.zero,
+                  labelText: "feedback-suggestions-questions".tr(),
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  minLines: 3,
+                  controller: _feedbackController,
+                  onChanged: (value) {
+                    if (writingFeedback == false) {
+                      setState(() {
+                        writingFeedback = true;
+                      });
+                      bottomSheetControllerGlobal.snapToExtent(0);
+                    }
+                  },
+                ),
+                if (appStateSettings["showFAQAndHelpLink"] == true)
+                  HorizontalBreak(
+                    padding: EdgeInsetsDirectional.zero,
+                    color: appStateSettings["materialYou"]
+                        ? dynamicPastel(
+                            context,
+                            Theme.of(context).colorScheme.secondaryContainer,
+                            amount: 0.1,
+                            inverse: true,
+                          )
+                        : getColor(context, "lightDarkAccent"),
+                  ),
+                if (appStateSettings["showFAQAndHelpLink"] == true)
+                  LinkInNotes(
+                    color: (appStateSettings["materialYou"]
+                        ? Theme.of(context).colorScheme.secondaryContainer
+                        : getColor(context, "canvasContainer")),
+                    link: "guide-and-faq".tr(),
+                    iconData: appStateSettings["outlinedIcons"]
+                        ? Icons.live_help_outlined
+                        : Icons.live_help_rounded,
+                    iconDataAfter: appStateSettings["outlinedIcons"]
+                        ? Icons.open_in_new_outlined
+                        : Icons.open_in_new_rounded,
+                    onTap: () async {
+                      openUrl("https://cashewapp.web.app/faq.html");
+                    },
+                  ),
+              ],
+            ),
           ),
           SizedBox(height: 10),
           AnimatedExpanded(

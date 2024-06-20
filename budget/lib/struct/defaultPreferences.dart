@@ -27,6 +27,8 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "theme": "system", //system, light, dark
     "use24HourFormat": "system", //system, 12-hour, 24-hour
     "numberCountUpAnimation": true,
+    "appAnimations": AppAnimations.all.index,
+    "showFAQAndHelpLink": true,
     "selectedWalletPk": "0",
     "selectedSubscriptionType": 0,
     "accentColor": toHexString(Color(0xFF1B447A)),
@@ -323,6 +325,8 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     // "migratedSetLongTermLoansAmountTo0": false,
   };
 }
+
+enum AppAnimations { all, minimal, disabled }
 
 Future attemptToMigrateSetLongTermLoansAmountTo0() async {
   try {

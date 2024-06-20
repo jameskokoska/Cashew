@@ -23,29 +23,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({Key? key}) : super(key: key);
-
-  showChangelogForce(BuildContext context) {
-    showChangelog(
-      context,
-      forceShow: true,
-      majorChangesOnly: true,
-      extraWidget: Padding(
-        padding: const EdgeInsetsDirectional.only(
-          bottom: 10,
-        ),
-        child: Button(
-          label: "view-detailed-changelog".tr(),
-          onTap: () {
-            Navigator.pop(context);
-            pushRoute(context, DetailedChangelogPage());
-          },
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,20 +79,14 @@ class AboutPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Tappable(
-                    borderRadius: 10,
-                    onTap: () {
-                      showChangelogForce(context);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsetsDirectional.symmetric(
-                          vertical: 0, horizontal: 10),
-                      child: TextFont(
-                        text: getVersionString(),
-                        fontSize: 14,
-                        textAlign: TextAlign.center,
-                        maxLines: 5,
-                      ),
+                  Padding(
+                    padding: const EdgeInsetsDirectional.symmetric(
+                        vertical: 0, horizontal: 10),
+                    child: TextFont(
+                      text: getVersionString(),
+                      fontSize: 14,
+                      textAlign: TextAlign.center,
+                      maxLines: 5,
                     ),
                   ),
                 ],
@@ -120,81 +95,10 @@ class AboutPage extends StatelessWidget {
           ),
         ),
         SizedBox(height: 5),
-        Padding(
-          padding: const EdgeInsetsDirectional.symmetric(
-              horizontal: 15, vertical: 5),
-          child: Tappable(
-            onTap: () {
-              openUrl("https://github.com/jameskokoska/Cashew");
-            },
-            color: containerColor,
-            borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
-            child: Padding(
-              padding: const EdgeInsetsDirectional.symmetric(
-                  horizontal: 13, vertical: 15),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(MoreIcons.github),
-                      SizedBox(width: 10),
-                      Flexible(
-                        child: TextFont(
-                          text: "app-is-open-source"
-                              .tr(namedArgs: {"app": globalAppName}),
-                          fontSize: 18,
-                          maxLines: 5,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        SizedBox(height: 7),
-        Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsetsDirectional.only(start: 15),
-                child: Button(
-                  label: "view-app-intro".tr(),
-                  onTap: () {
-                    pushRoute(
-                      context,
-                      OnBoardingPage(
-                        popNavigationWhenDone: true,
-                        showPreviewDemoButton: false,
-                      ),
-                    );
-                  },
-                  expandedLayout: true,
-                ),
-              ),
-            ),
-            SizedBox(width: 10),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsetsDirectional.only(end: 15),
-                child: Button(
-                  label: "view-changelog".tr(),
-                  onTap: () {
-                    showChangelogForce(context);
-                  },
-                  expandedLayout: true,
-                ),
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: 20),
+        AboutLinks(containerColor: containerColor),
+        SizedBox(height: 10),
+        HorizontalBreak(),
+        SizedBox(height: 10),
         Padding(
           padding: const EdgeInsetsDirectional.symmetric(
               horizontal: 15, vertical: 7),
@@ -284,144 +188,7 @@ class AboutPage extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 20),
-        Padding(
-          padding: const EdgeInsetsDirectional.symmetric(horizontal: 15),
-          child: OutlinedContainer(
-            borderColor:
-                Theme.of(context).colorScheme.tertiary.withOpacity(0.6),
-            clip: true,
-            child: Column(
-              children: [
-                TappableOpacityButton(
-                  expandedLayout: true,
-                  label: "view-licenses-and-legalese".tr(),
-                  color: containerColor,
-                  textColor: Theme.of(context).colorScheme.tertiary,
-                  onTap: () {
-                    showLicensePage(
-                        context: context,
-                        applicationVersion: getVersionString(),
-                        applicationLegalese:
-                            "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE." +
-                                "\n\n" +
-                                "exchange-rate-notice-description".tr());
-                  },
-                ),
-                TappableOpacityButtonBreak(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .tertiary
-                        .withOpacity(0.6)),
-                TappableOpacityButton(
-                  expandedLayout: true,
-                  label: "privacy-policy".tr(),
-                  color: containerColor,
-                  textColor: Theme.of(context).colorScheme.tertiary,
-                  onTap: () {
-                    openUrl("http://cashewapp.web.app/policy.html");
-                  },
-                ),
-                TappableOpacityButtonBreak(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .tertiary
-                        .withOpacity(0.6)),
-                TappableOpacityButton(
-                  expandedLayout: true,
-                  label: "delete-all-data".tr(),
-                  color: Theme.of(context).colorScheme.error.withOpacity(0.3),
-                  textColor: Theme.of(context).colorScheme.error,
-                  onTap: () {
-                    openPopup(
-                      context,
-                      title: "erase-everything".tr(),
-                      description: "erase-everything-description".tr(),
-                      icon: appStateSettings["outlinedIcons"]
-                          ? Icons.warning_outlined
-                          : Icons.warning_rounded,
-                      onExtraLabel2: "erase-synced-data-and-cloud-backups".tr(),
-                      onExtra2: () {
-                        Navigator.pop(context);
-                        openBottomSheet(
-                          context,
-                          PopupFramework(
-                            title: "erase-cloud-data".tr(),
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsetsDirectional.only(
-                                    bottom: 18,
-                                    start: 5,
-                                    end: 5,
-                                  ),
-                                  child: TextFont(
-                                    text: "erase-cloud-data-description".tr(),
-                                    fontSize: 18,
-                                    textAlign: TextAlign.center,
-                                    maxLines: 10,
-                                  ),
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: SyncCloudBackupButton(
-                                        onTap: () async {
-                                          Navigator.pop(context);
-                                          pushRoute(context, AccountsPage());
-                                        },
-                                      ),
-                                    ),
-                                    SizedBox(width: 18),
-                                    Expanded(
-                                      child: BackupsCloudBackupButton(
-                                        onTap: () async {
-                                          Navigator.pop(context);
-                                          pushRoute(context, AccountsPage());
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                      onSubmit: () async {
-                        Navigator.pop(context);
-                        openPopup(
-                          context,
-                          title: "erase-everything-warning".tr(),
-                          description:
-                              "erase-everything-warning-description".tr(),
-                          icon: appStateSettings["outlinedIcons"]
-                              ? Icons.warning_amber_outlined
-                              : Icons.warning_amber_rounded,
-                          onSubmit: () async {
-                            Navigator.pop(context);
-                            clearDatabase(context);
-                          },
-                          onSubmitLabel: "erase".tr(),
-                          onCancelLabel: "cancel".tr(),
-                          onCancel: () {
-                            Navigator.pop(context);
-                          },
-                        );
-                      },
-                      onSubmitLabel: "erase".tr(),
-                      onCancelLabel: "cancel".tr(),
-                      onCancel: () {
-                        Navigator.pop(context);
-                      },
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
-        SizedBox(height: 15),
+        SizedBox(height: 10),
         Padding(
           padding: const EdgeInsetsDirectional.symmetric(
               horizontal: 15, vertical: 7),
@@ -677,6 +444,266 @@ class AboutPage extends StatelessWidget {
         ),
         SizedBox(height: 20),
       ],
+    );
+  }
+}
+
+void showChangelogForce(BuildContext context) {
+  showChangelog(
+    context,
+    forceShow: true,
+    majorChangesOnly: true,
+    extraWidget: Padding(
+      padding: const EdgeInsetsDirectional.only(
+        bottom: 10,
+      ),
+      child: Button(
+        label: "view-detailed-changelog".tr(),
+        onTap: () {
+          Navigator.pop(context);
+          pushRoute(context, DetailedChangelogPage());
+        },
+      ),
+    ),
+  );
+}
+
+void openOnBoarding(BuildContext context) {
+  pushRoute(
+    context,
+    OnBoardingPage(
+      popNavigationWhenDone: true,
+      showPreviewDemoButton: false,
+    ),
+  );
+}
+
+void openLicensesPage(BuildContext context) {
+  showLicensePage(
+      context: context,
+      applicationVersion: getVersionString(),
+      applicationLegalese:
+          "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE." +
+              "\n\n" +
+              "exchange-rate-notice-description".tr());
+}
+
+void deleteAllDataFlow(BuildContext context) {
+  openPopup(
+    context,
+    title: "erase-everything".tr(),
+    description: "erase-everything-description".tr(),
+    icon: appStateSettings["outlinedIcons"]
+        ? Icons.warning_outlined
+        : Icons.warning_rounded,
+    onExtraLabel2: "erase-synced-data-and-cloud-backups".tr(),
+    onExtra2: () {
+      Navigator.pop(context);
+      openBottomSheet(
+        context,
+        PopupFramework(
+          title: "erase-cloud-data".tr(),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsetsDirectional.only(
+                  bottom: 18,
+                  start: 5,
+                  end: 5,
+                ),
+                child: TextFont(
+                  text: "erase-cloud-data-description".tr(),
+                  fontSize: 18,
+                  textAlign: TextAlign.center,
+                  maxLines: 10,
+                ),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: SyncCloudBackupButton(
+                      onTap: () async {
+                        Navigator.pop(context);
+                        pushRoute(context, AccountsPage());
+                      },
+                    ),
+                  ),
+                  SizedBox(width: 18),
+                  Expanded(
+                    child: BackupsCloudBackupButton(
+                      onTap: () async {
+                        Navigator.pop(context);
+                        pushRoute(context, AccountsPage());
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+    onSubmit: () async {
+      Navigator.pop(context);
+      openPopup(
+        context,
+        title: "erase-everything-warning".tr(),
+        description: "erase-everything-warning-description".tr(),
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.warning_amber_outlined
+            : Icons.warning_amber_rounded,
+        onSubmit: () async {
+          Navigator.pop(context);
+          clearDatabase(context);
+        },
+        onSubmitLabel: "erase".tr(),
+        onCancelLabel: "cancel".tr(),
+        onCancel: () {
+          Navigator.pop(context);
+        },
+      );
+    },
+    onSubmitLabel: "erase".tr(),
+    onCancelLabel: "cancel".tr(),
+    onCancel: () {
+      Navigator.pop(context);
+    },
+  );
+}
+
+class AboutLinks extends StatelessWidget {
+  const AboutLinks({required this.containerColor, Key? key}) : super(key: key);
+  final Color containerColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding:
+          const EdgeInsetsDirectional.symmetric(horizontal: 15, vertical: 5),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(
+          getPlatform() == PlatformOS.isIOS ? 10 : 15,
+        ),
+        child: Column(
+          children: [
+            _buildTappable(
+              context: context,
+              isExternalLink: true,
+              onTap: () => openUrl("https://github.com/jameskokoska/Cashew"),
+              icon: MoreIcons.github,
+              text: "app-is-open-source".tr(namedArgs: {"app": globalAppName}),
+            ),
+            const HorizontalBreak(padding: EdgeInsetsDirectional.zero),
+            _buildTappable(
+              context: context,
+              isExternalLink: true,
+              onTap: () => openUrl("https://cashewapp.web.app/faq.html"),
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.live_help_outlined
+                  : Icons.live_help_rounded,
+              text: "guide-and-faq".tr(),
+            ),
+            const HorizontalBreak(padding: EdgeInsetsDirectional.zero),
+            _buildTappable(
+              context: context,
+              isExternalLink: false,
+              onTap: () => showChangelogForce(context),
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.list_alt_outlined
+                  : Icons.list_alt_rounded,
+              text: "changelog".tr(),
+            ),
+            const HorizontalBreak(padding: EdgeInsetsDirectional.zero),
+            _buildTappable(
+              context: context,
+              isExternalLink: false,
+              onTap: () => openOnBoarding(context),
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.door_front_door_outlined
+                  : Icons.door_front_door_rounded,
+              text: "view-app-intro".tr(),
+            ),
+            const HorizontalBreak(padding: EdgeInsetsDirectional.zero),
+            _buildTappable(
+              context: context,
+              isExternalLink: true,
+              onTap: () => openUrl("http://cashewapp.web.app/policy.html"),
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.policy_outlined
+                  : Icons.policy_rounded,
+              text: "privacy-policy".tr(),
+            ),
+            const HorizontalBreak(padding: EdgeInsetsDirectional.zero),
+            _buildTappable(
+              context: context,
+              isExternalLink: false,
+              onTap: () => openLicensesPage(context),
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.account_balance_outlined
+                  : Icons.account_balance_rounded,
+              text: "view-licenses-and-legalese".tr(),
+            ),
+            const HorizontalBreak(padding: EdgeInsetsDirectional.zero),
+            _buildTappable(
+              context: context,
+              isExternalLink: false,
+              onTap: () => deleteAllDataFlow(context),
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.delete_sweep_outlined
+                  : Icons.delete_sweep_rounded,
+              text: "delete-all-data".tr(),
+              color: Colors.red.withOpacity(0.4),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTappable(
+      {required BuildContext context,
+      required VoidCallback onTap,
+      required IconData icon,
+      required String text,
+      required bool isExternalLink,
+      Color? color}) {
+    return Tappable(
+      onTap: onTap,
+      borderRadius: 0,
+      color: color ?? containerColor,
+      child: Padding(
+        padding: const EdgeInsetsDirectional.only(
+            start: 18, end: 18, top: 11, bottom: 11),
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              size: 25,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: TextFont(
+                text: text,
+                fontSize: 17,
+                maxLines: 5,
+              ),
+            ),
+            Icon(
+              isExternalLink
+                  ? appStateSettings["outlinedIcons"]
+                      ? Icons.open_in_new_outlined
+                      : Icons.open_in_new_rounded
+                  : appStateSettings["outlinedIcons"]
+                      ? Icons.keyboard_arrow_right_outlined
+                      : Icons.keyboard_arrow_right_rounded,
+              size: 22,
+              color: getColor(context, "black").withOpacity(0.3),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
