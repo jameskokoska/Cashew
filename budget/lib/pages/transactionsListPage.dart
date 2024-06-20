@@ -1,5 +1,6 @@
 import 'package:budget/pages/transactionFilters.dart';
 import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
+import 'package:budget/struct/defaultPreferences.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
@@ -289,8 +290,13 @@ class TransactionsListPageState extends State<TransactionsListPage>
                                       ),
                                       TransactionEntries(
                                         searchFilters: searchFilters,
-                                        renderType: TransactionEntriesRenderType
-                                            .implicitlyAnimatedSlivers,
+                                        renderType:
+                                            appStateSettings["appAnimations"] !=
+                                                    AppAnimations.all.index
+                                                ? TransactionEntriesRenderType
+                                                    .slivers
+                                                : TransactionEntriesRenderType
+                                                    .implicitlyAnimatedSlivers,
                                         startDate,
                                         new DateTime(
                                             startDate.year,
