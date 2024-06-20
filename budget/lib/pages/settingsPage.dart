@@ -678,6 +678,7 @@ class MoreOptionsPagePreferences extends StatelessWidget {
         HeaderHeightSetting(),
         OutlinedIconsSetting(),
         FontPickerSetting(),
+        AppAnimationSetting(),
         CountingNumberAnimationSetting(),
         IncreaseTextContrastSetting(),
         SettingsHeader(title: "transactions".tr()),
@@ -974,6 +975,48 @@ class CountingNumberAnimationSetting extends StatelessWidget {
           value == "count-up" ? true : false,
           updateGlobalState: false,
         );
+      },
+      getLabel: (item) {
+        return item.tr();
+      },
+    );
+  }
+}
+
+class AppAnimationSetting extends StatelessWidget {
+  const AppAnimationSetting({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsContainerDropdown(
+      title: "app-animations".tr(),
+      description: "app-animations-description".tr(),
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.animation_outlined
+          : Icons.animation_rounded,
+      initial: appStateSettings["appAnimations"] == AppAnimations.all.index
+          ? "all"
+          : appStateSettings["appAnimations"] == AppAnimations.minimal.index
+              ? "minimal"
+              : appStateSettings["appAnimations"] ==
+                      AppAnimations.disabled.index
+                  ? "disabled"
+                  : "all",
+      items: ["all", "minimal"], // "disabled" is not yet supported
+      onChanged: (value) async {
+        await updateSettings(
+          "appAnimations",
+          value == "all"
+              ? AppAnimations.all.index
+              : value == "minimal"
+                  ? AppAnimations.minimal.index
+                  : value == "disabled"
+                      ? AppAnimations.disabled.index
+                      : "all",
+          updateGlobalState: false,
+          setStateAllPageFrameworks: true,
+        );
+        appStateKey.currentState?.refreshAppState();
       },
       getLabel: (item) {
         return item.tr();

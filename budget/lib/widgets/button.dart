@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/struct/defaultPreferences.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -115,12 +116,14 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
                           amount: 0.3)
                       : Theme.of(context).colorScheme.secondaryContainer,
           onHighlightChanged: (value) {
-            setState(() {
-              isTapped = value;
-            });
+            if (appStateSettings["appAnimations"] == AppAnimations.all.index)
+              setState(() {
+                isTapped = value;
+              });
           },
           onTap: () {
-            _shrink();
+            if (appStateSettings["appAnimations"] == AppAnimations.all.index)
+              _shrink();
             if (widget.disabled == false) widget.onTap();
             if (widget.disabled == true && widget.onDisabled != null)
               widget.onDisabled!();

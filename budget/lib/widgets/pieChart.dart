@@ -1,6 +1,7 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/defaultPreferences.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/categoryIcon.dart';
@@ -180,13 +181,11 @@ class PieChartDisplayState extends State<PieChartDisplay> {
   @override
   void initState() {
     super.initState();
-    if (!appStateSettings["batterySaver"]) {
-      Future.delayed(Duration(milliseconds: 0), () {
-        setState(() {
-          scaleIn = true;
-        });
+    Future.delayed(Duration(milliseconds: 0), () {
+      setState(() {
+        scaleIn = true;
       });
-    }
+    });
     Future.delayed(Duration(milliseconds: 500), () async {
       int numCategories = (await database.getAllCategories()).length;
       for (int i = 1; i <= numCategories + 25; i++) {

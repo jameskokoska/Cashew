@@ -5,6 +5,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/defaultPreferences.dart';
 import 'package:budget/struct/languageMap.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
@@ -1397,8 +1398,11 @@ class PremiumBanner extends StatelessWidget {
                           : 0.9,
                       child: PremiumBackground(
                         purchased: purchased,
-                        disableAnimation:
-                            getPlatform() == PlatformOS.isIOS || kIsWeb,
+                        disableAnimation: appStateSettings["appAnimations"] !=
+                                AppAnimations.all.index ||
+                            getPlatform() == PlatformOS.isIOS ||
+                            kIsWeb ||
+                            appStateSettings["batterySaver"] == true,
                       ),
                     ),
                     Padding(

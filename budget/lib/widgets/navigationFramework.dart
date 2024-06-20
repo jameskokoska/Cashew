@@ -29,6 +29,7 @@ import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/pages/creditDebtTransactionsPage.dart';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/defaultPreferences.dart';
 import 'package:budget/struct/navBarIconsData.dart';
 import 'package:budget/struct/quickActions.dart';
 import 'package:budget/struct/settings.dart';
@@ -907,6 +908,8 @@ class AnimateFAB extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (appStateSettings["appAnimations"] != AppAnimations.all.index)
+      return condition ? fab : SizedBox.shrink();
     // return AnimatedOpacity(
     //   duration: Duration(milliseconds: 400),
     //   opacity: condition ? 1 : 0,

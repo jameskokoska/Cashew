@@ -1,5 +1,6 @@
 import 'package:budget/colors.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/struct/defaultPreferences.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
@@ -375,7 +376,9 @@ class EditRowEntry extends StatelessWidget {
       );
     }
     return AnimatedOpacity(
-      duration: Duration(milliseconds: 200),
+      duration: appStateSettings["appAnimations"] != AppAnimations.all.index
+          ? Duration.zero
+          : Duration(milliseconds: 200),
       opacity: currentReorder ? 0.6 : (opacity ?? 1),
       child: Column(
         children: [

@@ -1,3 +1,4 @@
+import 'package:budget/struct/defaultPreferences.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:flutter/material.dart';
@@ -376,15 +377,18 @@ class _AnimateFABDelayedState extends State<AnimateFABDelayed> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(widget.delay, () {
-      setState(() {
-        scaleIn = true;
+    if (appStateSettings["appAnimations"] != AppAnimations.all.index)
+      Future.delayed(widget.delay, () {
+        setState(() {
+          scaleIn = true;
+        });
       });
-    });
   }
 
   @override
   Widget build(BuildContext context) {
+    if (appStateSettings["appAnimations"] != AppAnimations.all.index)
+      return widget.fab;
     return AnimateFAB(
       condition: widget.enabled ?? scaleIn,
       fab: widget.fab,

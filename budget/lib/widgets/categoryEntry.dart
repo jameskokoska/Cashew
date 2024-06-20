@@ -4,6 +4,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/struct/currencyFunctions.dart';
+import 'package:budget/struct/defaultPreferences.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/categoryIcon.dart';
@@ -336,6 +337,10 @@ class CategoryEntry extends StatelessWidget {
           if (subCategoriesWithTotal.length <= 0) return mainCategoryWidget;
 
           Widget subCategoriesSummaryWidget = AnimatedExpanded(
+            duration:
+                appStateSettings["appAnimations"] != AppAnimations.all.index
+                    ? Duration.zero
+                    : Duration(milliseconds: 425),
             key: ValueKey(1),
             expand: selected == true || allSelected,
             child: SubCategoriesContainer(
@@ -423,7 +428,9 @@ class CategoryEntry extends StatelessWidget {
       child: AnimatedExpanded(
         expand:
             alwaysHide == false && (!(!selected && !allSelected) || alwaysShow),
-        duration: Duration(milliseconds: 650),
+        duration: appStateSettings["appAnimations"] != AppAnimations.all.index
+            ? Duration.zero
+            : Duration(milliseconds: 650),
         sizeCurve: Curves.easeInOutCubic,
         child: Tappable(
           borderRadius: 0,

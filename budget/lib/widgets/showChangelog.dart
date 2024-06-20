@@ -1,6 +1,7 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:budget/pages/activityPage.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/creditDebtTransactionsPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
@@ -26,6 +27,15 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 5.3.2
+    First navigation tab can be customized
+    Revamped About App page
+    FAQ, Tips, and Guide website link on More page
+    App animations setting (improve app performance if animations are disabled)
+    Long pressing duplicate transaction button creates a duplicate at the current date and time
+    Added haptic feedback setting to number pad
+    Fix CSV export for entries with a comma
+    Fixed app link routing for (A) 12+
     < 5.3.0
     Revamped scheduled transactions page: see an extrapolated total average per month or year
     Transaction activity log page: see recently deleted/modified transactions
@@ -40,11 +50,7 @@ String getChangelogString() {
     Added info point about next repetitive transaction will be generated after current marked as paid 
     Titles with the same category and name are automatically deleted
     Manual adding/editing of associated title can be configured to subcategory
-    Long pressing duplicate transaction creates a duplicate at the current date and time
     Add hint text about editing homepage sections
-    Added haptic feedback setting to numpad
-    First tab can now be customized
-    Fix CSV export for entries with a comma
     Fix associated titles order priority when recommending title
     Fix upcoming transactions not marked as paid when notification activated
     Fix if decimal precision limit empty when entering amount, default to 2 instead of 0
@@ -2395,6 +2401,21 @@ Map<String, List<MajorChanges>> getMajorChanges() {
             CreditDebtTransactions(
               isCredit: null,
             ),
+          );
+        },
+      ),
+    ],
+    "< 5.3.0": [
+      MajorChanges(
+        "major-change-18".tr(),
+        Icons.ballot_rounded,
+        info: [
+          "major-change-18-1".tr(),
+        ],
+        onTap: (context) {
+          pushRoute(
+            context,
+            ActivityPage(),
           );
         },
       ),

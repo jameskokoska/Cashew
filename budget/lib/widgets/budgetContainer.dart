@@ -2,6 +2,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/pages/sharedBudgetSettings.dart';
 import 'package:budget/pages/transactionFilters.dart';
 import 'package:budget/struct/currencyFunctions.dart';
+import 'package:budget/struct/defaultPreferences.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedCircularProgress.dart';
 import 'package:budget/pages/addBudgetPage.dart';
@@ -535,7 +536,8 @@ class AnimatedGooBackground extends StatelessWidget {
     if (appStateSettings["batterySaver"] ||
         kIsWeb ||
         (getPlatform() == PlatformOS.isIOS &&
-            appStateSettings["iOSAnimatedGoo"] != true)) {
+            appStateSettings["iOSAnimatedGoo"] != true) ||
+        appStateSettings["appAnimations"] != AppAnimations.all.index) {
       return Container(
         decoration: BoxDecoration(
           color:
