@@ -1153,5 +1153,12 @@
   "expand-all-with-spending-goals": "Проширите све помоћу циљева потрошње",
   "collapse-empty-categories": "Скупи празне категорије",
   "created-copy-for-current-time": "Направљена копија за тренутно време",
-  "haptic-feedback": "Хаптиц Феедбацк"
+  "haptic-feedback": "Хаптиц Феедбацк",
+  "guide-and-faq": "Честа питања, водичи и помоћ",
+  "faq": "Помоћ",
+  "app-animations": "Анимације",
+  "app-animations-description": "Онемогућавање анимација може побољшати перформансе",
+  "minimal": "Минимално",
+  "major-change-18": "Дневник активности трансакције",
+  "major-change-18-1": "Погледајте листу недавно избрисаних/измењених трансакција"
 }

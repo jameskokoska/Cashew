@@ -1153,5 +1153,12 @@
   "expand-all-with-spending-goals": "Perluas Semua Dengan Tujuan Pengeluaran",
   "collapse-empty-categories": "Ciutkan Kategori Kosong",
   "created-copy-for-current-time": "Salinan yang Dibuat Untuk Waktu Saat Ini",
-  "haptic-feedback": "Umpan Balik Haptik"
+  "haptic-feedback": "Umpan Balik Haptik",
+  "guide-and-faq": "FAQ, Panduan, dan Bantuan",
+  "faq": "Membantu",
+  "app-animations": "Animasi",
+  "app-animations-description": "Menonaktifkan animasi dapat meningkatkan kinerja",
+  "minimal": "Minimal",
+  "major-change-18": "Log Aktivitas Transaksi",
+  "major-change-18-1": "Melihat daftar transaksi yang baru saja dihapus/dimodifikasi"
 }

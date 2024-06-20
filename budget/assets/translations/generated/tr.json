@@ -1153,5 +1153,12 @@
   "expand-all-with-spending-goals": "Harcama Hedefleriyle Tümünü Genişletin",
   "collapse-empty-categories": "Boş Kategorileri Daralt",
   "created-copy-for-current-time": "Geçerli Zaman İçin Oluşturulan Kopya",
-  "haptic-feedback": "Dokunsal geribildirim"
+  "haptic-feedback": "Dokunsal geribildirim",
+  "guide-and-faq": "SSS, Kılavuzlar ve Yardım",
+  "faq": "Yardım",
+  "app-animations": "Animasyonlar",
+  "app-animations-description": "Animasyonları devre dışı bırakmak performansı artırabilir",
+  "minimal": "En az",
+  "major-change-18": "İşlem Etkinliği Günlüğü",
+  "major-change-18-1": "Yakın zamanda silinen/değiştirilen işlemlerin listesini görüntüleyin"
 }

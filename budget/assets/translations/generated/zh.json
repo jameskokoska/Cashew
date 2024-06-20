@@ -1153,5 +1153,12 @@
   "expand-all-with-spending-goals": "扩大支出目标",
   "collapse-empty-categories": "折叠空类别",
   "created-copy-for-current-time": "已为当前时间创建副本",
-  "haptic-feedback": "触觉反馈"
+  "haptic-feedback": "触觉反馈",
+  "guide-and-faq": "常见问题解答、指南和帮助",
+  "faq": "帮助",
+  "app-animations": "动画",
+  "app-animations-description": "禁用动画可以提高性能",
+  "minimal": "最小",
+  "major-change-18": "交易活动日志",
+  "major-change-18-1": "查看最近删除/修改的交易列表"
 }

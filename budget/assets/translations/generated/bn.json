@@ -1153,5 +1153,12 @@
   "expand-all-with-spending-goals": "ব্যয়ের লক্ষ্য সহ সমস্ত প্রসারিত করুন",
   "collapse-empty-categories": "খালি বিভাগগুলিকে সঙ্কুচিত করুন৷",
   "created-copy-for-current-time": "বর্তমান সময়ের জন্য কপি তৈরি করা হয়েছে",
-  "haptic-feedback": "হ্যাপটিক প্রতিক্রিয়া"
+  "haptic-feedback": "হ্যাপটিক প্রতিক্রিয়া",
+  "guide-and-faq": "FAQ, গাইড এবং সাহায্য",
+  "faq": "সাহায্য",
+  "app-animations": "অ্যানিমেশন",
+  "app-animations-description": "অ্যানিমেশন অক্ষম করা কর্মক্ষমতা উন্নত করতে পারে",
+  "minimal": "ন্যূনতম",
+  "major-change-18": "লেনদেন কার্যকলাপ লগ",
+  "major-change-18-1": "সম্প্রতি মুছে ফেলা/পরিবর্তিত লেনদেনের একটি তালিকা দেখুন"
 }

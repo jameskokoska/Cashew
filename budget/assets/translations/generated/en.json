@@ -1153,5 +1153,12 @@
   "expand-all-with-spending-goals": "Expand All With Spending Goals",
   "collapse-empty-categories": "Collapse Empty Categories",
   "created-copy-for-current-time": "Created Copy For Current Time",
-  "haptic-feedback": "Haptic Feedback"
+  "haptic-feedback": "Haptic Feedback",
+  "guide-and-faq": "FAQ, Guides, and Help",
+  "faq": "FAQ",
+  "app-animations": "App Animations",
+  "app-animations-description": "Disabling animations can improve performance",
+  "minimal": "Minimal",
+  "major-change-18": "Transaction Activity Log",
+  "major-change-18-1": "View a list of recently deleted/modified transactions"
 }

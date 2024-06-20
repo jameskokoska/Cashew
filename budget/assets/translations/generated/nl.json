@@ -1153,5 +1153,12 @@
   "expand-all-with-spending-goals": "Breid alles uit met bestedingsdoelen",
   "collapse-empty-categories": "Lege categorieën samenvouwen",
   "created-copy-for-current-time": "Kopie gemaakt voor huidige tijd",
-  "haptic-feedback": "Haptische feedback"
+  "haptic-feedback": "Haptische feedback",
+  "guide-and-faq": "Veelgestelde vragen, handleidingen en hulp",
+  "faq": "Hulp",
+  "app-animations": "Animaties",
+  "app-animations-description": "Het uitschakelen van animaties kan de prestaties verbeteren",
+  "minimal": "Minimaal",
+  "major-change-18": "Transactieactiviteitenlogboek",
+  "major-change-18-1": "Bekijk een lijst met onlangs verwijderde/gewijzigde transacties"
 }

@@ -1153,5 +1153,12 @@
   "expand-all-with-spending-goals": "Palawakin ang Lahat Gamit ang Mga Layunin sa Paggastos",
   "collapse-empty-categories": "I-collapse ang Mga Walang Lamang Kategorya",
   "created-copy-for-current-time": "Gumawa ng Kopya Para sa Kasalukuyang Panahon",
-  "haptic-feedback": "Haptic Feedback"
+  "haptic-feedback": "Haptic Feedback",
+  "guide-and-faq": "FAQ, Mga Gabay, at Tulong",
+  "faq": "Tulong",
+  "app-animations": "Mga animation",
+  "app-animations-description": "Ang hindi pagpapagana ng mga animation ay maaaring mapabuti ang pagganap",
+  "minimal": "Minimal",
+  "major-change-18": "Log ng Aktibidad ng Transaksyon",
+  "major-change-18-1": "Tingnan ang isang listahan ng kamakailang tinanggal/binagong mga transaksyon"
 }

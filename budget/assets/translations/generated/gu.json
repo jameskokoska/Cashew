@@ -1153,5 +1153,12 @@
   "expand-all-with-spending-goals": "ખર્ચના લક્ષ્યો સાથે બધાને વિસ્તૃત કરો",
   "collapse-empty-categories": "ખાલી શ્રેણીઓ સંકુચિત કરો",
   "created-copy-for-current-time": "વર્તમાન સમય માટે નકલ બનાવી",
-  "haptic-feedback": "હેપ્ટિક પ્રતિસાદ"
+  "haptic-feedback": "હેપ્ટિક પ્રતિસાદ",
+  "guide-and-faq": "FAQ, માર્ગદર્શિકાઓ અને મદદ",
+  "faq": "મદદ",
+  "app-animations": "એનિમેશન",
+  "app-animations-description": "એનિમેશનને અક્ષમ કરવાથી પ્રદર્શનમાં સુધારો થઈ શકે છે",
+  "minimal": "ન્યૂનતમ",
+  "major-change-18": "વ્યવહાર પ્રવૃત્તિ લોગ",
+  "major-change-18-1": "તાજેતરમાં કાઢી નાખેલ/સંશોધિત વ્યવહારોની યાદી જુઓ"
 }

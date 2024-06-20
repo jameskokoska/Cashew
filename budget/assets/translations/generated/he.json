@@ -1153,5 +1153,12 @@
   "expand-all-with-spending-goals": "הרחב הכל עם יעדי הוצאות",
   "collapse-empty-categories": "כווץ קטגוריות ריקות",
   "created-copy-for-current-time": "נוצר עותק לזמן נוכחי",
-  "haptic-feedback": "משוב הפטי"
+  "haptic-feedback": "משוב הפטי",
+  "guide-and-faq": "שאלות נפוצות, מדריכים ועזרה",
+  "faq": "עֶזרָה",
+  "app-animations": "אנימציות",
+  "app-animations-description": "השבתת הנפשות יכולה לשפר את הביצועים",
+  "minimal": "מִינִימָלִי",
+  "major-change-18": "יומן פעילות עסקאות",
+  "major-change-18-1": "הצג רשימה של עסקאות שנמחקו/שונו לאחרונה"
 }

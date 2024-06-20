@@ -1153,5 +1153,12 @@
   "expand-all-with-spending-goals": "Laajenna kaikki kulutustavoitteilla",
   "collapse-empty-categories": "Kutista tyhjät luokat",
   "created-copy-for-current-time": "Luotu kopio nykyiselle ajalle",
-  "haptic-feedback": "Haptinen palaute"
+  "haptic-feedback": "Haptinen palaute",
+  "guide-and-faq": "FAQ, oppaat ja ohje",
+  "faq": "auta",
+  "app-animations": "Animaatiot",
+  "app-animations-description": "Animaatioiden poistaminen käytöstä voi parantaa suorituskykyä",
+  "minimal": "Minimaalinen",
+  "major-change-18": "Tapahtumatoimintaloki",
+  "major-change-18-1": "Näytä luettelo äskettäin poistetuista/muokatuista tapahtumista"
 }

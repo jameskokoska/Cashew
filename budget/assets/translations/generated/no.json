@@ -1153,5 +1153,12 @@
   "expand-all-with-spending-goals": "Utvid alle med forbruksmål",
   "collapse-empty-categories": "Skjul tomme kategorier",
   "created-copy-for-current-time": "Opprettet kopi for gjeldende tid",
-  "haptic-feedback": "Haptisk tilbakemelding"
+  "haptic-feedback": "Haptisk tilbakemelding",
+  "guide-and-faq": "FAQ, guider og hjelp",
+  "faq": "Hjelp",
+  "app-animations": "Animasjoner",
+  "app-animations-description": "Deaktivering av animasjoner kan forbedre ytelsen",
+  "minimal": "Minimal",
+  "major-change-18": "Transaksjonsaktivitetslogg",
+  "major-change-18-1": "Vis en liste over nylig slettede/endrede transaksjoner"
 }

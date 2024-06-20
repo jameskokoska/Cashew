@@ -1153,5 +1153,12 @@
   "expand-all-with-spending-goals": "Extindeți totul cu obiective de cheltuieli",
   "collapse-empty-categories": "Restrângeți categoriile goale",
   "created-copy-for-current-time": "Copie creată pentru ora curentă",
-  "haptic-feedback": "Feedback-ul haptic"
+  "haptic-feedback": "Feedback-ul haptic",
+  "guide-and-faq": "Întrebări frecvente, ghiduri și ajutor",
+  "faq": "Ajutor",
+  "app-animations": "Animații",
+  "app-animations-description": "Dezactivarea animațiilor poate îmbunătăți performanța",
+  "minimal": "Minim",
+  "major-change-18": "Jurnalul activității tranzacției",
+  "major-change-18-1": "Vizualizați o listă a tranzacțiilor recent șterse/modificate"
 }

@@ -1153,5 +1153,12 @@
   "expand-all-with-spending-goals": "همه چیز را با اهداف هزینه گسترش دهید",
   "collapse-empty-categories": "جمع کردن دسته‌های خالی",
   "created-copy-for-current-time": "کپی برای زمان فعلی ایجاد شد",
-  "haptic-feedback": "بازخورد لمسی"
+  "haptic-feedback": "بازخورد لمسی",
+  "guide-and-faq": "پرسش‌های متداول، راهنماها و راهنما",
+  "faq": "کمک",
+  "app-animations": "تصاوير متحرك",
+  "app-animations-description": "غیرفعال کردن انیمیشن ها می تواند عملکرد را بهبود بخشد",
+  "minimal": "حداقل",
+  "major-change-18": "گزارش فعالیت تراکنش",
+  "major-change-18-1": "فهرستی از تراکنش‌های اخیراً حذف شده/تغییر شده را مشاهده کنید"
 }

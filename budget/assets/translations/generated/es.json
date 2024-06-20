@@ -1153,5 +1153,12 @@
   "expand-all-with-spending-goals": "Amplíe todo con objetivos de gasto",
   "collapse-empty-categories": "Contraer categorías vacías",
   "created-copy-for-current-time": "Copia creada para la hora actual",
-  "haptic-feedback": "Retroalimentación háptica"
+  "haptic-feedback": "Retroalimentación háptica",
+  "guide-and-faq": "Preguntas frecuentes, guías y ayuda",
+  "faq": "Ayuda",
+  "app-animations": "animaciones",
+  "app-animations-description": "Deshabilitar las animaciones puede mejorar el rendimiento.",
+  "minimal": "Mínimo",
+  "major-change-18": "Registro de actividad de transacciones",
+  "major-change-18-1": "Ver una lista de transacciones eliminadas/modificadas recientemente"
 }

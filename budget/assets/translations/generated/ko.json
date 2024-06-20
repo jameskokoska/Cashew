@@ -1153,5 +1153,12 @@
   "expand-all-with-spending-goals": "지출 목표로 모두 확장",
   "collapse-empty-categories": "빈 카테고리 접기",
   "created-copy-for-current-time": "현재 시간에 대한 복사본이 생성되었습니다.",
-  "haptic-feedback": "햅틱 피드백"
+  "haptic-feedback": "햅틱 피드백",
+  "guide-and-faq": "FAQ, 가이드 및 도움말",
+  "faq": "돕다",
+  "app-animations": "애니메이션",
+  "app-animations-description": "애니메이션을 비활성화하면 성능이 향상될 수 있습니다.",
+  "minimal": "최소",
+  "major-change-18": "거래 활동 로그",
+  "major-change-18-1": "최근 삭제/수정된 거래 목록 보기"
 }

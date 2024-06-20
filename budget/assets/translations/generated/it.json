@@ -1153,5 +1153,12 @@
   "expand-all-with-spending-goals": "Espandi tutto con obiettivi di spesa",
   "collapse-empty-categories": "Comprimi le categorie vuote",
   "created-copy-for-current-time": "Copia creata per l'ora corrente",
-  "haptic-feedback": "Feedback tattile"
+  "haptic-feedback": "Feedback tattile",
+  "guide-and-faq": "Domande frequenti, guide e aiuto",
+  "faq": "Aiuto",
+  "app-animations": "Animazioni",
+  "app-animations-description": "La disattivazione delle animazioni può migliorare le prestazioni",
+  "minimal": "Minimo",
+  "major-change-18": "Registro delle attività di transazione",
+  "major-change-18-1": "Visualizza un elenco delle transazioni cancellate/modificate di recente"
 }

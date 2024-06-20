@@ -1153,5 +1153,12 @@
   "expand-all-with-spending-goals": "Rozbalte vše pomocí cílů útraty",
   "collapse-empty-categories": "Sbalit prázdné kategorie",
   "created-copy-for-current-time": "Vytvořená kopie pro aktuální čas",
-  "haptic-feedback": "Hmatová zpětná vazba"
+  "haptic-feedback": "Hmatová zpětná vazba",
+  "guide-and-faq": "Časté dotazy, průvodce a nápověda",
+  "faq": "Pomoc",
+  "app-animations": "Animace",
+  "app-animations-description": "Zakázání animací může zlepšit výkon",
+  "minimal": "Minimální",
+  "major-change-18": "Protokol aktivity transakce",
+  "major-change-18-1": "Zobrazit seznam nedávno smazaných/upravených transakcí"
 }

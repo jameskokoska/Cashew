@@ -1153,5 +1153,12 @@
   "expand-all-with-spending-goals": "قم بتوسيع الكل مع أهداف الإنفاق",
   "collapse-empty-categories": "طي الفئات الفارغة",
   "created-copy-for-current-time": "نسخة تم إنشاؤها للوقت الحالي",
-  "haptic-feedback": "ردود الفعل اللمسية"
+  "haptic-feedback": "ردود الفعل اللمسية",
+  "guide-and-faq": "الأسئلة الشائعة والأدلة والمساعدة",
+  "faq": "يساعد",
+  "app-animations": "الرسوم المتحركة",
+  "app-animations-description": "يمكن أن يؤدي تعطيل الرسوم المتحركة إلى تحسين الأداء",
+  "minimal": "الحد الأدنى",
+  "major-change-18": "سجل نشاط المعاملة",
+  "major-change-18-1": "عرض قائمة المعاملات المحذوفة/المعدلة مؤخرا"
 }

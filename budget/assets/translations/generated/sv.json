@@ -1153,5 +1153,12 @@
   "expand-all-with-spending-goals": "Utöka alla med utgiftsmål",
   "collapse-empty-categories": "Komprimera tomma kategorier",
   "created-copy-for-current-time": "Skapat kopia för aktuell tid",
-  "haptic-feedback": "Haptisk återkoppling"
+  "haptic-feedback": "Haptisk återkoppling",
+  "guide-and-faq": "FAQ, guider och hjälp",
+  "faq": "Hjälp",
+  "app-animations": "Animationer",
+  "app-animations-description": "Att inaktivera animationer kan förbättra prestandan",
+  "minimal": "Minimal",
+  "major-change-18": "Transaktionsaktivitetslogg",
+  "major-change-18-1": "Visa en lista över nyligen raderade/ändrade transaktioner"
 }

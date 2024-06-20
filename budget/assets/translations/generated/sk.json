@@ -1153,5 +1153,12 @@
   "expand-all-with-spending-goals": "Rozbaľte všetko pomocou cieľov výdavkov",
   "collapse-empty-categories": "Zbaliť prázdne kategórie",
   "created-copy-for-current-time": "Vytvorená kópia pre aktuálny čas",
-  "haptic-feedback": "Haptická spätná väzba"
+  "haptic-feedback": "Haptická spätná väzba",
+  "guide-and-faq": "FAQ, Guides a Help",
+  "faq": "Pomoc",
+  "app-animations": "Animácie",
+  "app-animations-description": "Zakázanie animácií môže zlepšiť výkon",
+  "minimal": "Minimálne",
+  "major-change-18": "Denník aktivity transakcie",
+  "major-change-18-1": "Pozrite si zoznam nedávno odstránených/upravených transakcií"
 }

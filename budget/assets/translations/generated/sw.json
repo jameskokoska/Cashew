@@ -1153,5 +1153,12 @@
   "expand-all-with-spending-goals": "Panua Yote Kwa Malengo ya Matumizi",
   "collapse-empty-categories": "Kunja Aina Tupu",
   "created-copy-for-current-time": "Imeunda Nakala kwa Wakati wa Sasa",
-  "haptic-feedback": "Maoni ya Haptic"
+  "haptic-feedback": "Maoni ya Haptic",
+  "guide-and-faq": "Maswali Yanayoulizwa Mara kwa Mara, Miongozo na Usaidizi",
+  "faq": "Msaada",
+  "app-animations": "Uhuishaji",
+  "app-animations-description": "Kuzima uhuishaji kunaweza kuboresha utendakazi",
+  "minimal": "Ndogo",
+  "major-change-18": "Kumbukumbu ya Shughuli ya Muamala",
+  "major-change-18-1": "Tazama orodha ya miamala iliyofutwa/iliyorekebishwa hivi majuzi"
 }

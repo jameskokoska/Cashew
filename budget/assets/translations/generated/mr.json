@@ -1153,5 +1153,12 @@
   "expand-all-with-spending-goals": "खर्चाच्या उद्दिष्टांसह सर्व विस्तृत करा",
   "collapse-empty-categories": "रिक्त श्रेणी संकुचित करा",
   "created-copy-for-current-time": "वर्तमान वेळेसाठी प्रत तयार केली",
-  "haptic-feedback": "हॅप्टिक फीडबॅक"
+  "haptic-feedback": "हॅप्टिक फीडबॅक",
+  "guide-and-faq": "FAQ, मार्गदर्शक आणि मदत",
+  "faq": "मदत करा",
+  "app-animations": "ॲनिमेशन",
+  "app-animations-description": "ॲनिमेशन अक्षम केल्याने कार्यप्रदर्शन सुधारू शकते",
+  "minimal": "किमान",
+  "major-change-18": "व्यवहार क्रियाकलाप लॉग",
+  "major-change-18-1": "अलीकडे हटवलेल्या/सुधारित व्यवहारांची सूची पहा"
 }

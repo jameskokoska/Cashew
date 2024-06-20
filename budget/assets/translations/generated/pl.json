@@ -1153,5 +1153,12 @@
   "expand-all-with-spending-goals": "Rozwiń wszystko z celami wydatków",
   "collapse-empty-categories": "Zwiń puste kategorie",
   "created-copy-for-current-time": "Utworzono kopię dla bieżącego czasu",
-  "haptic-feedback": "Informacje zwrotne dotykowe"
+  "haptic-feedback": "Informacje zwrotne dotykowe",
+  "guide-and-faq": "Często zadawane pytania, przewodniki i pomoc",
+  "faq": "Pomoc",
+  "app-animations": "Animacje",
+  "app-animations-description": "Wyłączenie animacji może poprawić wydajność",
+  "minimal": "Minimalny",
+  "major-change-18": "Dziennik aktywności transakcji",
+  "major-change-18-1": "Wyświetl listę ostatnio usuniętych/zmodyfikowanych transakcji"
 }

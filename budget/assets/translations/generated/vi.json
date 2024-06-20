@@ -1153,5 +1153,12 @@
   "expand-all-with-spending-goals": "Mở rộng tất cả với mục tiêu chi tiêu",
   "collapse-empty-categories": "Thu gọn các danh mục trống",
   "created-copy-for-current-time": "Đã tạo bản sao cho thời điểm hiện tại",
-  "haptic-feedback": "Phản hồi xúc giác"
+  "haptic-feedback": "Phản hồi xúc giác",
+  "guide-and-faq": "Câu hỏi thường gặp, Hướng dẫn và Trợ giúp",
+  "faq": "Giúp đỡ",
+  "app-animations": "Hoạt hình",
+  "app-animations-description": "Vô hiệu hóa hình ảnh động có thể cải thiện hiệu suất",
+  "minimal": "Tối thiểu",
+  "major-change-18": "Nhật ký hoạt động giao dịch",
+  "major-change-18-1": "Xem danh sách các giao dịch đã xóa/sửa đổi gần đây"
 }
