@@ -442,6 +442,10 @@ class AboutPage extends StatelessWidget {
           title: "Hungarian",
           list: ["Döbröntei S."],
         ),
+        TranslationInfoBox(
+          title: "Thai",
+          list: ["Jateniphat U."],
+        ),
         SizedBox(height: 20),
       ],
     );
