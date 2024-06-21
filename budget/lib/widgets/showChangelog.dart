@@ -36,6 +36,8 @@ String getChangelogString() {
     Added haptic feedback setting to number pad
     Fix CSV export for entries with a comma
     Fixed app link routing for (A) 12+
+    Fix possibility to add blank title when editing a category
+    Fix saving category when adding title
     < 5.3.0
     Revamped scheduled transactions page: see an extrapolated total average per month or year
     Transaction activity log page: see recently deleted/modified transactions

@@ -370,7 +370,6 @@ class CreditDebtTransactionsState extends State<CreditDebtTransactions>
                     : SizedBox.shrink(),
               ],
               floatingActionButton: AnimateFABDelayed(
-                enabled: true,
                 fab: AddFAB(
                   tooltip: isCredit == true || isCredit == null
                       ? "add-credit".tr()

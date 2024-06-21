@@ -377,7 +377,7 @@ class _AnimateFABDelayedState extends State<AnimateFABDelayed> {
   @override
   void initState() {
     super.initState();
-    if (appStateSettings["appAnimations"] != AppAnimations.all.index)
+    if (appStateSettings["appAnimations"] == AppAnimations.all.index)
       Future.delayed(widget.delay, () {
         setState(() {
           scaleIn = true;

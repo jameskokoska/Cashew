@@ -2788,6 +2788,7 @@ class SelectText extends StatefulWidget {
     this.widgetBeside,
     required this.buttonLabel,
     this.maxLength,
+    this.enableButton = true,
   }) : super(key: key);
   final Function(String) setSelectedText;
   final String? selectedText;
@@ -2807,6 +2808,7 @@ class SelectText extends StatefulWidget {
   final Widget? widgetBeside;
   final String? buttonLabel;
   final int? maxLength;
+  final bool enableButton;
 
   @override
   _SelectTextState createState() => _SelectTextState();
@@ -2883,6 +2885,7 @@ class _SelectTextState extends State<SelectText> {
           Button(
             label: widget.buttonLabel ?? "",
             onTap: onEditingComplete,
+            disabled: !widget.enableButton,
           ),
       ],
     );
