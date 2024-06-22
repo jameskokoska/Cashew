@@ -33,7 +33,9 @@ String getChangelogString() {
     FAQ, Tips, and Guide website link on More page
     App animations setting (improve app performance if animations are disabled)
     Long pressing duplicate transaction button creates a duplicate at the current date and time
+    Optimized duplicating multiple transactions
     Added haptic feedback setting to number pad
+    Currency picker performance improvements
     Fix CSV export for entries with a comma
     Fixed app link routing for (A) 12+
     Fix possibility to add blank title when editing a category
