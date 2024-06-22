@@ -16,6 +16,7 @@ class PopupFramework extends StatelessWidget {
     this.hasPadding = true,
     this.underTitleSpace = true,
     this.aboveTitleSpace = true,
+    this.bottomSafeAreaExtraPadding = true,
     this.showCloseButton = false,
     this.icon,
     this.outsideExtraWidget,
@@ -27,6 +28,7 @@ class PopupFramework extends StatelessWidget {
   final bool hasPadding;
   final bool underTitleSpace;
   final bool aboveTitleSpace;
+  final bool bottomSafeAreaExtraPadding;
   final bool showCloseButton;
   final Widget? icon;
   final Widget? outsideExtraWidget;
@@ -146,29 +148,30 @@ class PopupFramework extends StatelessWidget {
                     : EdgeInsetsDirectional.zero,
                 child: child,
               ),
-              // Bottom safe area extra padding
-              Builder(
-                builder: (context) {
-                  // At least (initialBottomPadding) bottom padding
+              if (bottomSafeAreaExtraPadding == true)
+                // Bottom safe area extra padding
+                Builder(
+                  builder: (context) {
+                    // At least (initialBottomPadding) bottom padding
 
-                  double initialBottomPadding = 10;
-                  double bottomSafeAreaPadding =
-                      MediaQuery.paddingOf(context).bottom;
+                    double initialBottomPadding = 10;
+                    double bottomSafeAreaPadding =
+                        MediaQuery.paddingOf(context).bottom;
 
-                  bottomSafeAreaPadding =
-                      bottomSafeAreaPadding - initialBottomPadding;
+                    bottomSafeAreaPadding =
+                        bottomSafeAreaPadding - initialBottomPadding;
 
-                  if (bottomSafeAreaPadding < initialBottomPadding) {
-                    bottomSafeAreaPadding = initialBottomPadding;
-                  }
+                    if (bottomSafeAreaPadding < initialBottomPadding) {
+                      bottomSafeAreaPadding = initialBottomPadding;
+                    }
 
-                  // print(MediaQuery.paddingOf(context).bottom);
-                  // print(bottomSafeAreaPadding);
-                  return SizedBox(
-                    height: bottomSafeAreaPadding,
-                  );
-                },
-              ),
+                    // print(MediaQuery.paddingOf(context).bottom);
+                    // print(bottomSafeAreaPadding);
+                    return SizedBox(
+                      height: bottomSafeAreaPadding,
+                    );
+                  },
+                ),
             ],
           ),
         ),

@@ -357,13 +357,23 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                     onTap: () {
                       openBottomSheet(
                         context,
-                        PopupFramework(
-                          title: "select-primary-currency".tr(),
-                          subtitle: "select-primary-currency-description".tr(),
-                          child: Column(
-                            children: [
+                        SizedBox.shrink(),
+                        customBuilder:
+                            (context2, scrollController, sheetState) {
+                          return CustomScrollView(
+                            controller: scrollController,
+                            slivers: [
+                              SliverToBoxAdapter(
+                                child: PopupFramework(
+                                  title: "select-primary-currency".tr(),
+                                  subtitle:
+                                      "select-primary-currency-description"
+                                          .tr(),
+                                  child: SizedBox.shrink(),
+                                  bottomSafeAreaExtraPadding: false,
+                                ),
+                              ),
                               CurrencyPicker(
-                                padding: EdgeInsetsDirectional.zero,
                                 onSelected: (selectedCurrency) {
                                   Navigator.pop(context);
                                   database.createOrUpdateWallet(
@@ -379,8 +389,8 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                                 },
                               ),
                             ],
-                          ),
-                        ),
+                          );
+                        },
                       );
                     },
                     text: "change-currency".tr(),

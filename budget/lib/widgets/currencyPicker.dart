@@ -3,27 +3,25 @@ import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/noResults.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/viewAllTransactionsButton.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 class CurrencyPicker extends StatefulWidget {
   const CurrencyPicker({
     super.key,
     required this.onSelected,
-    this.extraButton,
     this.onHasFocus,
     this.initialCurrency,
-    this.padding,
   });
   final Function(String) onSelected;
-  final Widget? extraButton;
   final Function? onHasFocus;
   final String? initialCurrency;
-  final EdgeInsetsDirectional? padding;
 
   @override
   State<CurrencyPicker> createState() => _CurrencyPickerState();
@@ -117,14 +115,14 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: widget.padding ?? EdgeInsetsDirectional.symmetric(horizontal: 8),
-      child: Column(
+    return SliverPadding(
+      padding: EdgeInsetsDirectional.symmetric(horizontal: 24),
+      sliver: MultiSliver(
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: Focus(
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                Focus(
                   onFocusChange: (hasFocus) {
                     if (hasFocus && widget.onHasFocus != null)
                       widget.onHasFocus!();
@@ -137,86 +135,185 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                     onChanged: (text) {
                       searchCurrencies(text);
                     },
-                    padding: widget.extraButton != null
-                        ? EdgeInsetsDirectional.only(start: 18)
-                        : EdgeInsetsDirectional.zero,
+                    padding: EdgeInsetsDirectional.zero,
                   ),
                 ),
-              ),
-              if (widget.extraButton != null) widget.extraButton!,
-            ],
+                SizedBox(height: 12),
+              ],
+            ),
           ),
-          SizedBox(height: 12),
-          searchText != "" || viewAll == true
-              ? SizedBox.shrink()
-              : Wrap(
-                  spacing: 7,
-                  runSpacing: 7,
-                  alignment: WrapAlignment.center,
-                  runAlignment: WrapAlignment.center,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    for (dynamic currencyKey
-                        in appStateSettings["customCurrencies"])
-                      CurrencyItem(
-                        customCurrency: true,
-                        currencyKey: currencyKey.toString(),
-                        selected: selectedCurrency == currencyKey,
-                        onSelected: onSelected,
+          SliverGrid(
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 125,
+              crossAxisSpacing: 7,
+              mainAxisSpacing: 7,
+            ),
+            delegate: SliverChildListDelegate(
+              (searchText != "" || viewAll == true)
+                  ? [
+                      for (String currencyKey in currencies.keys)
+                        CurrencyItem(
+                          currencyKey: currencyKey,
+                          selected: selectedCurrency == currencyKey,
+                          onSelected: onSelected,
+                        )
+                    ]
+                  : [
+                      for (dynamic currencyKey
+                          in appStateSettings["customCurrencies"])
+                        CurrencyItem(
+                          customCurrency: true,
+                          currencyKey: currencyKey.toString(),
+                          selected: selectedCurrency == currencyKey,
+                          onSelected: onSelected,
+                        ),
+                      for (String currencyKey in popularCurrenciesLocal)
+                        CurrencyItem(
+                          currencyKey: currencyKey.toString(),
+                          selected: selectedCurrency == currencyKey,
+                          onSelected: onSelected,
+                        )
+                    ],
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                searchText != "" || viewAll == true
+                    ? SizedBox.shrink()
+                    : Padding(
+                        padding: const EdgeInsetsDirectional.only(top: 15),
+                        child: LowKeyButton(
+                          onTap: () {
+                            setState(() {
+                              viewAll = true;
+                            });
+                          },
+                          text: "view-all-currencies".tr(),
+                        ),
                       ),
-                    for (String currencyKey in popularCurrenciesLocal)
-                      CurrencyItem(
-                        currencyKey: currencyKey.toString(),
-                        selected: selectedCurrency == currencyKey,
-                        onSelected: onSelected,
+                currencies.length <= 0
+                    ? Padding(
+                        padding: const EdgeInsetsDirectional.only(bottom: 15),
+                        child: NoResults(
+                          message: "no-currencies-found".tr(),
+                        ),
                       )
-                  ],
-                ),
-          searchText != "" || viewAll == true
-              ? SizedBox.shrink()
-              : Padding(
-                  padding: const EdgeInsetsDirectional.symmetric(vertical: 15),
-                  child: LowKeyButton(
-                    onTap: () {
-                      setState(() {
-                        viewAll = true;
-                      });
-                    },
-                    text: "view-all-currencies".tr(),
-                  ),
-                ),
-          currencies.length <= 0
-              ? Padding(
-                  padding: const EdgeInsetsDirectional.only(bottom: 15),
-                  child: NoResults(
-                    message: "no-currencies-found".tr(),
-                  ),
-                )
-              : SizedBox.shrink(),
-          searchText == "" && viewAll == false
-              ? SizedBox.shrink()
-              : Wrap(
-                  spacing: 7,
-                  runSpacing: 7,
-                  alignment: WrapAlignment.center,
-                  runAlignment: WrapAlignment.center,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    for (String currencyKey in currencies.keys)
-                      CurrencyItem(
-                        currencyKey: currencyKey,
-                        selected: selectedCurrency == currencyKey,
-                        onSelected: onSelected,
+                    : SizedBox.shrink(),
+                currencies.length < 9 && currencies.length > 0
+                    ? SizedBox(
+                        height: 180,
                       )
-                  ],
-                ),
-          currencies.length < 9 && currencies.length > 0
-              ? SizedBox(
-                  height: 180,
-                )
-              : SizedBox.shrink(),
+                    : SizedBox(
+                        height: 20,
+                      )
+              ],
+            ),
+          ),
         ],
       ),
+    );
+  }
+}
+
+class AllCurrencies extends StatefulWidget {
+  const AllCurrencies({required this.scrollController, super.key});
+  final ScrollController scrollController;
+  @override
+  State<AllCurrencies> createState() => _AllCurrenciesState();
+}
+
+class _AllCurrenciesState extends State<AllCurrencies> {
+  bool viewAll = false;
+  String? selectedCurrency = null;
+  String? searchText = "";
+  Map<String, dynamic> currencies = {};
+  String? initialCurrency = "USD";
+  List<String> popularCurrenciesLocal = popularCurrencies;
+
+  @override
+  void initState() {
+    super.initState();
+    if (initialCurrency == null) {
+      setState(() {
+        selectedCurrency = getDevicesDefaultCurrencyCode();
+      });
+    } else {
+      setState(() {
+        selectedCurrency = initialCurrency;
+        if (!popularCurrencies.contains(initialCurrency) &&
+            selectedCurrency != "") {
+          popularCurrenciesLocal =
+              popularCurrencies.sublist(0, popularCurrencies.length - 1);
+          // Don't add again if selected and custom currency
+          if (currenciesJSON[initialCurrency] != null)
+            popularCurrenciesLocal.insert(0, initialCurrency!);
+        }
+      });
+    }
+
+    populateCurrencies();
+  }
+
+  void populateCurrencies() {
+    Future.delayed(Duration(milliseconds: 0), () async {
+      setState(() {
+        currencies = currenciesJSON;
+        searchText = "";
+      });
+    });
+  }
+
+  void searchCurrencies(String searchTerm) async {
+    if (searchTerm == "") {
+      populateCurrencies();
+    } else {
+      Map<String, dynamic> outCurrencies = {};
+      for (String key in currenciesJSON.keys) {
+        dynamic currency = currenciesJSON[key];
+        if ((currency["CountryName"] != null &&
+                currency["CountryName"]
+                    .toLowerCase()
+                    .contains(searchTerm.toLowerCase())) ||
+            (currency["Currency"] != null &&
+                currency["Currency"]
+                    .toLowerCase()
+                    .contains(searchTerm.toLowerCase())) ||
+            (currency["Code"] != null &&
+                currency["Code"]
+                    .toLowerCase()
+                    .contains(searchTerm.toLowerCase()))) {
+          outCurrencies[key] = currency;
+        }
+      }
+      setState(() {
+        currencies = outCurrencies;
+        searchText = searchTerm;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      controller: widget.scrollController,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        crossAxisSpacing: 7,
+        mainAxisSpacing: 0,
+        childAspectRatio: 1,
+      ),
+      itemCount: currencies.length,
+      itemBuilder: (context, index) {
+        String currencyKey = currencies.keys.toList()[index];
+        return CurrencyItem(
+          currencyKey: currencyKey,
+          selected: selectedCurrency == currencyKey,
+          onSelected: (currency) {
+            // Implement your selection logic here if needed
+          },
+        );
+      },
     );
   }
 }
@@ -264,19 +361,23 @@ class CurrencyItem extends StatelessWidget {
           ),
           duration: Duration(milliseconds: 450),
           child: ConstrainedBox(
-            constraints: BoxConstraints(minWidth: 100, minHeight: 100),
+            constraints: BoxConstraints(minWidth: 500, minHeight: 500),
             child: Padding(
-              padding: const EdgeInsetsDirectional.all(13),
+              padding: const EdgeInsetsDirectional.symmetric(
+                  horizontal: 13, vertical: 5),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   if (customCurrency == false &&
                       currenciesJSON[currencyKey]?["NotKnown"] != true)
                     TextFont(
+                      key: ValueKey("currencyKey"),
                       text: currencyKey.toUpperCase(),
                       fontSize: 18,
+                      textAlign: TextAlign.center,
                     ),
                   TextFont(
+                    key: ValueKey("symbol"),
                     text: customCurrency
                         ? currencyKey.toUpperCase()
                         : currenciesJSON[currencyKey]?["Symbol"] == null ||
@@ -293,6 +394,7 @@ class CurrencyItem extends StatelessWidget {
                         ? 20
                         : 25,
                     fontWeight: FontWeight.bold,
+                    textAlign: TextAlign.center,
                   ),
                   if (((currenciesJSON[currencyKey]?["CountryName"] == null ||
                               currenciesJSON[currencyKey]?["CountryName"] ==
@@ -302,17 +404,22 @@ class CurrencyItem extends StatelessWidget {
                                   "")) ==
                       false)
                     TextFont(
+                      key: ValueKey("extraName"),
                       text: currenciesJSON[currencyKey]?["CountryName"] ??
                           (currenciesJSON[currencyKey]["Currency"])
                               .toString()
                               .capitalizeFirst ??
                           "",
                       fontSize: 10,
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
                     ),
                   if (customCurrency)
                     TextFont(
+                      key: ValueKey("info"),
                       text: "custom-currency".tr(),
                       fontSize: 10,
+                      textAlign: TextAlign.center,
                     ),
                 ],
               ),

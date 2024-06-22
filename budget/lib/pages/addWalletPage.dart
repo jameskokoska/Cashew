@@ -724,20 +724,17 @@ class _AddWalletPageState extends State<AddWalletPage> {
                   ),
                 ),
               ),
-            ColumnSliver(children: [
-              SizedBox(height: 10),
-              CurrencyPicker(
-                onSelected: setSelectedCurrency,
-                initialCurrency: selectedCurrency,
-                onHasFocus: () {
-                  // Disable scroll when focus - because iOS header height is different than that of Android.
-                  // Future.delayed(Duration(milliseconds: 500), () {
-                  //   addWalletPageKey.currentState?.scrollTo(250);
-                  // });
-                },
-                padding: EdgeInsetsDirectional.symmetric(horizontal: 24),
-              ),
-            ]),
+            SliverToBoxAdapter(child: SizedBox(height: 10)),
+            CurrencyPicker(
+              onSelected: setSelectedCurrency,
+              initialCurrency: selectedCurrency,
+              onHasFocus: () {
+                // Disable scroll when focus - because iOS header height is different than that of Android.
+                // Future.delayed(Duration(milliseconds: 500), () {
+                //   addWalletPageKey.currentState?.scrollTo(250);
+                // });
+              },
+            ),
             SliverToBoxAdapter(child: SizedBox(height: 65)),
             // SliverToBoxAdapter(
             //   child: KeyboardHeightAreaAnimated(),

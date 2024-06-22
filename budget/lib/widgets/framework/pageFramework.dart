@@ -32,6 +32,7 @@ class PageFramework extends StatefulWidget {
     this.title = "",
     this.titleWidget,
     this.slivers = const [],
+    this.sliversBefore = true,
     this.listWidgets,
     this.appBarBackgroundColor,
     this.appBarBackgroundColorStart,
@@ -74,6 +75,7 @@ class PageFramework extends StatefulWidget {
   final String title;
   final Widget? titleWidget;
   final List<Widget> slivers;
+  final bool sliversBefore;
   final List<Widget>? listWidgets;
   final Color? appBarBackgroundColor;
   final bool backButton;
@@ -387,6 +389,42 @@ class PageFrameworkState extends State<PageFramework>
           widget.belowAppBarPaddingWhenCenteredTitleSmall,
     );
 
+    List<Widget> slivers = [
+      for (Widget sliver in widget.slivers)
+        widget.horizontalPadding == 0
+            ? sliver
+            : SliverPadding(
+                padding: EdgeInsetsDirectional.symmetric(
+                    horizontal: widget.horizontalPadding),
+                sliver: sliver)
+    ];
+
+    List<Widget> listWidgets = [
+      widget.listWidgets != null
+          ? SliverPadding(
+              padding: EdgeInsetsDirectional.symmetric(
+                  horizontal: widget.horizontalPadding),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate([
+                  ...widget.listWidgets!,
+                  widget.bottomPadding
+                      ? SizedBox(
+                          height: MediaQuery.paddingOf(context).bottom + 15)
+                      : SizedBox.shrink(),
+                ]),
+              ),
+            )
+          : SliverToBoxAdapter(
+              child: widget.bottomPadding
+                  ? SizedBox(height: MediaQuery.paddingOf(context).bottom + 15)
+                  : SizedBox.shrink(),
+            ),
+    ];
+
+    List<Widget> allSliversContent = widget.sliversBefore
+        ? [...slivers, ...listWidgets]
+        : [...listWidgets, ...slivers];
+
     Widget scaffold = Scaffold(
       resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
       backgroundColor: widget.backgroundColor,
@@ -415,39 +453,7 @@ class PageFrameworkState extends State<PageFramework>
                               SliverToBoxAdapter(
                                 child: Center(child: widget.subtitle),
                               ),
-                            for (Widget sliver in widget.slivers)
-                              widget.horizontalPadding == 0
-                                  ? sliver
-                                  : SliverPadding(
-                                      padding: EdgeInsetsDirectional.symmetric(
-                                          horizontal: widget.horizontalPadding),
-                                      sliver: sliver),
-                            widget.listWidgets != null
-                                ? SliverPadding(
-                                    padding: EdgeInsetsDirectional.symmetric(
-                                        horizontal: widget.horizontalPadding),
-                                    sliver: SliverList(
-                                      delegate: SliverChildListDelegate([
-                                        ...widget.listWidgets!,
-                                        widget.bottomPadding
-                                            ? SizedBox(
-                                                height: MediaQuery.paddingOf(
-                                                            context)
-                                                        .bottom +
-                                                    15)
-                                            : SizedBox.shrink(),
-                                      ]),
-                                    ),
-                                  )
-                                : SliverToBoxAdapter(
-                                    child: widget.bottomPadding
-                                        ? SizedBox(
-                                            height:
-                                                MediaQuery.paddingOf(context)
-                                                        .bottom +
-                                                    15)
-                                        : SizedBox.shrink(),
-                                  ),
+                            ...allSliversContent
                           ],
                         ),
                 ),

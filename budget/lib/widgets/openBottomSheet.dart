@@ -71,6 +71,9 @@ Future openBottomSheet(
   bool isDismissable = true,
   bool useCustomController = false,
   bool reAssignBottomSheetControllerGlobal = true,
+  Widget Function(BuildContext context, ScrollController scrollController,
+          SheetState sheetState)?
+      customBuilder,
 }) async {
   ThemeData themeData = Theme.of(context);
 
@@ -152,6 +155,19 @@ Future openBottomSheet(
               : [0.95, 1],
           positioning: SnapPositioning.relativeToAvailableSpace,
         ),
+        customBuilder: customBuilder != null
+            ? (context, controller, state) {
+                return Material(
+                  child: Theme(
+                    data: Theme.of(context),
+                    child: Container(
+                      color: bottomPaddingColor,
+                      child: customBuilder(context, controller, state),
+                    ),
+                  ),
+                );
+              }
+            : null,
         listener: (SheetState state) {
           if (state.maxExtent == 1 &&
               state.isExpanded &&
@@ -169,16 +185,18 @@ Future openBottomSheet(
         color: bottomPaddingColor,
         cornerRadius: getPlatform() == PlatformOS.isIOS ? 10 : 20,
         duration: Duration(milliseconds: 300),
-        builder: (context, state) {
-          return Material(
-            child: Theme(
-              data: themeData,
-              child: SingleChildScrollView(
-                child: child,
-              ),
-            ),
-          );
-        },
+        builder: customBuilder != null
+            ? null
+            : (context, state) {
+                return Material(
+                  child: Theme(
+                    data: themeData,
+                    child: SingleChildScrollView(
+                      child: child,
+                    ),
+                  ),
+                );
+              },
       );
     },
   );
