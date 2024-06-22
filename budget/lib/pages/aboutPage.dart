@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
@@ -12,6 +13,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/moreIcons.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
@@ -24,430 +26,576 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    bool fullScreenLayout = enableDoubleColumn(context);
     Color containerColor = appStateSettings["materialYou"]
         ? dynamicPastel(
             context, Theme.of(context).colorScheme.secondaryContainer,
             amountLight: 0.2, amountDark: 0.6)
         : getColor(context, "lightDarkAccent");
+
+    Widget cashewInformation = Wrap(
+      alignment: WrapAlignment.center,
+      runAlignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      spacing: 10,
+      runSpacing: 10,
+      children: [
+        Image(
+          image: AssetImage("assets/icon/icon-small.png"),
+          height: 70,
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Tappable(
+              borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
+              onLongPress: () {
+                if (allowDebugFlags)
+                  pushRoute(
+                    context,
+                    DebugPage(),
+                  );
+              },
+              child: Padding(
+                padding: const EdgeInsetsDirectional.symmetric(
+                    vertical: 3, horizontal: 10),
+                child: TextFont(
+                  text: globalAppName,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25,
+                  textAlign: TextAlign.center,
+                  maxLines: 5,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsetsDirectional.symmetric(
+                  vertical: 0, horizontal: 10),
+              child: TextFont(
+                text: getVersionString(),
+                fontSize: 14,
+                textAlign: TextAlign.center,
+                maxLines: 5,
+              ),
+            ),
+          ],
+        )
+      ],
+    );
+
+    List<Widget> developmentTeam = [
+      Padding(
+        padding:
+            const EdgeInsetsDirectional.symmetric(horizontal: 15, vertical: 7),
+        child: Center(
+          child: TextFont(
+            text: "development-team".tr(),
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            textAlign: TextAlign.center,
+            maxLines: 5,
+          ),
+        ),
+      ),
+      Padding(
+        padding:
+            const EdgeInsetsDirectional.symmetric(horizontal: 15, vertical: 5),
+        child: Tappable(
+          onTap: () {
+            openUrl('mailto:dapperappdeveloper@gmail.com');
+          },
+          onLongPress: () {
+            copyToClipboard("dapperappdeveloper@gmail.com");
+          },
+          color: containerColor,
+          borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
+          child: Padding(
+            padding: const EdgeInsetsDirectional.symmetric(
+                horizontal: 13, vertical: 15),
+            child: Column(
+              children: [
+                TextFont(
+                  text: "lead-developer".tr(),
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  textAlign: TextAlign.center,
+                  maxLines: 5,
+                ),
+                TextFont(
+                  text: "James",
+                  fontSize: 29,
+                  fontWeight: FontWeight.bold,
+                  textColor: Theme.of(context).colorScheme.onPrimaryContainer,
+                  textAlign: TextAlign.center,
+                  maxLines: 5,
+                ),
+                TextFont(
+                  text: "dapperappdeveloper@gmail.com",
+                  fontSize: 16,
+                  textAlign: TextAlign.center,
+                  maxLines: 5,
+                  textColor: getColor(context, "textLight"),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      Padding(
+        padding:
+            const EdgeInsetsDirectional.symmetric(horizontal: 15, vertical: 5),
+        child: Tappable(
+          onTap: () {},
+          color: containerColor,
+          borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
+          child: Padding(
+            padding: const EdgeInsetsDirectional.symmetric(
+                horizontal: 13, vertical: 15),
+            child: Column(
+              children: [
+                TextFont(
+                  text: "database-designer".tr(),
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  textAlign: TextAlign.center,
+                  maxLines: 5,
+                ),
+                TextFont(
+                  text: "YuYing",
+                  fontSize: 29,
+                  fontWeight: FontWeight.bold,
+                  textColor: Theme.of(context).colorScheme.onPrimaryContainer,
+                  textAlign: TextAlign.center,
+                  maxLines: 5,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      SizedBox(height: 10),
+      Padding(
+        padding:
+            const EdgeInsetsDirectional.symmetric(horizontal: 15, vertical: 7),
+        child: Center(
+          child: TextFont(
+            text: "made-in-canada".tr() + " " + "🍁",
+            fontSize: 14,
+            textAlign: TextAlign.center,
+            maxLines: 5,
+          ),
+        ),
+      ),
+    ];
+
+    List<Widget> graphics = [
+      AboutInfoBox(
+        title: "freepik-credit".tr(),
+        link: "https://www.flaticon.com/authors/freepik",
+      ),
+      AboutInfoBox(
+        title: "font-awesome-credit".tr(),
+        link: "https://fontawesome.com/",
+      ),
+      AboutInfoBox(
+        title: "pch-vector-credit".tr(),
+        link: "https://www.freepik.com/author/pch-vector",
+      ),
+    ];
+
+    List<Widget> majorTools = [
+      AboutInfoBox(
+        title: "Flutter",
+        link: "https://flutter.dev/",
+        padding: fullScreenLayout
+            ? EdgeInsetsDirectional.symmetric(horizontal: 7.5, vertical: 5)
+            : null,
+      ),
+      AboutInfoBox(
+        title: "Google Cloud APIs",
+        link: "https://cloud.google.com/",
+        padding: fullScreenLayout
+            ? EdgeInsetsDirectional.symmetric(horizontal: 7.5, vertical: 5)
+            : null,
+      ),
+      AboutInfoBox(
+        title: "Drift SQL Database",
+        link: "https://drift.simonbinder.eu/",
+        padding: fullScreenLayout
+            ? EdgeInsetsDirectional.symmetric(horizontal: 7.5, vertical: 5)
+            : null,
+      ),
+      AboutInfoBox(
+        title: "FL Charts",
+        link: "https://github.com/imaNNeoFighT/fl_chart",
+        padding: fullScreenLayout
+            ? EdgeInsetsDirectional.symmetric(horizontal: 7.5, vertical: 5)
+            : null,
+      ),
+      AboutInfoBox(
+        title: "exchange-rates-api".tr(),
+        link: "https://github.com/fawazahmed0/exchange-api",
+        padding: fullScreenLayout
+            ? EdgeInsetsDirectional.symmetric(horizontal: 7.5, vertical: 5)
+            : null,
+      ),
+    ];
+
+    List<Widget> translators = [
+      TranslationInfoBox(
+        title: "Italian",
+        list: ["Thomas B.", "Mattia A."],
+      ),
+      TranslationInfoBox(
+        title: "Polish",
+        list: ["Michał S.", "Michał P."],
+      ),
+      TranslationInfoBox(
+        title: "Serbian",
+        list: ["Jovan P."],
+      ),
+      TranslationInfoBox(
+        title: "Swahili",
+        list: ["Anthony K."],
+      ),
+      TranslationInfoBox(
+        title: "German",
+        list: ["Fabian S.", "Christian R.", "Samuel R."],
+      ),
+      TranslationInfoBox(
+        title: "Arabic",
+        list: ["Dorra Y."],
+      ),
+      TranslationInfoBox(
+        title: "Portuguese",
+        list: [
+          "Alexander G.",
+          "Jean J.",
+          "João P.",
+          "Junior M.",
+          "Leandro",
+          "Xavier B."
+        ],
+      ),
+      TranslationInfoBox(
+        title: "Bulgarian",
+        list: ["Денислав C."],
+      ),
+      TranslationInfoBox(
+        title: "Chinese (Simplified)",
+        list: ["Clyde"],
+      ),
+      TranslationInfoBox(
+        title: "Chinese (Traditional)",
+        list: ["qazlll456"],
+      ),
+      TranslationInfoBox(
+        title: "Hindi",
+        list: ["Dikshant S.", "Nikunj K."],
+      ),
+      TranslationInfoBox(
+        title: "Vietnamese",
+        list: ["Ng. Anh"],
+      ),
+      TranslationInfoBox(
+        title: "French",
+        list: ["Antoine C.", "Fabien H."],
+      ),
+      TranslationInfoBox(
+        title: "Indonesian",
+        list: ["Gusairi P."],
+      ),
+      TranslationInfoBox(
+        title: "Ukrainian",
+        list: ["Chris M.", "Yurii S."],
+      ),
+      TranslationInfoBox(
+        title: "Russian",
+        list: ["Ilya A.", "Konstantin B.", "Dennis Q"],
+      ),
+      TranslationInfoBox(
+        title: "Romanian",
+        list: ["Valentin G."],
+      ),
+      TranslationInfoBox(
+        title: "Spanish",
+        list: ["Pablo S.", "Gonzalo R.", "Ramon M."],
+      ),
+      TranslationInfoBox(
+        title: "Swedish",
+        list: ["Anna M."],
+      ),
+      TranslationInfoBox(
+        title: "Danish",
+        list: ["Mittheo"],
+      ),
+      TranslationInfoBox(
+        title: "Turkish",
+        list: ["Serdar A."],
+      ),
+      TranslationInfoBox(
+        title: "Slovak",
+        list: ["Igor V."],
+      ),
+      TranslationInfoBox(
+        title: "Macedonian",
+        list: ["Andrej A."],
+      ),
+      TranslationInfoBox(
+        title: "Arabic",
+        list: ["Ammar N."],
+      ),
+      TranslationInfoBox(
+        title: "Czech",
+        list: ["Kamil T."],
+      ),
+      TranslationInfoBox(
+        title: "Hebrew",
+        list: ["Happy Bear"],
+      ),
+      TranslationInfoBox(
+        title: "Afrikaans",
+        list: ["Andrè B."],
+      ),
+      TranslationInfoBox(
+        title: "Filipino",
+        list: ["Waren G."],
+      ),
+      TranslationInfoBox(
+        title: "Tamil",
+        list: ["Mohamed A."],
+      ),
+      TranslationInfoBox(
+        title: "Japanese",
+        list: ["Tetta N."],
+      ),
+      TranslationInfoBox(
+        title: "Hungarian",
+        list: ["Döbröntei S."],
+      ),
+      TranslationInfoBox(
+        title: "Thai",
+        list: ["Jateniphat U."],
+      ),
+    ];
+
+    double maxWidth = 900;
+    double widthOfScreen =
+        MediaQuery.sizeOf(context).width - getWidthNavigationSidebar(context);
+    double padding = enableDoubleColumn(context)
+        ? max(0, (widthOfScreen - maxWidth) / 2)
+        : getHorizontalPaddingConstrained(context);
+
     return PageFramework(
       dragDownToDismiss: true,
       title: "about".tr(),
-      horizontalPadding: getHorizontalPaddingConstrained(context),
-      listWidgets: [
-        Padding(
-          padding: const EdgeInsetsDirectional.symmetric(
-              horizontal: 15, vertical: 7),
-          child: Wrap(
-            alignment: WrapAlignment.center,
-            runAlignment: WrapAlignment.center,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            spacing: 10,
-            runSpacing: 10,
-            children: [
-              Image(
-                image: AssetImage("assets/icon/icon-small.png"),
-                height: 70,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Tappable(
-                    borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
-                    onLongPress: () {
-                      if (allowDebugFlags)
-                        pushRoute(
-                          context,
-                          DebugPage(),
-                        );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsetsDirectional.symmetric(
-                          vertical: 3, horizontal: 10),
-                      child: TextFont(
-                        text: globalAppName,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 25,
-                        textAlign: TextAlign.center,
-                        maxLines: 5,
+      horizontalPadding: padding,
+      sliversBefore: false,
+      slivers: [
+        SliverPadding(
+          padding: fullScreenLayout
+              ? EdgeInsets.zero
+              : EdgeInsetsDirectional.symmetric(horizontal: 7.5),
+          sliver: SliverMasonryGrid(
+            gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: fullScreenLayout ? 4 : 2,
+            ),
+            mainAxisSpacing: 0,
+            crossAxisSpacing: 0,
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return translators[index];
+              },
+              childCount: translators.length,
+            ),
+          ),
+        ),
+        SliverToBoxAdapter(child: SizedBox(height: 20)),
+      ],
+      listWidgets: fullScreenLayout
+          ? [
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Flexible(
+                        child: Column(
+                          children: [
+                            cashewInformation,
+                            SizedBox(height: 15),
+                            AboutLinks(containerColor: containerColor),
+                            HorizontalBreak(
+                                padding: EdgeInsetsDirectional.symmetric(
+                                    horizontal: 10, vertical: 20)),
+                            AboutDeepLinking(),
+                          ],
+                        ),
                       ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsetsDirectional.symmetric(
-                        vertical: 0, horizontal: 10),
-                    child: TextFont(
-                      text: getVersionString(),
-                      fontSize: 14,
-                      textAlign: TextAlign.center,
-                      maxLines: 5,
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
-        ),
-        SizedBox(height: 5),
-        AboutLinks(containerColor: containerColor),
-        SizedBox(height: 10),
-        HorizontalBreak(),
-        SizedBox(height: 10),
-        Padding(
-          padding: const EdgeInsetsDirectional.symmetric(
-              horizontal: 15, vertical: 7),
-          child: Center(
-            child: TextFont(
-              text: "development-team".tr(),
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              textAlign: TextAlign.center,
-              maxLines: 5,
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsetsDirectional.symmetric(
-              horizontal: 15, vertical: 5),
-          child: Tappable(
-            onTap: () {
-              openUrl('mailto:dapperappdeveloper@gmail.com');
-            },
-            onLongPress: () {
-              copyToClipboard("dapperappdeveloper@gmail.com");
-            },
-            color: containerColor,
-            borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
-            child: Padding(
-              padding: const EdgeInsetsDirectional.symmetric(
-                  horizontal: 13, vertical: 15),
-              child: Column(
-                children: [
-                  TextFont(
-                    text: "lead-developer".tr(),
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    textAlign: TextAlign.center,
-                    maxLines: 5,
-                  ),
-                  TextFont(
-                    text: "James",
-                    fontSize: 29,
-                    fontWeight: FontWeight.bold,
-                    textColor: Theme.of(context).colorScheme.onPrimaryContainer,
-                    textAlign: TextAlign.center,
-                    maxLines: 5,
-                  ),
-                  TextFont(
-                    text: "dapperappdeveloper@gmail.com",
-                    fontSize: 16,
-                    textAlign: TextAlign.center,
-                    maxLines: 5,
-                    textColor: getColor(context, "textLight"),
-                  ),
-                ],
+                      Flexible(
+                        child: Column(
+                          children: [
+                            for (Widget teamMember in developmentTeam)
+                              Row(children: [Expanded(child: teamMember)]),
+                            HorizontalBreak(
+                                padding: EdgeInsetsDirectional.symmetric(
+                                    horizontal: 10, vertical: 20)),
+                            for (Widget graphicAcknowledge in graphics)
+                              Row(children: [
+                                Expanded(child: graphicAcknowledge)
+                              ]),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsetsDirectional.symmetric(
-              horizontal: 15, vertical: 5),
-          child: Tappable(
-            onTap: () {},
-            color: containerColor,
-            borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
-            child: Padding(
-              padding: const EdgeInsetsDirectional.symmetric(
-                  horizontal: 13, vertical: 15),
-              child: Column(
-                children: [
-                  TextFont(
-                    text: "database-designer".tr(),
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    textAlign: TextAlign.center,
-                    maxLines: 5,
-                  ),
-                  TextFont(
-                    text: "YuYing",
-                    fontSize: 29,
-                    fontWeight: FontWeight.bold,
-                    textColor: Theme.of(context).colorScheme.onPrimaryContainer,
-                    textAlign: TextAlign.center,
-                    maxLines: 5,
-                  ),
-                ],
+              HorizontalBreak(
+                  padding: EdgeInsetsDirectional.symmetric(
+                      horizontal: 10, vertical: 20)),
+              Padding(
+                padding: EdgeInsetsDirectional.symmetric(horizontal: 7.5),
+                child: SpreadExpandFlex(majorTools: majorTools, maxPerRow: 3),
               ),
-            ),
-          ),
-        ),
-        SizedBox(height: 10),
-        Padding(
-          padding: const EdgeInsetsDirectional.symmetric(
-              horizontal: 15, vertical: 7),
-          child: Center(
-            child: TextFont(
-              text: "made-in-canada".tr() + " " + "🍁",
-              fontSize: 14,
-              textAlign: TextAlign.center,
-              maxLines: 5,
-            ),
-          ),
-        ),
-        SizedBox(height: 10),
-        if (getPlatform(ignoreEmulation: true) == PlatformOS.isAndroid ||
-            kIsWeb)
-          Padding(
-            padding: const EdgeInsetsDirectional.only(top: 10, bottom: 10),
-            child: HorizontalBreakAbove(
-                child: Column(
-              children: [
-                SizedBox(height: 10),
+              HorizontalBreak(
+                padding: EdgeInsetsDirectional.only(
+                    start: 10, end: 10, top: 25, bottom: 10),
+              ),
+            ]
+          : [
+              Padding(
+                padding: const EdgeInsetsDirectional.symmetric(
+                    horizontal: 15, vertical: 7),
+                child: cashewInformation,
+              ),
+              SizedBox(height: 5),
+              AboutLinks(containerColor: containerColor),
+              SizedBox(height: 10),
+              HorizontalBreak(),
+              SizedBox(height: 10),
+              ...developmentTeam,
+              SizedBox(height: 5),
+              
+              if (getPlatform(ignoreEmulation: true) == PlatformOS.isAndroid ||
+                  kIsWeb)
                 Padding(
-                  padding: const EdgeInsetsDirectional.symmetric(
-                      horizontal: 15, vertical: 7),
-                  child: Center(
-                    child: TextFont(
-                      text: "advanced-automation".tr(),
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      textAlign: TextAlign.center,
-                      maxLines: 5,
-                    ),
+                  padding:
+                      const EdgeInsetsDirectional.only(top: 10, bottom: 10),
+                  child: HorizontalBreakAbove(
+                      child: Column(
+                    children: [
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.symmetric(
+                            horizontal: 15, vertical: 7),
+                        child: Center(
+                          child: TextFont(
+                            text: "advanced-automation".tr(),
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            textAlign: TextAlign.center,
+                            maxLines: 5,
+                          ),
+                        ),
+                      ),
+                      AboutDeepLinking(),
+                                    SizedBox(height: 10),
+                    ],
+                  )),
+                ),
+              HorizontalBreak(),
+              SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsetsDirectional.symmetric(
+                    horizontal: 15, vertical: 7),
+                child: Center(
+                  child: TextFont(
+                    text: "graphics".tr(),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    textAlign: TextAlign.center,
+                    maxLines: 5,
                   ),
                 ),
-                AboutDeepLinking(),
-              ],
-            )),
-          ),
-        SizedBox(height: 10),
-        HorizontalBreak(),
-        SizedBox(height: 10),
-        Padding(
-          padding: const EdgeInsetsDirectional.symmetric(
-              horizontal: 15, vertical: 7),
-          child: Center(
-            child: TextFont(
-              text: "graphics".tr(),
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              textAlign: TextAlign.center,
-              maxLines: 5,
-            ),
-          ),
-        ),
-        AboutInfoBox(
-          title: "freepik-credit".tr(),
-          link: "https://www.flaticon.com/authors/freepik",
-        ),
-        AboutInfoBox(
-          title: "font-awesome-credit".tr(),
-          link: "https://fontawesome.com/",
-        ),
-        AboutInfoBox(
-          title: "pch-vector-credit".tr(),
-          link: "https://www.freepik.com/author/pch-vector",
-        ),
-        Container(height: 15),
-        Padding(
-          padding: const EdgeInsetsDirectional.symmetric(
-              horizontal: 15, vertical: 7),
-          child: Center(
-            child: TextFont(
-              text: "major-tools".tr(),
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              textAlign: TextAlign.center,
-              maxLines: 5,
-            ),
-          ),
-        ),
-        AboutInfoBox(
-          title: "Flutter",
-          link: "https://flutter.dev/",
-        ),
-        AboutInfoBox(
-          title: "Google Cloud APIs",
-          link: "https://cloud.google.com/",
-        ),
-        AboutInfoBox(
-          title: "Drift SQL Database",
-          link: "https://drift.simonbinder.eu/",
-        ),
-        AboutInfoBox(
-          title: "FL Charts",
-          link: "https://github.com/imaNNeoFighT/fl_chart",
-        ),
-        AboutInfoBox(
-          title: "exchange-rates-api".tr(),
-          link: "https://github.com/fawazahmed0/exchange-api",
-        ),
-        Container(height: 15),
-        Padding(
-          padding: const EdgeInsetsDirectional.symmetric(
-              horizontal: 15, vertical: 7),
-          child: Center(
-            child: TextFont(
-              text: "translations".tr().capitalizeFirst,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              textAlign: TextAlign.center,
-              maxLines: 5,
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsetsDirectional.symmetric(
-              horizontal: 15, vertical: 5),
-          child: TranslationsHelp(
-            showIcon: false,
-            backgroundColor: containerColor,
-          ),
-        ),
-        TranslationInfoBox(
-          title: "Italian",
-          list: ["Thomas B.", "Mattia A."],
-        ),
-        TranslationInfoBox(
-          title: "Polish",
-          list: ["Michał S.", "Michał P."],
-        ),
-        TranslationInfoBox(
-          title: "Serbian",
-          list: ["Jovan P."],
-        ),
-        TranslationInfoBox(
-          title: "Swahili",
-          list: ["Anthony K."],
-        ),
-        TranslationInfoBox(
-          title: "German",
-          list: ["Fabian S.", "Christian R.", "Samuel R."],
-        ),
-        TranslationInfoBox(
-          title: "Arabic",
-          list: ["Dorra Y."],
-        ),
-        TranslationInfoBox(
-          title: "Portuguese",
-          list: [
-            "Alexander G.",
-            "Jean J.",
-            "João P.",
-            "Junior M.",
-            "Leandro",
-            "Xavier B."
-          ],
-        ),
-        TranslationInfoBox(
-          title: "Bulgarian",
-          list: ["Денислав C."],
-        ),
-        TranslationInfoBox(
-          title: "Chinese (Simplified)",
-          list: ["Clyde"],
-        ),
-        TranslationInfoBox(
-          title: "Chinese (Traditional)",
-          list: ["qazlll456"],
-        ),
-        TranslationInfoBox(
-          title: "Hindi",
-          list: ["Dikshant S.", "Nikunj K."],
-        ),
-        TranslationInfoBox(
-          title: "Vietnamese",
-          list: ["Ng. Anh"],
-        ),
-        TranslationInfoBox(
-          title: "French",
-          list: ["Antoine C.", "Fabien H."],
-        ),
-        TranslationInfoBox(
-          title: "Indonesian",
-          list: ["Gusairi P."],
-        ),
-        TranslationInfoBox(
-          title: "Ukrainian",
-          list: ["Chris M.", "Yurii S."],
-        ),
-        TranslationInfoBox(
-          title: "Russian",
-          list: ["Ilya A.", "Konstantin B.", "Dennis Q"],
-        ),
-        TranslationInfoBox(
-          title: "Romanian",
-          list: ["Valentin G."],
-        ),
-        TranslationInfoBox(
-          title: "Spanish",
-          list: ["Pablo S.", "Gonzalo R.", "Ramon M."],
-        ),
-        TranslationInfoBox(
-          title: "Swedish",
-          list: ["Anna M."],
-        ),
-        TranslationInfoBox(
-          title: "Danish",
-          list: ["Mittheo"],
-        ),
-        TranslationInfoBox(
-          title: "Turkish",
-          list: ["Serdar A."],
-        ),
-        TranslationInfoBox(
-          title: "Slovak",
-          list: ["Igor V."],
-        ),
-        TranslationInfoBox(
-          title: "Macedonian",
-          list: ["Andrej A."],
-        ),
-        TranslationInfoBox(
-          title: "Arabic",
-          list: ["Ammar N."],
-        ),
-        TranslationInfoBox(
-          title: "Czech",
-          list: ["Kamil T."],
-        ),
-        TranslationInfoBox(
-          title: "Hebrew",
-          list: ["Happy Bear"],
-        ),
-        TranslationInfoBox(
-          title: "Afrikaans",
-          list: ["Andrè B."],
-        ),
-        TranslationInfoBox(
-          title: "Filipino",
-          list: ["Waren G."],
-        ),
-        TranslationInfoBox(
-          title: "Tamil",
-          list: ["Mohamed A."],
-        ),
-        TranslationInfoBox(
-          title: "Japanese",
-          list: ["Tetta N."],
-        ),
-        TranslationInfoBox(
-          title: "Hungarian",
-          list: ["Döbröntei S."],
-        ),
-        TranslationInfoBox(
-          title: "Thai",
-          list: ["Jateniphat U."],
-        ),
-        SizedBox(height: 20),
-      ],
+              ),
+              ...graphics,
+              SizedBox(height: 15),
+              Padding(
+                padding: const EdgeInsetsDirectional.symmetric(
+                    horizontal: 15, vertical: 7),
+                child: Center(
+                  child: TextFont(
+                    text: "major-tools".tr(),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    textAlign: TextAlign.center,
+                    maxLines: 5,
+                  ),
+                ),
+              ),
+              ...majorTools,
+              Container(height: 15),
+              Padding(
+                padding: const EdgeInsetsDirectional.symmetric(
+                    horizontal: 15, vertical: 7),
+                child: Center(
+                  child: TextFont(
+                    text: "translations".tr().capitalizeFirst,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    textAlign: TextAlign.center,
+                    maxLines: 5,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsetsDirectional.only(
+                    start: 15, end: 15, top: 5),
+                child: TranslationsHelp(
+                  showIcon: false,
+                  backgroundColor: containerColor,
+                ),
+              ),
+            ],
+    );
+  }
+}
+
+class SpreadExpandFlex extends StatelessWidget {
+  final List<Widget> majorTools;
+  final int maxPerRow;
+
+  SpreadExpandFlex({required this.majorTools, this.maxPerRow = 3});
+
+  @override
+  Widget build(BuildContext context) {
+    List<Row> rows = [];
+    List<Widget> currentRow = [];
+
+    for (int i = 0; i < majorTools.length; i++) {
+      currentRow.add(Expanded(child: majorTools[i]));
+
+      // If the current row is full or it's the last widget, add the row to the rows list
+      if ((i + 1) % maxPerRow == 0 || i == majorTools.length - 1) {
+        rows.add(Row(
+          children: currentRow,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        ));
+        currentRow = [];
+      }
+    }
+
+    return Column(
+      children: rows,
     );
   }
 }
@@ -590,6 +738,7 @@ class AboutLinks extends StatelessWidget {
           getPlatform() == PlatformOS.isIOS ? 10 : 15,
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             _buildTappable(
               context: context,
@@ -754,6 +903,7 @@ class TranslationInfoBox extends StatelessWidget {
       title: title,
       list: list,
       listTextColor: getColor(context, "black").withOpacity(0.5),
+      padding: EdgeInsetsDirectional.symmetric(horizontal: 7.5, vertical: 5),
     );
   }
 }
@@ -775,14 +925,14 @@ class AboutInfoBox extends StatelessWidget {
   final List<String>? list;
   final Color? color;
   final Color? listTextColor;
-  final EdgeInsetsDirectional? padding;
+  final EdgeInsetsGeometry? padding;
   final bool showLink;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: padding ??
-          const EdgeInsetsDirectional.symmetric(horizontal: 15, vertical: 5),
+          EdgeInsetsDirectional.symmetric(horizontal: 15, vertical: 5),
       child: Tappable(
         onTap: () async {
           if (link != null) openUrl(link ?? "");
