@@ -276,13 +276,15 @@ class SelectedTransactionsAppBarMenu extends StatelessWidget {
   Future duplicateTransactions(BuildContext context,
       {bool duplicateForNow = false}) async {
     bool showDetailedSnackbarMessage = selectedTransactionPks.length <= 1;
-    for (int i = 0; i < selectedTransactionPks.length; i++) {
+    if (selectedTransactionPks.length <= 1) {
       await duplicateTransaction(
         context,
-        selectedTransactionPks[i],
+        selectedTransactionPks[0],
         showDuplicatedMessage: showDetailedSnackbarMessage,
         useCurrentDate: duplicateForNow,
       );
+    } else {
+      duplicateMultipleTransactions(context, selectedTransactionPks);
     }
     if (showDetailedSnackbarMessage == false) {
       if (duplicateForNow) {
@@ -1005,4 +1007,41 @@ Future duplicateTransaction(
       );
     }
   }
+}
+
+Future duplicateMultipleTransactions(
+  BuildContext context,
+  List<String> transactionPks, {
+  bool useCurrentDate = false,
+  double? customAmount,
+}) async {
+  List<Transaction> transactions =
+      await database.getTransactionsFromPk(transactionPks);
+  if (useCurrentDate) {
+    transactions = transactions
+        .map((transaction) => transaction.copyWith(dateCreated: DateTime.now()))
+        .toList();
+  }
+  if (customAmount != null) {
+    transactions = transactions
+        .map((transaction) => transaction.copyWith(amount: customAmount))
+        .toList();
+  }
+
+  // Add one second so when transactions sorted, they don't change positions when updated
+  // Since the transaction list is sorted by date created
+  transactions = transactions
+      .map((transaction) => transaction.copyWith(
+            dateCreated: transaction.dateCreated.add(Duration(seconds: 1)),
+            dateTimeModified: Value(DateTime.now()),
+            transactionPk: null,
+          ))
+      .toList();
+
+  List<TransactionsCompanion> transactionsCompanion = transactions
+      .map((transaction) =>
+          transaction.toCompanion(true).copyWith(transactionPk: Value.absent()))
+      .toList();
+
+  await database.createBatchTransactionsOnly(transactionsCompanion);
 }
