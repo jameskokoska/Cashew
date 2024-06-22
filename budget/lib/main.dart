@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
+import 'package:budget/struct/defaultPreferences.dart';
 import 'package:budget/struct/iconObjects.dart';
 import 'package:budget/struct/keyboardIntents.dart';
 import 'package:budget/widgets/fadeIn.dart';
@@ -197,9 +198,10 @@ class App extends StatelessWidget {
                         Row(
                           children: [
                             AnimatedContainer(
-                              duration: getIsFullScreen(context)
-                                  ? Duration(milliseconds: 1500)
-                                  : Duration.zero,
+                             duration: appStateSettings["appAnimations"] !=
+                                    AppAnimations.all.index
+                                ? Duration.zero
+                                : Duration(milliseconds: 1500),
                               curve: Curves.easeInOutCubicEmphasized,
                               width: getWidthNavigationSidebar(context),
                               color: Theme.of(context).canvasColor,

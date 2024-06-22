@@ -3,6 +3,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/pages/exchangeRatesPage.dart';
+import 'package:budget/struct/defaultPreferences.dart';
 import 'package:budget/struct/navBarIconsData.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
@@ -98,7 +99,9 @@ class NavigationSidebarState extends State<NavigationSidebar> {
         ContextMenuController.removeAny();
       },
       child: AnimatedContainer(
-        duration: Duration(milliseconds: 1500),
+        duration: appStateSettings["appAnimations"] != AppAnimations.all.index
+            ? Duration.zero
+            : Duration(milliseconds: 1500),
         curve: Curves.easeInOutCubicEmphasized,
         width: getWidthNavigationSidebar(context),
         child: Container(
@@ -146,7 +149,10 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                               Opacity(
                                 opacity: 0.7,
                                 child: AnimatedPadding(
-                                  duration: Duration(milliseconds: 1500),
+                                  duration: appStateSettings["appAnimations"] !=
+                                          AppAnimations.all.index
+                                      ? Duration.zero
+                                      : Duration(milliseconds: 1500),
                                   curve: Curves.easeInOutCubicEmphasized,
                                   padding: EdgeInsetsDirectional.only(
                                     bottom: appStateSettings[
@@ -163,7 +169,11 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                                         : 7,
                                   ),
                                   child: AnimatedRotation(
-                                    duration: Duration(milliseconds: 1500),
+                                    duration:
+                                        appStateSettings["appAnimations"] !=
+                                                AppAnimations.all.index
+                                            ? Duration.zero
+                                            : Duration(milliseconds: 1500),
                                     turns: appStateSettings[
                                             "expandedNavigationSidebar"]
                                         ? 0
@@ -211,8 +221,11 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                                           }
                                         },
                                         child: AnimatedPadding(
-                                          duration:
-                                              Duration(milliseconds: 1500),
+                                          duration: appStateSettings[
+                                                      "appAnimations"] !=
+                                                  AppAnimations.all.index
+                                              ? Duration.zero
+                                              : Duration(milliseconds: 1500),
                                           curve:
                                               Curves.easeInOutCubicEmphasized,
                                           padding: EdgeInsetsDirectional.only(
@@ -233,7 +246,10 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                                 ],
                               ),
                               AnimatedContainer(
-                                duration: Duration(milliseconds: 1500),
+                                duration: appStateSettings["appAnimations"] !=
+                                        AppAnimations.all.index
+                                    ? Duration.zero
+                                    : Duration(milliseconds: 1500),
                                 curve: Curves.easeInOutCubicEmphasized,
                                 height: appStateSettings[
                                         "expandedNavigationSidebar"]
@@ -599,7 +615,9 @@ class NavigationSidebarButton extends StatelessWidget {
       padding:
           const EdgeInsetsDirectional.symmetric(horizontal: 5, vertical: 1),
       child: AnimatedSwitcher(
-        duration: Duration(milliseconds: 250),
+        duration: appStateSettings["appAnimations"] != AppAnimations.all.index
+            ? Duration.zero
+            : Duration(milliseconds: 250),
         child: Tappable(
           key: ValueKey(isSelected),
           borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 50,
@@ -689,7 +707,10 @@ class _EdiDatatButtonsState extends State<EditDataButtons> {
           },
           popRoutes: false,
           trailing: AnimatedRotation(
-            duration: Duration(milliseconds: 600),
+            duration:
+                appStateSettings["appAnimations"] != AppAnimations.all.index
+                    ? Duration.zero
+                    : Duration(milliseconds: 600),
             curve: Curves.easeInOutCubicEmphasized,
             turns: showEditDataButtons ? 0 : -0.5,
             child: Icon(
@@ -700,7 +721,9 @@ class _EdiDatatButtonsState extends State<EditDataButtons> {
           ),
         ),
         AnimatedPadding(
-          duration: Duration(milliseconds: 1500),
+          duration: appStateSettings["appAnimations"] != AppAnimations.all.index
+              ? Duration.zero
+              : Duration(milliseconds: 1500),
           curve: Curves.easeInOutCubicEmphasized,
           padding: EdgeInsetsDirectional.only(
               start: appStateSettings["expandedNavigationSidebar"] ? 8 : 0),
