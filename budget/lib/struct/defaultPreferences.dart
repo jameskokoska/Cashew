@@ -123,6 +123,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "batterySaver": false,
     "username": "",
     "hasOnboarded": false,
+    "restrictAmountOfInitiallyLoadedTransactions": false,
     "autoAddAssociatedTitles": true,
     "AutoTransactions-canReadEmails": false,
     "notificationScanningDebug": false,

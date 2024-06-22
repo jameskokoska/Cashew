@@ -20,6 +20,7 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/incomeAmountArrow.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
+import 'package:budget/widgets/viewAllTransactionsButton.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/noResults.dart';
@@ -48,7 +49,7 @@ enum TransactionEntriesRenderType {
   implicitlyAnimatedNonSlivers,
 }
 
-class TransactionEntries extends StatelessWidget {
+class TransactionEntries extends StatefulWidget {
   const TransactionEntries(
     this.startDay,
     this.endDay, {
@@ -89,6 +90,7 @@ class TransactionEntries extends StatelessWidget {
     this.showNumberOfDaysUntilForFutureDates = false,
     this.showExcludedBudgetTag,
     this.enableFutureTransactionsCollapse = true,
+    this.initialLoadLimit,
     super.key,
   });
   final TransactionEntriesRenderType renderType;
@@ -130,6 +132,20 @@ class TransactionEntries extends StatelessWidget {
   final bool showNumberOfDaysUntilForFutureDates;
   final bool Function(Transaction transaction)? showExcludedBudgetTag;
   final bool enableFutureTransactionsCollapse;
+  // Note this limit restricts the net total calculation for the list!
+  final int? initialLoadLimit;
+
+  @override
+  State<TransactionEntries> createState() => _TransactionEntriesState();
+}
+
+class _TransactionEntriesState extends State<TransactionEntries> {
+  late bool loadAll =
+      appStateSettings["restrictAmountOfInitiallyLoadedTransactions"] == true
+          ? widget.initialLoadLimit == null
+              ? true
+              : false
+          : true;
 
   Widget createTransactionEntry(
     List<TransactionWithCategory> transactionListForDay,
@@ -142,9 +158,9 @@ class TransactionEntries extends StatelessWidget {
           nullIfIndexOutOfRange(transactionListForDay, index - 1)?.transaction,
       transactionAfter:
           nullIfIndexOutOfRange(transactionListForDay, index + 1)?.transaction,
-      categoryTintColor: categoryTintColor,
-      useHorizontalPaddingConstrained: useHorizontalPaddingConstrained,
-      containerColor: transactionBackgroundColor,
+      categoryTintColor: widget.categoryTintColor,
+      useHorizontalPaddingConstrained: widget.useHorizontalPaddingConstrained,
+      containerColor: widget.transactionBackgroundColor,
       key: ValueKey(item.transaction.transactionPk),
       category: item.category,
       subCategory: item.subCategory,
@@ -156,13 +172,13 @@ class TransactionEntries extends StatelessWidget {
       ),
       transaction: item.transaction,
       onSelected: (Transaction transaction, bool selected) {
-        onSelected?.call(transaction, selected);
+        widget.onSelected?.call(transaction, selected);
       },
-      listID: listID,
-      allowSelect: allowSelect,
-      showObjectivePercentage: showObjectivePercentage,
-      allowOpenIntoObjectiveLoanPage: allowOpenIntoObjectiveLoanPage,
-      showExcludedBudgetTag: showExcludedBudgetTag,
+      listID: widget.listID,
+      allowSelect: widget.allowSelect,
+      showObjectivePercentage: widget.showObjectivePercentage,
+      allowOpenIntoObjectiveLoanPage: widget.allowOpenIntoObjectiveLoanPage,
+      showExcludedBudgetTag: widget.showExcludedBudgetTag,
       enableFutureTransactionsDivider: enableFutureTransactionsDivider,
     );
   }
@@ -170,79 +186,85 @@ class TransactionEntries extends StatelessWidget {
   Widget transactionEntryListBuilder(double? initialNetValue) {
     return StreamBuilder<List<TransactionWithCategory>>(
       stream: database.getTransactionCategoryWithDay(
-        startDay,
-        endDay,
-        search: search,
-        categoryFks: categoryFks,
-        categoryFksExclude: categoryFksExclude,
-        walletFks: walletFks,
-        budgetTransactionFilters: budgetTransactionFilters,
-        memberTransactionFilters: memberTransactionFilters,
-        member: member,
+        widget.startDay,
+        widget.endDay,
+        search: widget.search,
+        categoryFks: widget.categoryFks,
+        categoryFksExclude: widget.categoryFksExclude,
+        walletFks: widget.walletFks,
+        budgetTransactionFilters: widget.budgetTransactionFilters,
+        memberTransactionFilters: widget.memberTransactionFilters,
+        member: widget.member,
         onlyShowTransactionsBelongingToBudgetPk:
-            onlyShowTransactionsBelongingToBudgetPk,
-        searchFilters: searchFilters,
-        limit: limit,
-        budget: budget,
+            widget.onlyShowTransactionsBelongingToBudgetPk,
+        searchFilters: widget.searchFilters,
+        limit: widget.limit,
+        budget: widget.budget,
       ),
       builder: (context, snapshot) {
         if (snapshot.data != null && snapshot.hasData) {
-          globalTransactionsListedOnPageID[listID ?? ""] = (snapshot.data ?? [])
+          List<TransactionWithCategory> data = snapshot.data ?? [];
+          int totalNumberTransactionsAll = data.length;
+          if (loadAll == false)
+            data = data.take(widget.initialLoadLimit ?? 30).toList();
+          globalTransactionsListedOnPageID[widget.listID ?? ""] = data
               .map((t) => t.transaction.transactionPk)
               .take(maxSelectableTransactionsListedOnPage)
               .toList();
           List<Section> sectionsOut = [];
           List<Widget> widgetsOut = [];
           Widget totalCashFlowWidget = SizedBox.shrink();
+          Widget viewAllTransactionsWidget = SizedBox.shrink();
           double netSpent = initialNetValue ?? 0;
           double totalSpent = 0;
           double totalIncome = 0;
           double totalExpense = 0;
-          int totalNumberTransactions = (snapshot.data ?? []).length;
-          Set<String> futureTransactionPks = (snapshot.data
-                  ?.where((transactionWithCategory) => isAfterCurrentDate(
-                      transactionWithCategory.transaction.dateCreated))
-                  .map((transactionWithCategory) =>
-                      transactionWithCategory.transaction.transactionPk)
-                  .toSet()) ??
-              Set<String>();
+          int totalNumberTransactions = data.length;
+          Set<String> futureTransactionPks = (data
+              .where((transactionWithCategory) => isAfterCurrentDate(
+                  transactionWithCategory.transaction.dateCreated))
+              .map((transactionWithCategory) =>
+                  transactionWithCategory.transaction.transactionPk)
+              .toSet());
 
           bool enableFutureTransactionsDivider =
-              enableFutureTransactionsCollapse &&
+              widget.enableFutureTransactionsCollapse &&
                   futureTransactionPks.length >= 3;
           bool notYetAddedPastTransactionsDivider = true;
 
           if (totalNumberTransactions <= 0 &&
-              (showNoResults || noResultsExtraWidget != null)) {
+              (widget.showNoResults || widget.noResultsExtraWidget != null)) {
             Widget noResults = Column(
               children: [
-                if (showNoResults)
+                if (widget.showNoResults)
                   NoResults(
-                    message: noResultsMessage ??
+                    message: widget.noResultsMessage ??
                         "no-transactions-within-time-range".tr() +
                             "." +
-                            (budget != null
+                            (widget.budget != null
                                 ? ("\n" +
                                     "(" +
                                     getWordedDateShortMore(
-                                        startDay ?? DateTime.now()) +
+                                        widget.startDay ?? DateTime.now()) +
                                     " – " +
                                     getWordedDateShortMore(
-                                        endDay ?? DateTime.now()) +
+                                        widget.endDay ?? DateTime.now()) +
                                     ")")
                                 : ""),
                     tintColor:
                         Theme.of(context).colorScheme.primary.withOpacity(0.6),
-                    noSearchResultsVariation: noSearchResultsVariation,
-                    padding: noResultsPadding,
+                    noSearchResultsVariation: widget.noSearchResultsVariation,
+                    padding: widget.noResultsPadding,
                   ),
-                if (noResultsExtraWidget != null) noResultsExtraWidget!,
+                if (widget.noResultsExtraWidget != null)
+                  widget.noResultsExtraWidget!,
               ],
             );
-            if (renderType == TransactionEntriesRenderType.slivers ||
-                renderType ==
+            if (widget.renderType == TransactionEntriesRenderType.slivers ||
+                widget.renderType ==
                     TransactionEntriesRenderType.implicitlyAnimatedSlivers ||
-                renderType == TransactionEntriesRenderType.sliversNotSticky) {
+                widget.renderType ==
+                    TransactionEntriesRenderType.sliversNotSticky) {
               return SliverToBoxAdapter(child: noResults);
               // return SliverFillRemaining(
               //   hasScrollBody: false,
@@ -253,8 +275,9 @@ class TransactionEntries extends StatelessWidget {
               //     ],
               //   ),
               // );
-            } else if (renderType == TransactionEntriesRenderType.nonSlivers ||
-                renderType ==
+            } else if (widget.renderType ==
+                    TransactionEntriesRenderType.nonSlivers ||
+                widget.renderType ==
                     TransactionEntriesRenderType.implicitlyAnimatedNonSlivers) {
               return noResults;
             }
@@ -267,10 +290,9 @@ class TransactionEntries extends StatelessWidget {
           DateTime? currentDate;
           int totalPastUniqueDays = 0;
 
-          for (TransactionWithCategory transactionWithCategory
-              in snapshot.data ?? []) {
-            if (pastDaysLimitToShow != null &&
-                totalPastUniqueDays > pastDaysLimitToShow!) break;
+          for (TransactionWithCategory transactionWithCategory in data ?? []) {
+            if (widget.pastDaysLimitToShow != null &&
+                totalPastUniqueDays > widget.pastDaysLimitToShow!) break;
 
             DateTime currentTransactionDate = DateTime(
                 transactionWithCategory.transaction.dateCreated.year,
@@ -312,15 +334,15 @@ class TransactionEntries extends StatelessWidget {
                 totalNumberTransactions == currentTotalIndex + 1
                     ? null
                     : DateTime(
-                        (snapshot.data ?? [])[currentTotalIndex + 1]
+                        (data ?? [])[currentTotalIndex + 1]
                             .transaction
                             .dateCreated
                             .year,
-                        (snapshot.data ?? [])[currentTotalIndex + 1]
+                        (data ?? [])[currentTotalIndex + 1]
                             .transaction
                             .dateCreated
                             .month,
-                        (snapshot.data ?? [])[currentTotalIndex + 1]
+                        (data ?? [])[currentTotalIndex + 1]
                             .transaction
                             .dateCreated
                             .day,
@@ -339,29 +361,30 @@ class TransactionEntries extends StatelessWidget {
                             notYetAddedPastTransactionsDivider &&
                             isAfterCurrentDate(currentTransactionDate) == false
                         ? PastTransactionsDivider(
-                            listID: listID,
+                            listID: widget.listID,
                             useHorizontalPaddingConstrained:
-                                useHorizontalPaddingConstrained,
+                                widget.useHorizontalPaddingConstrained,
                           )
                         : null;
 
                 if (pastTransactionsDivider != null)
                   notYetAddedPastTransactionsDivider = false;
 
-                Widget dateDividerWidget = includeDateDivider == false
+                Widget dateDividerWidget = widget.includeDateDivider == false
                     ? SizedBox.shrink()
                     : CollapseFutureTransactions(
                         alwaysExpanded:
                             enableFutureTransactionsDivider == false,
                         dateToCompare: currentTransactionDate,
-                        listID: listID,
+                        listID: widget.listID,
                         child: DateDivider(
                             useHorizontalPaddingConstrained:
-                                useHorizontalPaddingConstrained,
-                            color: dateDividerColor,
+                                widget.useHorizontalPaddingConstrained,
+                            color: widget.dateDividerColor,
                             date: currentTransactionDate,
                             afterDate: daysDifference >= 0 ||
-                                    showNumberOfDaysUntilForFutureDates == false
+                                    widget.showNumberOfDaysUntilForFutureDates ==
+                                        false
                                 ? ""
                                 : " • " +
                                     (daysDifference * -1).toString() +
@@ -382,7 +405,7 @@ class TransactionEntries extends StatelessWidget {
                                         : ""),
                       );
 
-                if (renderType == TransactionEntriesRenderType.slivers) {
+                if (widget.renderType == TransactionEntriesRenderType.slivers) {
                   if (pastTransactionsDivider != null) {
                     sectionsOut.add(
                       Section()
@@ -409,7 +432,7 @@ class TransactionEntries extends StatelessWidget {
                               enableFutureTransactionsDivider),
                       ],
                   );
-                } else if (renderType ==
+                } else if (widget.renderType ==
                     TransactionEntriesRenderType.sliversNotSticky) {
                   if (pastTransactionsDivider != null) {
                     widgetsOut.add(pastTransactionsDivider);
@@ -427,7 +450,7 @@ class TransactionEntries extends StatelessWidget {
                       ),
                     );
                   }
-                } else if (renderType ==
+                } else if (widget.renderType ==
                     TransactionEntriesRenderType.implicitlyAnimatedSlivers) {
                   List<TransactionWithCategory> transactionListForDayCopy = [
                     ...transactionListForDay
@@ -440,7 +463,7 @@ class TransactionEntries extends StatelessWidget {
                       header: Transform.translate(
                           offset: Offset(0, -1),
                           child: transactionListForDay.length > 0
-                              ? includeDateDivider == false
+                              ? widget.includeDateDivider == false
                                   ? SizedBox.shrink()
                                   : dateDividerWidget
                               : SizedBox.shrink()),
@@ -473,9 +496,9 @@ class TransactionEntries extends StatelessWidget {
                       ),
                     ),
                   );
-                } else if (renderType ==
+                } else if (widget.renderType ==
                         TransactionEntriesRenderType.nonSlivers ||
-                    renderType ==
+                    widget.renderType ==
                         TransactionEntriesRenderType
                             .implicitlyAnimatedNonSlivers) {
                   if (pastTransactionsDivider != null)
@@ -499,7 +522,7 @@ class TransactionEntries extends StatelessWidget {
             currentTotalIndex++;
           }
 
-          if (showTotalCashFlow) {
+          if (widget.showTotalCashFlow) {
             totalCashFlowWidget = Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -528,45 +551,63 @@ class TransactionEntries extends StatelessWidget {
                         textColor: getColor(context, "textLight"),
                       ),
                     ),
-                    if (totalCashFlowExtraWidget != null)
-                      totalCashFlowExtraWidget!,
+                    if (widget.totalCashFlowExtraWidget != null)
+                      widget.totalCashFlowExtraWidget!,
                   ],
                 ),
               ],
             );
-            if (renderType != TransactionEntriesRenderType.slivers)
+            if (widget.renderType != TransactionEntriesRenderType.slivers) {
               widgetsOut.add(totalCashFlowWidget);
+            }
+          }
+
+          if (totalNumberTransactionsAll > totalNumberTransactions)
+            viewAllTransactionsWidget = Padding(
+              padding: EdgeInsetsDirectional.only(top: 7),
+              child: Center(
+                child: ViewAllTransactionsButton(
+                  onPress: () {
+                    setState(() {
+                      loadAll = true;
+                    });
+                  },
+                ),
+              ),
+            );
+          if (widget.renderType != TransactionEntriesRenderType.slivers) {
+            widgetsOut.add(viewAllTransactionsWidget);
           }
 
           Widget futureTransactionsDivider = enableFutureTransactionsDivider
               ? Padding(
-                  padding: enableSpendingSummary
+                  padding: widget.enableSpendingSummary
                       ? const EdgeInsetsDirectional.only(top: 5)
                       : EdgeInsetsDirectional.zero,
                   child: FutureTransactionsDivider(
-                    listID: listID,
+                    listID: widget.listID,
                     futureTransactionPks: futureTransactionPks,
                     useHorizontalPaddingConstrained:
-                        useHorizontalPaddingConstrained,
+                        widget.useHorizontalPaddingConstrained,
                   ),
                 )
               : SizedBox.shrink();
 
           widgetsOut.insert(0, futureTransactionsDivider);
 
-          if (enableSpendingSummary)
+          if (widget.enableSpendingSummary)
             widgetsOut.insert(
               0,
               TransactionsEntriesSpendingSummary(
-                show: showSpendingSummary,
+                show: widget.showSpendingSummary,
                 netSpending: totalIncome + totalExpense,
                 income: totalIncome,
                 expense: totalExpense,
-                onLongPress: onLongPressSpendingSummary,
+                onLongPress: widget.onLongPressSpendingSummary,
               ),
             );
 
-          if (renderType == TransactionEntriesRenderType.slivers) {
+          if (widget.renderType == TransactionEntriesRenderType.slivers) {
             return MultiSliver(
               children: [
                 SliverToBoxAdapter(child: futureTransactionsDivider),
@@ -586,9 +627,12 @@ class TransactionEntries extends StatelessWidget {
                 SliverToBoxAdapter(
                   child: totalCashFlowWidget,
                 ),
+                SliverToBoxAdapter(
+                  child: viewAllTransactionsWidget,
+                ),
               ],
             );
-          } else if (renderType ==
+          } else if (widget.renderType ==
               TransactionEntriesRenderType.sliversNotSticky) {
             return SliverList(
               delegate: SliverChildBuilderDelegate(
@@ -599,10 +643,11 @@ class TransactionEntries extends StatelessWidget {
                 addAutomaticKeepAlives: false,
               ),
             );
-          } else if (renderType ==
+          } else if (widget.renderType ==
               TransactionEntriesRenderType.implicitlyAnimatedSlivers) {
             return MultiSliver(children: widgetsOut);
-          } else if (renderType == TransactionEntriesRenderType.nonSlivers) {
+          } else if (widget.renderType ==
+              TransactionEntriesRenderType.nonSlivers) {
             return ImplicitlyAnimatedList<Widget>(
               items: widgetsOut,
               areItemsTheSame: (a, b) => a.key.toString() == b.key.toString(),
@@ -621,7 +666,7 @@ class TransactionEntries extends StatelessWidget {
               physics: ClampingScrollPhysics(),
               shrinkWrap: true,
             );
-          } else if (renderType ==
+          } else if (widget.renderType ==
               TransactionEntriesRenderType.implicitlyAnimatedNonSlivers) {
             return ListView(
               scrollDirection: Axis.vertical,
@@ -641,13 +686,15 @@ class TransactionEntries extends StatelessWidget {
                 ),
             ],
           );
-          if (renderType == TransactionEntriesRenderType.slivers ||
-              renderType ==
+          if (widget.renderType == TransactionEntriesRenderType.slivers ||
+              widget.renderType ==
                   TransactionEntriesRenderType.implicitlyAnimatedSlivers ||
-              renderType == TransactionEntriesRenderType.sliversNotSticky) {
+              widget.renderType ==
+                  TransactionEntriesRenderType.sliversNotSticky) {
             return SliverToBoxAdapter(child: ghostTransactions);
-          } else if (renderType == TransactionEntriesRenderType.nonSlivers ||
-              renderType ==
+          } else if (widget.renderType ==
+                  TransactionEntriesRenderType.nonSlivers ||
+              widget.renderType ==
                   TransactionEntriesRenderType.implicitlyAnimatedNonSlivers) {
             return ghostTransactions;
           }
@@ -668,43 +715,44 @@ class TransactionEntries extends StatelessWidget {
       // Ideally we refactor all the queries so they only rely on the search filters!
 
       stream: database.watchTotalNetBeforeStartDateTransactionCategoryWithDay(
-        end: endDay == null && searchFilters?.dateTimeRange?.end == null
+        end: widget.endDay == null &&
+                widget.searchFilters?.dateTimeRange?.end == null
             ? null
             : DateTime(
-                endDay?.year ??
-                    searchFilters?.dateTimeRange?.end.year ??
+                widget.endDay?.year ??
+                    widget.searchFilters?.dateTimeRange?.end.year ??
                     DateTime.now().year,
-                endDay?.month ??
-                    searchFilters?.dateTimeRange?.end.month ??
+                widget.endDay?.month ??
+                    widget.searchFilters?.dateTimeRange?.end.month ??
                     DateTime.now().month,
-                (endDay?.day ??
-                        searchFilters?.dateTimeRange?.end.day ??
+                (widget.endDay?.day ??
+                        widget.searchFilters?.dateTimeRange?.end.day ??
                         DateTime.now().day) +
-                    (budget == null ? 1 : 0),
+                    (widget.budget == null ? 1 : 0),
                 //Add one because want the total from the start of the next day because we get everything BEFORE this date,
                 // Only add one if not a budget! because a different query is used if it is a budget
               ),
-        start: startDay,
+        start: widget.startDay,
         allWallets: Provider.of<AllWallets>(context),
-        search: search,
-        categoryFks: categoryFks,
-        categoryFksExclude: categoryFksExclude,
-        walletFks: walletFks,
-        budgetTransactionFilters: budgetTransactionFilters,
-        memberTransactionFilters: memberTransactionFilters,
-        member: member,
+        search: widget.search,
+        categoryFks: widget.categoryFks,
+        categoryFksExclude: widget.categoryFksExclude,
+        walletFks: widget.walletFks,
+        budgetTransactionFilters: widget.budgetTransactionFilters,
+        memberTransactionFilters: widget.memberTransactionFilters,
+        member: widget.member,
         onlyShowTransactionsBelongingToBudgetPk:
-            onlyShowTransactionsBelongingToBudgetPk,
-        searchFilters: searchFilters,
-        limit: limit,
-        budget: budget,
+            widget.onlyShowTransactionsBelongingToBudgetPk,
+        searchFilters: widget.searchFilters,
+        limit: widget.limit,
+        budget: widget.budget,
       ),
       builder: (context, snapshotNetTotal) {
-        if (snapshotNetTotal.hasData == false) if (renderType ==
+        if (snapshotNetTotal.hasData == false) if (widget.renderType ==
                 TransactionEntriesRenderType.slivers ||
-            renderType ==
+            widget.renderType ==
                 TransactionEntriesRenderType.implicitlyAnimatedSlivers ||
-            renderType == TransactionEntriesRenderType.sliversNotSticky)
+            widget.renderType == TransactionEntriesRenderType.sliversNotSticky)
           return SliverToBoxAdapter(
             child: SizedBox.shrink(),
           );

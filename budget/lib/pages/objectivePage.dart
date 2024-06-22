@@ -595,6 +595,7 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
               TransactionEntries(
                 null,
                 null,
+                initialLoadLimit: 25,
                 listID: pageId,
                 dateDividerColor: pageBackgroundColor,
                 transactionBackgroundColor: pageBackgroundColor,

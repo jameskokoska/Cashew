@@ -138,6 +138,22 @@ class DebugPage extends StatelessWidget {
               : Icons.web_asset_rounded,
         ),
         SettingsContainerSwitch(
+          title: "Restrict amount transactions loaded".tr(),
+          description:
+              "Load a small number of transactions when loading a page initially, a view all button will appear at the bottom to load all. Only applies to some pages."
+                  .tr(),
+          onSwitched: (value) {
+            updateSettings("restrictAmountOfInitiallyLoadedTransactions", value,
+                updateGlobalState: true);
+          },
+          initialValue:
+              appStateSettings["restrictAmountOfInitiallyLoadedTransactions"] ==
+                  true,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.sort_outlined
+              : Icons.sort_rounded,
+        ),
+        SettingsContainerSwitch(
           title: "Fade Transaction Title Overflow".tr(),
           description:
               "Fade overflow text instead of adding '...' for transactions"
