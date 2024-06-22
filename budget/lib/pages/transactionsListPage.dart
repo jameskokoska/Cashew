@@ -294,7 +294,7 @@ class TransactionsListPageState extends State<TransactionsListPage>
                                             appStateSettings["appAnimations"] !=
                                                     AppAnimations.all.index
                                                 ? TransactionEntriesRenderType
-                                                    .slivers
+                                                    .sliversNotSticky
                                                 : TransactionEntriesRenderType
                                                     .implicitlyAnimatedSlivers,
                                         startDate,

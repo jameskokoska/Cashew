@@ -12,6 +12,7 @@ import 'package:budget/pages/pastBudgetsPage.dart';
 import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/pages/transactionFilters.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/defaultPreferences.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/spendingSummaryHelper.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
@@ -849,6 +850,10 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                 transaction.budgetFksExclude
                     ?.contains(widget.budget.budgetPk) ==
                 true,
+            renderType:
+                appStateSettings["appAnimations"] != AppAnimations.all.index
+                    ? TransactionEntriesRenderType.sliversNotSticky
+                    : TransactionEntriesRenderType.implicitlyAnimatedSlivers,
           ),
           SliverToBoxAdapter(
             child: widget.budget.sharedDateUpdated == null

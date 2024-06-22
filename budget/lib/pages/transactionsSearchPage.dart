@@ -5,6 +5,7 @@ import 'package:budget/pages/addObjectivePage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/transactionFilters.dart';
+import 'package:budget/struct/defaultPreferences.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/fab.dart';
@@ -332,7 +333,10 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                 ),
               );
               return TransactionEntries(
-                renderType: TransactionEntriesRenderType.slivers,
+                renderType:
+                    appStateSettings["appAnimations"] != AppAnimations.all.index
+                        ? TransactionEntriesRenderType.sliversNotSticky
+                        : TransactionEntriesRenderType.slivers,
                 null, null,
                 listID: "TransactionsSearch",
                 noResultsMessage: "no-transactions-found".tr(),
