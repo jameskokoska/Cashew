@@ -35,7 +35,7 @@ class HomeTransactions extends StatelessWidget {
     int numberOfFutureDays = appStateSettings["futureTransactionDaysHomePage"];
     return TransactionEntries(
       showNumberOfDaysUntilForFutureDates: true,
-      renderType: TransactionEntriesRenderType.nonSlivers,
+      renderType: TransactionEntriesRenderType.implicitlyAnimatedNonSlivers,
       showNoResults: false,
       DateTime(
         DateTime.now().year,

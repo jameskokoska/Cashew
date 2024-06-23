@@ -126,6 +126,7 @@ class CreditDebtTransactionsState extends State<CreditDebtTransactions>
             }
 
             return SliverImplicitlyAnimatedList<Transaction>(
+              spawnIsolate: false,
               items: snapshot.data!,
               areItemsTheSame: (a, b) => a.transactionPk == b.transactionPk,
               insertDuration: Duration(milliseconds: 500),

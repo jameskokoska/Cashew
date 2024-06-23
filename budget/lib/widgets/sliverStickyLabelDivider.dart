@@ -77,7 +77,7 @@ class StickyLabelDivider extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Flexible(
+          Expanded(
             child: TextFont(
               text: info,
               fontSize: fontSize,
@@ -86,13 +86,11 @@ class StickyLabelDivider extends StatelessWidget {
             ),
           ),
           if (extraInfo != null)
-            Expanded(
-              child: TextFont(
-                text: extraInfo ?? "",
-                fontSize: fontSize,
-                textColor: getColor(context, "textLight"),
-                textAlign: TextAlign.end,
-              ),
+            TextFont(
+              text: extraInfo ?? "",
+              fontSize: fontSize,
+              textColor: getColor(context, "textLight"),
+              textAlign: TextAlign.end,
             ),
           if (extraInfoWidget != null) extraInfoWidget!,
         ],

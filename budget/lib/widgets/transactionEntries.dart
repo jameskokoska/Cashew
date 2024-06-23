@@ -470,8 +470,8 @@ class _TransactionEntriesState extends State<TransactionEntries> {
                       sticky: true,
                       sliver:
                           SliverImplicitlyAnimatedList<TransactionWithCategory>(
+                        spawnIsolate: false,
                         items: transactionListForDay,
-                        spawnIsolate: true,
                         areItemsTheSame: (a, b) =>
                             a.transaction.transactionPk ==
                             b.transaction.transactionPk,
@@ -647,8 +647,9 @@ class _TransactionEntriesState extends State<TransactionEntries> {
               TransactionEntriesRenderType.implicitlyAnimatedSlivers) {
             return MultiSliver(children: widgetsOut);
           } else if (widget.renderType ==
-              TransactionEntriesRenderType.nonSlivers) {
+              TransactionEntriesRenderType.implicitlyAnimatedNonSlivers) {
             return ImplicitlyAnimatedList<Widget>(
+              spawnIsolate: false,
               items: widgetsOut,
               areItemsTheSame: (a, b) => a.key.toString() == b.key.toString(),
               insertDuration: Duration(milliseconds: 500),
@@ -667,7 +668,7 @@ class _TransactionEntriesState extends State<TransactionEntries> {
               shrinkWrap: true,
             );
           } else if (widget.renderType ==
-              TransactionEntriesRenderType.implicitlyAnimatedNonSlivers) {
+              TransactionEntriesRenderType.nonSlivers) {
             return ListView(
               scrollDirection: Axis.vertical,
               children: widgetsOut,
