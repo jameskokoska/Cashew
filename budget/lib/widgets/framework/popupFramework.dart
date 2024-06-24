@@ -83,9 +83,11 @@ class PopupFramework extends StatelessWidget {
                             if (title != null || subtitle != null)
                               Container(
                                 height: 1.5,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .secondaryContainer,
+                                color: appStateSettings["materialYou"] == true
+                                    ? Theme.of(context)
+                                        .colorScheme
+                                        .secondaryContainer
+                                    : getColor(context, "canvasContainer"),
                                 margin: EdgeInsetsDirectional.only(
                                     top: 10, bottom: 5),
                               )

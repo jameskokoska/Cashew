@@ -7,6 +7,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/struct/syncClient.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
@@ -52,6 +53,9 @@ Future<String?> importDBFileFromDevice(BuildContext context) async {
     ));
     return null;
   }
+
+  await cancelAndPreventSyncOperation();
+
   if (kIsWeb) {
     Uint8List fileBytes = result.files.single.bytes!;
     await overwriteDefaultDB(fileBytes);
@@ -60,7 +64,7 @@ Future<String?> importDBFileFromDevice(BuildContext context) async {
     Uint8List fileBytes = await file.readAsBytes();
     await overwriteDefaultDB(fileBytes);
   }
-  resetLanguageToSystem(context);
+  await resetLanguageToSystem(context);
   await updateSettings("databaseJustImported", true,
       pagesNeedingRefresh: [], updateGlobalState: false);
   return result.files.single.name;

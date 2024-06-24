@@ -18,10 +18,12 @@ class CurrencyPicker extends StatefulWidget {
     required this.onSelected,
     this.onHasFocus,
     this.initialCurrency,
+    this.unSelectedColor,
   });
   final Function(String) onSelected;
   final Function? onHasFocus;
   final String? initialCurrency;
+  final Color? unSelectedColor;
 
   @override
   State<CurrencyPicker> createState() => _CurrencyPickerState();
@@ -156,6 +158,7 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                           currencyKey: currencyKey,
                           selected: selectedCurrency == currencyKey,
                           onSelected: onSelected,
+                          unSelectedColor: widget.unSelectedColor,
                         )
                     ]
                   : [
@@ -166,12 +169,14 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                           currencyKey: currencyKey.toString(),
                           selected: selectedCurrency == currencyKey,
                           onSelected: onSelected,
+                          unSelectedColor: widget.unSelectedColor,
                         ),
                       for (String currencyKey in popularCurrenciesLocal)
                         CurrencyItem(
                           currencyKey: currencyKey.toString(),
                           selected: selectedCurrency == currencyKey,
                           onSelected: onSelected,
+                          unSelectedColor: widget.unSelectedColor,
                         )
                     ],
             ),
@@ -184,6 +189,7 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                     : Padding(
                         padding: const EdgeInsetsDirectional.only(top: 15),
                         child: LowKeyButton(
+                          color: widget.unSelectedColor,
                           onTap: () {
                             setState(() {
                               viewAll = true;
@@ -216,108 +222,6 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
   }
 }
 
-class AllCurrencies extends StatefulWidget {
-  const AllCurrencies({required this.scrollController, super.key});
-  final ScrollController scrollController;
-  @override
-  State<AllCurrencies> createState() => _AllCurrenciesState();
-}
-
-class _AllCurrenciesState extends State<AllCurrencies> {
-  bool viewAll = false;
-  String? selectedCurrency = null;
-  String? searchText = "";
-  Map<String, dynamic> currencies = {};
-  String? initialCurrency = "USD";
-  List<String> popularCurrenciesLocal = popularCurrencies;
-
-  @override
-  void initState() {
-    super.initState();
-    if (initialCurrency == null) {
-      setState(() {
-        selectedCurrency = getDevicesDefaultCurrencyCode();
-      });
-    } else {
-      setState(() {
-        selectedCurrency = initialCurrency;
-        if (!popularCurrencies.contains(initialCurrency) &&
-            selectedCurrency != "") {
-          popularCurrenciesLocal =
-              popularCurrencies.sublist(0, popularCurrencies.length - 1);
-          // Don't add again if selected and custom currency
-          if (currenciesJSON[initialCurrency] != null)
-            popularCurrenciesLocal.insert(0, initialCurrency!);
-        }
-      });
-    }
-
-    populateCurrencies();
-  }
-
-  void populateCurrencies() {
-    Future.delayed(Duration(milliseconds: 0), () async {
-      setState(() {
-        currencies = currenciesJSON;
-        searchText = "";
-      });
-    });
-  }
-
-  void searchCurrencies(String searchTerm) async {
-    if (searchTerm == "") {
-      populateCurrencies();
-    } else {
-      Map<String, dynamic> outCurrencies = {};
-      for (String key in currenciesJSON.keys) {
-        dynamic currency = currenciesJSON[key];
-        if ((currency["CountryName"] != null &&
-                currency["CountryName"]
-                    .toLowerCase()
-                    .contains(searchTerm.toLowerCase())) ||
-            (currency["Currency"] != null &&
-                currency["Currency"]
-                    .toLowerCase()
-                    .contains(searchTerm.toLowerCase())) ||
-            (currency["Code"] != null &&
-                currency["Code"]
-                    .toLowerCase()
-                    .contains(searchTerm.toLowerCase()))) {
-          outCurrencies[key] = currency;
-        }
-      }
-      setState(() {
-        currencies = outCurrencies;
-        searchText = searchTerm;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GridView.builder(
-      controller: widget.scrollController,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 7,
-        mainAxisSpacing: 0,
-        childAspectRatio: 1,
-      ),
-      itemCount: currencies.length,
-      itemBuilder: (context, index) {
-        String currencyKey = currencies.keys.toList()[index];
-        return CurrencyItem(
-          currencyKey: currencyKey,
-          selected: selectedCurrency == currencyKey,
-          onSelected: (currency) {
-            // Implement your selection logic here if needed
-          },
-        );
-      },
-    );
-  }
-}
-
 class CurrencyItem extends StatelessWidget {
   const CurrencyItem({
     super.key,
@@ -325,11 +229,13 @@ class CurrencyItem extends StatelessWidget {
     required this.selected,
     required this.onSelected,
     this.customCurrency = false,
+    this.unSelectedColor,
   });
   final String currencyKey;
   final bool selected;
   final Function(String) onSelected;
   final bool customCurrency;
+  final Color? unSelectedColor;
 
   @override
   Widget build(BuildContext context) {
@@ -343,11 +249,12 @@ class CurrencyItem extends StatelessWidget {
         borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
         color: selected
             ? Theme.of(context).colorScheme.secondaryContainer
-            : appStateSettings["materialYou"]
-                ? dynamicPastel(
-                    context, Theme.of(context).colorScheme.secondaryContainer,
-                    amountLight: 0.4, amountDark: 0.6)
-                : getColor(context, "lightDarkAccent"),
+            : unSelectedColor ??
+                (appStateSettings["materialYou"]
+                    ? dynamicPastel(context,
+                        Theme.of(context).colorScheme.secondaryContainer,
+                        amountLight: 0.4, amountDark: 0.6)
+                    : getColor(context, "lightDarkAccent")),
         child: AnimatedContainer(
           decoration: BoxDecoration(
             borderRadius: BorderRadiusDirectional.circular(

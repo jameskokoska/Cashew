@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/editHomePage.dart';
@@ -295,15 +296,29 @@ void openLanguagePicker(BuildContext context) {
   );
 }
 
-void resetLanguageToSystem(BuildContext context) {
+Future<void> resetLanguageToSystem(BuildContext context) async {
   if (appStateSettings["locale"].toString() == "System") return;
   context.resetLocale();
-  updateSettings(
+  await updateSettings(
     "locale",
     "System",
     pagesNeedingRefresh: [],
     updateGlobalState: false,
   );
+}
+
+// Backup user settings by creating an entry in the db
+Future backupSettings() async {
+  String userSettings = sharedPreferences.getString('userSettings') ?? "";
+  if (userSettings == "") throw ("No settings stored");
+  await database.createOrUpdateSettings(
+    AppSetting(
+      settingsPk: 0,
+      settingsJSON: userSettings,
+      dateUpdated: DateTime.now(),
+    ),
+  );
+  print("Created settings entry in DB");
 }
 
 class TranslationsHelp extends StatelessWidget {

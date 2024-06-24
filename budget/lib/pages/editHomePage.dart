@@ -439,11 +439,15 @@ class _EditHomePageState extends State<EditHomePage> {
         dragDownToDismiss: true,
         dragDownToDismissEnabled: dragDownToDismissEnabled,
         title: "edit-home".tr(),
-        subtitle: TextFont(
-          text: "tap-each-section-to-customize".tr(),
-          fontSize: 18,
-          maxLines: 2,
+        subtitle: Padding(
+          padding: const EdgeInsetsDirectional.only(bottom: 5),
+          child: TextFont(
+            text: "tap-each-section-to-customize".tr(),
+            fontSize: 17,
+            maxLines: 2,
+          ),
         ),
+        addExtraPaddingAfterCenteredSubtitle: 5,
         subtitleAlignment: AlignmentDirectional.bottomStart,
         subtitleSize: 10,
         slivers: [

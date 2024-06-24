@@ -11,6 +11,7 @@ import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/currencyPicker.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:budget/widgets/linearGradientFadedEdges.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -387,6 +388,9 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                                   //   addWalletPageKey.currentState?.scrollTo(250);
                                   // });
                                 },
+                                unSelectedColor: appStateSettings["materialYou"]
+                                    ? null
+                                    : getColor(context, "canvasContainer"),
                               ),
                             ],
                           );
@@ -694,17 +698,24 @@ class OnBoardPage extends StatelessWidget {
     return Stack(
       children: [
         Center(
-          child: ListView(
-            shrinkWrap: true,
-            children: <Widget>[
-              Column(
-                children: [
-                  SizedBox(height: 20),
-                  ...widgets,
-                  SizedBox(height: 80),
-                ],
-              ),
-            ],
+          child: LinearGradientFadedEdges(
+            gradientSize: 20,
+            enableTop: getPlatform() == PlatformOS.isIOS,
+            enableBottom: getPlatform() == PlatformOS.isIOS,
+            enableStart: false,
+            enableEnd: false,
+            child: ListView(
+              shrinkWrap: true,
+              children: <Widget>[
+                Column(
+                  children: [
+                    SizedBox(height: 20),
+                    ...widgets,
+                    SizedBox(height: 80),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
         Padding(

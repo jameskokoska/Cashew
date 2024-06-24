@@ -37,6 +37,7 @@ String getChangelogString() {
     Added haptic feedback setting to number pad
     Currency picker performance improvements
     Improve performance for line graphs
+    Fix local backups not saving app settings
     Fix CSV export for entries with a comma
     Fixed app link routing for (A) 12+
     Fix possibility to add blank title when editing a category

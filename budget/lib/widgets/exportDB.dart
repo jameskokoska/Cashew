@@ -5,12 +5,20 @@ import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/util/saveFile.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
+import 'package:budget/struct/databaseGlobal.dart';
 
 Future saveDBFileToDevice({
   required BuildContext boxContext,
   required String fileName,
   String? customDirectory,
 }) async {
+  try {
+    await backupSettings();
+  } catch (e) {
+    print("Error creating settings entry in the db: " + e.toString());
+  }
+
   DBFileInfo currentDBFileInfo = await getCurrentDBFileInfo();
 
   List<int> dataStore = [];

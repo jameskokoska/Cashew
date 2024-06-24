@@ -257,6 +257,8 @@ class ObjectiveList extends StatelessWidget {
                         return ObjectiveContainer(
                           index: index,
                           objective: objective,
+                          demoObjective: showDemoObjectives,
+                          isGridView: true,
                           forcedTotalAmount: showDemoObjectives
                               ? (objective.income
                                       ? randomInt[index].toDouble() * -1
@@ -289,6 +291,7 @@ class ObjectiveList extends StatelessWidget {
                           child: ObjectiveContainer(
                             index: index,
                             objective: objective,
+                            demoObjective: showDemoObjectives,
                             forcedTotalAmount: showDemoObjectives
                                 ? (objective.income
                                         ? randomInt[index].toDouble() * -1
@@ -375,6 +378,8 @@ class ObjectiveContainer extends StatelessWidget {
     this.forcedTotalAmount,
     this.forcedNumberTransactions,
     this.forceAndroidBubbleDesign = false, //forced on the homepage
+    this.demoObjective = false,
+    this.isGridView,
     super.key,
   });
   final Objective objective;
@@ -382,6 +387,8 @@ class ObjectiveContainer extends StatelessWidget {
   final double? forcedTotalAmount;
   final int? forcedNumberTransactions;
   final bool forceAndroidBubbleDesign;
+  final bool demoObjective;
+  final bool? isGridView;
 
   @override
   Widget build(BuildContext context) {
@@ -716,26 +723,28 @@ class ObjectiveContainer extends StatelessWidget {
       child = Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          index == 0 || enableDoubleColumn(context)
-              ? Container(
-                  height: 1.5,
-                  color: getColor(context, "dividerColor"),
-                )
-              : SizedBox.shrink(),
+          if (isGridView != true)
+            index == 0 || enableDoubleColumn(context)
+                ? Container(
+                    height: 1.5,
+                    color: getColor(context, "dividerColor"),
+                  )
+                : SizedBox.shrink(),
           child,
-          Container(
-            height: 1.5,
-            color: getColor(context, "dividerColor"),
-          ),
+          if (isGridView != true)
+            Container(
+              height: 1.5,
+              color: getColor(context, "dividerColor"),
+            ),
         ],
       );
     }
-    if (forcedNumberTransactions != null || forcedTotalAmount != null) {
+    if (demoObjective) {
       return IgnorePointer(
         child: Opacity(
           opacity: 0.25,
           child: ClipRRect(
-            borderRadius: BorderRadiusDirectional.circular(20),
+            borderRadius: BorderRadiusDirectional.circular(borderRadius),
             child: ColorFiltered(
               colorFilter: ColorFilter.mode(
                 Colors.grey,

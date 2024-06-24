@@ -412,7 +412,7 @@ class DebugPage extends StatelessWidget {
           },
         ),
         Button(
-          label: "Fix migration (from db 37 above)",
+          label: "Redo migration (from db 37 above)",
           onTap: () async {
             await database.customStatement('PRAGMA user_version = 37');
             if (kIsWeb) {
@@ -427,6 +427,30 @@ class DebugPage extends StatelessWidget {
           label: "Fix transaction polarity",
           onTap: () async {
             await database.fixTransactionPolarity();
+          },
+        ),
+        SizedBox(height: 20),
+        Button(
+          label: "Vacuum/Clean DB",
+          onTap: () async {
+            try {
+              await database.customStatement('VACUUM');
+              openSnackbar(
+                SnackbarMessage(
+                  title: "Done",
+                  icon: Icons.time_to_leave,
+                  timeout: Duration(milliseconds: 1000),
+                ),
+              );
+            } catch (e) {
+              openSnackbar(
+                SnackbarMessage(
+                  title: e.toString(),
+                  icon: Icons.time_to_leave,
+                  timeout: Duration(milliseconds: 1000),
+                ),
+              );
+            }
           },
         ),
         SizedBox(height: 20),

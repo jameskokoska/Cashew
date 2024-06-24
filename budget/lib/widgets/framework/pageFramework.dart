@@ -39,6 +39,7 @@ class PageFramework extends StatefulWidget {
     this.backButton = true,
     this.subtitle = null,
     this.subtitleSize = null,
+    this.addExtraPaddingAfterCenteredSubtitle,
     this.subtitleAnimationSpeed,
     this.onBottomReached,
     this.pinned = true,
@@ -82,6 +83,7 @@ class PageFramework extends StatefulWidget {
   final Color? appBarBackgroundColorStart;
   final Widget? subtitle;
   final double? subtitleSize;
+  final double? addExtraPaddingAfterCenteredSubtitle;
   final double? subtitleAnimationSpeed;
   final VoidCallback? onBottomReached;
   final bool pinned;
@@ -451,7 +453,13 @@ class PageFrameworkState extends State<PageFramework>
                             if (widget.enableHeader &&
                                 (centeredTitleSmall || centeredTitle))
                               SliverToBoxAdapter(
-                                child: Center(child: widget.subtitle),
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.only(
+                                      bottom: widget
+                                              .addExtraPaddingAfterCenteredSubtitle ??
+                                          0),
+                                  child: Center(child: widget.subtitle),
+                                ),
                               ),
                             ...allSliversContent
                           ],

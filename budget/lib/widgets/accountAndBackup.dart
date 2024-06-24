@@ -380,21 +380,11 @@ Future<void> createBackup(
   bool deleteOldBackups = false,
   String? clientIDForSync,
 }) async {
-  // Backup user settings
   try {
     if (silentBackup == false || silentBackup == null) {
       loadingIndeterminateKey.currentState?.setVisibility(true);
     }
-    String userSettings = sharedPreferences.getString('userSettings') ?? "";
-    if (userSettings == "") throw ("No settings stored");
-    await database.createOrUpdateSettings(
-      AppSetting(
-        settingsPk: 0,
-        settingsJSON: userSettings,
-        dateUpdated: DateTime.now(),
-      ),
-    );
-    print("successfully created settings entry");
+    await backupSettings();
   } catch (e) {
     if (silentBackup == false || silentBackup == null) {
       Navigator.of(context).maybePop();
@@ -576,7 +566,7 @@ Future<void> loadBackup(
         // if this is added, it doesn't restore the database properly on web
         // await database.close();
         Navigator.of(context).pop();
-        resetLanguageToSystem(context);
+        await resetLanguageToSystem(context);
         await updateSettings("databaseJustImported", true,
             pagesNeedingRefresh: [], updateGlobalState: false);
         print(appStateSettings);
