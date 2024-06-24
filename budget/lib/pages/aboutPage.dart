@@ -299,7 +299,7 @@ class AboutPage extends StatelessWidget {
       ),
       TranslationInfoBox(
         title: "Hindi",
-        list: ["Dikshant S.", "Nikunj K."],
+        list: ["Dikshant S.", "Nikunj K.", "Darshan L."],
       ),
       TranslationInfoBox(
         title: "Vietnamese",
@@ -384,6 +384,10 @@ class AboutPage extends StatelessWidget {
       TranslationInfoBox(
         title: "Thai",
         list: ["Jateniphat U."],
+      ),
+      TranslationInfoBox(
+        title: "Gujarati",
+        list: ["Darshan L."],
       ),
     ];
 
@@ -484,7 +488,6 @@ class AboutPage extends StatelessWidget {
               SizedBox(height: 10),
               ...developmentTeam,
               SizedBox(height: 5),
-              
               if (getPlatform(ignoreEmulation: true) == PlatformOS.isAndroid ||
                   kIsWeb)
                 Padding(
@@ -508,7 +511,7 @@ class AboutPage extends StatelessWidget {
                         ),
                       ),
                       AboutDeepLinking(),
-                                    SizedBox(height: 10),
+                      SizedBox(height: 10),
                     ],
                   )),
                 ),
