@@ -343,27 +343,40 @@ List<Pair> calculatePoints(CalculatePointsParams p) {
       (dailyTotals.length / resolutionThreshold).round().toDouble();
   if (resolution <= 1) resolution = 1;
 
-  //print("Input length: " + dailyTotals.length.toString());
+  DateTime customStartDateStatic = DateTime(
+    p.customStartDate.year,
+    p.customStartDate.month,
+    p.customStartDate.day,
+  );
 
-  int index = -1;
+  DateTime customEndDateStatic = DateTime(
+    p.customEndDate.year,
+    p.customEndDate.month,
+    p.customEndDate.day,
+  );
 
-  for (DateTime indexDay = p.customStartDate;
-      indexDay.compareTo(p.customEndDate) <= 0;
-      indexDay = DateTime(indexDay.year, indexDay.month, indexDay.day + 1)) {
-    index++;
-    if (indexDay == p.customStartDate) {
-      indexDay = DateTime(p.customStartDate.year, p.customStartDate.month,
-          p.customStartDate.day);
-    }
+  final List<DateTime> filteredDates = dailyTotals.keys
+      .where((date) =>
+          !date.isBefore(customStartDateStatic) &&
+          !date.isAfter(customEndDateStatic))
+      .toList();
 
+  if (!filteredDates.contains(customStartDateStatic))
+    filteredDates.add(customStartDateStatic);
+
+  if (!filteredDates.contains(customEndDateStatic))
+    filteredDates.insert(0, customEndDateStatic);
+
+  // We assume the transactions are passed in in order!
+
+  for (int i = filteredDates.length - 1; i >= 0; i--) {
+    DateTime indexDay = filteredDates[i];
+
+    int index = indexDay.difference(p.customStartDate).inDays;
     double totalForDay = dailyTotals[indexDay] ?? 0;
     cumulativeTotal += totalForDay;
-    if (indexDay !=
-            DateTime(p.customStartDate.year, p.customStartDate.month,
-                p.customStartDate.day) &&
-        indexDay !=
-            DateTime(p.customEndDate.year, p.customEndDate.month,
-                p.customEndDate.day) &&
+    if (indexDay != customStartDateStatic &&
+        indexDay != customEndDateStatic &&
         index % resolution >= 1) continue;
     points.add(
       Pair(
@@ -373,8 +386,6 @@ List<Pair> calculatePoints(CalculatePointsParams p) {
       ),
     );
   }
-
-  //print("Output length: " + points.length.toString());
 
   return points;
 }
