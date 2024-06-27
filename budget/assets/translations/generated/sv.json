@@ -541,7 +541,7 @@
   "delete-bill-item-question": "Radera räkningsobjekt?",
   "bill-splitter": "Bill Splitter",
   "bill-splitter-info": "Bill Splitter kommer att dela upp en räkning du betalade för bland de människor som köpte föremål. Du kan enkelt hålla reda på vem som är skyldiga dig vissa mängder pengar.",
-  "new-bill": "Ny räkning",
+  "clear-bill": "Ny räkning",
   "names": "Namn",
   "summary": "Sammanfattning",
   "edit-item": "Redigera objekt",
@@ -1160,5 +1160,6 @@
   "app-animations-description": "Att inaktivera animationer kan förbättra prestandan",
   "minimal": "Minimal",
   "major-change-18": "Transaktionsaktivitetslogg",
-  "major-change-18-1": "Visa en lista över nyligen raderade/ändrade transaktioner"
+  "major-change-18-1": "Visa en lista över nyligen raderade/ändrade transaktioner",
+  "greeting-message": "Hälsningsmeddelande"
 }

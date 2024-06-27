@@ -541,7 +541,7 @@
   "delete-bill-item-question": "Usuń element rachunku?",
   "bill-splitter": "Rozdzielacz Bill",
   "bill-splitter-info": "Rozdzielacz rachunków podzieli rachunek, za który zapłaciłeś wśród osób, które kupiły przedmioty. Możesz łatwo śledzić, kto jest ci winien pewne kwoty.",
-  "new-bill": "Nowy rachunek",
+  "clear-bill": "Nowy rachunek",
   "names": "Nazwy",
   "summary": "Streszczenie",
   "edit-item": "Edytuj rzecz",
@@ -1160,5 +1160,6 @@
   "app-animations-description": "Wyłączenie animacji może poprawić wydajność",
   "minimal": "Minimalny",
   "major-change-18": "Dziennik aktywności transakcji",
-  "major-change-18-1": "Wyświetl listę ostatnio usuniętych/zmodyfikowanych transakcji"
+  "major-change-18-1": "Wyświetl listę ostatnio usuniętych/zmodyfikowanych transakcji",
+  "greeting-message": "Pozdrowienia"
 }

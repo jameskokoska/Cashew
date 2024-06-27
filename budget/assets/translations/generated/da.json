@@ -541,7 +541,7 @@
   "delete-bill-item-question": "Slet regning?",
   "bill-splitter": "Regningsdeler",
   "bill-splitter-info": "Regningsdeleren fordeler en regning, du har lagt ud for, blandt dem, der har købt varerne. På den måde kan du nemt holde styr på, hvem der skylder dig bestemte mængder penge.",
-  "new-bill": "Ny Regning",
+  "clear-bill": "Ny Regning",
   "names": "Navne",
   "summary": "Resumé",
   "edit-item": "Redigér Vare",
@@ -1160,5 +1160,6 @@
   "app-animations-description": "Deaktivering af animationer kan forbedre ydeevnen",
   "minimal": "Minimal",
   "major-change-18": "Transaktionsaktivitetslog",
-  "major-change-18-1": "Se en liste over nyligt slettede/ændrede transaktioner"
+  "major-change-18-1": "Se en liste over nyligt slettede/ændrede transaktioner",
+  "greeting-message": "Hilsen besked"
 }

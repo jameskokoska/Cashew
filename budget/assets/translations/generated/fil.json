@@ -541,7 +541,7 @@
   "delete-bill-item-question": "Tanggalin ang item ng bill?",
   "bill-splitter": "Bill Splitter",
   "bill-splitter-info": "Ang Bill Splitter ay maghahati ng isang panukalang batas na iyong binayaran para sa mga taong bumili ng mga item. Madali mong subaybayan kung sino ang may utang sa iyo ng ilang mga halaga ng pera.",
-  "new-bill": "Bagong panukalang batas",
+  "clear-bill": "Bagong panukalang batas",
   "names": "Mga pangalan",
   "summary": "Buod",
   "edit-item": "I -edit ang item",
@@ -1160,5 +1160,6 @@
   "app-animations-description": "Ang hindi pagpapagana ng mga animation ay maaaring mapabuti ang pagganap",
   "minimal": "Minimal",
   "major-change-18": "Log ng Aktibidad ng Transaksyon",
-  "major-change-18-1": "Tingnan ang isang listahan ng kamakailang tinanggal/binagong mga transaksyon"
+  "major-change-18-1": "Tingnan ang isang listahan ng kamakailang tinanggal/binagong mga transaksyon",
+  "greeting-message": "Mensahe ng Pagbati"
 }

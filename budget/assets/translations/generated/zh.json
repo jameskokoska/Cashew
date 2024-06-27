@@ -541,7 +541,7 @@
   "delete-bill-item-question": "删除账单项目？",
   "bill-splitter": "账单分摊",
   "bill-splitter-info": "多人参与消费时，账单分摊能帮你拆分已支付账单，让你轻松记录每位成员应当支付给你的金额。",
-  "new-bill": "新账单",
+  "clear-bill": "新账单",
   "names": "姓名",
   "summary": "摘要",
   "edit-item": "编辑项目",
@@ -1160,5 +1160,6 @@
   "app-animations-description": "禁用动画可以提高性能",
   "minimal": "最小",
   "major-change-18": "交易活动日志",
-  "major-change-18-1": "查看最近删除/修改的交易列表"
+  "major-change-18-1": "查看最近删除/修改的交易列表",
+  "greeting-message": "问候语"
 }

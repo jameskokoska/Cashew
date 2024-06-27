@@ -541,7 +541,7 @@
   "delete-bill-item-question": "청구서 항목 삭제?",
   "bill-splitter": "빌 스플리터",
   "bill-splitter-info": "Bill Splitter는 상품을 구매 한 사람들 사이에서 지불 한 청구서를 분할합니다. 당신은 누가 당신에게 특정한 금액의 돈을 빚지고 있는지 쉽게 추적 할 수 있습니다.",
-  "new-bill": "새로운 법안",
+  "clear-bill": "새로운 법안",
   "names": "이름",
   "summary": "요약",
   "edit-item": "항목 편집",
@@ -1160,5 +1160,6 @@
   "app-animations-description": "애니메이션을 비활성화하면 성능이 향상될 수 있습니다.",
   "minimal": "최소",
   "major-change-18": "거래 활동 로그",
-  "major-change-18-1": "최근 삭제/수정된 거래 목록 보기"
+  "major-change-18-1": "최근 삭제/수정된 거래 목록 보기",
+  "greeting-message": "인사말 메시지"
 }

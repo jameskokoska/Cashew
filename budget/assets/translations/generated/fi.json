@@ -541,7 +541,7 @@
   "delete-bill-item-question": "Poista laskuteollisuus?",
   "bill-splitter": "Laskun jakaja",
   "bill-splitter-info": "Laskun jakaja jakaa laskun, jonka maksat tuotteita ostaneiden ihmisten keskuudessa. Voit helposti seurata sitä, kuka velkaa sinulle tiettyjä määriä rahaa.",
-  "new-bill": "Uusi lasku",
+  "clear-bill": "Uusi lasku",
   "names": "Nimeä",
   "summary": "Yhteenveto",
   "edit-item": "Muokkaa kohdetta",
@@ -1160,5 +1160,6 @@
   "app-animations-description": "Animaatioiden poistaminen käytöstä voi parantaa suorituskykyä",
   "minimal": "Minimaalinen",
   "major-change-18": "Tapahtumatoimintaloki",
-  "major-change-18-1": "Näytä luettelo äskettäin poistetuista/muokatuista tapahtumista"
+  "major-change-18-1": "Näytä luettelo äskettäin poistetuista/muokatuista tapahtumista",
+  "greeting-message": "Tervehdysviesti"
 }

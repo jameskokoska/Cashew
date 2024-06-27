@@ -541,7 +541,7 @@
   "delete-bill-item-question": "Padam item bil?",
   "bill-splitter": "Splitter Bill",
   "bill-splitter-info": "Splitter Bill akan membahagikan bil yang anda bayar di kalangan orang yang membeli barangan. Anda boleh menjejaki siapa yang berhutang kepada anda sejumlah wang.",
-  "new-bill": "Rang Undang -Undang Baru",
+  "clear-bill": "Rang Undang -Undang Baru",
   "names": "Nama",
   "summary": "Ringkasan",
   "edit-item": "Edit item",
@@ -1160,5 +1160,6 @@
   "app-animations-description": "Melumpuhkan animasi boleh meningkatkan prestasi",
   "minimal": "Yang minimum",
   "major-change-18": "Log Aktiviti Transaksi",
-  "major-change-18-1": "Lihat senarai transaksi yang dipadam/diubah suai baru-baru ini"
+  "major-change-18-1": "Lihat senarai transaksi yang dipadam/diubah suai baru-baru ini",
+  "greeting-message": "Mesej Salam"
 }

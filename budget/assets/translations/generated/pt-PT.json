@@ -541,7 +541,7 @@
   "delete-bill-item-question": "Eliminar item da conta?",
   "bill-splitter": "Partilha de despesas",
   "bill-splitter-info": "A partilha de despesas irá dividir uma conta pela qual pagou entre as pessoas que fizeram compras. Pode acompanhar facilmente quem lhe deve certas quantias de dinheiro.",
-  "new-bill": "Nova conta",
+  "clear-bill": "Nova conta",
   "names": "Nomes",
   "summary": "Resumo",
   "edit-item": "Editar item",
@@ -1160,5 +1160,6 @@
   "app-animations-description": "Desativar animações pode melhorar o desempenho",
   "minimal": "Mínimo",
   "major-change-18": "Log de atividades de transação",
-  "major-change-18-1": "Veja uma lista de transações excluídas/modificadas recentemente"
+  "major-change-18-1": "Veja uma lista de transações excluídas/modificadas recentemente",
+  "greeting-message": "Mensagem de saudação"
 }

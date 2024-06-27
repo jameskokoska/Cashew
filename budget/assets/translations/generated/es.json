@@ -541,7 +541,7 @@
   "delete-bill-item-question": "¿Eliminar el artículo de la factura?",
   "bill-splitter": "Divisor de cuentas",
   "bill-splitter-info": "El divisor de la factura dividirá una factura que pagó entre las personas que compraron los artículos. Puede realizar un seguimiento fácil de quién le debe ciertas cantidades de dinero.",
-  "new-bill": "Nueva cuenta",
+  "clear-bill": "Nueva cuenta",
   "names": "Nombres",
   "summary": "Resumen",
   "edit-item": "Editar elemento",
@@ -1160,5 +1160,6 @@
   "app-animations-description": "Deshabilitar las animaciones puede mejorar el rendimiento.",
   "minimal": "Mínimo",
   "major-change-18": "Registro de actividad de transacciones",
-  "major-change-18-1": "Ver una lista de transacciones eliminadas/modificadas recientemente"
+  "major-change-18-1": "Ver una lista de transacciones eliminadas/modificadas recientemente",
+  "greeting-message": "Mensaje de saludo"
 }

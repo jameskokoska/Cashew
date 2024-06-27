@@ -541,7 +541,7 @@
   "delete-bill-item-question": "Hapus item tagihan?",
   "bill-splitter": "Pemisah Tagihan",
   "bill-splitter-info": "Pemisah tagihan akan membagi tagihan yang Anda bayar di antara orang-orang yang membeli barang. Anda dapat dengan mudah melacak siapa yang berutang uang kepada Anda.",
-  "new-bill": "Tagihan baru",
+  "clear-bill": "Tagihan baru",
   "names": "Nama",
   "summary": "Ringkasan",
   "edit-item": "Ubah Item",
@@ -1160,5 +1160,6 @@
   "app-animations-description": "Menonaktifkan animasi dapat meningkatkan kinerja",
   "minimal": "Minimal",
   "major-change-18": "Log Aktivitas Transaksi",
-  "major-change-18-1": "Melihat daftar transaksi yang baru saja dihapus/dimodifikasi"
+  "major-change-18-1": "Melihat daftar transaksi yang baru saja dihapus/dimodifikasi",
+  "greeting-message": "Pesan Ucapan"
 }

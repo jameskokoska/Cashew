@@ -541,7 +541,7 @@
   "delete-bill-item-question": "Odstrániť položku účtu?",
   "bill-splitter": "Rozdelenie účtu.",
   "bill-splitter-info": "Rozdelenie účtu rozdelí účet medzi všetkých zúčastnených. Môžete jednoducho sledovať kto Vám stále dlhuje a koľko peňazi.",
-  "new-bill": "Nový účet",
+  "clear-bill": "Nový účet",
   "names": "Mená",
   "summary": "Zhrnutie",
   "edit-item": "Upraviť položku",
@@ -1160,5 +1160,6 @@
   "app-animations-description": "Zakázanie animácií môže zlepšiť výkon",
   "minimal": "Minimálne",
   "major-change-18": "Denník aktivity transakcie",
-  "major-change-18-1": "Pozrite si zoznam nedávno odstránených/upravených transakcií"
+  "major-change-18-1": "Pozrite si zoznam nedávno odstránených/upravených transakcií",
+  "greeting-message": "Pozdravná správa"
 }

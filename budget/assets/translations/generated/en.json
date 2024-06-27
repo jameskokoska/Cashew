@@ -541,7 +541,7 @@
   "delete-bill-item-question": "Delete Bill Item?",
   "bill-splitter": "Bill Splitter",
   "bill-splitter-info": "The bill splitter will split a bill you paid for amongst the people who purchased items. You can easily keep track of who owes you certain amounts of money.",
-  "new-bill": "New Bill",
+  "clear-bill": "Clear Bill",
   "names": "Names",
   "summary": "Summary",
   "edit-item": "Edit Item",
@@ -1160,5 +1160,6 @@
   "app-animations-description": "Disabling animations can improve performance",
   "minimal": "Minimal",
   "major-change-18": "Transaction Activity Log",
-  "major-change-18-1": "View a list of recently deleted/modified transactions"
+  "major-change-18-1": "View a list of recently deleted/modified transactions",
+  "greeting-message": "Greeting Message"
 }

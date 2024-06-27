@@ -541,7 +541,7 @@
   "delete-bill-item-question": "Slett regningselementet?",
   "bill-splitter": "Bill Splitter",
   "bill-splitter-info": "Regningen Splitter vil dele et regning du betalte for blant menneskene som kjøpte varer. Du kan enkelt holde rede på hvem som skylder deg visse mengder penger.",
-  "new-bill": "Ny regning",
+  "clear-bill": "Ny regning",
   "names": "Navn",
   "summary": "Sammendrag",
   "edit-item": "Rediger element",
@@ -1160,5 +1160,6 @@
   "app-animations-description": "Deaktivering av animasjoner kan forbedre ytelsen",
   "minimal": "Minimal",
   "major-change-18": "Transaksjonsaktivitetslogg",
-  "major-change-18-1": "Vis en liste over nylig slettede/endrede transaksjoner"
+  "major-change-18-1": "Vis en liste over nylig slettede/endrede transaksjoner",
+  "greeting-message": "Hilsen melding"
 }

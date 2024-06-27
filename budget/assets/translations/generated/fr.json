@@ -541,7 +541,7 @@
   "delete-bill-item-question": "Supprimer le poste de facturation ?",
   "bill-splitter": "Partage de facture",
   "bill-splitter-info": "Le partage de facture divisera une facture que vous avez payée parmi les personnes qui ont acheté des articles. Vous pouvez facilement garder une trace de qui vous doit certaines sommes d'argent.",
-  "new-bill": "Nouvelle facture",
+  "clear-bill": "Nouvelle facture",
   "names": "Noms",
   "summary": "Résumé",
   "edit-item": "Modifier l'article",
@@ -1160,5 +1160,6 @@
   "app-animations-description": "La désactivation des animations peut améliorer les performances",
   "minimal": "Minimal",
   "major-change-18": "Journal d'activité des transactions",
-  "major-change-18-1": "Afficher une liste des transactions récemment supprimées/modifiées"
+  "major-change-18-1": "Afficher une liste des transactions récemment supprimées/modifiées",
+  "greeting-message": "Message d'accueil"
 }

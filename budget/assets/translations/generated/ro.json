@@ -541,7 +541,7 @@
   "delete-bill-item-question": "Ștergeți articolul de factură?",
   "bill-splitter": "Bill Splitter",
   "bill-splitter-info": "Splitter -ul de factură va împărți o factură pe care ați plătit -o printre persoanele care au achiziționat articole. Puteți urmări cu ușurință cine vă datorează anumite sume de bani.",
-  "new-bill": "Nou factură",
+  "clear-bill": "Nou factură",
   "names": "Nume",
   "summary": "rezumat",
   "edit-item": "Editați articolul",
@@ -1160,5 +1160,6 @@
   "app-animations-description": "Dezactivarea animațiilor poate îmbunătăți performanța",
   "minimal": "Minim",
   "major-change-18": "Jurnalul activității tranzacției",
-  "major-change-18-1": "Vizualizați o listă a tranzacțiilor recent șterse/modificate"
+  "major-change-18-1": "Vizualizați o listă a tranzacțiilor recent șterse/modificate",
+  "greeting-message": "Mesaj de salut"
 }

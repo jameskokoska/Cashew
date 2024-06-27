@@ -541,7 +541,7 @@
   "delete-bill-item-question": "刪除賬單項目？",
   "bill-splitter": "帳單分攤",
   "bill-splitter-info": "賬單分離器將在購買商品的人中拆分各人購買的賬單。您可以輕鬆跟踪誰欠您一定數量的錢。",
-  "new-bill": "新帳單",
+  "clear-bill": "新帳單",
   "names": "姓名",
   "summary": "摘要",
   "edit-item": "編輯項目",
@@ -1160,5 +1160,6 @@
   "app-animations-description": "禁用動畫可以提高效能",
   "minimal": "最小",
   "major-change-18": "交易活動日誌",
-  "major-change-18-1": "查看最近刪除/修改的交易列表"
+  "major-change-18-1": "查看最近刪除/修改的交易列表",
+  "greeting-message": "問候語"
 }

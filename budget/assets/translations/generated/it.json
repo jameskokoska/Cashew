@@ -541,7 +541,7 @@
   "delete-bill-item-question": "Vuoi eliminare l'articolo?",
   "bill-splitter": "Dividi scontrino",
   "bill-splitter-info": "La funzione \"Dividi scontrino\" dividerà una spesa che hai pagato tra le persone che hanno acquistato gli articoli. Puoi facilmente tenere traccia di chi ti deve determinate quantità di denaro.",
-  "new-bill": "Nuovo scontrino",
+  "clear-bill": "Nuovo scontrino",
   "names": "Nomi",
   "summary": "Totali",
   "edit-item": "Modifica articolo",
@@ -1160,5 +1160,6 @@
   "app-animations-description": "La disattivazione delle animazioni può migliorare le prestazioni",
   "minimal": "Minimo",
   "major-change-18": "Registro delle attività di transazione",
-  "major-change-18-1": "Visualizza un elenco delle transazioni cancellate/modificate di recente"
+  "major-change-18-1": "Visualizza un elenco delle transazioni cancellate/modificate di recente",
+  "greeting-message": "Messaggio di saluto"
 }

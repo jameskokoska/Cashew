@@ -571,5 +571,6 @@
   "app-animations-description": "Deaktiveer animasies kan prestasie verbeter",
   "minimal": "Minimaal",
   "major-change-18": "Transaksie-aktiwiteitslogboek",
-  "major-change-18-1": "Bekyk 'n lys van onlangs geskrap/gewysigde transaksies"
+  "major-change-18-1": "Bekyk 'n lys van onlangs geskrap/gewysigde transaksies",
+  "greeting-message": "Groete Boodskap"
 }

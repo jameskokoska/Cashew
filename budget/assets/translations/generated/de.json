@@ -541,7 +541,7 @@
   "delete-bill-item-question": "Rechnungsartikel löschen?",
   "bill-splitter": "Bill Splitter",
   "bill-splitter-info": "Der Bill Splitter teilt eine Rechnung unter den Personen auf, die bezahlt haben. Sie können leicht im Auge behalten, wer Ihnen bestimmte Geldbeträge schuldet.",
-  "new-bill": "Neue Rechnung",
+  "clear-bill": "Neue Rechnung",
   "names": "Namen",
   "summary": "Zusammenfassung",
   "edit-item": "Element bearbeiten",
@@ -1160,5 +1160,6 @@
   "app-animations-description": "Das Deaktivieren von Animationen kann die Leistung verbessern",
   "minimal": "Minimal",
   "major-change-18": "Transaktionsaktivitätsprotokoll",
-  "major-change-18-1": "Sehen Sie sich eine Liste der kürzlich gelöschten/geänderten Transaktionen an"
+  "major-change-18-1": "Sehen Sie sich eine Liste der kürzlich gelöschten/geänderten Transaktionen an",
+  "greeting-message": "Grußnachricht"
 }

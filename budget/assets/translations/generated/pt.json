@@ -541,7 +541,7 @@
   "delete-bill-item-question": "Excluir item da conta?",
   "bill-splitter": "Bill Splitter",
   "bill-splitter-info": "O Bill Splitter dividirá uma conta pela qual você pagou entre as pessoas que compraram itens. Você pode acompanhar facilmente quem lhe deve certas quantias de dinheiro.",
-  "new-bill": "Nova conta",
+  "clear-bill": "Nova conta",
   "names": "Nomes",
   "summary": "Resumo",
   "edit-item": "Editar item",
@@ -1160,5 +1160,6 @@
   "app-animations-description": "Desativar animações pode melhorar o desempenho",
   "minimal": "Mínimo",
   "major-change-18": "Log de atividades de transação",
-  "major-change-18-1": "Veja uma lista de transações excluídas/modificadas recentemente"
+  "major-change-18-1": "Veja uma lista de transações excluídas/modificadas recentemente",
+  "greeting-message": "Mensagem de saudação"
 }

@@ -541,7 +541,7 @@
   "delete-bill-item-question": "請求書アイテムを削除しますか？",
   "bill-splitter": "割り勘",
   "bill-splitter-info": "割り勘機能は、あなたが建て替えた請求書を商品を購入した人たちの間で分割します。誰がいくらお金を借りているのか、簡単に把握することができます",
-  "new-bill": "新しい建て替え",
+  "clear-bill": "新しい建て替え",
   "names": "メンバー",
   "summary": "精算方法",
   "edit-item": "アイテムを編集",
@@ -1160,5 +1160,6 @@
   "app-animations-description": "アニメーションを無効にするとパフォーマンスが向上する可能性があります",
   "minimal": "最小限",
   "major-change-18": "トランザクションアクティビティログ",
-  "major-change-18-1": "最近削除/変更されたトランザクションのリストを表示する"
+  "major-change-18-1": "最近削除/変更されたトランザクションのリストを表示する",
+  "greeting-message": "ご挨拶メッセージ"
 }

@@ -541,7 +541,7 @@
   "delete-bill-item-question": "Törli a számatételt?",
   "bill-splitter": "Számlamegosztó",
   "bill-splitter-info": "A számlaelosztó felosztja az Ön által kifizetett számlát azok között, akik a tételeket megvásárolták. Könnyedén nyomon követheti, hogy ki tartozik Önnek bizonyos összegekkel.",
-  "new-bill": "Új számla",
+  "clear-bill": "Új számla",
   "names": "Nevek",
   "summary": "Összefoglaló",
   "edit-item": "Tétel szerkesztése",
@@ -1160,5 +1160,6 @@
   "app-animations-description": "Az animációk letiltása javíthatja a teljesítményt",
   "minimal": "Minimális",
   "major-change-18": "Tranzakciós tevékenység naplója",
-  "major-change-18-1": "Tekintse meg a legutóbb törölt/módosított tranzakciók listáját"
+  "major-change-18-1": "Tekintse meg a legutóbb törölt/módosított tranzakciók listáját",
+  "greeting-message": "Üdvözlő üzenet"
 }

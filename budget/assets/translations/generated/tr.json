@@ -541,7 +541,7 @@
   "delete-bill-item-question": "Fiş öğesi silinsin mi?",
   "bill-splitter": "Fiş Bölücü",
   "bill-splitter-info": "Fiş Bölücü, ürün satın alan kişiler arasında ödediğiniz bir fişi bölecektir. Diğer bir kişinin bu fiş ile size belirli miktarda para borçlu olduğunu kolayca takip edebilirsiniz.",
-  "new-bill": "Yeni Fiş",
+  "clear-bill": "Yeni Fiş",
   "names": "İsimler",
   "summary": "Özet",
   "edit-item": "Öğeyi Düzenle",
@@ -1160,5 +1160,6 @@
   "app-animations-description": "Animasyonları devre dışı bırakmak performansı artırabilir",
   "minimal": "En az",
   "major-change-18": "İşlem Etkinliği Günlüğü",
-  "major-change-18-1": "Yakın zamanda silinen/değiştirilen işlemlerin listesini görüntüleyin"
+  "major-change-18-1": "Yakın zamanda silinen/değiştirilen işlemlerin listesini görüntüleyin",
+  "greeting-message": "Tebrik Mesajı"
 }

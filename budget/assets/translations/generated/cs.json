@@ -541,7 +541,7 @@
   "delete-bill-item-question": "Odstranit položku účtu?",
   "bill-splitter": "Bill Splitter",
   "bill-splitter-info": "Splitter Bill rozdělí účet, za který jste zaplatili mezi lidmi, kteří zakoupili předměty. Můžete snadno sledovat, kdo vám dluží určité částky peněz.",
-  "new-bill": "Nový účet",
+  "clear-bill": "Nový účet",
   "names": "Jména",
   "summary": "souhrn",
   "edit-item": "Upravit položku",
@@ -1160,5 +1160,6 @@
   "app-animations-description": "Zakázání animací může zlepšit výkon",
   "minimal": "Minimální",
   "major-change-18": "Protokol aktivity transakce",
-  "major-change-18-1": "Zobrazit seznam nedávno smazaných/upravených transakcí"
+  "major-change-18-1": "Zobrazit seznam nedávno smazaných/upravených transakcí",
+  "greeting-message": "Pozdrav"
 }

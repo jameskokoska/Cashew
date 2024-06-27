@@ -541,7 +541,7 @@
   "delete-bill-item-question": "Bill -item verwijderen?",
   "bill-splitter": "Bill Splitter",
   "bill-splitter-info": "De Bill Splitter splitst een rekening waarvoor u hebt betaald bij de mensen die items hebben gekocht. U kunt gemakkelijk bijhouden wie u bepaalde bedragen verschuldigd is.",
-  "new-bill": "Nieuwe rekening",
+  "clear-bill": "Nieuwe rekening",
   "names": "Namen",
   "summary": "Samenvatting",
   "edit-item": "Item bewerken",
@@ -1160,5 +1160,6 @@
   "app-animations-description": "Het uitschakelen van animaties kan de prestaties verbeteren",
   "minimal": "Minimaal",
   "major-change-18": "Transactieactiviteitenlogboek",
-  "major-change-18-1": "Bekijk een lijst met onlangs verwijderde/gewijzigde transacties"
+  "major-change-18-1": "Bekijk een lijst met onlangs verwijderde/gewijzigde transacties",
+  "greeting-message": "Groet bericht"
 }

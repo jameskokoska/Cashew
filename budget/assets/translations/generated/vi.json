@@ -541,7 +541,7 @@
   "delete-bill-item-question": "Xóa mục hóa đơn?",
   "bill-splitter": "Chia hóa đơn",
   "bill-splitter-info": "Bộ chia hóa đơn sẽ chia một hóa đơn mà bạn trả giúp những người đã mua hàng. Bạn có thể dễ dàng theo dõi xem ai nợ bạn một số tiền nhất định.",
-  "new-bill": "Hóa đơn mới",
+  "clear-bill": "Hóa đơn mới",
   "names": "Tên",
   "summary": "Tóm tắt",
   "edit-item": "Chỉnh sửa mục",
@@ -1160,5 +1160,6 @@
   "app-animations-description": "Vô hiệu hóa hoạt ảnh có thể cải thiện hiệu suất",
   "minimal": "Tối thiểu",
   "major-change-18": "Nhật ký hoạt động giao dịch",
-  "major-change-18-1": "Xem danh sách các giao dịch đã xóa/sửa đổi gần đây"
+  "major-change-18-1": "Xem danh sách các giao dịch đã xóa/sửa đổi gần đây",
+  "greeting-message": "Tin nhắn chào hỏi"
 }
