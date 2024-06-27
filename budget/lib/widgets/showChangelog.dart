@@ -37,6 +37,8 @@ String getChangelogString() {
     Added haptic feedback setting to number pad
     Currency picker performance improvements
     Improve performance for line graphs
+    Include year in add transaction date if not the current year
+    Edit username and toggle greeting message for top homepage banner
     Fix local backups not saving app settings
     Fix CSV export for entries with a comma
     Fixed app link routing for (A) 12+

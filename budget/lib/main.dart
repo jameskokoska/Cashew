@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/struct/defaultPreferences.dart';
@@ -198,10 +199,10 @@ class App extends StatelessWidget {
                         Row(
                           children: [
                             AnimatedContainer(
-                             duration: appStateSettings["appAnimations"] !=
-                                    AppAnimations.all.index
-                                ? Duration.zero
-                                : Duration(milliseconds: 1500),
+                              duration: appStateSettings["appAnimations"] !=
+                                      AppAnimations.all.index
+                                  ? Duration.zero
+                                  : Duration(milliseconds: 1500),
                               curve: Curves.easeInOutCubicEmphasized,
                               width: getWidthNavigationSidebar(context),
                               color: Theme.of(context).canvasColor,

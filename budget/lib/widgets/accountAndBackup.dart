@@ -235,7 +235,8 @@ Future<bool> signInAndSync(BuildContext context,
     {required dynamic Function() next}) async {
   dynamic result = true;
   if (getPlatform() == PlatformOS.isIOS &&
-      navigatorKey.currentContext != null) {
+      navigatorKey.currentContext != null &&
+      appStateSettings["hasSignedIn"] != true) {
     result = await openPopup(
       navigatorKey.currentContext!,
       icon: appStateSettings["outlinedIcons"]

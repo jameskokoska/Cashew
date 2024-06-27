@@ -1,9 +1,12 @@
 import 'package:budget/colors.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:budget/pages/exchangeRatesPage.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -19,11 +22,13 @@ class CurrencyPicker extends StatefulWidget {
     this.onHasFocus,
     this.initialCurrency,
     this.unSelectedColor,
+    required this.showExchangeRateInfoNotice,
   });
   final Function(String) onSelected;
   final Function? onHasFocus;
   final String? initialCurrency;
   final Color? unSelectedColor;
+  final bool showExchangeRateInfoNotice;
 
   @override
   State<CurrencyPicker> createState() => _CurrencyPickerState();
@@ -124,21 +129,58 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
           SliverToBoxAdapter(
             child: Column(
               children: [
-                Focus(
-                  onFocusChange: (hasFocus) {
-                    if (hasFocus && widget.onHasFocus != null)
-                      widget.onHasFocus!();
-                  },
-                  child: TextInput(
-                    labelText: "search-currencies-placeholder".tr(),
-                    icon: appStateSettings["outlinedIcons"]
-                        ? Icons.search_outlined
-                        : Icons.search_rounded,
-                    onChanged: (text) {
-                      searchCurrencies(text);
-                    },
-                    padding: EdgeInsetsDirectional.zero,
-                  ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Focus(
+                        onFocusChange: (hasFocus) {
+                          if (hasFocus && widget.onHasFocus != null)
+                            widget.onHasFocus!();
+                        },
+                        child: TextInput(
+                          labelText: "search-currencies-placeholder".tr(),
+                          icon: appStateSettings["outlinedIcons"]
+                              ? Icons.search_outlined
+                              : Icons.search_rounded,
+                          onChanged: (text) {
+                            searchCurrencies(text);
+                          },
+                          padding: EdgeInsetsDirectional.zero,
+                        ),
+                      ),
+                    ),
+                    if (widget.showExchangeRateInfoNotice)
+                      Padding(
+                        padding: const EdgeInsetsDirectional.only(start: 7),
+                        child: ButtonIcon(
+                          onTap: () {
+                            openPopup(
+                              context,
+                              title: "exchange-rate-notice".tr(),
+                              description:
+                                  "exchange-rate-notice-description".tr(),
+                              icon: appStateSettings["outlinedIcons"]
+                                  ? Icons.info_outlined
+                                  : Icons.info_outline_rounded,
+                              onCancel: () {
+                                Navigator.pop(context);
+                              },
+                              onCancelLabel: "ok".tr(),
+                              onSubmit: () async {
+                                checkIfExchangeRateChangeBefore();
+                                Navigator.pop(context);
+                                await pushRoute(context, ExchangeRates());
+                                checkIfExchangeRateChangeAfter();
+                              },
+                              onSubmitLabel: "exchange-rates".tr(),
+                            );
+                          },
+                          icon: appStateSettings["outlinedIcons"]
+                              ? Icons.info_outlined
+                              : Icons.info_outline_rounded,
+                        ),
+                      ),
+                  ],
                 ),
                 SizedBox(height: 12),
               ],

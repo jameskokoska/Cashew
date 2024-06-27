@@ -137,6 +137,7 @@ class HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     super.build(context);
     bool showUsername = appStateSettings["username"] != "";
+    bool showGreeting = appStateSettings["enableGreetingMessage"] == true;
     Widget slidingSelector = GestureDetector(
       onLongPress: () async {
         HapticFeedback.heavyImpact();
@@ -282,6 +283,8 @@ class HomePageState extends State<HomePage>
                             ? Expanded(
                                 child: HomePageWelcomeBannerSmall(
                                   showUsername: showUsername,
+                                  showGreeting: showGreeting,
+                                  username: appStateSettings["username"] ?? "",
                                 ),
                               )
                             : SizedBox.shrink(),
@@ -327,8 +330,10 @@ class HomePageState extends State<HomePage>
                                     animationControllerHeader2:
                                         _animationControllerHeader2,
                                     showUsername: showUsername,
-                                    appStateSettings: appStateSettings,
+                                    showGreeting: showGreeting,
                                     enterNameBottomSheet: enterNameBottomSheet,
+                                    username:
+                                        appStateSettings["username"] ?? "",
                                   ),
                                 ],
                               ),

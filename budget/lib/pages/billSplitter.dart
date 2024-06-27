@@ -33,6 +33,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -369,10 +370,10 @@ class _BillSplitterState extends State<BillSplitter> {
                           const EdgeInsetsDirectional.symmetric(horizontal: 4),
                       child: SettingsContainer(
                         isOutlinedColumn: true,
-                        title: "new-bill".tr(),
+                        title: "clear-bill".tr(),
                         icon: appStateSettings["outlinedIcons"]
-                            ? Icons.add_outlined
-                            : Icons.add_rounded,
+                            ? Symbols.scan_delete_sharp
+                            : Symbols.scan_delete_rounded,
                         isOutlined: true,
                         onTap: () {
                           resetBill();

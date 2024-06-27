@@ -360,7 +360,8 @@ class EnterName extends StatelessWidget {
   }
 }
 
-Future enterNameBottomSheet(context) async {
+Future<String> enterNameBottomSheet(context,
+    {bool updatePageWhenSet = true}) async {
   return await openBottomSheet(
     context,
     popupWithKeyboard: true,
@@ -374,7 +375,8 @@ Future enterNameBottomSheet(context) async {
         setSelectedText: (_) {},
         nextWithInput: (text) {
           updateSettings("username", text.trim(),
-              pagesNeedingRefresh: [0], updateGlobalState: false);
+              pagesNeedingRefresh: updatePageWhenSet ? [0] : [],
+              updateGlobalState: false);
         },
         selectedText: appStateSettings["username"],
         placeholder: "nickname".tr(),

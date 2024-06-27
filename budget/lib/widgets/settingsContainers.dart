@@ -242,13 +242,7 @@ class SettingsContainerOpenPage extends StatelessWidget {
                 : Row(
                     children: [
                       if (afterWidget != null) afterWidget!,
-                      Icon(
-                        appStateSettings["outlinedIcons"]
-                            ? Icons.chevron_right_outlined
-                            : Icons.chevron_right_rounded,
-                        size: isOutlined == true ? 20 : 30,
-                        color: colorScheme.secondary,
-                      ),
+                      MoreChevron(color: colorScheme.secondary,size: isOutlined == true ? 20 : 30),
                     ],
                   ),
             isOutlined: isOutlined,
@@ -259,6 +253,22 @@ class SettingsContainerOpenPage extends StatelessWidget {
         },
         openPage: openPage,
       ),
+    );
+  }
+}
+
+class MoreChevron extends StatelessWidget {
+  const MoreChevron({super.key, required this.color, this.size,});
+  final Color color;
+  final double? size;
+  @override
+  Widget build(BuildContext context) {
+    return Icon(
+      appStateSettings["outlinedIcons"]
+          ? Icons.chevron_right_outlined
+          : Icons.chevron_right_rounded,
+      size: size,
+      color: color,
     );
   }
 }

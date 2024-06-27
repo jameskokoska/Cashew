@@ -375,6 +375,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                                 ),
                               ),
                               CurrencyPicker(
+                                showExchangeRateInfoNotice: false,
                                 onSelected: (selectedCurrency) {
                                   Navigator.pop(context);
                                   database.createOrUpdateWallet(

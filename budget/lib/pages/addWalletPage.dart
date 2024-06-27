@@ -421,34 +421,6 @@ class _AddWalletPageState extends State<AddWalletPage> {
                       );
                     },
                   ),
-                DropdownItemMenu(
-                  id: "info",
-                  label: "info".tr(),
-                  icon: appStateSettings["outlinedIcons"]
-                      ? Icons.info_outlined
-                      : Icons.info_outline_rounded,
-                  action: () {
-                    openPopup(
-                      context,
-                      title: "exchange-rate-notice".tr(),
-                      description: "exchange-rate-notice-description".tr(),
-                      icon: appStateSettings["outlinedIcons"]
-                          ? Icons.info_outlined
-                          : Icons.info_outline_rounded,
-                      onCancel: () {
-                        Navigator.pop(context);
-                      },
-                      onCancelLabel: "ok".tr(),
-                      onSubmit: () async {
-                        checkIfExchangeRateChangeBefore();
-                        Navigator.pop(context);
-                        await pushRoute(context, ExchangeRates());
-                        checkIfExchangeRateChangeAfter();
-                      },
-                      onSubmitLabel: "exchange-rates".tr(),
-                    );
-                  },
-                ),
               ],
             ),
           ],
@@ -726,6 +698,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
               ),
             SliverToBoxAdapter(child: SizedBox(height: 10)),
             CurrencyPicker(
+              showExchangeRateInfoNotice: true,
               onSelected: setSelectedCurrency,
               initialCurrency: selectedCurrency,
               onHasFocus: () {

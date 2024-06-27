@@ -1669,7 +1669,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                         maxLines: 4,
                       ),
                     ),
-              Container(height: 100),
+              SizedBox(height: 80),
             ],
           ),
         ),
@@ -2160,6 +2160,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                     : Flexible(
                         child: Container(
                           constraints: BoxConstraints(maxWidth: 900),
+                          padding: const EdgeInsets.only(bottom: 80),
                           child: Column(
                             children: [
                               Padding(
@@ -2280,8 +2281,10 @@ class _DateButtonState extends State<DateButton> {
 
   @override
   Widget build(BuildContext context) {
-    String wordedDate = getWordedDateShortMore(selectedDate);
-    String wordedDateShort = getWordedDateShort(selectedDate);
+    String wordedDate = getWordedDateShortMore(selectedDate,
+        includeYear: selectedDate.year != DateTime.now().year);
+    String wordedDateShort = getWordedDateShort(selectedDate,
+        includeYear: selectedDate.year != DateTime.now().year);
 
     return Tappable(
       color: Colors.transparent,
@@ -2346,7 +2349,7 @@ class _DateButtonState extends State<DateButton> {
                 text: wordedDate,
                 fontWeight: FontWeight.bold,
                 fontSize: 23,
-                minFontSize: 15,
+                minFontSize: 18,
                 maxLines: 1,
                 autoSizeText: true,
                 overflowReplacement: TextFont(
@@ -2832,7 +2835,7 @@ class _SelectTextState extends State<SelectText> {
   onEditingComplete() {
     widget.setSelectedText(input ?? "");
     if (widget.popContext) {
-      Navigator.pop(context);
+      Navigator.pop(context, input);
     }
     if (widget.next != null) {
       widget.next!();
@@ -2868,7 +2871,7 @@ class _SelectTextState extends State<SelectText> {
                   input = text;
                   widget.setSelectedText(input!);
                   if (widget.popContextWhenSet) {
-                    Navigator.pop(context);
+                    Navigator.pop(context, input);
                   }
                 },
                 labelText: widget.placeholder ?? widget.labelText,

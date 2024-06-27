@@ -11,11 +11,13 @@ import 'package:budget/pages/homePage/homePageNetWorth.dart';
 import 'package:budget/pages/homePage/homePageObjectives.dart';
 import 'package:budget/pages/homePage/homePageUpcomingTransactions.dart';
 import 'package:budget/pages/homePage/homePageWalletSwitcher.dart';
+import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/modified/reorderable_list.dart';
 import 'package:budget/struct/navBarIconsData.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/editRowEntry.dart';
 import 'package:budget/widgets/iconButtonScaled.dart';
 import 'package:budget/widgets/listItem.dart';
@@ -43,6 +45,7 @@ import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/functions.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:budget/pages/homepage/homePageUsername.dart';
 
 import '../widgets/tappableTextEntry.dart';
 
@@ -507,60 +510,17 @@ class _EditHomePageState extends State<EditHomePage> {
                   key: ValueKey(index),
                 );
 
-              return EditRowEntry(
-                canReorder: true,
+              return HomePageEditRowEntry(
                 key: ValueKey(key),
+                text: editHomePageItems[key]!.name,
+                iconData: editHomePageItems[key]!.icon,
+                toggleSwitch: () => toggleSwitch(key),
+                switchValue: editHomePageItems[key]?.isEnabled ?? false,
+                canReorder: true,
                 currentReorder: currentReorder != -1 && currentReorder != index,
-                padding: EdgeInsetsDirectional.only(
-                    start: 18, end: 0, top: 16, bottom: 16),
-                extraWidget: Row(
-                  children: [
-                    getPlatform() == PlatformOS.isIOS
-                        ? CupertinoSwitch(
-                            activeColor: Theme.of(context).colorScheme.primary,
-                            value: editHomePageItems[key]?.isEnabled ?? false,
-                            onChanged: (value) {
-                              toggleSwitch(key);
-                            },
-                          )
-                        : Switch(
-                            activeColor: Theme.of(context).colorScheme.primary,
-                            value: editHomePageItems[key]?.isEnabled ?? false,
-                            onChanged: (value) {
-                              toggleSwitch(key);
-                            },
-                            materialTapTargetSize:
-                                MaterialTapTargetSize.shrinkWrap,
-                          ),
-                  ],
-                ),
-                content: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(
-                      editHomePageItems[key]!.icon,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    SizedBox(width: 13),
-                    Expanded(
-                      child: TextFont(
-                        text: editHomePageItems[key]!.name,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 17,
-                        maxLines: 5,
-                      ),
-                    ),
-                  ],
-                ),
-                hasMoreOptionsIcon: editHomePageItems[key]?.onTap != null,
+                onTap: editHomePageItems[key]?.onTap,
                 extraWidgetsBelow: editHomePageItems[key]?.extraWidgetsBelow,
-                canDelete: false,
                 index: index,
-                onTap: editHomePageItems[key]?.onTap ??
-                    () {
-                      toggleSwitch(key);
-                    },
-                openPage: Container(),
               );
             },
             itemCount: keyOrder.length,
@@ -579,6 +539,80 @@ class _EditHomePageState extends State<EditHomePage> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class HomePageEditRowEntry extends StatelessWidget {
+  const HomePageEditRowEntry({
+    super.key,
+    required this.currentReorder,
+    required this.canReorder,
+    required this.switchValue,
+    required this.toggleSwitch,
+    required this.iconData,
+    required this.text,
+    required this.extraWidgetsBelow,
+    required this.index,
+    required this.onTap,
+  });
+  final bool currentReorder;
+  final bool canReorder;
+  final bool switchValue;
+  final VoidCallback toggleSwitch;
+  final IconData iconData;
+  final String text;
+  final List<Widget>? extraWidgetsBelow;
+  final int index;
+  final VoidCallback? onTap;
+  @override
+  Widget build(BuildContext context) {
+    return EditRowEntry(
+      canReorder: canReorder,
+      key: ValueKey(key),
+      currentReorder: currentReorder,
+      padding:
+          EdgeInsetsDirectional.only(start: 18, end: 0, top: 16, bottom: 16),
+      extraWidget: Row(
+        children: [
+          getPlatform() == PlatformOS.isIOS
+              ? CupertinoSwitch(
+                  activeColor: Theme.of(context).colorScheme.primary,
+                  value: switchValue,
+                  onChanged: (value) => toggleSwitch(),
+                )
+              : Switch(
+                  activeColor: Theme.of(context).colorScheme.primary,
+                  value: switchValue,
+                  onChanged: (value) => toggleSwitch(),
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+        ],
+      ),
+      content: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(
+            iconData,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          SizedBox(width: 13),
+          Expanded(
+            child: TextFont(
+              text: text,
+              fontWeight: FontWeight.bold,
+              fontSize: 17,
+              maxLines: 5,
+            ),
+          ),
+        ],
+      ),
+      hasMoreOptionsIcon: onTap != null,
+      extraWidgetsBelow: extraWidgetsBelow,
+      canDelete: false,
+      index: index,
+      onTap: onTap ?? () => toggleSwitch(),
+      openPage: Container(),
     );
   }
 }
@@ -897,63 +931,83 @@ class _HomePageEditRowEntryUsernameState
   late bool value = widget.initialValue;
   @override
   Widget build(BuildContext context) {
-    return EditRowEntry(
+    return HomePageEditRowEntry(
       canReorder: false,
-      padding:
-          EdgeInsetsDirectional.only(start: 18, end: 0, top: 16, bottom: 16),
-      extraWidget: Row(
-        children: [
-          getPlatform() == PlatformOS.isIOS
-              ? CupertinoSwitch(
-                  activeColor: Theme.of(context).colorScheme.primary,
-                  value: value,
-                  onChanged: (value) {
-                    widget.onChanged(value);
-                    setState(() {
-                      this.value = value;
-                    });
-                  },
-                )
-              : Switch(
-                  activeColor: Theme.of(context).colorScheme.primary,
-                  value: value,
-                  onChanged: (value) {
-                    widget.onChanged(value);
-                    setState(() {
-                      this.value = value;
-                    });
-                  },
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-        ],
-      ),
-      content: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(
-            widget.iconData,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-          SizedBox(width: 13),
-          Expanded(
-            child: TextFont(
-              text: widget.name,
-              fontWeight: FontWeight.bold,
-              fontSize: 17,
-              maxLines: 5,
-            ),
-          ),
-        ],
-      ),
-      canDelete: false,
-      index: 0,
-      onTap: () {
-        widget.onChanged(!value);
+      text: widget.name,
+      iconData: widget.iconData,
+      toggleSwitch: () {
+        bool newValue = !this.value;
+        widget.onChanged(newValue);
         setState(() {
-          this.value = !value;
+          this.value = newValue;
         });
       },
-      openPage: Container(),
+      switchValue: this.value,
+      currentReorder: false,
+      onTap: () => openBottomSheet(
+        context,
+        PopupFramework(
+          title: "homepage-banner".tr(),
+          child: HomePageBannerSettings(),
+        ),
+        useCustomController: true,
+      ),
+      extraWidgetsBelow: null,
+      index: 0,
+    );
+  }
+}
+
+class HomePageBannerSettings extends StatefulWidget {
+  const HomePageBannerSettings({super.key});
+  @override
+  State<HomePageBannerSettings> createState() => _HomePageBannerSettingsState();
+}
+
+class _HomePageBannerSettingsState extends State<HomePageBannerSettings> {
+  late String username = appStateSettings["username"] ?? "";
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SettingsContainer(
+          afterWidget:
+              MoreChevron(color: Theme.of(context).colorScheme.secondary),
+          enableBorderRadius: true,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.edit_outlined
+              : Icons.edit_rounded,
+          title: "username".tr(),
+          onTap: () async {
+            dynamic result =
+                await enterNameBottomSheet(context, updatePageWhenSet: false);
+            if (result is String)
+              setState(() {
+                username = result;
+              });
+            // Update the size of the bottom sheet
+            Future.delayed(Duration(milliseconds: 250), () {
+              bottomSheetControllerGlobalCustomAssigned?.snapToExtent(0);
+            });
+          },
+        ),
+        AnimatedExpanded(
+          expand: username != "",
+          child: SettingsContainerSwitch(
+            enableBorderRadius: true,
+            title: "greeting-message".tr(),
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.waving_hand_outlined
+                : Icons.waving_hand_rounded,
+            onSwitched: (value) {
+              updateSettings("enableGreetingMessage", value,
+                  updateGlobalState: false);
+            },
+            initialValue: appStateSettings["enableGreetingMessage"],
+          ),
+        ),
+      ],
     );
   }
 }

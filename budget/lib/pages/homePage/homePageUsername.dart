@@ -1,4 +1,5 @@
 import 'package:budget/functions.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -9,14 +10,16 @@ class HomePageUsername extends StatelessWidget {
   final AnimationController animationControllerHeader;
   final AnimationController animationControllerHeader2;
   final bool showUsername;
-  final Map<String, dynamic> appStateSettings;
+  final bool showGreeting;
+  final String username;
   final Function enterNameBottomSheet;
 
   HomePageUsername({
     required this.animationControllerHeader,
     required this.animationControllerHeader2,
     required this.showUsername,
-    required this.appStateSettings,
+    required this.showGreeting,
+    required this.username,
     required this.enterNameBottomSheet,
   });
 
@@ -26,35 +29,34 @@ class HomePageUsername extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        !showUsername
-            ? SizedBox()
-            : Padding(
-                padding: const EdgeInsetsDirectional.symmetric(horizontal: 9),
-                child: AnimatedBuilder(
-                  animation: animationControllerHeader,
-                  builder: (_, child) {
-                    return Transform.translate(
-                      offset: Offset(
-                        0,
-                        20 - 20 * (animationControllerHeader.value),
-                      ),
-                      child: child,
-                    );
-                  },
-                  child: FadeTransition(
-                    opacity: animationControllerHeader2,
-                    child: PartyHat(
-                      size: 23,
-                      enabled: showUsername,
-                      child: TextFont(
-                        text: getWelcomeMessage(),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
+        if (showUsername && showGreeting)
+          Padding(
+            padding: const EdgeInsetsDirectional.symmetric(horizontal: 9),
+            child: AnimatedBuilder(
+              animation: animationControllerHeader,
+              builder: (_, child) {
+                return Transform.translate(
+                  offset: Offset(
+                    0,
+                    20 - 20 * (animationControllerHeader.value),
+                  ),
+                  child: child,
+                );
+              },
+              child: FadeTransition(
+                opacity: animationControllerHeader2,
+                child: PartyHat(
+                  size: 23,
+                  enabled: showUsername,
+                  child: TextFont(
+                    text: getWelcomeMessage(),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
                   ),
                 ),
               ),
+            ),
+          ),
         AnimatedBuilder(
           animation: animationControllerHeader,
           builder: (_, child) {
@@ -82,14 +84,15 @@ class HomePageUsername extends StatelessWidget {
               data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
               child: PartyHat(
                 size: 28,
-                enabled: !showUsername,
+                enabled: !(showUsername && showGreeting),
                 child: TextFont(
-                  text: !showUsername
-                      ? "home".tr()
-                      : appStateSettings["username"] ?? "",
+                  text: !showUsername ? "home".tr() : username,
                   fontWeight: FontWeight.bold,
                   fontSize: 33,
                   textColor: Theme.of(context).colorScheme.onPrimaryContainer,
+                  // textColor: showGreeting && showUsername
+                  //     ? Theme.of(context).colorScheme.onPrimaryContainer
+                  //     : Theme.of(context).colorScheme.onSecondaryContainer,
                 ),
               ),
             ),
@@ -101,8 +104,14 @@ class HomePageUsername extends StatelessWidget {
 }
 
 class HomePageWelcomeBannerSmall extends StatelessWidget {
-  const HomePageWelcomeBannerSmall({required this.showUsername, super.key});
+  const HomePageWelcomeBannerSmall(
+      {required this.showUsername,
+      required this.showGreeting,
+      required this.username,
+      super.key});
   final bool showUsername;
+  final bool showGreeting;
+  final String username;
 
   @override
   Widget build(BuildContext context) {
@@ -110,10 +119,12 @@ class HomePageWelcomeBannerSmall extends StatelessWidget {
       padding: const EdgeInsetsDirectional.only(start: 17, end: 5),
       child: PartyHat(
         child: TextFont(
-          text: showUsername ? getWelcomeMessage() : "home".tr(),
+          text:
+              showGreeting && showUsername ? getWelcomeMessage() : "home".tr(),
           fontWeight: FontWeight.bold,
           fontSize: getWidthNavigationSidebar(context) <= 0 ? 26 : 30,
           textColor: Theme.of(context).colorScheme.onPrimaryContainer,
+          //textColor: Theme.of(context).colorScheme.onSecondaryContainer,
         ),
       ),
     );

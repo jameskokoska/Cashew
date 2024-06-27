@@ -73,6 +73,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "showTransactionsListFullScreen": true,
     "showUsernameWelcomeBanner": true,
     "showUsernameWelcomeBannerFullScreen": true,
+    "enableGreetingMessage": true,
     "homePageOrder": [
       "wallets",
       "walletsList",
