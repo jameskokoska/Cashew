@@ -60,7 +60,7 @@ class _ColorPickerState extends State<ColorPicker> {
     Color.fromARGB(255, 255, 255, 0),
     Color.fromARGB(255, 128, 255, 0),
     Color.fromARGB(255, 0, 255, 0),
-    Color.fromARGB(255, 0, 255, 128),
+    Color.fromARGB(255, 0, 219, 110),
     Color.fromARGB(255, 0, 255, 255),
     Color.fromARGB(255, 0, 128, 255),
     Color.fromARGB(255, 0, 0, 255),
@@ -376,44 +376,44 @@ double findClosestColorPosition(
     Color end = colors[i + 1];
     for (double t = 0; t <= 1; t += resolution) {
       Color interpolated = lerpColor(start, end, t);
-      if (compareBlackAndWhiteSpectrum) {
-        for (double t2 = 0; t2 <= 1; t2 += resolution) {
-          Color interpolated2 = lerpColor(interpolated, Colors.white, t2);
-          double distance = colorDistance(interpolated2, targetColor);
-          if (distance < minDistance) {
-            minDistance = distance;
-            closestIndex = i;
-          }
-        }
-        for (double t2 = 0; t2 <= 1; t2 += resolution) {
-          Color interpolated2 = lerpColor(interpolated, Colors.black, t2);
-          double distance = colorDistance(interpolated2, targetColor);
-          if (distance < minDistance) {
-            minDistance = distance;
-            closestIndex = i;
-          }
-        }
-      } else {
-        double distance = colorDistance(interpolated, targetColor);
-        if (distance < minDistance) {
-          minDistance = distance;
-          closestIndex = i;
-        }
+      double distance = colorDistance(interpolated, targetColor);
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestIndex = i;
       }
     }
   }
 
-  Color start = colors[closestIndex];
-  Color end = colors[closestIndex + 1];
+  Color start = colors[max(closestIndex, 0)];
+  Color end = colors[min(closestIndex + 1, colors.length - 1)];
   double closestT = 0.0;
   minDistance = double.infinity;
 
   for (double t = 0; t <= 1; t += resolution) {
     Color interpolated = lerpColor(start, end, t);
     double distance = colorDistance(interpolated, targetColor);
-    if (distance < minDistance) {
-      minDistance = distance;
-      closestT = t;
+    if (compareBlackAndWhiteSpectrum) {
+      for (double t2 = 0; t2 <= 1; t2 += resolution) {
+        Color interpolated2 = lerpColor(interpolated, Colors.white, t2);
+        double distance = colorDistance(interpolated2, targetColor);
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestT = t;
+        }
+      }
+      for (double t2 = 0; t2 <= 1; t2 += resolution) {
+        Color interpolated2 = lerpColor(Colors.black, interpolated, t2);
+        double distance = colorDistance(interpolated2, targetColor);
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestT = t;
+        }
+      }
+    } else {
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestT = t;
+      }
     }
   }
 

@@ -10,6 +10,7 @@ import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/util/checkWidgetLaunch.dart';
+import 'package:budget/widgets/util/keepAliveClientMixin.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
@@ -122,21 +123,23 @@ class _SelectColorState extends State<SelectColor> {
                       )
                     : widget.supportCustomColors &&
                             index + 1 == selectableColorsList.length
-                        ? ColorIconCustom(
-                            initialSelectedColor: selectedColor ??
-                                Theme.of(context).colorScheme.primary,
-                            outline: selectedIndex == -1 ||
-                                selectedIndex ==
-                                    selectableColorsList.length - 1,
-                            margin: EdgeInsetsDirectional.all(5),
-                            size: 55,
-                            onTap: (colorPassed) {
-                              widget.setSelectedColor!(colorPassed);
-                              setState(() {
-                                selectedColor = color;
-                                selectedIndex = index;
-                              });
-                            },
+                        ? KeepAliveClientMixin(
+                            child: ColorIconCustom(
+                              initialSelectedColor: selectedColor ??
+                                  Theme.of(context).colorScheme.primary,
+                              outline: selectedIndex == -1 ||
+                                  selectedIndex ==
+                                      selectableColorsList.length - 1,
+                              margin: EdgeInsetsDirectional.all(5),
+                              size: 55,
+                              onTap: (colorPassed) {
+                                widget.setSelectedColor!(colorPassed);
+                                setState(() {
+                                  selectedColor = color;
+                                  selectedIndex = index;
+                                });
+                              },
+                            ),
                           )
                         : ColorIcon(
                             margin: EdgeInsetsDirectional.all(5),
@@ -217,28 +220,30 @@ class _SelectColorState extends State<SelectColor> {
                         index,
                         widget.supportCustomColors &&
                                 index + 1 == selectableColorsList.length
-                            ? ColorIconCustom(
-                                initialSelectedColor: selectedColor ??
-                                    Theme.of(context).colorScheme.primary,
-                                margin: EdgeInsetsDirectional.all(5),
-                                size: 55,
-                                onTap: (colorPassed) {
-                                  widget.setSelectedColor!(colorPassed);
-                                  setState(() {
-                                    selectedColor = color;
-                                    selectedIndex = index;
-                                  });
-                                  Future.delayed(Duration(milliseconds: 70),
-                                      () {
-                                    Navigator.pop(context);
-                                    if (widget.next != null) {
-                                      widget.next!();
-                                    }
-                                  });
-                                },
-                                outline: selectedIndex == -1 ||
-                                    selectedIndex ==
-                                        selectableColorsList.length - 1,
+                            ? KeepAliveClientMixin(
+                                child: ColorIconCustom(
+                                  initialSelectedColor: selectedColor ??
+                                      Theme.of(context).colorScheme.primary,
+                                  margin: EdgeInsetsDirectional.all(5),
+                                  size: 55,
+                                  onTap: (colorPassed) {
+                                    widget.setSelectedColor!(colorPassed);
+                                    setState(() {
+                                      selectedColor = color;
+                                      selectedIndex = index;
+                                    });
+                                    Future.delayed(Duration(milliseconds: 70),
+                                        () {
+                                      Navigator.pop(context);
+                                      if (widget.next != null) {
+                                        widget.next!();
+                                      }
+                                    });
+                                  },
+                                  outline: selectedIndex == -1 ||
+                                      selectedIndex ==
+                                          selectableColorsList.length - 1,
+                                ),
                               )
                             : ColorIcon(
                                 margin: EdgeInsetsDirectional.all(5),
@@ -448,7 +453,6 @@ class _ColorIconCustomState extends State<ColorIconCustom> {
                   // only set selected color after a slider change, we want to keep the
                   // value of widget.initialSelectedColor for the hex picker
                   selectedColor = color;
-                  print(selectedColor);
                   colorSliderPosition = colorSliderPositionPassed;
                   shadeSliderPosition = shadeSliderPositionPassed;
                 });
@@ -569,7 +573,6 @@ class _HexColorPickerState extends State<HexColorPicker> {
 
   @override
   Widget build(BuildContext context) {
-    print(selectedColor);
     return SelectText(
       buttonLabel: "set-color".tr(),
       icon: appStateSettings["outlinedIcons"]
