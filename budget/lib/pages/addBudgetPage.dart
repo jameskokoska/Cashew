@@ -115,7 +115,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   DateTime selectedStartDate =
       DateTime(DateTime.now().year, DateTime.now().month, 1);
   DateTime? selectedEndDate;
-  Color? selectedColor;
+  late Color? selectedColor =
+      widget.budget?.colour == null ? null : HexColor(widget.budget?.colour);
   String selectedRecurrence = "Monthly";
   bool selectedPin = true;
   bool selectedShared = false;

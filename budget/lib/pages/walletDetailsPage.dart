@@ -2828,29 +2828,26 @@ class _AllSpendingPastSpendingGraphState
                                       ? 10
                                       : 0,
                                 ),
-                                child: Opacity(
-                                  opacity: 0.5,
-                                  child: LowKeyButton(
-                                    onTap: () {
-                                      if (amountLoadedPressedOnce == false) {
-                                        setState(() {
-                                          amountLoadedPressedOnce = true;
-                                        });
-                                      } else {
-                                        int amountMoreToLoad =
-                                            getIsFullScreen(context) == false
-                                                ? 3
-                                                : 5;
-                                        loadLines(
-                                            amountLoaded + amountMoreToLoad);
-                                        setState(() {
-                                          amountLoaded =
-                                              amountLoaded + amountMoreToLoad;
-                                        });
-                                      }
-                                    },
-                                    text: "view-more".tr(),
-                                  ),
+                                child: LowKeyButton(
+                                  onTap: () {
+                                    if (amountLoadedPressedOnce == false) {
+                                      setState(() {
+                                        amountLoadedPressedOnce = true;
+                                      });
+                                    } else {
+                                      int amountMoreToLoad =
+                                          getIsFullScreen(context) == false
+                                              ? 3
+                                              : 5;
+                                      loadLines(
+                                          amountLoaded + amountMoreToLoad);
+                                      setState(() {
+                                        amountLoaded =
+                                            amountLoaded + amountMoreToLoad;
+                                      });
+                                    }
+                                  },
+                                  text: "view-more".tr(),
                                 ),
                               ),
                             ),

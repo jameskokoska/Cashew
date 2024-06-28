@@ -32,6 +32,7 @@ String getChangelogString() {
     Revamped About App page
     FAQ, Tips, and Guide website link on More page
     App animations setting (improve app performance if animations are disabled)
+    Custom color picker now prefills with correct selected color
     Long pressing duplicate transaction button creates a duplicate at the current date and time
     Optimized duplicating multiple transactions
     Added haptic feedback setting to number pad

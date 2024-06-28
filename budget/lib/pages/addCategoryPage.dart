@@ -68,7 +68,9 @@ class _AddCategoryPageState extends State<AddCategoryPage>
   String? selectedTitle;
   late String? selectedImage = widget.category == null ? "image.png" : null;
   String? selectedEmoji;
-  Color? selectedColor;
+  late Color? selectedColor = widget.category?.colour == null
+      ? null
+      : HexColor(widget.category?.colour);
   late bool selectedIncome = widget.initiallyIsExpense == false;
   bool? canAddCategory;
   TransactionCategory? widgetCategory;

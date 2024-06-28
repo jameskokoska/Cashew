@@ -74,10 +74,8 @@ class _SelectColorState extends State<SelectColor> {
           index++;
         }
         print("color not found - must be custom color");
-        if (useSystemColor == false) {
-          selectedIndex = -1;
-          selectedColor = widget.selectedColor;
-        }
+        selectedIndex = -1;
+        selectedColor = widget.selectedColor;
       } else {
         selectedIndex = 0;
         selectedColor = null;
@@ -220,8 +218,8 @@ class _SelectColorState extends State<SelectColor> {
                         widget.supportCustomColors &&
                                 index + 1 == selectableColorsList.length
                             ? ColorIconCustom(
-                                initialSelectedColor:
-                                    selectedColor ?? Colors.red,
+                                initialSelectedColor: selectedColor ??
+                                    Theme.of(context).colorScheme.primary,
                                 margin: EdgeInsetsDirectional.all(5),
                                 size: 55,
                                 onTap: (colorPassed) {
@@ -414,6 +412,7 @@ class _ColorIconCustomState extends State<ColorIconCustom> {
     Widget colorPickerPopup = PopupFramework(
       title: "custom-color".tr(),
       outsideExtraWidget: IconButton(
+        tooltip: "enter-color-code".tr(),
         iconSize: 25,
         padding: EdgeInsetsDirectional.all(
             getPlatform() == PlatformOS.isIOS ? 15 : 20),
@@ -437,6 +436,7 @@ class _ColorIconCustomState extends State<ColorIconCustom> {
         children: [
           Center(
             child: ColorPicker(
+              initialColor: widget.initialSelectedColor,
               colorSliderPosition: colorSliderPosition,
               shadeSliderPosition: shadeSliderPosition,
               ringColor: getColor(context, "black"),
@@ -447,9 +447,8 @@ class _ColorIconCustomState extends State<ColorIconCustom> {
                 setState(() {
                   // only set selected color after a slider change, we want to keep the
                   // value of widget.initialSelectedColor for the hex picker
-                  if (colorSliderPosition != null) {
-                    selectedColor = color;
-                  }
+                  selectedColor = color;
+                  print(selectedColor);
                   colorSliderPosition = colorSliderPositionPassed;
                   shadeSliderPosition = shadeSliderPositionPassed;
                 });

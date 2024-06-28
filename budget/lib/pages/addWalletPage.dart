@@ -67,7 +67,8 @@ class _AddWalletPageState extends State<AddWalletPage> {
   bool? canAddWallet;
 
   String? selectedTitle;
-  Color? selectedColor;
+  late Color? selectedColor =
+      widget.wallet?.colour == null ? null : HexColor(widget.wallet?.colour);
   String? selectedIconName;
   Map<String, dynamic> currencies = {};
   bool customCurrencyIcon = false;

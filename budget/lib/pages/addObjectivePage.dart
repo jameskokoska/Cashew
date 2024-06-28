@@ -78,7 +78,9 @@ class _AddObjectivePageState extends State<AddObjectivePage>
   bool? canAddObjective;
 
   String? selectedTitle;
-  Color? selectedColor;
+  late Color? selectedColor = widget.objective?.colour == null
+      ? null
+      : HexColor(widget.objective?.colour);
   late String? selectedImage = widget.objective == null ? "image.png" : null;
   String? selectedEmoji;
   double selectedAmount = 0;

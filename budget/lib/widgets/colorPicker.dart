@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 // Modified from:
@@ -35,6 +37,7 @@ class ColorPicker extends StatefulWidget {
   final double ringSize;
   final double? colorSliderPosition;
   final double? shadeSliderPosition;
+  final Color? initialColor;
   final Function(Color, double, double) onChange;
   ColorPicker({
     required this.width,
@@ -43,6 +46,7 @@ class ColorPicker extends StatefulWidget {
     required this.onChange,
     this.colorSliderPosition,
     this.shadeSliderPosition,
+    this.initialColor,
   });
   @override
   _ColorPickerState createState() => _ColorPickerState();
@@ -65,6 +69,7 @@ class _ColorPickerState extends State<ColorPicker> {
     Color.fromARGB(255, 255, 0, 127),
     Color.fromARGB(255, 255, 0, 0),
   ];
+
   double _colorSliderPosition = 0;
   bool _tapDownColor = false;
   bool _tapDownShade = false;
@@ -77,13 +82,37 @@ class _ColorPickerState extends State<ColorPicker> {
   initState() {
     super.initState();
     // print(widget.colorSliderPosition);
-    _colorSliderPosition = widget.colorSliderPosition ?? widget.width * 0.5;
-    _shadeSliderPosition = widget.shadeSliderPosition ?? widget.width * 0.75;
+    _colorSliderPosition = widget.colorSliderPosition ??
+        (widget.width *
+            findClosestColorPosition(
+              colors: _colors,
+              targetColor: widget.initialColor,
+              compareBlackAndWhiteSpectrum: true,
+            ));
     _currentColor = _calculateSelectedColor(_colorSliderPosition);
+    _shadeSliderPosition = widget.shadeSliderPosition ??
+        (widget.width *
+            findClosestColorPosition(
+              colors: getShadeColors(_currentColor) ?? [],
+              targetColor: widget.initialColor,
+              compareBlackAndWhiteSpectrum: false,
+            ));
     _shadedColor = _calculateShadedColor(_shadeSliderPosition);
     Future.delayed(Duration.zero, () {
-      widget.onChange(_shadedColor, _colorSliderPosition, _shadeSliderPosition);
+      print("Distance to predicted color: " +
+          colorDistance(widget.initialColor ?? Colors.red, _shadedColor)
+              .toString());
+
+      if (widget.colorSliderPosition == null &&
+          widget.shadeSliderPosition == null)
+        widget.onChange(widget.initialColor ?? _shadedColor,
+            _colorSliderPosition, _shadeSliderPosition);
     });
+  }
+
+  List<Color>? getShadeColors(Color? selectedColor) {
+    if (selectedColor == null) return null;
+    return [Colors.black, selectedColor, Colors.white];
   }
 
   _colorChangeHandler(double position) {
@@ -289,7 +318,7 @@ class _ColorPickerState extends State<ColorPicker> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadiusDirectional.circular(15),
                   gradient: LinearGradient(
-                      colors: [Colors.black, _currentColor, Colors.white]),
+                      colors: getShadeColors(_currentColor) ?? []),
                 ),
                 child: AnimatedScale(
                   alignment:
@@ -309,4 +338,85 @@ class _ColorPickerState extends State<ColorPicker> {
       ],
     );
   }
+}
+
+// Find the initial position (percentage decimal) of the slider given a gradient list and a target color
+
+double lerp(double a, double b, double t) {
+  return a + (b - a) * t;
+}
+
+Color lerpColor(Color a, Color b, double t) {
+  return Color.fromARGB(
+    lerp(a.alpha.toDouble(), b.alpha.toDouble(), t).round(),
+    lerp(a.red.toDouble(), b.red.toDouble(), t).round(),
+    lerp(a.green.toDouble(), b.green.toDouble(), t).round(),
+    lerp(a.blue.toDouble(), b.blue.toDouble(), t).round(),
+  );
+}
+
+double colorDistance(Color a, Color b) {
+  return sqrt(pow(a.red - b.red, 2) +
+      pow(a.green - b.green, 2) +
+      pow(a.blue - b.blue, 2));
+}
+
+double findClosestColorPosition(
+    {required List<Color> colors,
+    required Color? targetColor,
+    required bool compareBlackAndWhiteSpectrum}) {
+  if (colors.isEmpty || targetColor == null) return 0.5;
+
+  int closestIndex = 0;
+  double minDistance = double.infinity;
+  double resolution = 0.01;
+
+  for (int i = 0; i < colors.length - 1; i++) {
+    Color start = colors[i];
+    Color end = colors[i + 1];
+    for (double t = 0; t <= 1; t += resolution) {
+      Color interpolated = lerpColor(start, end, t);
+      if (compareBlackAndWhiteSpectrum) {
+        for (double t2 = 0; t2 <= 1; t2 += resolution) {
+          Color interpolated2 = lerpColor(interpolated, Colors.white, t2);
+          double distance = colorDistance(interpolated2, targetColor);
+          if (distance < minDistance) {
+            minDistance = distance;
+            closestIndex = i;
+          }
+        }
+        for (double t2 = 0; t2 <= 1; t2 += resolution) {
+          Color interpolated2 = lerpColor(interpolated, Colors.black, t2);
+          double distance = colorDistance(interpolated2, targetColor);
+          if (distance < minDistance) {
+            minDistance = distance;
+            closestIndex = i;
+          }
+        }
+      } else {
+        double distance = colorDistance(interpolated, targetColor);
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestIndex = i;
+        }
+      }
+    }
+  }
+
+  Color start = colors[closestIndex];
+  Color end = colors[closestIndex + 1];
+  double closestT = 0.0;
+  minDistance = double.infinity;
+
+  for (double t = 0; t <= 1; t += resolution) {
+    Color interpolated = lerpColor(start, end, t);
+    double distance = colorDistance(interpolated, targetColor);
+    if (distance < minDistance) {
+      minDistance = distance;
+      closestT = t;
+    }
+  }
+
+  double position = (closestIndex + closestT) / (colors.length - 1);
+  return position;
 }

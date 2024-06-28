@@ -953,20 +953,15 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                     ? 10
                     : 0,
               ),
-              child: Opacity(
-                opacity: 0.5,
-                child: LowKeyButton(
-                  color: Theme.of(context).colorScheme.secondaryContainer,
-                  textColor: Theme.of(context).colorScheme.onSecondaryContainer,
-                  onTap: () {
-                    int amountMoreToLoad =
-                        getIsFullScreen(context) == false ? 3 : 5;
-                    widget.loadLines(widget.amountLoaded + amountMoreToLoad);
-                    widget.setAmountLoaded(
-                        widget.amountLoaded + amountMoreToLoad);
-                  },
-                  text: "view-more".tr(),
-                ),
+              child: LowKeyButton(
+                onTap: () {
+                  int amountMoreToLoad =
+                      getIsFullScreen(context) == false ? 3 : 5;
+                  widget.loadLines(widget.amountLoaded + amountMoreToLoad);
+                  widget
+                      .setAmountLoaded(widget.amountLoaded + amountMoreToLoad);
+                },
+                text: "view-more".tr(),
               ),
             ),
           ),

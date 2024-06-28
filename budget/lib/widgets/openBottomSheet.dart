@@ -75,8 +75,6 @@ Future openBottomSheet(
           SheetState sheetState)?
       customBuilder,
 }) async {
-  ThemeData themeData = Theme.of(context);
-
   //minimize keyboard when open
   minimizeKeyboard(context);
   if (reAssignBottomSheetControllerGlobal)
@@ -93,18 +91,24 @@ Future openBottomSheet(
           ?.scrollTo(0, duration: Duration(milliseconds: 100));
     });
   }
-  Color bottomPaddingColor = appStateSettings["materialYou"]
-      ? dynamicPastel(context, Theme.of(context).colorScheme.secondaryContainer,
-          amountDark: 0.3, amountLight: 0.6)
-      : getColor(context, "lightDarkAccent");
+
   return await showSlidingBottomSheet(
     context,
     resizeToAvoidBottomInset: resizeForKeyboard,
     // getOSInsideWeb() == "iOS" ? false : resizeForKeyboard,
-    bottomPaddingColor: bottomPaddingColor,
+    bottomPaddingColor: appStateSettings["materialYou"]
+        ? dynamicPastel(
+            context, Theme.of(context).colorScheme.secondaryContainer,
+            amountDark: 0.3, amountLight: 0.6)
+        : getColor(context, "lightDarkAccent"),
     builder: (context) {
       double deviceAspectRatio =
           MediaQuery.sizeOf(context).height / MediaQuery.sizeOf(context).width;
+      Color bottomPaddingColor = appStateSettings["materialYou"]
+          ? dynamicPastel(
+              context, Theme.of(context).colorScheme.secondaryContainer,
+              amountDark: 0.3, amountLight: 0.6)
+          : getColor(context, "lightDarkAccent");
 
       return SlidingSheetDialog(
         isDismissable: isDismissable,
@@ -190,7 +194,7 @@ Future openBottomSheet(
             : (context, state) {
                 return Material(
                   child: Theme(
-                    data: themeData,
+                    data: Theme.of(context),
                     child: SingleChildScrollView(
                       child: child,
                     ),
