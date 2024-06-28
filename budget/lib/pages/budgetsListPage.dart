@@ -27,8 +27,7 @@ class BudgetsListPage extends StatefulWidget {
   State<BudgetsListPage> createState() => BudgetsListPageState();
 }
 
-class BudgetsListPageState extends State<BudgetsListPage>
-    with AutomaticKeepAliveClientMixin {
+class BudgetsListPageState extends State<BudgetsListPage> {
   GlobalKey<PageFrameworkState> pageState = GlobalKey();
 
   void refreshState() {
@@ -38,9 +37,6 @@ class BudgetsListPageState extends State<BudgetsListPage>
   void scrollToTop() {
     pageState.currentState?.scrollToTop();
   }
-
-  @override
-  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {

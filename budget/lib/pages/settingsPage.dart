@@ -75,8 +75,7 @@ class MoreActionsPage extends StatefulWidget {
   State<MoreActionsPage> createState() => MoreActionsPageState();
 }
 
-class MoreActionsPageState extends State<MoreActionsPage>
-    with AutomaticKeepAliveClientMixin {
+class MoreActionsPageState extends State<MoreActionsPage> {
   GlobalKey<PageFrameworkState> pageState = GlobalKey();
 
   void refreshState() {
@@ -87,9 +86,6 @@ class MoreActionsPageState extends State<MoreActionsPage>
   void scrollToTop() {
     pageState.currentState?.scrollToTop();
   }
-
-  @override
-  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {

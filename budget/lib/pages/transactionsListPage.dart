@@ -35,7 +35,7 @@ class TransactionsListPage extends StatefulWidget {
 }
 
 class TransactionsListPageState extends State<TransactionsListPage>
-    with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
+    with TickerProviderStateMixin {
   void refreshState() {
     setState(() {});
   }
@@ -55,9 +55,6 @@ class TransactionsListPageState extends State<TransactionsListPage>
               : Curves.elasticOut);
     }
   }
-
-  @override
-  bool get wantKeepAlive => true;
 
   bool showAppBarPaddingOffset = false;
   bool alreadyChanged = false;

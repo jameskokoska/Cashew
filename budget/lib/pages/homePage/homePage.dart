@@ -62,8 +62,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => HomePageState();
 }
 
-class HomePageState extends State<HomePage>
-    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+class HomePageState extends State<HomePage> with TickerProviderStateMixin {
   void refreshState() {
     setState(() {});
   }
@@ -84,8 +83,6 @@ class HomePageState extends State<HomePage>
             : Curves.elasticOut);
   }
 
-  @override
-  bool get wantKeepAlive => true;
   bool showElevation = false;
   late ScrollController _scrollController;
   late AnimationController _animationControllerHeader;
@@ -135,7 +132,6 @@ class HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     bool showUsername = appStateSettings["username"] != "";
     bool showGreeting = appStateSettings["enableGreetingMessage"] == true;
     Widget slidingSelector = GestureDetector(
