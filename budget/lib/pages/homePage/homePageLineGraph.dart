@@ -371,8 +371,7 @@ List<Pair> calculatePoints(CalculatePointsParams p) {
 
   for (int i = filteredDates.length - 1; i >= 0; i--) {
     DateTime indexDay = filteredDates[i];
-
-    int index = indexDay.difference(p.customStartDate).inDays;
+    int index = indexDay.difference(customStartDateStatic).inDays;
     double totalForDay = dailyTotals[indexDay] ?? 0;
     cumulativeTotal += totalForDay;
     if (indexDay != customStartDateStatic &&

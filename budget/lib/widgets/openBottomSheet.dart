@@ -74,6 +74,7 @@ Future openBottomSheet(
   Widget Function(BuildContext context, ScrollController scrollController,
           SheetState sheetState)?
       customBuilder,
+  bool useParentContextForTheme = true,
 }) async {
   //minimize keyboard when open
   minimizeKeyboard(context);
@@ -101,14 +102,19 @@ Future openBottomSheet(
             context, Theme.of(context).colorScheme.secondaryContainer,
             amountDark: 0.3, amountLight: 0.6)
         : getColor(context, "lightDarkAccent"),
-    builder: (context) {
+    builder: (buildContext) {
       double deviceAspectRatio =
           MediaQuery.sizeOf(context).height / MediaQuery.sizeOf(context).width;
       Color bottomPaddingColor = appStateSettings["materialYou"]
           ? dynamicPastel(
-              context, Theme.of(context).colorScheme.secondaryContainer,
-              amountDark: 0.3, amountLight: 0.6)
-          : getColor(context, "lightDarkAccent");
+              useParentContextForTheme ? context : buildContext,
+              Theme.of(useParentContextForTheme ? context : buildContext)
+                  .colorScheme
+                  .secondaryContainer,
+              amountDark: 0.3,
+              amountLight: 0.6)
+          : getColor(useParentContextForTheme ? context : buildContext,
+              "lightDarkAccent");
 
       return SlidingSheetDialog(
         isDismissable: isDismissable,
@@ -160,13 +166,14 @@ Future openBottomSheet(
           positioning: SnapPositioning.relativeToAvailableSpace,
         ),
         customBuilder: customBuilder != null
-            ? (context, controller, state) {
+            ? (buildContext, controller, state) {
                 return Material(
                   child: Theme(
-                    data: Theme.of(context),
+                    data: Theme.of(
+                        useParentContextForTheme ? context : buildContext),
                     child: Container(
                       color: bottomPaddingColor,
-                      child: customBuilder(context, controller, state),
+                      child: customBuilder(buildContext, controller, state),
                     ),
                   ),
                 );
@@ -191,10 +198,11 @@ Future openBottomSheet(
         duration: Duration(milliseconds: 300),
         builder: customBuilder != null
             ? null
-            : (context, state) {
+            : (buildContext, state) {
                 return Material(
                   child: Theme(
-                    data: Theme.of(context),
+                    data: Theme.of(
+                        useParentContextForTheme ? context : buildContext),
                     child: SingleChildScrollView(
                       child: child,
                     ),

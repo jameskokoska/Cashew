@@ -424,6 +424,7 @@ class SettingsPageContent extends StatelessWidget {
               onTap: () {
                 openBottomSheet(
                   context,
+                  useParentContextForTheme: false,
                   PopupFramework(
                     title: "select-color".tr(),
                     child: Column(
