@@ -93,28 +93,25 @@ Future openBottomSheet(
     });
   }
 
+  BuildContext? themeContext =
+      useParentContextForTheme && isContextValidForTheme(context)
+          ? context
+          : null;
+
   return await showSlidingBottomSheet(
     context,
     resizeToAvoidBottomInset: resizeForKeyboard,
     // getOSInsideWeb() == "iOS" ? false : resizeForKeyboard,
-    bottomPaddingColor: appStateSettings["materialYou"]
-        ? dynamicPastel(
-            context, Theme.of(context).colorScheme.secondaryContainer,
-            amountDark: 0.3, amountLight: 0.6)
-        : getColor(context, "lightDarkAccent"),
-    builder: (buildContext) {
+    builder: (context) {
+      if (checkIfDefaultThemeData(themeContext)) themeContext = null;
+
       double deviceAspectRatio =
           MediaQuery.sizeOf(context).height / MediaQuery.sizeOf(context).width;
       Color bottomPaddingColor = appStateSettings["materialYou"]
-          ? dynamicPastel(
-              useParentContextForTheme ? context : buildContext,
-              Theme.of(useParentContextForTheme ? context : buildContext)
-                  .colorScheme
-                  .secondaryContainer,
-              amountDark: 0.3,
-              amountLight: 0.6)
-          : getColor(useParentContextForTheme ? context : buildContext,
-              "lightDarkAccent");
+          ? dynamicPastel(themeContext ?? context,
+              Theme.of(themeContext ?? context).colorScheme.secondaryContainer,
+              amountDark: 0.3, amountLight: 0.6)
+          : getColor(themeContext ?? context, "lightDarkAccent");
 
       return SlidingSheetDialog(
         isDismissable: isDismissable,
@@ -134,8 +131,10 @@ Future openBottomSheet(
         cornerRadiusOnFullscreen: 0,
         avoidStatusBar: true,
         extendBody: true,
+        // Add a header builder so that we get proper extension when full screen sliding sheets
+        // extend properly past that notification bar
         headerBuilder: (context, state) {
-          return SizedBox(height: 10);
+          return SizedBox(height: 0);
         },
         // headerBuilder: (context, _) {
         //   if (handle) {
@@ -166,14 +165,15 @@ Future openBottomSheet(
           positioning: SnapPositioning.relativeToAvailableSpace,
         ),
         customBuilder: customBuilder != null
-            ? (buildContext, controller, state) {
+            ? (context, controller, state) {
+                if (checkIfDefaultThemeData(themeContext)) themeContext = null;
+
                 return Material(
                   child: Theme(
-                    data: Theme.of(
-                        useParentContextForTheme ? context : buildContext),
+                    data: Theme.of(themeContext ?? context),
                     child: Container(
                       color: bottomPaddingColor,
-                      child: customBuilder(buildContext, controller, state),
+                      child: customBuilder(context, controller, state),
                     ),
                   ),
                 );
@@ -198,11 +198,12 @@ Future openBottomSheet(
         duration: Duration(milliseconds: 300),
         builder: customBuilder != null
             ? null
-            : (buildContext, state) {
+            : (context, state) {
+                if (checkIfDefaultThemeData(themeContext)) themeContext = null;
+
                 return Material(
                   child: Theme(
-                    data: Theme.of(
-                        useParentContextForTheme ? context : buildContext),
+                    data: Theme.of(themeContext ?? context),
                     child: SingleChildScrollView(
                       child: child,
                     ),
@@ -212,6 +213,28 @@ Future openBottomSheet(
       );
     },
   );
+}
+
+bool isContextValidForTheme(context) {
+  try {
+    Theme.of(context);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+bool checkIfDefaultThemeData(BuildContext? context) {
+  try {
+    return context != null &&
+        Theme.of(context).primaryColor == ThemeData().primaryColor &&
+        Theme.of(context).secondaryHeaderColor ==
+            ThemeData().secondaryHeaderColor &&
+        Theme.of(context).canvasColor == ThemeData().canvasColor &&
+        Theme.of(context).cardColor == ThemeData().cardColor;
+  } catch (e) {
+    return true;
+  }
 }
 
 // openBottomSheetWithKeyboard(context, child,

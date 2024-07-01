@@ -18,7 +18,6 @@ Future<T?> showSlidingBottomSheet<T>(
   RouteSettings? routeSettings,
   bool useRootNavigator = false,
   bool resizeToAvoidBottomInset = true,
-  Color bottomPaddingColor = Colors.transparent,
 }) {
   SlidingSheetDialog dialog = builder(context);
   final SheetController controller = dialog.controller ?? SheetController();
@@ -95,15 +94,17 @@ Future<T?> showSlidingBottomSheet<T>(
               sheet = parentBuilder(context, sheet as SlidingSheet);
             }
 
-            if (resizeToAvoidBottomInset &&
-                bottomPaddingColor != Colors.transparent) {
+            if (resizeToAvoidBottomInset) {
               sheet = Stack(
                 children: [
                   Align(
                     alignment: AlignmentDirectional.bottomCenter,
                     child: Container(
                       height: MediaQuery.viewInsetsOf(context).bottom,
-                      color: bottomPaddingColor,
+                      color: dialog.color ??
+                          theme.bottomSheetTheme.backgroundColor ??
+                          theme.dialogTheme.backgroundColor ??
+                          theme.dialogBackgroundColor,
                     ),
                   ),
                   Padding(
@@ -113,13 +114,6 @@ Future<T?> showSlidingBottomSheet<T>(
                     child: sheet,
                   ),
                 ],
-              );
-            } else if (resizeToAvoidBottomInset) {
-              sheet = Padding(
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.viewInsetsOf(context).bottom,
-                ),
-                child: sheet,
               );
             }
 

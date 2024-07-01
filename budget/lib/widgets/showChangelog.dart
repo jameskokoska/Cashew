@@ -40,6 +40,7 @@ String getChangelogString() {
     Improve performance for line graphs
     Include year in add transaction date if not the current year
     Edit username and toggle greeting message for top homepage banner
+    Adjust popup heights and fix emoji category selection
     Fix local backups not saving app settings
     Fix CSV export for entries with a comma
     Fixed app link routing for (A) 12+
