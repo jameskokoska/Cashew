@@ -283,6 +283,7 @@ class CalculatePointsParams {
   final bool showCumulativeSpending;
   final Map<String, dynamic> appStateSettingsPassed;
   final bool invertPolarity;
+  final bool cycleThroughAllDays;
 
   CalculatePointsParams({
     required this.transactions,
@@ -294,6 +295,7 @@ class CalculatePointsParams {
     required this.showCumulativeSpending,
     required this.appStateSettingsPassed,
     this.invertPolarity = false,
+    this.cycleThroughAllDays = false,
   });
 }
 
@@ -336,54 +338,77 @@ List<Pair> calculatePoints(CalculatePointsParams p) {
 
   cumulativeTotal += transactionsBeforeStartDateTotal;
 
-  // Higher number is more resolution!
-  // Means for every resolutionThreshold point, it will skip one
-  double resolutionThreshold = 500;
-  double resolution =
-      (dailyTotals.length / resolutionThreshold).round().toDouble();
-  if (resolution <= 1) resolution = 1;
+  if (p.cycleThroughAllDays) {
+    int index = -1;
+    for (DateTime indexDay = p.customStartDate;
+        indexDay.compareTo(p.customEndDate) <= 0;
+        indexDay = DateTime(indexDay.year, indexDay.month, indexDay.day + 1)) {
+      index++;
+      if (indexDay == p.customStartDate) {
+        indexDay = DateTime(p.customStartDate.year, p.customStartDate.month,
+            p.customStartDate.day);
+      }
 
-  DateTime customStartDateStatic = DateTime(
-    p.customStartDate.year,
-    p.customStartDate.month,
-    p.customStartDate.day,
-  );
+      double totalForDay = dailyTotals[indexDay] ?? 0;
+      cumulativeTotal += totalForDay;
+      points.add(
+        Pair(
+          index.toDouble(),
+          p.showCumulativeSpending ? cumulativeTotal : totalForDay,
+          dateTime: indexDay,
+        ),
+      );
+    }
+  } else {
+    // Higher number is more resolution!
+    // Means for every resolutionThreshold point, it will skip one
+    double resolutionThreshold = 500;
+    double resolution =
+        (dailyTotals.length / resolutionThreshold).round().toDouble();
+    if (resolution <= 1) resolution = 1;
 
-  DateTime customEndDateStatic = DateTime(
-    p.customEndDate.year,
-    p.customEndDate.month,
-    p.customEndDate.day,
-  );
-
-  final List<DateTime> filteredDates = dailyTotals.keys
-      .where((date) =>
-          !date.isBefore(customStartDateStatic) &&
-          !date.isAfter(customEndDateStatic))
-      .toList();
-
-  if (!filteredDates.contains(customStartDateStatic))
-    filteredDates.add(customStartDateStatic);
-
-  if (!filteredDates.contains(customEndDateStatic))
-    filteredDates.insert(0, customEndDateStatic);
-
-  // We assume the transactions are passed in in order!
-
-  for (int i = filteredDates.length - 1; i >= 0; i--) {
-    DateTime indexDay = filteredDates[i];
-    int index = indexDay.difference(customStartDateStatic).inDays;
-    double totalForDay = dailyTotals[indexDay] ?? 0;
-    cumulativeTotal += totalForDay;
-    if (indexDay != customStartDateStatic &&
-        indexDay != customEndDateStatic &&
-        index % resolution >= 1) continue;
-    points.add(
-      Pair(
-        index.toDouble(),
-        p.showCumulativeSpending ? cumulativeTotal : totalForDay,
-        dateTime: indexDay,
-      ),
+    DateTime customStartDateStatic = DateTime(
+      p.customStartDate.year,
+      p.customStartDate.month,
+      p.customStartDate.day,
     );
+
+    DateTime customEndDateStatic = DateTime(
+      p.customEndDate.year,
+      p.customEndDate.month,
+      p.customEndDate.day,
+    );
+
+    final List<DateTime> filteredDates = dailyTotals.keys
+        .where((date) =>
+            !date.isBefore(customStartDateStatic) &&
+            !date.isAfter(customEndDateStatic))
+        .toList();
+
+    if (!filteredDates.contains(customStartDateStatic))
+      filteredDates.add(customStartDateStatic);
+
+    if (!filteredDates.contains(customEndDateStatic))
+      filteredDates.insert(0, customEndDateStatic);
+
+    // We assume the transactions are passed in in order!
+
+    for (int i = filteredDates.length - 1; i >= 0; i--) {
+      DateTime indexDay = filteredDates[i];
+      int index = indexDay.difference(customStartDateStatic).inDays;
+      double totalForDay = dailyTotals[indexDay] ?? 0;
+      cumulativeTotal += totalForDay;
+      if (indexDay != customStartDateStatic &&
+          indexDay != customEndDateStatic &&
+          index % resolution >= 1) continue;
+      points.add(
+        Pair(
+          index.toDouble(),
+          p.showCumulativeSpending ? cumulativeTotal : totalForDay,
+          dateTime: indexDay,
+        ),
+      );
+    }
   }
 
   return points;

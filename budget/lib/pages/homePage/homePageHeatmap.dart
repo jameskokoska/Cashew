@@ -105,6 +105,7 @@ class _HomePageHeatMapState extends State<HomePageHeatMap> {
                     allWallets: Provider.of<AllWallets>(context, listen: false),
                     showCumulativeSpending: false,
                     appStateSettingsPassed: appStateSettings,
+                    cycleThroughAllDays: true, //required for heatmap
                   );
                   points = calculatePoints(p);
 
