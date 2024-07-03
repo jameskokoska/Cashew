@@ -50,75 +50,51 @@ class _HomePageHeatMapState extends State<HomePageHeatMap> {
   @override
   Widget build(BuildContext context) {
     return KeepAliveClientMixin(
-      child: StreamBuilder<double?>(
-        stream: database.getTotalBeforeStartDateInTimeRangeFromCategories(
+      child: StreamBuilder<List<Transaction>>(
+        stream: database.getTransactionsInTimeRangeFromCategories(
           DateTime(
             DateTime.now().year,
             DateTime.now().month - monthsToLoad,
             DateTime.now().day,
           ),
-          [],
+          DateTime(
+            DateTime.now().year,
+            DateTime.now().month,
+            DateTime.now().day,
+          ),
+          null,
+          null,
           true,
-          true,
           null,
           null,
           null,
-          allWallets: Provider.of<AllWallets>(context),
         ),
-        builder: (context, snapshotTotalSpentBefore) {
-          if (snapshotTotalSpentBefore.hasData) {
-            double totalSpentBefore = appStateSettings["ignorePastAmountSpent"]
-                ? 0
-                : snapshotTotalSpentBefore.data!;
-            return StreamBuilder<List<Transaction>>(
-              stream: database.getTransactionsInTimeRangeFromCategories(
-                DateTime(
-                  DateTime.now().year,
-                  DateTime.now().month - monthsToLoad,
-                  DateTime.now().day,
-                ),
-                DateTime(
-                  DateTime.now().year,
-                  DateTime.now().month,
-                  DateTime.now().day,
-                ),
-                null,
-                null,
-                true,
-                null,
-                null,
-                null,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<Pair> points = [];
+            var p = CalculatePointsParams(
+              transactions: snapshot.data ?? [],
+              customStartDate: DateTime(
+                DateTime.now().year,
+                DateTime.now().month - monthsToLoad,
+                DateTime.now().day,
               ),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  List<Pair> points = [];
-                  var p = CalculatePointsParams(
-                    transactions: snapshot.data ?? [],
-                    customStartDate: DateTime(
-                      DateTime.now().year,
-                      DateTime.now().month - monthsToLoad,
-                      DateTime.now().day,
-                    ),
-                    customEndDate: DateTime.now(),
-                    totalSpentBefore: totalSpentBefore,
-                    isIncome: null,
-                    allWallets: Provider.of<AllWallets>(context, listen: false),
-                    showCumulativeSpending: false,
-                    appStateSettingsPassed: appStateSettings,
-                    cycleThroughAllDays: true, //required for heatmap
-                  );
-                  points = calculatePoints(p);
+              customEndDate: DateTime.now(),
+              totalSpentBefore: 0,
+              isIncome: null,
+              allWallets: Provider.of<AllWallets>(context, listen: false),
+              showCumulativeSpending: false,
+              appStateSettingsPassed: appStateSettings,
+              cycleThroughAllDays: true, // needed for heatmap
+            );
+            points = calculatePoints(p);
 
-                  // for (Pair point in points) {
-                  //   print((point.x.toString() + "," + point.y.toString()));
-                  // }
-                  return HeatMap(
-                    points: points,
-                    loadMoreMonths: loadMoreMonths,
-                  );
-                }
-                return SizedBox.shrink();
-              },
+            // for (Pair point in points) {
+            //   print((point.x.toString() + "," + point.y.toString()));
+            // }
+            return HeatMap(
+              points: points,
+              loadMoreMonths: loadMoreMonths,
             );
           }
           return SizedBox.shrink();
@@ -172,24 +148,18 @@ class HeatMap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final int totalDaysBeforeFixed = points.length;
-    final int totalWeeksBeforeFixed = (totalDaysBeforeFixed / 7).ceil();
     final int lastDateWeekday =
         points[totalDaysBeforeFixed - 1].dateTime?.weekday ?? 0;
-    final int lastDayGridLocation =
-        7 - (totalWeeksBeforeFixed * 7 - totalDaysBeforeFixed);
-    // Subtract one here so the first day of the week is sunday
-    int extraDaysOffsetAtStart = (lastDayGridLocation - lastDateWeekday) -
-        1 +
-        // Follow the locale (1 is Monday, 0 if for Sunday)
-        MaterialLocalizations.of(context).firstDayOfWeekIndex;
-    if (extraDaysOffsetAtStart > 0) {
-      extraDaysOffsetAtStart = 7 - extraDaysOffsetAtStart.abs();
-    } else {
-      extraDaysOffsetAtStart = extraDaysOffsetAtStart.abs();
-    }
     final List<Pair?> pointsOffsetFixed = [
-      for (int i = 0; i < extraDaysOffsetAtStart; i++) null,
-      ...points
+      ...points,
+      for (int i = 0;
+          i <
+              lastDateWeekday +
+                  1 +
+                  // Follow the locale (1 is Monday, 0 if for Sunday)
+                  MaterialLocalizations.of(context).firstDayOfWeekIndex;
+          i++)
+        null,
     ];
     final double maxIncome = getMaxY(pointsOffsetFixed, true) ?? 0;
     final double minIncome = getMinY(pointsOffsetFixed, true) ?? 0;
@@ -203,9 +173,10 @@ class HeatMap extends StatelessWidget {
     return Padding(
       padding: const EdgeInsetsDirectional.only(bottom: 13),
       child: Container(
+        height:
+            12 + 7 * dayWidth + 7 * 2 * dayPadding + bottomTitleSpacing + 15,
         padding:
             EdgeInsetsDirectional.only(start: 0, end: 0, bottom: 12, top: 15),
-        margin: EdgeInsetsDirectional.symmetric(horizontal: 13),
         decoration: BoxDecoration(
           borderRadius: BorderRadiusDirectional.all(Radius.circular(15)),
           color: backgroundColor,
@@ -224,161 +195,157 @@ class HeatMap extends StatelessWidget {
               }
               return false;
             },
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
+            child: ListView.builder(
+              shrinkWrap: true,
               reverse: true,
+              itemCount: totalWeeks + 1,
               padding: EdgeInsetsDirectional.symmetric(horizontal: 13),
-              child: Stack(
-                children: [
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.only(bottom: bottomTitleSpacing),
-                    child: Row(
-                      children: [
-                        for (int i = 0; i < totalWeeks; i++)
-                          Column(
-                            children: [
-                              for (int j = 0; j < 7; j++)
-                                Padding(
-                                  padding:
-                                      EdgeInsetsDirectional.all(dayPadding),
-                                  child: Builder(
-                                    builder: (context) {
-                                      int index = i * 7 + j;
-                                      double? amount = nullIfIndexOutOfRange(
-                                                  pointsOffsetFixed, index) ==
-                                              null
-                                          ? null
-                                          : nullIfIndexOutOfRange(
-                                                  pointsOffsetFixed, index)
-                                              .y;
-                                      DateTime? day = nullIfIndexOutOfRange(
-                                                  pointsOffsetFixed, index) ==
-                                              null
-                                          ? null
-                                          : nullIfIndexOutOfRange(
-                                                  pointsOffsetFixed, index)
-                                              .dateTime;
-                                      Color color = amount == null
-                                          ? Colors.transparent
-                                          : amount == 0
-                                              ? appStateSettings["materialYou"]
-                                                  ? Theme.of(context)
-                                                      .colorScheme
-                                                      .onSecondary
-                                                      .withOpacity(0.6)
-                                                  : getColor(context,
-                                                          "lightDarkAccent")
-                                                      .withOpacity(0.6)
-                                              : amount < 0
-                                                  ? getColor(context,
-                                                          "expenseAmount")
-                                                      .withOpacity(
-                                                      0.5 +
-                                                          (((1 - 0.5) / 4) *
-                                                              (getRangeIndex(
-                                                                      maxExpense,
-                                                                      minExpense,
-                                                                      amount) +
-                                                                  1)),
-                                                    )
-                                                  : getColor(context,
-                                                          "incomeAmount")
-                                                      .withOpacity(
-                                                      0.5 +
-                                                          (((1 - 0.5) / 4) *
-                                                              (getRangeIndex(
-                                                                      minIncome,
-                                                                      maxIncome,
-                                                                      amount) +
-                                                                  1)),
-                                                    );
-                                      return Tooltip(
-                                        waitDuration:
-                                            Duration(milliseconds: 200),
-                                        message: day == null
-                                            ? ""
-                                            : getWordedDate(
-                                                day,
-                                                includeMonthDate: true,
-                                                includeYearIfNotCurrentYear:
-                                                    true,
-                                              ),
-                                        child: Tappable(
-                                          onTap: () {
-                                            if (amount != null)
-                                              openTransactionsOnDayBottomSheet(
-                                                  context, day);
-                                          },
-                                          child: Container(
-                                            height: dayWidth,
-                                            width: dayWidth,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: amount == null
-                                                    ? Theme.of(context)
-                                                                .brightness ==
-                                                            Brightness.light
-                                                        ? color
-                                                            .withOpacity(0.05)
-                                                        : color.withOpacity(0.2)
-                                                    : color.withOpacity(0.3),
-                                                width: 1,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadiusDirectional
-                                                      .circular(5),
-                                            ),
-                                          ),
-                                          borderRadius: 5,
-                                          color: color,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                )
-                            ],
-                          )
-                      ],
-                    ),
-                  ),
-                  loadMoreMonths == null
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, itemIndex) {
+                if (itemIndex == totalWeeks)
+                  return loadMoreMonths == null
                       ? SizedBox.shrink()
-                      : PositionedDirectional(
-                          start: 0,
-                          child: Tooltip(
-                            message: "view-more".tr(),
-                            child: ButtonIcon(
-                              padding: EdgeInsetsDirectional.zero,
-                              size: dayWidth * 2 + dayPadding * 4,
-                              icon: appStateSettings["outlinedIcons"]
-                                  ? Icons.history_outlined
-                                  : Icons.history_rounded,
-                              onTap: () {
-                                loadMoreMonths!(1);
-                              },
-                            ),
+                      : Tooltip(
+                          message: "view-more".tr(),
+                          child: ButtonIcon(
+                            padding: EdgeInsetsDirectional.zero,
+                            size: dayWidth * 2 + dayPadding * 4,
+                            icon: appStateSettings["outlinedIcons"]
+                                ? Icons.history_outlined
+                                : Icons.history_rounded,
+                            onTap: () {
+                              loadMoreMonths!(1);
+                            },
                           ),
-                        ),
-                  for (int i = 0; i < totalWeeks; i++)
-                    i % 4 == 0
-                        ? PositionedDirectional(
-                            bottom: 0,
-                            child: HeatMapMonthLabel(
-                              label: getWordedDateShort(
-                                nullIfIndexOutOfRange(
-                                            pointsOffsetFixed, i * 7 + 6)
-                                        ?.dateTime ??
-                                    DateTime.now(),
-                                showTodayTomorrow: false,
+                        );
+                return Container(
+                  child: Stack(
+                    children: [
+                      Column(
+                        children: [
+                          for (int j = 6; j >= 0; j--)
+                            Padding(
+                              padding: EdgeInsetsDirectional.all(dayPadding),
+                              child: Builder(
+                                builder: (context) {
+                                  int index = totalDays - (itemIndex * 7 + j);
+                                  double? amount = nullIfIndexOutOfRange(
+                                              pointsOffsetFixed, index) ==
+                                          null
+                                      ? null
+                                      : nullIfIndexOutOfRange(
+                                              pointsOffsetFixed, index)
+                                          .y;
+                                  DateTime? day = nullIfIndexOutOfRange(
+                                              pointsOffsetFixed, index) ==
+                                          null
+                                      ? null
+                                      : nullIfIndexOutOfRange(
+                                              pointsOffsetFixed, index)
+                                          .dateTime;
+                                  Color color = amount == null
+                                      ? Colors.transparent
+                                      : amount == 0
+                                          ? appStateSettings["materialYou"]
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .onSecondary
+                                                  .withOpacity(0.6)
+                                              : getColor(context,
+                                                      "lightDarkAccent")
+                                                  .withOpacity(0.6)
+                                          : amount < 0
+                                              ? getColor(
+                                                      context, "expenseAmount")
+                                                  .withOpacity(
+                                                  0.5 +
+                                                      (((1 - 0.5) / 4) *
+                                                          (getRangeIndex(
+                                                                  maxExpense,
+                                                                  minExpense,
+                                                                  amount) +
+                                                              1)),
+                                                )
+                                              : getColor(
+                                                      context, "incomeAmount")
+                                                  .withOpacity(
+                                                  0.5 +
+                                                      (((1 - 0.5) / 4) *
+                                                          (getRangeIndex(
+                                                                  minIncome,
+                                                                  maxIncome,
+                                                                  amount) +
+                                                              1)),
+                                                );
+                                  return Tooltip(
+                                    waitDuration: Duration(milliseconds: 200),
+                                    message: day == null
+                                        ? ""
+                                        : getWordedDate(
+                                            day,
+                                            includeMonthDate: true,
+                                            includeYearIfNotCurrentYear: true,
+                                          ),
+                                    child: Tappable(
+                                      onTap: () {
+                                        if (amount != null)
+                                          openTransactionsOnDayBottomSheet(
+                                              context, day);
+                                      },
+                                      child: Container(
+                                        height: dayWidth,
+                                        width: dayWidth,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: amount == null
+                                                ? Theme.of(context)
+                                                            .brightness ==
+                                                        Brightness.light
+                                                    ? color.withOpacity(0.05)
+                                                    : color.withOpacity(0.2)
+                                                : color.withOpacity(0.3),
+                                            width: 1,
+                                          ),
+                                          borderRadius:
+                                              BorderRadiusDirectional.circular(
+                                                  5),
+                                        ),
+                                      ),
+                                      borderRadius: 5,
+                                      color: color,
+                                    ),
+                                  );
+                                },
                               ),
-                              weekNumber: i,
-                              weekWidth: dayPadding * 2 + dayWidth,
-                            ),
-                          )
-                        : SizedBox.shrink()
-                ],
-              ),
+                            )
+                        ],
+                      ),
+                      itemIndex % 4 == 4 - 1
+                          ? Container(
+                              width: dayWidth,
+                              padding: EdgeInsetsDirectional.only(start: 3),
+                              child: OverflowBox(
+                                maxWidth: dayWidth * 4 + dayPadding * 4 * 2,
+                                alignment: Alignment.bottomLeft,
+                                child: HeatMapMonthLabel(
+                                  label: getWordedDateShort(
+                                    nullIfIndexOutOfRange(pointsOffsetFixed,
+                                                totalDays - (itemIndex * 7))
+                                            ?.dateTime ??
+                                        DateTime.now(),
+                                    showTodayTomorrow: false,
+                                  ),
+                                ),
+                              ),
+                            )
+                          : SizedBox(
+                              height: bottomTitleSpacing,
+                            )
+                    ],
+                  ),
+                );
+                return Container(child: Text(itemIndex.toString()));
+              },
             ),
           ),
         ),
@@ -456,29 +423,19 @@ Future<dynamic> openTransactionsOnDayBottomSheet(
 }
 
 class HeatMapMonthLabel extends StatelessWidget {
-  const HeatMapMonthLabel(
-      {required this.weekNumber,
-      required this.label,
-      required this.weekWidth,
-      super.key});
-  final int weekNumber;
+  const HeatMapMonthLabel({required this.label, super.key});
   final String label;
-  final double weekWidth;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsetsDirectional.only(start: weekWidth * weekNumber),
-      child: Container(
-        child: TextFont(
-          textAlign: TextAlign.center,
-          fontSize: 13,
-          text: label,
-          textColor: dynamicPastel(
-                  context, Theme.of(context).colorScheme.primary,
-                  amount: 0.8, inverse: true)
-              .withOpacity(0.5),
-        ),
+    return Container(
+      child: TextFont(
+        textAlign: TextAlign.center,
+        fontSize: 13,
+        text: label,
+        textColor: dynamicPastel(context, Theme.of(context).colorScheme.primary,
+                amount: 0.8, inverse: true)
+            .withOpacity(0.5),
       ),
     );
   }
