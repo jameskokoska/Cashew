@@ -207,15 +207,19 @@ class HeatMap extends StatelessWidget {
                       ? SizedBox.shrink()
                       : Tooltip(
                           message: "view-more".tr(),
-                          child: ButtonIcon(
-                            padding: EdgeInsetsDirectional.zero,
-                            size: dayWidth * 2 + dayPadding * 4,
-                            icon: appStateSettings["outlinedIcons"]
-                                ? Icons.history_outlined
-                                : Icons.history_rounded,
-                            onTap: () {
-                              loadMoreMonths!(1);
-                            },
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.only(
+                                end: 8.0, bottom: bottomTitleSpacing),
+                            child: ButtonIcon(
+                              padding: EdgeInsetsDirectional.zero,
+                              size: dayWidth * 2 + dayPadding * 4,
+                              icon: appStateSettings["outlinedIcons"]
+                                  ? Icons.history_outlined
+                                  : Icons.history_rounded,
+                              onTap: () {
+                                loadMoreMonths!(1);
+                              },
+                            ),
                           ),
                         );
                 return Container(
