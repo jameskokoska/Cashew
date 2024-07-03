@@ -348,11 +348,19 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
       if (tempBudget.periodLength == 1) {
         selectedRecurrenceDisplay = tempBudget.periodLength.toString() +
             " " +
-            nameRecurrence[tempBudget.reoccurrence];
+            nameRecurrence[tempBudget.reoccurrence]
+                .toString()
+                .toLowerCase()
+                .tr()
+                .toLowerCase();
       } else {
         selectedRecurrenceDisplay = tempBudget.periodLength.toString() +
             " " +
-            namesRecurrence[tempBudget.reoccurrence];
+            namesRecurrence[tempBudget.reoccurrence]
+                .toString()
+                .toLowerCase()
+                .tr()
+                .toLowerCase();
       }
       return SelectedPeriodHeaderLabel(
         color: Theme.of(context).colorScheme.secondaryContainer,

@@ -32,7 +32,7 @@ Future<AuthResult> checkBiometrics({
 
     final LocalAuthentication auth = LocalAuthentication();
     authAvailable =
-        await auth.canCheckBiometrics || await auth.isDeviceSupported();
+        await auth.isDeviceSupported() || await auth.canCheckBiometrics;
 
     final bool requireAuth =
         checkAlways || appStateSettings["requireAuth"] == true;
@@ -41,10 +41,10 @@ Future<AuthResult> checkBiometrics({
     await auth.stopAuthentication();
 
     if (authAvailable) {
-      bool biometricsOnly = (await auth.canCheckBiometrics);
+      //bool biometricsOnly = (await auth.canCheckBiometrics);
       return (await auth.authenticate(
         localizedReason: "verify-identity".tr(),
-        options: AuthenticationOptions(biometricOnly: biometricsOnly),
+        options: AuthenticationOptions(biometricOnly: false),
       ))
           ? AuthResult.authenticated
           : AuthResult.unauthenticated;
