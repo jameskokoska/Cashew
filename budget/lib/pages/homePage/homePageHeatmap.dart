@@ -150,16 +150,17 @@ class HeatMap extends StatelessWidget {
     final int totalDaysBeforeFixed = points.length;
     final int lastDateWeekday =
         points[totalDaysBeforeFixed - 1].dateTime?.weekday ?? 0;
+    int extraDaysOffset = 7 -
+        lastDateWeekday -
+        1 +
+        // Follow the locale (1 is Monday, 0 if for Sunday)
+        MaterialLocalizations.of(context).firstDayOfWeekIndex;
+    if (extraDaysOffset < 0) {
+      extraDaysOffset = 7 - extraDaysOffset.abs();
+    }
     final List<Pair?> pointsOffsetFixed = [
       ...points,
-      for (int i = 0;
-          i <
-              lastDateWeekday +
-                  1 +
-                  // Follow the locale (1 is Monday, 0 if for Sunday)
-                  MaterialLocalizations.of(context).firstDayOfWeekIndex;
-          i++)
-        null,
+      for (int i = 0; i < extraDaysOffset; i++) null,
     ];
     final double maxIncome = getMaxY(pointsOffsetFixed, true) ?? 0;
     final double minIncome = getMinY(pointsOffsetFixed, true) ?? 0;
@@ -227,7 +228,7 @@ class HeatMap extends StatelessWidget {
                     children: [
                       Column(
                         children: [
-                          for (int j = 6; j >= 0; j--)
+                          for (int j = 7; j >= 1; j--)
                             Padding(
                               padding: EdgeInsetsDirectional.all(dayPadding),
                               child: Builder(
@@ -334,7 +335,7 @@ class HeatMap extends StatelessWidget {
                                 child: HeatMapMonthLabel(
                                   label: getWordedDateShort(
                                     nullIfIndexOutOfRange(pointsOffsetFixed,
-                                                totalDays - (itemIndex * 7))
+                                                totalDays - (itemIndex * 7 + 1))
                                             ?.dateTime ??
                                         DateTime.now(),
                                     showTodayTomorrow: false,
