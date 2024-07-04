@@ -153,7 +153,9 @@ Changes and progress about development is all heavily documented in GitHub [comm
 
 ## App Links
 
-Only supported in the Android and Web App versions as of now. App links allow direct navigation and automation of actions using application URLs. Some examples are below:
+A discussion/thread on App Links (example usage and how to harness the power of App Links) can be found at this issue: https://github.com/jameskokoska/Cashew/issues/127#issuecomment-1975096357. 
+
+App Links are only supported in the Android and Web App versions as of now. App links allow direct navigation and automation of actions using application URLs. Some examples are below:
 
 ### Examples (for Android)
 
