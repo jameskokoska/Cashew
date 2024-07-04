@@ -271,9 +271,15 @@ Don't forget to encode the JSON in the URL as JSON uses invalid URI characters. 
 
 > https://cashewapp.web.app/addTransaction?JSON=%7B%22transactions%22%3A%5B%7B%22amount%22%3A%22-100%22%2C%20%22notes%22%3A%22This%20is%20a%20note%22%2C%20%22category%22%3A%22Shopping%22%7D%2C%7B%22amount%22%3A%22-150%22%2C%20%22notes%22%3A%22This%20is%20a%20note%202%22%7D%5D%7D
 
+
+### Troubleshooting
+
+#### Android
+If you get redirected to the website instead of the Cashew app, your device may not be correctly set up to open App Links. Ensure Cashew can open its respective app link. On your Android device head to your device settings, 'Default apps', 'Opening links' and ensure Cashew has permission to open from the domain `cashewapp.web.app` under 'Supported web addresses'. This may be disabled by default if you did not install a Google Play signed copy of Cashew (i.e. downloaded from GitHub). This is because Cashew now uses App Links which need to be verified as per Android 12+ requirements with an app's signature public key. Alternatively, you can use a redirect application such as LinkSheet which can manage which apps open when certain links are activated.
+
 ### Testing
 
-#### Using ADB
+#### Using ADB for Android
 
 You can use ADB to test app links. For example
 
