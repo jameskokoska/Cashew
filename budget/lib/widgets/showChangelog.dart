@@ -27,6 +27,12 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 5.3.5
+    When All Spending page opened from other means, correct date range applied
+    Improve performance of heatmap homepage section
+    Adjust popup heights and fix emoji category selection
+    Allow pattern unlock instead of just biometrics
+    Fix heatmap missing blank days
     < 5.3.2
     First navigation tab can be customized
     Revamped About App page
@@ -40,9 +46,6 @@ String getChangelogString() {
     Improve performance for line graphs
     Include year in add transaction date if not the current year
     Edit username and toggle greeting message for top homepage banner
-    Allow pattern unlock instead of just biometrics
-    Adjust popup heights and fix emoji category selection
-    Fix heatmap missing blank days
     Fix translation for All Spending history period
     Fix local backups not saving app settings
     Fix CSV export for entries with a comma

@@ -87,7 +87,15 @@ class HomePageNetWorth extends StatelessWidget {
                         //         ? getColor(context, "incomeAmount")
                         //         : getColor(context, "expenseAmount"),
                         textColor: getColor(context, "black"),
-                        openPage: WalletDetailsPage(wallet: null),
+                        openPage: WalletDetailsPage(
+                          wallet: null,
+                          initialSearchFilters: SearchFilters(
+                            dateTimeRange:
+                                getDateTimeRangeForPassedSearchFilters(
+                              cycleSettingsExtension: "NetWorth",
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ],

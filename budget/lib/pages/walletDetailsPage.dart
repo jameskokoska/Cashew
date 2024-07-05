@@ -171,6 +171,7 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
     searchFilters = SearchFilters();
     if (widget.initialSearchFilters != null) {
       searchFilters = widget.initialSearchFilters;
+      selectedDateTimeRange = widget.initialSearchFilters?.dateTimeRange;
     } else if (widget.wallet == null) {
       allSpendingHistoryDismissedPremium = false;
       searchFilters?.loadFilterString(
