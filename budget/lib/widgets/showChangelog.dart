@@ -32,6 +32,7 @@ String getChangelogString() {
     Improve performance of heatmap homepage section
     Adjust popup heights and fix emoji category selection
     Allow pattern unlock instead of just biometrics
+    When budget/loan/objective archived, it is unpinned
     Fix heatmap missing blank days
     < 5.3.2
     First navigation tab can be customized
