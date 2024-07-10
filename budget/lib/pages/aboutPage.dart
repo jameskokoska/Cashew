@@ -323,7 +323,7 @@ class AboutPage extends StatelessWidget {
       ),
       TranslationInfoBox(
         title: "Romanian",
-        list: ["Valentin G."],
+        list: ["Valentin G.", "Tarciziu"],
       ),
       TranslationInfoBox(
         title: "Spanish",
@@ -351,7 +351,7 @@ class AboutPage extends StatelessWidget {
       ),
       TranslationInfoBox(
         title: "Arabic",
-        list: ["Ammar N."],
+        list: ["Ammar N.", "Hussain A."],
       ),
       TranslationInfoBox(
         title: "Czech",
@@ -388,6 +388,10 @@ class AboutPage extends StatelessWidget {
       TranslationInfoBox(
         title: "Gujarati",
         list: ["Darshan L."],
+      ),
+      TranslationInfoBox(
+        title: "Finnish",
+        list: ["Mirko J."],
       ),
     ];
 

@@ -618,6 +618,9 @@ class _BudgetHistoryLineGraphState extends State<_BudgetHistoryLineGraph> {
                         data: MediaQuery.of(context)
                             .copyWith(textScaleFactor: 1.0),
                         child: TextFont(
+                          overflow: TextOverflow.fade,
+                          maxLines: 1,
+                          softWrap: false,
                           textAlign: TextAlign.center,
                           fontSize: 13,
                           text: widget.budget.reoccurrence ==
@@ -676,6 +679,9 @@ class _BudgetHistoryLineGraphState extends State<_BudgetHistoryLineGraph> {
                       data:
                           MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
                       child: TextFont(
+                        overflow: TextOverflow.fade,
+                        maxLines: 1,
+                        softWrap: false,
                         textAlign: TextAlign.right,
                         text: getWordedNumber(
                             context, Provider.of<AllWallets>(context), value),
