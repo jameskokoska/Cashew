@@ -34,6 +34,7 @@ String getChangelogString() {
     Allow pattern unlock instead of just biometrics
     When budget/loan/objective archived, it is unpinned
     Fix heatmap missing blank days
+    Update translations and fix incorrect country specific language loading
     < 5.3.2
     First navigation tab can be customized
     Revamped About App page

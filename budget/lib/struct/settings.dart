@@ -273,6 +273,9 @@ void openLanguagePicker(BuildContext context) {
             initial: appStateSettings["locale"].toString(),
             displayFilter: languageDisplayFilter,
             onChanged: (value) async {
+              // Need to update this value first because our RootBundleAssetLoaderCustomLocaleLoader
+              // makes use of this value for some languages
+              appStateSettings["locale"] = value;
               if (value == "System") {
                 context.resetLocale();
               } else {

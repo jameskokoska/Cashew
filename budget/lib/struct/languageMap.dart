@@ -1,3 +1,4 @@
+import 'package:budget/struct/settings.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
@@ -65,10 +66,12 @@ class RootBundleAssetLoaderCustomLocaleLoader extends RootBundleAssetLoader {
   @override
   String getLocalePath(String basePath, Locale locale) {
     print("Initial Locale: " + locale.toString());
-
-    if (supportedLocales["zh_Hant"] == locale) {
+    print("App Settings Locale: " + appStateSettings["locale"]);
+    if (supportedLocales["zh_Hant"] == locale ||
+        appStateSettings["locale"] == "zh_Hant") {
       locale = supportedLocales["zh_Hant"] ?? Locale(locale.languageCode);
-    } else if (supportedLocales["pt_PT"] == locale) {
+    } else if (supportedLocales["pt_PT"] == locale ||
+        appStateSettings["locale"] == "pt_PT") {
       locale = supportedLocales["pt_PT"] ?? Locale(locale.languageCode);
     } else {
       // We only support the language code right now
@@ -76,7 +79,7 @@ class RootBundleAssetLoaderCustomLocaleLoader extends RootBundleAssetLoader {
       locale = Locale(locale.languageCode);
     }
 
-    //print("Set Locale: " + locale.toString());
+    print("Set Locale: " + locale.toString());
 
     return '$basePath/${locale.toStringWithSeparator(separator: "-")}.json';
   }
