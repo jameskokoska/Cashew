@@ -276,6 +276,7 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
               ),
             ],
             title: widget.objective.name,
+            capitalizeTitle: false,
             appBarBackgroundColor:
                 Theme.of(context).colorScheme.secondaryContainer,
             appBarBackgroundColorStart:

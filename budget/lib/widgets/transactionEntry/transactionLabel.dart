@@ -35,7 +35,7 @@ class TransactionTitleNameLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFont(
-      text: transaction.name.capitalizeFirst,
+      text: transaction.name,
       fontSize: fontSize,
       maxLines:
           appStateSettings["fadeTransactionNameOverflows"] == false ? null : 1,

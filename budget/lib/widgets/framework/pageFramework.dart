@@ -30,6 +30,7 @@ class PageFramework extends StatefulWidget {
   const PageFramework({
     Key? key,
     this.title = "",
+    this.capitalizeTitle = true,
     this.titleWidget,
     this.slivers = const [],
     this.sliversBefore = true,
@@ -74,6 +75,7 @@ class PageFramework extends StatefulWidget {
   }) : super(key: key);
 
   final String title;
+  final bool capitalizeTitle;
   final Widget? titleWidget;
   final List<Widget> slivers;
   final bool sliversBefore;
@@ -368,6 +370,7 @@ class PageFrameworkState extends State<PageFramework>
 
     Widget sliverAppBar = PageFrameworkSliverAppBar(
       title: widget.title,
+      capitalizeTitle: widget.capitalizeTitle,
       titleWidget: widget.titleWidget,
       appBarBackgroundColor: widget.appBarBackgroundColor,
       appBarBackgroundColorStart: widget.appBarBackgroundColorStart,
@@ -739,6 +742,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
   const PageFrameworkSliverAppBar({
     Key? key,
     this.title = "",
+    this.capitalizeTitle = true,
     this.titleWidget,
     this.appBarBackgroundColor,
     this.appBarBackgroundColorStart,
@@ -763,6 +767,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
   }) : super(key: key);
 
   final String title;
+  final bool capitalizeTitle;
   final Widget? titleWidget;
   final Color? appBarBackgroundColor;
   final bool backButton;
@@ -848,7 +853,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                     MediaQuery.paddingOf(context).top) /
                 (expandedHeightCalculated - collapsedHeight);
         if (collapsedHeight == expandedHeightCalculated) percent = 1;
-        String titleString = title.capitalizeFirst;
+        String titleString = capitalizeTitle ? title.capitalizeFirst : title;
         return FlexibleSpaceBar(
           centerTitle: centeredTitleWithDefault,
           titlePadding:

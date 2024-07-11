@@ -1279,6 +1279,7 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
         ),
         title:
             widget.wallet == null ? "all-spending".tr() : widget.wallet!.name,
+        capitalizeTitle: widget.wallet == null,
         actions: [
           if (widget.wallet != null)
             CustomPopupMenuButton(
