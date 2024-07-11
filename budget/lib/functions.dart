@@ -18,6 +18,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import './colors.dart';
 import 'package:flutter/material.dart';
@@ -1242,6 +1243,19 @@ void copyToClipboard(String text,
         timeout: Duration(milliseconds: 2500),
       ),
     );
+}
+
+Future shareToClipboard(String text, {required BuildContext context}) async {
+  try {
+    final box = context.findRenderObject() as RenderBox?;
+    await Share.share(
+      text,
+      sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+    );
+  } catch (e) {
+    print("There was an error sharing: " + e.toString());
+    copyToClipboard(text);
+  }
 }
 
 Future<String?> readClipboard({bool showSnackbar = true}) async {
