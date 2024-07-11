@@ -721,7 +721,9 @@ class PageFrameworkState extends State<PageFramework>
       valueListenable: callRefreshToPages,
       builder: (context, callRefreshToPagesValue, _) {
         if (callRefreshToPagesValue == true) {
-          WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+          WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
+                callRefreshToPages.value = false;
+              }));
         }
         return Container(child: child);
       },

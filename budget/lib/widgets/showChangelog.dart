@@ -34,6 +34,7 @@ String getChangelogString() {
     Allow pattern unlock instead of just biometrics
     When budget/loan/objective archived, it is unpinned
     Fix heatmap missing blank days
+    Improve performance when switching the primary account if the currency remains unchanged
     Consistent capitalization throughout interface
     Update translations and fix incorrect country specific language loading
     < 5.3.2

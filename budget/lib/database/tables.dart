@@ -18,6 +18,7 @@ import 'package:drift/drift.dart';
 export 'platform/shared.dart';
 import 'dart:convert';
 import 'package:budget/struct/currencyFunctions.dart';
+import 'package:flutter/foundation.dart';
 import 'schema_versions.dart';
 import 'package:flutter/material.dart' show DateTimeRange;
 import 'package:budget/pages/activityPage.dart';
@@ -618,6 +619,11 @@ class AllWallets {
 
     return false;
   }
+}
+
+class SelectedWalletPk with ChangeNotifier {
+  String selectedWalletPk;
+  SelectedWalletPk({required this.selectedWalletPk});
 }
 
 class CategoryWithTotal {
@@ -2348,7 +2354,10 @@ class FinanceDatabase extends _$FinanceDatabase {
       Map<String, TransactionWallet> indexedByPk = {
         for (TransactionWallet wallet in wallets) wallet.walletPk: wallet,
       };
-      return AllWallets(list: wallets, indexedByPk: indexedByPk);
+      return AllWallets(
+        list: wallets,
+        indexedByPk: indexedByPk,
+      );
     });
   }
 

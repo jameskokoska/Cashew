@@ -15,6 +15,7 @@ import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/incomeAmountArrow.dart';
+import 'package:budget/widgets/watchAllWallets.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
@@ -119,7 +120,9 @@ class WalletEntry extends StatelessWidget {
               if (selected) {
                 openContainer();
               } else {
-                setPrimaryWallet(walletWithDetails.wallet.walletPk);
+                setPrimaryWallet(walletWithDetails.wallet.walletPk,
+                    allWallets:
+                        Provider.of<AllWallets>(context, listen: false));
               }
             },
             onLongPress: () {
@@ -283,7 +286,8 @@ class WalletEntryRow extends StatelessWidget {
             if (selected || isCurrencyRow) {
               openContainer();
             } else {
-              setPrimaryWallet(walletWithDetails.wallet.walletPk);
+              setPrimaryWallet(walletWithDetails.wallet.walletPk,
+                  allWallets: Provider.of<AllWallets>(context, listen: false));
             }
           },
           onLongPress: () async {
@@ -311,13 +315,6 @@ class WalletEntryRow extends StatelessWidget {
       },
     );
   }
-}
-
-// set selectedWallet, update selectedWallet
-Future<bool> setPrimaryWallet(String walletPk) async {
-  await updateSettings("selectedWalletPk", walletPk, updateGlobalState: true);
-  homePageStateKey.currentState?.refreshState();
-  return true;
 }
 
 class AmountAccount extends StatelessWidget {
@@ -389,4 +386,23 @@ class AmountAccount extends StatelessWidget {
       ],
     );
   }
+}
+
+// set selectedWallet, update selectedWallet
+Future<bool> setPrimaryWallet(String walletPk, {AllWallets? allWallets}) async {
+  if (allWallets != null &&
+      allWallets.indexedByPk[appStateSettings["selectedWalletPk"]]?.currency !=
+          null &&
+      allWallets.indexedByPk[walletPk]?.currency != null &&
+      allWallets.indexedByPk[appStateSettings["selectedWalletPk"]]?.currency ==
+          allWallets.indexedByPk[walletPk]?.currency) {
+    // The currency has not changed, we do not need to refresh the global state!
+    await updateSettings("selectedWalletPk", walletPk,
+        updateGlobalState: false);
+  } else {
+    // The currency has changed, or we do not have access to allWallets, so we need to refresh the global state
+    await updateSettings("selectedWalletPk", walletPk, updateGlobalState: true);
+  }
+  selectedWalletPkController.add(SelectedWalletPk(selectedWalletPk: walletPk));
+  return true;
 }

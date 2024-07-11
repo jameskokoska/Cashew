@@ -7,6 +7,7 @@ import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
+import 'package:budget/widgets/watchAllWallets.dart';
 import 'package:drift/isolate.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -117,6 +118,9 @@ Future<bool> initializeSettings() async {
   }
 
   timeDilation = double.parse(appStateSettings["animationSpeed"].toString());
+
+  selectedWalletPkController.add(SelectedWalletPk(
+      selectedWalletPk: appStateSettings["selectedWalletPk"] ?? "0"));
 
   Map<String, dynamic> defaultPreferences = await getDefaultPreferences();
 
