@@ -334,13 +334,16 @@ class AmountAccount extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double? roundedWalletWithTotal = (double.tryParse(
+        absoluteZero(walletWithDetails.totalSpent ?? 0)
+            .toStringAsFixed(walletWithDetails.wallet.decimals)));
     Color textColor =
         appStateSettings["accountColorfulAmountsWithArrows"] == true
-            ? ((walletWithDetails.totalSpent ?? 0) == 0
+            ? roundedWalletWithTotal == 0
                 ? getColor(context, "black")
                 : (walletWithDetails.totalSpent ?? 0) > 0
                     ? getColor(context, "incomeAmount")
-                    : getColor(context, "expenseAmount"))
+                    : getColor(context, "expenseAmount")
             : getColor(context, "black");
     double finalTotal =
         appStateSettings["accountColorfulAmountsWithArrows"] == true
@@ -351,7 +354,7 @@ class AmountAccount extends StatelessWidget {
       children: [
         if (appStateSettings["accountColorfulAmountsWithArrows"] == true)
           AnimatedSizeSwitcher(
-            child: (walletWithDetails.totalSpent ?? 0) == 0
+            child: roundedWalletWithTotal == 0
                 ? Container(
                     key: ValueKey(1),
                   )
