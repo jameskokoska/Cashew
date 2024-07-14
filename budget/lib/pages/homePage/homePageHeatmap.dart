@@ -176,6 +176,7 @@ class HeatMap extends StatelessWidget {
       child: Container(
         height:
             12 + 7 * dayWidth + 7 * 2 * dayPadding + bottomTitleSpacing + 15,
+        margin: EdgeInsetsDirectional.symmetric(horizontal: 13),
         padding:
             EdgeInsetsDirectional.only(start: 0, end: 0, bottom: 12, top: 15),
         decoration: BoxDecoration(
