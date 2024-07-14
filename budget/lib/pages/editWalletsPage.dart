@@ -215,14 +215,19 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                         amountLight: 0.55,
                         amountDark: 0.35);
                     return EditRowEntry(
-                      extraIcon: appStateSettings["selectedWalletPk"] ==
+                      extraIcon: Provider.of<SelectedWalletPk>(context)
+                                  .selectedWalletPk ==
                               wallet.walletPk
                           ? appStateSettings["outlinedIcons"]
                               ? Icons.star_outlined
                               : Icons.star_rounded
                           : Icons.star_outline,
                       onExtra: () async {
-                        setPrimaryWallet(wallet.walletPk);
+                        setPrimaryWallet(
+                          wallet.walletPk,
+                          allWallets:
+                              Provider.of<AllWallets>(context, listen: false),
+                        );
                       },
                       canDelete: (wallet.walletPk != "0"),
                       canReorder: searchValue == "" &&
@@ -255,7 +260,8 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               AnimatedSizeSwitcher(
-                                child: appStateSettings["selectedWalletPk"] ==
+                                child: Provider.of<SelectedWalletPk>(context)
+                                            .selectedWalletPk ==
                                         wallet.walletPk
                                     ? Padding(
                                         padding:
