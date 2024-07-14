@@ -221,8 +221,10 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                                   ? Icons.visibility_outlined
                                   : Icons.visibility_rounded,
                           onExtra: () async {
-                            Budget updatedBudget =
-                                budget.copyWith(archived: !budget.archived);
+                            Budget updatedBudget = budget.copyWith(
+                              archived: !budget.archived,
+                              pinned: budget.archived,
+                            );
                             await database.createOrUpdateBudget(updatedBudget);
                           },
                           opacity: budget.archived ? 0.5 : 1,

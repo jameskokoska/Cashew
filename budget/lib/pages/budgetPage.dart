@@ -365,6 +365,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
           ),
         ],
         title: widget.budget.name,
+        capitalizeTitle: false,
         appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
         appBarBackgroundColorStart:
             Theme.of(context).colorScheme.secondaryContainer,

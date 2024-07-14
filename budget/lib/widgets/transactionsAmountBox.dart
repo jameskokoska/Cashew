@@ -66,6 +66,8 @@ class TransactionsAmountBox extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextFont(
+                      textAlign: TextAlign.center,
+                      maxLines: 3,
                       text: label,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -100,6 +102,7 @@ class TransactionsAmountBox extends StatelessWidget {
                                       ? getTextColor!(totalSpent)
                                       : textColor,
                                   fontWeight: FontWeight.bold,
+                                  textAlign: TextAlign.center,
                                   autoSizeText: true,
                                   fontSize: 21,
                                   maxFontSize: 21,
@@ -110,12 +113,14 @@ class TransactionsAmountBox extends StatelessWidget {
                             ),
                             SizedBox(height: 6),
                             TextFont(
+                              maxLines: 2,
                               text: totalCount.toString() +
                                   " " +
                                   (totalCount == 1
                                       ? "transaction".tr().toLowerCase()
                                       : "transactions".tr().toLowerCase()),
                               fontSize: 13,
+                              textAlign: TextAlign.center,
                               textColor: getColor(context, "textLight"),
                             ),
                           ],

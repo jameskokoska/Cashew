@@ -7,6 +7,7 @@ import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
+import 'package:budget/widgets/watchAllWallets.dart';
 import 'package:drift/isolate.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -117,6 +118,9 @@ Future<bool> initializeSettings() async {
   }
 
   timeDilation = double.parse(appStateSettings["animationSpeed"].toString());
+
+  selectedWalletPkController.add(SelectedWalletPk(
+      selectedWalletPk: appStateSettings["selectedWalletPk"] ?? "0"));
 
   Map<String, dynamic> defaultPreferences = await getDefaultPreferences();
 
@@ -273,6 +277,9 @@ void openLanguagePicker(BuildContext context) {
             initial: appStateSettings["locale"].toString(),
             displayFilter: languageDisplayFilter,
             onChanged: (value) async {
+              // Need to update this value first because our RootBundleAssetLoaderCustomLocaleLoader
+              // makes use of this value for some languages
+              appStateSettings["locale"] = value;
               if (value == "System") {
                 context.resetLocale();
               } else {

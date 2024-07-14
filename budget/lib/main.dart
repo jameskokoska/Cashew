@@ -193,125 +193,127 @@ class App extends StatelessWidget {
             child: InitializeNotificationService(
               child: InitializeDeepLinks(
                 child: WatchForDayChange(
-                  child: WatchAllWallets(
-                    child: Stack(
-                      children: [
-                        Row(
-                          children: [
-                            AnimatedContainer(
-                              duration: appStateSettings["appAnimations"] !=
-                                      AppAnimations.all.index
-                                  ? Duration.zero
-                                  : Duration(milliseconds: 1500),
-                              curve: Curves.easeInOutCubicEmphasized,
-                              width: getWidthNavigationSidebar(context),
-                              color: Theme.of(context).canvasColor,
-                            ),
-                            Expanded(
-                              child: Builder(builder: (context) {
-                                double rightPaddingSafeArea =
-                                    MediaQuery.paddingOf(context).right;
-                                bool hasRightSafeArea =
-                                    rightPaddingSafeArea > 0;
-                                double leftPaddingSafeArea =
-                                    MediaQuery.paddingOf(context).left;
-                                bool hasLeftSafeArea =
-                                    leftPaddingSafeArea > 0 &&
-                                        getIsFullScreen(context) == false;
-                                // Only enable left safe area if no navigation sidebar
-                                return Stack(
-                                  children: [
-                                    hasRightSafeArea || hasLeftSafeArea
-                                        ? Container(
-                                            color:
-                                                Theme.of(context).canvasColor,
-                                          )
-                                        : SizedBox.shrink(),
-                                    hasRightSafeArea || hasLeftSafeArea
-                                        ? Padding(
-                                            padding: EdgeInsets.only(
-                                              right: hasRightSafeArea
-                                                  ? rightPaddingSafeArea
-                                                  : 0,
-                                              left: hasLeftSafeArea
-                                                  ? leftPaddingSafeArea
-                                                  : 0,
-                                            ),
-                                            child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.horizontal(
-                                                  right: hasRightSafeArea
-                                                      ? Radius.circular(25)
-                                                      : Radius.circular(0),
-                                                  left: hasLeftSafeArea
-                                                      ? Radius.circular(25)
-                                                      : Radius.circular(0),
-                                                ),
-                                                child:
-                                                    child ?? SizedBox.shrink()),
-                                          )
-                                        : child ?? SizedBox.shrink(),
-                                    GlobalSnackbar(key: snackbarKey),
-                                    // SignInWithGoogleFlyIn(),
-                                    hasRightSafeArea
-                                        ? Align(
-                                            alignment: Alignment.centerRight,
-                                            child: Container(
-                                              width: rightPaddingSafeArea,
+                  child: WatchSelectedWalletPk(
+                    child: WatchAllWallets(
+                      child: Stack(
+                        children: [
+                          Row(
+                            children: [
+                              AnimatedContainer(
+                                duration: appStateSettings["appAnimations"] !=
+                                        AppAnimations.all.index
+                                    ? Duration.zero
+                                    : Duration(milliseconds: 1500),
+                                curve: Curves.easeInOutCubicEmphasized,
+                                width: getWidthNavigationSidebar(context),
+                                color: Theme.of(context).canvasColor,
+                              ),
+                              Expanded(
+                                child: Builder(builder: (context) {
+                                  double rightPaddingSafeArea =
+                                      MediaQuery.paddingOf(context).right;
+                                  bool hasRightSafeArea =
+                                      rightPaddingSafeArea > 0;
+                                  double leftPaddingSafeArea =
+                                      MediaQuery.paddingOf(context).left;
+                                  bool hasLeftSafeArea =
+                                      leftPaddingSafeArea > 0 &&
+                                          getIsFullScreen(context) == false;
+                                  // Only enable left safe area if no navigation sidebar
+                                  return Stack(
+                                    children: [
+                                      hasRightSafeArea || hasLeftSafeArea
+                                          ? Container(
                                               color:
                                                   Theme.of(context).canvasColor,
-                                            ),
-                                          )
-                                        : SizedBox.shrink(),
-                                    hasLeftSafeArea
-                                        ? Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Container(
-                                              width: leftPaddingSafeArea,
-                                              color:
-                                                  Theme.of(context).canvasColor,
-                                            ),
-                                          )
-                                        : SizedBox.shrink(),
-                                    // Gradient fade to right overflow, disabled for now
-                                    // because many pages have full screen elements/banners etc
-                                    // hasRightSafeArea
-                                    //     ? Padding(
-                                    //         padding: EdgeInsets.only(
-                                    //             right: rightPaddingSafeArea),
-                                    //         child: Align(
-                                    //           alignment: Alignment.centerRight,
-                                    //           child: Container(
-                                    //             width: 12,
-                                    //             foregroundDecoration: BoxDecoration(
-                                    //               gradient: LinearGradient(
-                                    //                 colors: [
-                                    //                   Theme.of(context)
-                                    //                       .canvasColor
-                                    //                       .withOpacity(0.0),
-                                    //                   Theme.of(context).canvasColor,
-                                    //                 ],
-                                    //                 begin: Alignment.centerLeft,
-                                    //                 end: Alignment.centerRight,
-                                    //                 stops: [0.1, 1],
-                                    //               ),
-                                    //             ),
-                                    //           ),
-                                    //         ),
-                                    //       )
-                                    //     : SizedBox.shrink(),
-                                  ],
-                                );
-                              }),
-                            ),
-                          ],
-                        ),
-                        NavigationSidebar(key: sidebarStateKey),
-                        // The persistent global Widget stack (stays on navigation change)
-                        GlobalLoadingIndeterminate(
-                            key: loadingIndeterminateKey),
-                        GlobalLoadingProgress(key: loadingProgressKey),
-                      ],
+                                            )
+                                          : SizedBox.shrink(),
+                                      hasRightSafeArea || hasLeftSafeArea
+                                          ? Padding(
+                                              padding: EdgeInsets.only(
+                                                right: hasRightSafeArea
+                                                    ? rightPaddingSafeArea
+                                                    : 0,
+                                                left: hasLeftSafeArea
+                                                    ? leftPaddingSafeArea
+                                                    : 0,
+                                              ),
+                                              child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.horizontal(
+                                                    right: hasRightSafeArea
+                                                        ? Radius.circular(25)
+                                                        : Radius.circular(0),
+                                                    left: hasLeftSafeArea
+                                                        ? Radius.circular(25)
+                                                        : Radius.circular(0),
+                                                  ),
+                                                  child: child ??
+                                                      SizedBox.shrink()),
+                                            )
+                                          : child ?? SizedBox.shrink(),
+                                      GlobalSnackbar(key: snackbarKey),
+                                      // SignInWithGoogleFlyIn(),
+                                      hasRightSafeArea
+                                          ? Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Container(
+                                                width: rightPaddingSafeArea,
+                                                color: Theme.of(context)
+                                                    .canvasColor,
+                                              ),
+                                            )
+                                          : SizedBox.shrink(),
+                                      hasLeftSafeArea
+                                          ? Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Container(
+                                                width: leftPaddingSafeArea,
+                                                color: Theme.of(context)
+                                                    .canvasColor,
+                                              ),
+                                            )
+                                          : SizedBox.shrink(),
+                                      // Gradient fade to right overflow, disabled for now
+                                      // because many pages have full screen elements/banners etc
+                                      // hasRightSafeArea
+                                      //     ? Padding(
+                                      //         padding: EdgeInsets.only(
+                                      //             right: rightPaddingSafeArea),
+                                      //         child: Align(
+                                      //           alignment: Alignment.centerRight,
+                                      //           child: Container(
+                                      //             width: 12,
+                                      //             foregroundDecoration: BoxDecoration(
+                                      //               gradient: LinearGradient(
+                                      //                 colors: [
+                                      //                   Theme.of(context)
+                                      //                       .canvasColor
+                                      //                       .withOpacity(0.0),
+                                      //                   Theme.of(context).canvasColor,
+                                      //                 ],
+                                      //                 begin: Alignment.centerLeft,
+                                      //                 end: Alignment.centerRight,
+                                      //                 stops: [0.1, 1],
+                                      //               ),
+                                      //             ),
+                                      //           ),
+                                      //         ),
+                                      //       )
+                                      //     : SizedBox.shrink(),
+                                    ],
+                                  );
+                                }),
+                              ),
+                            ],
+                          ),
+                          NavigationSidebar(key: sidebarStateKey),
+                          // The persistent global Widget stack (stays on navigation change)
+                          GlobalLoadingIndeterminate(
+                              key: loadingIndeterminateKey),
+                          GlobalLoadingProgress(key: loadingProgressKey),
+                        ],
+                      ),
                     ),
                   ),
                 ),

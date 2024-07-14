@@ -193,8 +193,10 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
                               ? Icons.visibility_outlined
                               : Icons.visibility_rounded,
                       onExtra: () async {
-                        Objective updatedObjective =
-                            objective.copyWith(archived: !objective.archived);
+                        Objective updatedObjective = objective.copyWith(
+                          archived: !objective.archived,
+                          pinned: objective.archived,
+                        );
                         await database
                             .createOrUpdateObjective(updatedObjective);
                       },

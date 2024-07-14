@@ -18,6 +18,7 @@ import 'package:drift/drift.dart';
 export 'platform/shared.dart';
 import 'dart:convert';
 import 'package:budget/struct/currencyFunctions.dart';
+import 'package:flutter/foundation.dart';
 import 'schema_versions.dart';
 import 'package:flutter/material.dart' show DateTimeRange;
 import 'package:budget/pages/activityPage.dart';
@@ -618,6 +619,11 @@ class AllWallets {
 
     return false;
   }
+}
+
+class SelectedWalletPk with ChangeNotifier {
+  String selectedWalletPk;
+  SelectedWalletPk({required this.selectedWalletPk});
 }
 
 class CategoryWithTotal {
@@ -1991,7 +1997,10 @@ class FinanceDatabase extends _$FinanceDatabase {
                           .collate(Collate.noCase)
                           .like("%" + title + "%") &
                       associatedTitles.title.isNotIn(excludeTitles))
-                  ..groupBy([associatedTitles.title])
+                  // Group by happens before the orderby,
+                  // so we get titles with the least order if they are grouped
+                  // Therefore we cannot use group by
+                  //..groupBy([associatedTitles.title])
                   // Remove duplicate title titles only if not searching categories
                   ..orderBy([OrderingTerm.desc(associatedTitles.order)])
                   ..limit(limit, offset: offset ?? DEFAULT_OFFSET))
@@ -2345,7 +2354,10 @@ class FinanceDatabase extends _$FinanceDatabase {
       Map<String, TransactionWallet> indexedByPk = {
         for (TransactionWallet wallet in wallets) wallet.walletPk: wallet,
       };
-      return AllWallets(list: wallets, indexedByPk: indexedByPk);
+      return AllWallets(
+        list: wallets,
+        indexedByPk: indexedByPk,
+      );
     });
   }
 

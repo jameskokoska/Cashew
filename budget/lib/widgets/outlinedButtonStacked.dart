@@ -94,6 +94,7 @@ class OutlinedButtonStacked extends StatelessWidget {
                                       fontSize: fontSize ?? 18,
                                       fontWeight: FontWeight.bold,
                                       maxLines: 2,
+                                      textAlign: TextAlign.center,
                                     ),
                                   infoButton ?? SizedBox.shrink()
                                 ],

@@ -1279,6 +1279,7 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
         ),
         title:
             widget.wallet == null ? "all-spending".tr() : widget.wallet!.name,
+        capitalizeTitle: widget.wallet == null,
         actions: [
           if (widget.wallet != null)
             CustomPopupMenuButton(
@@ -1607,15 +1608,18 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                           Padding(
                             padding: const EdgeInsetsDirectional.symmetric(
                                 horizontal: 10),
-                            child: IconButtonScaled(
-                              iconData: appStateSettings["outlinedIcons"]
-                                  ? Icons.chevron_left_outlined
-                                  : Icons.chevron_left_rounded,
-                              iconSize: 18,
-                              scale: 1,
-                              onTap: () {
-                                changeSelectedDateRange(-1);
-                              },
+                            child: DisabledButton(
+                              disabled: selectedDateTimeRangeIndex == null,
+                              child: IconButtonScaled(
+                                iconData: appStateSettings["outlinedIcons"]
+                                    ? Icons.chevron_left_outlined
+                                    : Icons.chevron_left_rounded,
+                                iconSize: 18,
+                                scale: 1,
+                                onTap: () {
+                                  changeSelectedDateRange(-1);
+                                },
+                              ),
                             ),
                           ),
                           Flexible(
@@ -1633,25 +1637,21 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                               ),
                             ),
                           ),
-                          IgnorePointer(
-                            ignoring: selectedDateTimeRangeIndex == 0,
-                            child: AnimatedOpacity(
-                              duration: Duration(milliseconds: 200),
-                              opacity:
-                                  selectedDateTimeRangeIndex == 0 ? 0.5 : 1,
-                              child: Padding(
-                                padding: const EdgeInsetsDirectional.symmetric(
-                                    horizontal: 10),
-                                child: IconButtonScaled(
-                                  iconData: appStateSettings["outlinedIcons"]
-                                      ? Icons.chevron_right_outlined
-                                      : Icons.chevron_right_rounded,
-                                  iconSize: 18,
-                                  scale: 1,
-                                  onTap: () {
-                                    changeSelectedDateRange(1);
-                                  },
-                                ),
+                          Padding(
+                            padding: const EdgeInsetsDirectional.symmetric(
+                                horizontal: 10),
+                            child: DisabledButton(
+                              disabled: selectedDateTimeRangeIndex == null ||
+                                  selectedDateTimeRangeIndex == 0,
+                              child: IconButtonScaled(
+                                iconData: appStateSettings["outlinedIcons"]
+                                    ? Icons.chevron_right_outlined
+                                    : Icons.chevron_right_rounded,
+                                iconSize: 18,
+                                scale: 1,
+                                onTap: () {
+                                  changeSelectedDateRange(1);
+                                },
                               ),
                             ),
                           ),
@@ -1667,6 +1667,24 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
         selectedTransactionsAppBar: SelectedTransactionsAppBar(
           pageID: listID,
         ),
+      ),
+    );
+  }
+}
+
+class DisabledButton extends StatelessWidget {
+  const DisabledButton(
+      {required this.child, required this.disabled, super.key});
+  final Widget child;
+  final bool disabled;
+  @override
+  Widget build(BuildContext context) {
+    return IgnorePointer(
+      ignoring: disabled,
+      child: AnimatedOpacity(
+        duration: Duration(milliseconds: 200),
+        opacity: disabled ? 0.3 : 1,
+        child: child,
       ),
     );
   }

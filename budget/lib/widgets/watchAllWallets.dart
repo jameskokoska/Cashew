@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'package:budget/database/tables.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +20,23 @@ class WatchAllWallets extends StatelessWidget {
     return StreamProvider<AllWallets>.value(
       initialData: AllWallets(list: [], indexedByPk: {}),
       value: database.watchAllWalletsIndexed(),
+      child: child,
+    );
+  }
+}
+
+final selectedWalletPkController = StreamController<SelectedWalletPk>();
+
+class WatchSelectedWalletPk extends StatelessWidget {
+  const WatchSelectedWalletPk({required this.child, super.key});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamProvider<SelectedWalletPk>.value(
+      initialData: SelectedWalletPk(
+          selectedWalletPk: appStateSettings["selectedWalletPk"] ?? "0"),
+      value: selectedWalletPkController.stream,
       child: child,
     );
   }
