@@ -320,7 +320,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                       : Icons.swap_vert_rounded,
                   enableBorderRadius: true,
                   title: "amount-color".tr(),
-                  initial: "green-or-red",
+                  initial: appStateSettings["balanceTransferAmountColor"],
                   items: ["green-or-red", "no-color"],
                   getLabel: (item) {
                     return item.tr();
