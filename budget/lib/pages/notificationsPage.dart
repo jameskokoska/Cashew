@@ -56,7 +56,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                   : Icons.warning_rounded,
               color: Theme.of(context).colorScheme.error,
               onTap: () {
-                AppSettings.openNotificationSettings();
+                AppSettings.openAppSettings(type: AppSettingsType.notification);
               },
             ),
           ),

@@ -89,7 +89,7 @@ class _DeepLinksState extends State<DeepLinks> {
   }
 
   Future<void> initDeepLinks() async {
-    final appLink = await _appLinks.getInitialAppLink();
+    Uri? appLink = await _appLinks.getInitialLink();
     if (appLink != null) {
       // This delay may or may not be needed...
       // we need to make sure Material navigator is accessible by the context though!

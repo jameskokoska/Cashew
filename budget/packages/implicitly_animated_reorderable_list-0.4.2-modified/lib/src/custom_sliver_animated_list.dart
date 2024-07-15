@@ -2,6 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 const Duration _kDuration = Duration(milliseconds: 300);
+typedef AnimatedListItemBuilder = Widget Function(
+    BuildContext context, int index, Animation<double> animation);
+typedef AnimatedListRemovedItemBuilder = Widget Function(
+    BuildContext context, Animation<double> animation);
 
 class CustomSliverAnimatedList extends StatefulWidget {
   /// Creates a sliver that animates items when they are inserted or removed.
@@ -208,6 +212,7 @@ class CustomSliverAnimatedListState extends State<CustomSliverAnimatedList>
   /// This method's semantics are the same as Dart's [List.remove] method:
   /// it decreases the length of the list by one and shifts all items at or
   /// before [index] towards the beginning of the list.
+
   void removeItem(int index, AnimatedListRemovedItemBuilder builder,
       {Duration duration = _kDuration}) {
     assert(index >= 0);

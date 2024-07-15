@@ -368,7 +368,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
           touchedValue = value.toInt();
         },
         touchTooltipData: LineTouchTooltipData(
-          tooltipBgColor: widget.color.withOpacity(0.7),
+          getTooltipColor: (_) => widget.color.withOpacity(0.7),
           tooltipRoundedRadius: 8,
           fitInsideVertically: true,
           fitInsideHorizontally: true,
