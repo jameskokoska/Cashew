@@ -58,9 +58,18 @@ class HomePageNetWorth extends StatelessWidget {
                                 true
                             ? null
                             : (double amount) {
+                                double? roundedWalletWithTotal =
+                                    (double.tryParse(absoluteZero(amount)
+                                        .toStringAsFixed(
+                                            Provider.of<AllWallets>(context)
+                                                    .indexedByPk[
+                                                        appStateSettings[
+                                                            "selectedWalletPk"]]
+                                                    ?.decimals ??
+                                                2)));
                                 return appStateSettings["netTotalsColorful"] ==
                                         true
-                                    ? (amount == 0
+                                    ? (roundedWalletWithTotal == 0
                                         ? getColor(context, "black")
                                         : amount > 0
                                             ? getColor(context, "incomeAmount")

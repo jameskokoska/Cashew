@@ -675,8 +675,11 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
           getTextColor: appStateSettings["netTotalsColorful"] != true
               ? null
               : (double amount) {
+                  double? roundedWalletWithTotal = (double.tryParse(
+                      absoluteZero(amount)
+                          .toStringAsFixed(widget.wallet?.decimals ?? 2)));
                   return appStateSettings["netTotalsColorful"] == true
-                      ? (amount == 0
+                      ? (roundedWalletWithTotal == 0
                           ? getColor(context, "black")
                           : amount > 0
                               ? getColor(context, "incomeAmount")
@@ -2380,6 +2383,7 @@ class _AllSpendingPastSpendingGraphState
     required double incomeSpending,
     required double expenseSpending,
   }) {
+    print(netSpending);
     return FadeIn(
       duration: Duration(milliseconds: 400),
       child: Container(
