@@ -13,6 +13,7 @@ import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/navBarIconsData.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/struct/upcomingTransactionsFunctions.dart';
 import 'package:budget/struct/uploadAttachment.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/navigationFramework.dart';
@@ -1332,6 +1333,38 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                     vertical: 0, horizontal: 5),
                               ),
                             ),
+                            Builder(builder: (context) {
+                              int? numberRepeats = widget.transaction
+                                          ?.createdAnotherFutureTransaction ==
+                                      true
+                                  ? null
+                                  : countTransactionOccurrences(
+                                      type: selectedType,
+                                      reoccurrence: selectedRecurrenceEnum,
+                                      periodLength: selectedPeriodLength,
+                                      dateCreated: selectedDate,
+                                      endDate: selectedEndDate,
+                                    );
+                              return AnimatedSizeSwitcher(
+                                child: numberRepeats != null
+                                    ? Padding(
+                                        padding: const EdgeInsetsDirectional
+                                            .symmetric(horizontal: 4),
+                                        child: TextFont(
+                                          key: ValueKey(1),
+                                          fontSize: 14.5,
+                                          textColor:
+                                              getColor(context, "textLight"),
+                                          text: "( ×" +
+                                              numberRepeats.toString() +
+                                              " )",
+                                        ),
+                                      )
+                                    : Container(
+                                        key: ValueKey(2),
+                                      ),
+                              );
+                            }),
                             AnimatedSizeSwitcher(
                               child: selectedEndDate != null
                                   ? Opacity(

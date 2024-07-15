@@ -33,6 +33,7 @@ String getChangelogString() {
     Adjust popup heights and fix emoji category selection
     Allow pattern unlock instead of just biometrics
     When budget/loan/objective archived, it is unpinned
+    Add amount of times a transaction will repeat with a set end date
     Fix heatmap missing blank days
     Improve performance when switching the primary account if the currency remains unchanged
     Consistent capitalization throughout interface

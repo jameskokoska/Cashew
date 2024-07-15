@@ -128,6 +128,60 @@ Future createNewSubscriptionTransaction(
   }
 }
 
+int? countTransactionOccurrences({
+  required TransactionSpecialType? type,
+  required BudgetReoccurence reoccurrence,
+  required int periodLength,
+  required DateTime dateCreated,
+  required DateTime? endDate,
+}) {
+  if (type != TransactionSpecialType.subscription &&
+      type != TransactionSpecialType.repetitive) {
+    return null;
+  }
+  if (endDate == null) return null;
+
+  int yearOffset = 0;
+  int monthOffset = 0;
+  int dayOffset = 0;
+
+  if (reoccurrence == BudgetReoccurence.yearly) {
+    yearOffset = periodLength;
+  } else if (reoccurrence == BudgetReoccurence.monthly) {
+    monthOffset = periodLength;
+  } else if (reoccurrence == BudgetReoccurence.weekly) {
+    dayOffset = periodLength * 7;
+  } else if (reoccurrence == BudgetReoccurence.daily) {
+    dayOffset = periodLength;
+  }
+
+  DateTime currentDate = dateCreated;
+
+  int occurrenceCount = 0;
+
+  while (!endDate.isBefore(currentDate)) {
+    occurrenceCount++;
+
+    currentDate = DateTime(
+      currentDate.year + yearOffset,
+      currentDate.month + monthOffset,
+      currentDate.day + dayOffset,
+      currentDate.hour,
+      currentDate.minute,
+      currentDate.second,
+      currentDate.millisecond,
+    );
+
+    if (endDate.isBefore(currentDate)) {
+      break;
+    } else if (occurrenceCount > 999) {
+      return null;
+    }
+  }
+
+  return occurrenceCount;
+}
+
 // We create a predictable key when a new repeat transaction is made
 // So that when we sync, if the sync client syncs later but it was already automatically marked as paid
 // It won't create a new entry (with a random key), it will just replace the entry that we predictably created
