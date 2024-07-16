@@ -5,6 +5,7 @@ import "package:budget/pages/addTransactionPage.dart";
 import "package:budget/pages/budgetPage.dart";
 import "package:budget/struct/databaseGlobal.dart";
 import "package:budget/struct/settings.dart";
+import "package:budget/struct/throttler.dart";
 import "package:budget/widgets/openBottomSheet.dart";
 import "package:budget/widgets/openPopup.dart";
 import "package:easy_localization/easy_localization.dart";
@@ -14,10 +15,15 @@ import "package:provider/provider.dart";
 import "package:quick_actions/quick_actions.dart";
 import 'package:budget/pages/addWalletPage.dart';
 
+Throttler quickActionThrottler =
+    Throttler(duration: Duration(milliseconds: 350));
+
 void runQuickActionsPayLoads(context) async {
   if (kIsWeb) return;
   final QuickActions quickActions = const QuickActions();
   quickActions.initialize((String quickAction) async {
+    if (!quickActionThrottler.canProceed()) return;
+
     if (Navigator.of(context).canPop() == false || entireAppLoaded) {
       if (quickAction == "addTransaction") {
         // Add a delay so the keyboard can focus

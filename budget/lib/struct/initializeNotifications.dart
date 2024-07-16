@@ -66,12 +66,15 @@ Future<bool> runNotificationPayLoads(context) async {
   if (kIsWeb) return false;
   if (notificationPayload == null) return false;
   if (notificationPayload == "addTransaction") {
-    pushRoute(
-      context,
-      AddTransactionPage(
-        routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-      ),
-    );
+    // Add a delay so the keyboard can focus
+    await Future.delayed(Duration(milliseconds: 50), () async {
+      pushRoute(
+        context,
+        AddTransactionPage(
+          routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+        ),
+      );
+    });
     return true;
   } else if (notificationPayload == "upcomingTransaction") {
     // When the notification comes in, the transaction is past due!

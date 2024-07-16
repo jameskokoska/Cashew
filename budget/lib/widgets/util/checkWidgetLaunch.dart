@@ -24,6 +24,7 @@ import 'package:budget/pages/transactionFilters.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/initializeNotifications.dart';
+import 'package:budget/struct/quickActions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
@@ -50,6 +51,7 @@ import 'package:home_widget/home_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/widgets/util/checkWidgetLaunch.dart';
+import "package:budget/struct/throttler.dart";
 
 class AndroidOnly extends StatelessWidget {
   const AndroidOnly({required this.child, super.key});
@@ -69,11 +71,10 @@ class CheckWidgetLaunch extends StatefulWidget {
   State<CheckWidgetLaunch> createState() => _CheckWidgetLaunchState();
 }
 
-bool hasDoneWidgetAction = false;
+Throttler widgetActionThrottler =
+    Throttler(duration: Duration(milliseconds: 350));
 
 class _CheckWidgetLaunchState extends State<CheckWidgetLaunch> {
-  Timer? cancelTimer;
-
   @override
   void initState() {
     super.initState();
@@ -84,12 +85,6 @@ class _CheckWidgetLaunchState extends State<CheckWidgetLaunch> {
     HomeWidget.widgetClicked.listen(_launchedFromWidget);
   }
 
-  @override
-  void dispose() {
-    cancelTimer?.cancel();
-    super.dispose();
-  }
-
   void _checkForWidgetLaunch() {
     HomeWidget.initiallyLaunchedFromHomeWidget().then(_launchedFromWidget);
   }
@@ -98,8 +93,7 @@ class _CheckWidgetLaunchState extends State<CheckWidgetLaunch> {
   // has this been fixed with: android:launchMode="singleInstance" ?
   void _launchedFromWidget(Uri? uri) async {
     // Only perform one widget action per launch/continue of the app
-    if (hasDoneWidgetAction == true) return;
-    hasDoneWidgetAction = true;
+    if (!widgetActionThrottler.canProceed()) return;
 
     String widgetPayload = (uri ?? "").toString();
     if (widgetPayload == "addTransactionWidget") {
@@ -138,24 +132,11 @@ class _CheckWidgetLaunchState extends State<CheckWidgetLaunch> {
         ),
       );
     }
-    _scheduleHasDoneWidgetAction();
-  }
-
-  void _scheduleHasDoneWidgetAction() {
-    cancelTimer = Timer(Duration(milliseconds: 3000), () {
-      hasDoneWidgetAction = false;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return OnAppResume(
-      onAppResume: () {
-        hasDoneWidgetAction = false;
-        cancelTimer?.cancel();
-      },
-      child: SizedBox.shrink(),
-    );
+    return SizedBox.shrink();
   }
 }
 

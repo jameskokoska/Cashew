@@ -8,7 +8,9 @@ import 'package:budget/pages/addEmailTemplate.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/quickActions.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/struct/throttler.dart';
 import 'package:budget/widgets/globalSnackbar.dart';
 import 'package:budget/widgets/importCSV.dart';
 import 'package:budget/widgets/navigationFramework.dart';
@@ -24,6 +26,8 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:budget/struct/commonDateFormats.dart';
 import 'package:budget/widgets/tableEntry.dart';
 import 'package:provider/provider.dart';
+
+Throttler deepLinksThrottler = Throttler(duration: Duration(milliseconds: 350));
 
 class InitializeDeepLinks extends StatelessWidget {
   const InitializeDeepLinks({required this.child, super.key});
@@ -236,19 +240,22 @@ Future processAddTransactionRouteFromParams(
   TransactionWallet? wallet = await getWalletFromParams(params);
   DateTime? dateCreated = await getDateTimeFromParams(params, context);
   double amount = getAmountFromParams(params);
-  await pushRoute(
-    context,
-    AddTransactionPage(
-      routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-      selectedAmount: amount,
-      selectedCategory: mainAndSubCategory.main,
-      selectedSubCategory: mainAndSubCategory.sub,
-      selectedWallet: wallet,
-      selectedDate: dateCreated,
-      selectedTitle: params["title"],
-      selectedNotes: params["notes"],
-    ),
-  );
+  // Add a delay so the keyboard can focus
+  await Future.delayed(Duration(milliseconds: 50), () async {
+    await pushRoute(
+      context,
+      AddTransactionPage(
+        routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+        selectedAmount: amount,
+        selectedCategory: mainAndSubCategory.main,
+        selectedSubCategory: mainAndSubCategory.sub,
+        selectedWallet: wallet,
+        selectedDate: dateCreated,
+        selectedTitle: params["title"],
+        selectedNotes: params["notes"],
+      ),
+    );
+  });
 }
 
 Future processMessageToParse(
@@ -275,6 +282,7 @@ Future processMessageToParse(
 Future executeAppLink(BuildContext? context, Uri uri,
     {Function(dynamic)? onDebug}) async {
   if (appStateSettings["hasOnboarded"] != true) return;
+  if (!deepLinksThrottler.canProceed()) return;
 
   String endPoint = getApiEndpoint(uri);
   Map<String, String> params = parseAppLink(uri);
