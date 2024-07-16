@@ -78,21 +78,16 @@ class _CheckWidgetLaunchState extends State<CheckWidgetLaunch> {
   void initState() {
     super.initState();
     HomeWidget.setAppGroupId('WIDGET_GROUP_ID');
+    Future.delayed(Duration(milliseconds: 50), () {
+      _checkForWidgetLaunch();
+    });
+    HomeWidget.widgetClicked.listen(_launchedFromWidget);
   }
 
   @override
   void dispose() {
     cancelTimer?.cancel();
     super.dispose();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    Future.delayed(Duration(milliseconds: 50), () {
-      _checkForWidgetLaunch();
-    });
-    HomeWidget.widgetClicked.listen(_launchedFromWidget);
   }
 
   void _checkForWidgetLaunch() {
@@ -108,12 +103,15 @@ class _CheckWidgetLaunchState extends State<CheckWidgetLaunch> {
 
     String widgetPayload = (uri ?? "").toString();
     if (widgetPayload == "addTransactionWidget") {
-      pushRoute(
-        context,
-        AddTransactionPage(
-          routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-        ),
-      );
+      // Add a delay so the keyboard can focus
+      Future.delayed(Duration(milliseconds: 50), () {
+        pushRoute(
+          context,
+          AddTransactionPage(
+            routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+          ),
+        );
+      });
     } else if (widgetPayload == "transferTransactionWidget") {
       // This fixes an issue on older versions of Android where the route would popup twice
       // We can detect when this is going to happen if the Provider is not yet loaded, so just pop

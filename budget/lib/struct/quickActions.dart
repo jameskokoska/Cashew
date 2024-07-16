@@ -20,12 +20,15 @@ void runQuickActionsPayLoads(context) async {
   quickActions.initialize((String quickAction) async {
     if (Navigator.of(context).canPop() == false || entireAppLoaded) {
       if (quickAction == "addTransaction") {
-        pushRoute(
-          context,
-          AddTransactionPage(
-            routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-          ),
-        );
+        // Add a delay so the keyboard can focus
+        Future.delayed(Duration(milliseconds: 50), () {
+          pushRoute(
+            context,
+            AddTransactionPage(
+              routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+            ),
+          );
+        });
       } else if (quickAction == "transferTransaction") {
         openBottomSheet(
           context,
