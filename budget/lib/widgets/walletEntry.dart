@@ -398,7 +398,12 @@ Future<bool> setPrimaryWallet(String walletPk, {AllWallets? allWallets}) async {
           null &&
       allWallets.indexedByPk[walletPk]?.currency != null &&
       allWallets.indexedByPk[appStateSettings["selectedWalletPk"]]?.currency ==
-          allWallets.indexedByPk[walletPk]?.currency) {
+          allWallets.indexedByPk[walletPk]?.currency &&
+      allWallets.indexedByPk[appStateSettings["selectedWalletPk"]]?.decimals !=
+          null &&
+      allWallets.indexedByPk[walletPk]?.decimals != null &&
+      allWallets.indexedByPk[appStateSettings["selectedWalletPk"]]?.decimals ==
+          allWallets.indexedByPk[walletPk]?.decimals) {
     // The currency has not changed, we do not need to refresh the global state!
     await updateSettings("selectedWalletPk", walletPk,
         updateGlobalState: false);
