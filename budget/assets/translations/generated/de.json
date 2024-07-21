@@ -1161,5 +1161,7 @@
   "minimal": "Minimal",
   "major-change-18": "Transaktionsaktivitätsprotokoll",
   "major-change-18-1": "Sehen Sie sich eine Liste der kürzlich gelöschten/geänderten Transaktionen an",
-  "greeting-message": "Grußnachricht"
+  "greeting-message": "Grußnachricht",
+  "edit-heatmap": "Heatmap bearbeiten",
+  "first-weekday": "Erster Wochentag"
 }

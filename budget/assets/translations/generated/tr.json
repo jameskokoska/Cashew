@@ -1161,5 +1161,7 @@
   "minimal": "En az",
   "major-change-18": "İşlem Etkinliği Günlüğü",
   "major-change-18-1": "Yakın zamanda silinen/değiştirilen işlemlerin listesini görüntüleyin",
-  "greeting-message": "Tebrik Mesajı"
+  "greeting-message": "Tebrik Mesajı",
+  "edit-heatmap": "Isı Haritasını Düzenle",
+  "first-weekday": "Haftanın İlk Günü"
 }

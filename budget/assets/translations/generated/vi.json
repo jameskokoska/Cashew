@@ -1161,5 +1161,7 @@
   "minimal": "Tối thiểu",
   "major-change-18": "Nhật ký hoạt động giao dịch",
   "major-change-18-1": "Xem danh sách các giao dịch đã xóa/sửa đổi gần đây",
-  "greeting-message": "Tin nhắn chào hỏi"
+  "greeting-message": "Tin nhắn chào hỏi",
+  "edit-heatmap": "Chỉnh sửa bản đồ nhiệt",
+  "first-weekday": "Ngày đầu tiên trong tuần"
 }

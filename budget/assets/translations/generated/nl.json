@@ -1161,5 +1161,7 @@
   "minimal": "Minimaal",
   "major-change-18": "Transactieactiviteitenlogboek",
   "major-change-18-1": "Bekijk een lijst met onlangs verwijderde/gewijzigde transacties",
-  "greeting-message": "Groet bericht"
+  "greeting-message": "Groet bericht",
+  "edit-heatmap": "Hittekaart bewerken",
+  "first-weekday": "Eerste weekdag"
 }

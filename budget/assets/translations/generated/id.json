@@ -1161,5 +1161,7 @@
   "minimal": "Minimal",
   "major-change-18": "Log Aktivitas Transaksi",
   "major-change-18-1": "Melihat daftar transaksi yang baru saja dihapus/dimodifikasi",
-  "greeting-message": "Pesan Ucapan"
+  "greeting-message": "Pesan Ucapan",
+  "edit-heatmap": "Edit Peta Panas",
+  "first-weekday": "Hari Minggu Pertama"
 }

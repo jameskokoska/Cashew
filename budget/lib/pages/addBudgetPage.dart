@@ -6,6 +6,7 @@ import 'package:budget/pages/editBudgetLimitsPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/premiumPage.dart';
+import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/pages/sharedBudgetSettings.dart';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -283,6 +284,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         onCancelLabel: "Exit Without Saving",
       );
     } else {
+      savingHapticFeedback();
       Navigator.pop(context);
     }
   }

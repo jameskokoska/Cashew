@@ -1161,5 +1161,7 @@
   "minimal": "최소",
   "major-change-18": "거래 활동 로그",
   "major-change-18-1": "최근 삭제/수정된 거래 목록 보기",
-  "greeting-message": "인사말 메시지"
+  "greeting-message": "인사말 메시지",
+  "edit-heatmap": "히트맵 편집",
+  "first-weekday": "첫 번째 평일"
 }

@@ -1161,5 +1161,7 @@
   "minimal": "Minim",
   "major-change-18": "Jurnalul activității tranzacției",
   "major-change-18-1": "Vizualizați o listă a tranzacțiilor recent șterse/modificate",
-  "greeting-message": "Mesaj de salut"
+  "greeting-message": "Mesaj de salut",
+  "edit-heatmap": "Editați harta termică",
+  "first-weekday": "Prima zi a săptămânii"
 }

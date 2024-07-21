@@ -1,5 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
@@ -68,6 +69,7 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
             : length,
       ),
     );
+    savingHapticFeedback();
     Navigator.pop(context);
   }
 

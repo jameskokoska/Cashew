@@ -1161,5 +1161,7 @@
   "minimal": "Minimal",
   "major-change-18": "Journal d'activité des transactions",
   "major-change-18-1": "Afficher une liste des transactions récemment supprimées/modifiées",
-  "greeting-message": "Message d'accueil"
+  "greeting-message": "Message d'accueil",
+  "edit-heatmap": "Modifier la carte thermique",
+  "first-weekday": "Premier jour de la semaine"
 }

@@ -1161,5 +1161,7 @@
   "minimal": "Minimal",
   "major-change-18": "Log ng Aktibidad ng Transaksyon",
   "major-change-18-1": "Tingnan ang isang listahan ng kamakailang tinanggal/binagong mga transaksyon",
-  "greeting-message": "Mensahe ng Pagbati"
+  "greeting-message": "Mensahe ng Pagbati",
+  "edit-heatmap": "I-edit ang Heatmap",
+  "first-weekday": "Unang Linggo"
 }

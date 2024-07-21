@@ -4,6 +4,7 @@ import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
+import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
@@ -116,6 +117,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
     }
 
     if (popContext) {
+      savingHapticFeedback();
       Navigator.pop(context);
     } else {
       walletInitial = await createTransactionWallet();

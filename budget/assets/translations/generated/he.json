@@ -1161,5 +1161,7 @@
   "minimal": "מִינִימָלִי",
   "major-change-18": "יומן פעילות של עסקאות",
   "major-change-18-1": "הצג רשימה של עסקאות שנמחקו/שונו לאחרונה",
-  "greeting-message": "הודעת ברכת שלום"
+  "greeting-message": "הודעת ברכת שלום",
+  "edit-heatmap": "ערוך מפת חום",
+  "first-weekday": "יום חול ראשון"
 }

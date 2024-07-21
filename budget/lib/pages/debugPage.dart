@@ -191,6 +191,19 @@ class DebugPage extends StatelessWidget {
               ? Icons.battery_charging_full_outlined
               : Icons.battery_charging_full_rounded,
         ),
+        SettingsContainerSwitch(
+          enableBorderRadius: true,
+          onSwitched: (value) {
+            updateSettings("savingHapticFeedback", value,
+                pagesNeedingRefresh: [], updateGlobalState: false);
+          },
+          initialValue: appStateSettings["savingHapticFeedback"] == true,
+          title: "Saving Haptic Feedback".tr(),
+          description: "When saving changes or adding, provide haptic feedback",
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.vibration_outlined
+              : Icons.vibration_rounded,
+        ),
         if (getPlatform(ignoreEmulation: true) == PlatformOS.isAndroid)
           SettingsContainerSwitch(
             onSwitched: (value) async {

@@ -9,6 +9,7 @@ import 'package:budget/pages/editObjectivesPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/pages/objectivesListPage.dart';
 import 'package:budget/pages/premiumPage.dart';
+import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
@@ -277,6 +278,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
         );
       }
     }
+    savingHapticFeedback();
     Navigator.pop(context);
   }
 

@@ -189,7 +189,8 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "iOSEmulate": false,
     "iOSAnimatedGoo": false,
     "expandedNavigationSidebar": true,
-    "locale": "System",
+    "locale": "System", // the locale code or "System"
+    "firstDayOfWeek": -1, // -1: Locale/System, 0: Sunday, 1: Monday,
     "disableShadows": false,
     "showTransactionPk": false,
     "showBackupLimit": false,
@@ -220,6 +221,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "extraZerosButton": null, //will be null, 00 or 000
     "numberPadFormat": NumberPadFormat.format123.index,
     "numberPadHapticFeedback": false,
+    "savingHapticFeedback": false,
     "percentagePrecision": 0, //number of decimals to round percentages to
     "allSpendingLastPage": 0, //index of the last tab on the all spending page
     "loansLastPage": 0, //index of the last tab on the loans page

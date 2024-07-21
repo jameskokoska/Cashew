@@ -1161,5 +1161,7 @@
   "minimal": "Minimális",
   "major-change-18": "Tranzakciós tevékenységnapló",
   "major-change-18-1": "Tekintse meg a legutóbb törölt/módosított tranzakciók listáját",
-  "greeting-message": "Üdvözlő üzenet"
+  "greeting-message": "Üdvözlő üzenet",
+  "edit-heatmap": "Hőtérkép szerkesztése",
+  "first-weekday": "Első hétköznap"
 }

@@ -1161,5 +1161,7 @@
   "minimal": "Mínimo",
   "major-change-18": "Registro de actividad de transacciones",
   "major-change-18-1": "Ver una lista de transacciones eliminadas/modificadas recientemente",
-  "greeting-message": "Mensaje de saludo"
+  "greeting-message": "Mensaje de saludo",
+  "edit-heatmap": "Editar mapa de calor",
+  "first-weekday": "Primer día laborable"
 }

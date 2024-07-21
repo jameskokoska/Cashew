@@ -1161,5 +1161,7 @@
   "minimal": "最小",
   "major-change-18": "交易活動日誌",
   "major-change-18-1": "查看最近刪除/修改的交易列表",
-  "greeting-message": "問候語"
+  "greeting-message": "問候語",
+  "edit-heatmap": "編輯熱圖",
+  "first-weekday": "第一個工作天"
 }

@@ -1161,5 +1161,7 @@
   "minimal": "最小限",
   "major-change-18": "トランザクションアクティビティログ",
   "major-change-18-1": "最近削除/変更されたトランザクションのリストを表示する",
-  "greeting-message": "ご挨拶メッセージ"
+  "greeting-message": "ご挨拶メッセージ",
+  "edit-heatmap": "ヒートマップの編集",
+  "first-weekday": "最初の平日"
 }

@@ -1161,5 +1161,7 @@
   "minimal": "Minimalny",
   "major-change-18": "Dziennik aktywności transakcji",
   "major-change-18-1": "Wyświetl listę ostatnio usuniętych/zmodyfikowanych transakcji",
-  "greeting-message": "Pozdrowienia"
+  "greeting-message": "Pozdrowienia",
+  "edit-heatmap": "Edytuj mapę cieplną",
+  "first-weekday": "Pierwszy dzień powszedni"
 }

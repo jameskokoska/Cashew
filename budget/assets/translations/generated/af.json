@@ -229,7 +229,10 @@
   "change-limit": "Wysig Beperking",
   "change-limit-warning": "Deur die rugsteunlimiet na 'n kleiner getal te verander, sal enige vorige rugsteun wat tans gestoor word, verwyder, indien hulle die limiet oorskry, elke keer as 'n rugsteun gemaak word.",
   "change": "Wysig",
+  "load-backup": "Laai Rugsteun?",
   "load": "Laai",
+  "delete-backup": "Verwyder rugsteun?",
+  "deleted-backup": "Verwyderde rugsteun",
   "delete": "Verwyder",
   "selected": "gekiesde",
   "system": "Stelsel",
@@ -581,5 +584,7 @@
   "minimal": "Minimaal",
   "major-change-18": "Transaksie-aktiwiteitslogboek",
   "major-change-18-1": "Bekyk 'n lys van onlangs geskrap/gewysigde transaksies",
-  "greeting-message": "Groete Boodskap"
+  "greeting-message": "Groete Boodskap",
+  "edit-heatmap": "Wysig hittekaart",
+  "first-weekday": "Eerste weeksdag"
 }

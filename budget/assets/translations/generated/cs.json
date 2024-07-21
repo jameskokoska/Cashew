@@ -1161,5 +1161,7 @@
   "minimal": "Minimální",
   "major-change-18": "Protokol aktivity transakce",
   "major-change-18-1": "Zobrazit seznam nedávno smazaných/upravených transakcí",
-  "greeting-message": "Pozdrav"
+  "greeting-message": "Pozdrav",
+  "edit-heatmap": "Upravit teplotní mapu",
+  "first-weekday": "První všední den"
 }

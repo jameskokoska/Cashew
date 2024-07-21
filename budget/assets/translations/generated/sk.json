@@ -1161,5 +1161,7 @@
   "minimal": "Minimálne",
   "major-change-18": "Denník aktivity transakcie",
   "major-change-18-1": "Pozrite si zoznam nedávno odstránených/upravených transakcií",
-  "greeting-message": "Pozdravná správa"
+  "greeting-message": "Pozdravná správa",
+  "edit-heatmap": "Upraviť teplotnú mapu",
+  "first-weekday": "Prvý pracovný deň"
 }

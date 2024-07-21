@@ -6,6 +6,7 @@ import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/homePage/homePageAllSpendingSummary.dart';
 import 'package:budget/pages/homePage/homePageBudgets.dart';
 import 'package:budget/pages/homePage/homePageCreditDebts.dart';
+import 'package:budget/pages/homePage/homePageHeatmap.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/pages/homePage/homePageNetWorth.dart';
 import 'package:budget/pages/homePage/homePageObjectives.dart';
@@ -396,6 +397,9 @@ class _EditHomePageState extends State<EditHomePage> {
               switchHomeScreenSection(context, "showHeatMap", value);
             },
             extraWidgetsBelow: [],
+            onTap: () {
+              openHeatMapHomePageBottomSheetSettings(context);
+            },
           ),
           "transactionsList": EditHomePageItem(
             icon: navBarIconsData["transactions"]!.iconData,
@@ -806,6 +810,13 @@ Future openPieChartHomePageBottomSheetSettings(BuildContext context) async {
       //   ],
       // ),
     ),
+  );
+}
+
+Future openHeatMapHomePageBottomSheetSettings(BuildContext context) async {
+  await openBottomSheet(
+    context,
+    HomePageHeatMapSettings(),
   );
 }
 

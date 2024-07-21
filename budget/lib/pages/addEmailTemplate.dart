@@ -2,6 +2,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
+import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
@@ -364,6 +365,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
       insert: widget.scannerTemplate == null,
       createTemplate(),
     );
+    savingHapticFeedback();
     Navigator.pop(context);
   }
 

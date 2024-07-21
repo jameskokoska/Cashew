@@ -1161,5 +1161,7 @@
   "minimal": "Minimal",
   "major-change-18": "Transaction Activity Log",
   "major-change-18-1": "View a list of recently deleted/modified transactions",
-  "greeting-message": "Greeting Message"
+  "greeting-message": "Greeting Message",
+  "edit-heatmap": "Edit Heatmap",
+  "first-weekday": "First Weekday"
 }

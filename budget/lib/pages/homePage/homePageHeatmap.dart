@@ -2,6 +2,7 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
+import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
@@ -154,7 +155,10 @@ class HeatMap extends StatelessWidget {
         lastDateWeekday -
         1 +
         // Follow the locale (1 is Monday, 0 if for Sunday)
-        MaterialLocalizations.of(context).firstDayOfWeekIndex;
+        (appStateSettings["firstDayOfWeek"] == -1
+            ? MaterialLocalizations.of(context).firstDayOfWeekIndex
+            : (int.tryParse(appStateSettings["firstDayOfWeek"].toString()) ??
+                MaterialLocalizations.of(context).firstDayOfWeekIndex));
     if (extraDaysOffset < 0) {
       extraDaysOffset = 7 - extraDaysOffset.abs();
     }
@@ -463,4 +467,19 @@ int getRangeIndex(double minValue, double maxValue, double number) {
     }
   }
   return 4 - 1;
+}
+
+class HomePageHeatMapSettings extends StatelessWidget {
+  const HomePageHeatMapSettings({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupFramework(
+      title: "edit-heatmap".tr(),
+      child: FirstDayOfWeekSetting(
+        // We already update the homepage when we exit edit homepage settings
+        updateHomePage: false,
+      ),
+    );
+  }
 }

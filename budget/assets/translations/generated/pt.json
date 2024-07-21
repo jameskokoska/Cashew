@@ -1161,5 +1161,7 @@
   "minimal": "Mínimo",
   "major-change-18": "Log de atividades de transação",
   "major-change-18-1": "Veja uma lista de transações excluídas/modificadas recentemente",
-  "greeting-message": "Mensagem de saudação"
+  "greeting-message": "Mensagem de saudação",
+  "edit-heatmap": "Editar mapa de calor",
+  "first-weekday": "Primeiro dia da semana"
 }

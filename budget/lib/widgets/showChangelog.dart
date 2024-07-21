@@ -34,10 +34,12 @@ String getChangelogString() {
     Allow pattern unlock instead of just biometrics
     When budget/loan/objective archived, it is unpinned
     Add amount of times a transaction will repeat with a set end date
+    Heatmap homepage section first weekday setting
     Fix heatmap missing blank days
     Improve performance when switching the primary account if the currency remains unchanged
     Consistent capitalization throughout interface
     Update translations and fix incorrect country specific language loading
+    SDK upgrades; stability and performance improvements
     < 5.3.2
     First navigation tab can be customized
     Revamped About App page

@@ -1161,5 +1161,7 @@
   "minimal": "Minimal",
   "major-change-18": "Transaksjonsaktivitetslogg",
   "major-change-18-1": "Vis en liste over nylig slettede/endrede transaksjoner",
-  "greeting-message": "Hilsen melding"
+  "greeting-message": "Hilsen melding",
+  "edit-heatmap": "Rediger varmekart",
+  "first-weekday": "Første ukedag"
 }

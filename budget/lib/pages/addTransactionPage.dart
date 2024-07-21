@@ -8,6 +8,7 @@ import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/editAssociatedTitlesPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/pages/premiumPage.dart';
+import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/pages/sharedBudgetSettings.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -398,6 +399,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     await SchedulerBinding.instance.endOfFrame;
 
     lockAddTransaction = false;
+    savingHapticFeedback();
     return result;
   }
 
@@ -3225,6 +3227,7 @@ class _SelectObjectiveState extends State<SelectObjective> {
                   },
                   extraWidgetAfter: SelectChipsAddButtonExtraWidget(
                     openPage: AddObjectivePage(
+                      objectiveType: widget.objectiveType,
                       routesToPopAfterDelete: RoutesToPopAfterDelete.One,
                     ),
                   ),
