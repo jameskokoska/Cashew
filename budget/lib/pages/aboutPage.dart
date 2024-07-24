@@ -18,6 +18,7 @@ import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/outlinedButtonStacked.dart';
+import 'package:budget/widgets/ratingPopup.dart';
 import 'package:budget/widgets/showChangelog.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -763,6 +764,17 @@ class AboutLinks extends StatelessWidget {
                   ? Icons.live_help_outlined
                   : Icons.live_help_rounded,
               text: "guide-and-faq".tr(),
+            ),
+            const HorizontalBreak(padding: EdgeInsetsDirectional.zero),
+            _buildTappable(
+              context: context,
+              isExternalLink: false,
+              onTap: () =>
+                  openBottomSheet(context, RatingPopup(), fullSnap: true),
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.rate_review_outlined
+                  : Icons.rate_review_rounded,
+              text: "feedback".tr(),
             ),
             const HorizontalBreak(padding: EdgeInsetsDirectional.zero),
             _buildTappable(
