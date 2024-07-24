@@ -148,7 +148,9 @@ class MorePages extends StatelessWidget {
                     ),
                     title: navBarIconsData["settings"]!.labelLong.tr(),
                     icon: navBarIconsData["settings"]!.iconData,
-                    description: "settings-and-customization-description".tr(),
+                    description: appStateSettings["showExtraInfoText"] == false
+                        ? null
+                        : "settings-and-customization-description".tr(),
                     isOutlined: true,
                     // description: "Theme, Language, CSV Import",
                     isWideOutlined: true,
@@ -164,7 +166,9 @@ class MorePages extends StatelessWidget {
                     openPage: WalletDetailsPage(wallet: null),
                     title: navBarIconsData["allSpending"]!.labelLong.tr(),
                     icon: navBarIconsData["allSpending"]!.iconData,
-                    description: "all-spending-description".tr(),
+                    description: appStateSettings["showExtraInfoText"] == false
+                        ? null
+                        : "all-spending-description".tr(),
                     isOutlined: true,
                     isWideOutlined: true,
                   ),

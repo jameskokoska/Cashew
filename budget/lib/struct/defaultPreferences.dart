@@ -29,6 +29,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "numberCountUpAnimation": true,
     "appAnimations": AppAnimations.all.index,
     "showFAQAndHelpLink": true,
+    "showExtraInfoText": true,
     "selectedWalletPk": "0",
     "selectedSubscriptionType": 0,
     "accentColor": toHexString(Color(0xFF1B447A)),

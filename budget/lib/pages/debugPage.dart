@@ -180,6 +180,17 @@ class DebugPage extends StatelessWidget {
               : Icons.live_help_rounded,
         ),
         SettingsContainerSwitch(
+          title: "Show extra info text".tr(),
+          onSwitched: (value) {
+            updateSettings("showExtraInfoText", value,
+                updateGlobalState: false, pagesNeedingRefresh: [3]);
+          },
+          initialValue: appStateSettings["showExtraInfoText"] == true,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.info_outline
+              : Icons.info_rounded,
+        ),
+        SettingsContainerSwitch(
           title: "battery-saver".tr(),
           description: "battery-saver-description".tr(),
           onSwitched: (value) {

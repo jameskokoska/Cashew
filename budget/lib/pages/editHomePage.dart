@@ -446,17 +446,21 @@ class _EditHomePageState extends State<EditHomePage> {
         dragDownToDismiss: true,
         dragDownToDismissEnabled: dragDownToDismissEnabled,
         title: "edit-home".tr(),
-        subtitle: Padding(
-          padding: const EdgeInsetsDirectional.only(bottom: 5),
-          child: TextFont(
-            text: "tap-each-section-to-customize".tr(),
-            fontSize: 17,
-            maxLines: 2,
-          ),
-        ),
-        addExtraPaddingAfterCenteredSubtitle: 5,
+        subtitle: appStateSettings["showExtraInfoText"] == false
+            ? null
+            : Padding(
+                padding: const EdgeInsetsDirectional.only(bottom: 5),
+                child: TextFont(
+                  text: "tap-each-section-to-customize".tr(),
+                  fontSize: 17,
+                  maxLines: 2,
+                ),
+              ),
+        addExtraPaddingAfterCenteredSubtitle:
+            appStateSettings["showExtraInfoText"] == false ? null : 5,
         subtitleAlignment: AlignmentDirectional.bottomStart,
-        subtitleSize: 10,
+        subtitleSize:
+            appStateSettings["showExtraInfoText"] == false ? null : 10,
         slivers: [
           if (enableDoubleColumn(context))
             SliverToBoxAdapter(
