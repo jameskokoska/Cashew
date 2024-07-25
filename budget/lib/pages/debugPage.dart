@@ -651,7 +651,9 @@ class DebugPage extends StatelessWidget {
         ColorBox(color: Theme.of(context).colorScheme.surface, name: "surface"),
         ColorBox(
             color: Theme.of(context).colorScheme.onSurface, name: "onSurface"),
-        ColorBox(color: Theme.of(context).canvasColor, name: "background"),
+        ColorBox(
+            color: Theme.of(context).colorScheme.background,
+            name: "background"),
         ColorBox(
             color: Theme.of(context).colorScheme.onBackground,
             name: "onBackground"),

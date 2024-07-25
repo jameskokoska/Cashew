@@ -3709,8 +3709,10 @@ class SelectTransactionTypePopup extends StatelessWidget {
                     highlightActionButton: true,
                     useHorizontalPaddingConstrained: false,
                     openPage: Container(),
-                    containerColor:
-                        Theme.of(context).canvasColor.withOpacity(0.5),
+                    containerColor: Theme.of(context)
+                        .colorScheme
+                        .background
+                        .withOpacity(0.5),
                     transaction: Transaction(
                       transactionPk: "-1",
                       name: "",
@@ -4733,8 +4735,10 @@ class SelectSubcategoryChips extends StatelessWidget {
                       padding: padding,
                       child: SelectChips(
                         allowMultipleSelected: false,
-                        selectedColor:
-                            Theme.of(context).canvasColor.withOpacity(0.6),
+                        selectedColor: Theme.of(context)
+                            .colorScheme
+                            .background
+                            .withOpacity(0.6),
                         onLongPress: (category) {
                           pushRoute(
                             context,

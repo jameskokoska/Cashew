@@ -299,7 +299,9 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       ],
                     ),
                     // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
-                    Container(height: 1, color: Theme.of(context).canvasColor),
+                    Container(
+                        height: 1,
+                        color: Theme.of(context).colorScheme.background),
 
                     showWelcomeBanner
                         ? ConstrainedBox(
@@ -409,7 +411,9 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               : 73,
                     ),
                     // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
-                    Container(height: 1, color: Theme.of(context).canvasColor),
+                    Container(
+                        height: 1,
+                        color: Theme.of(context).colorScheme.background),
                   ],
                 ),
               ),

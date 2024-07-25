@@ -203,7 +203,7 @@ class SettingsContainerOpenPage extends StatelessWidget {
       child: OpenContainerNavigation(
         onClosed: onClosed,
         onOpen: onOpen,
-        closedColor: Theme.of(context).canvasColor,
+        closedColor: Theme.of(context).colorScheme.background,
         borderRadius: isOutlined == true
             ? 10
             : getIsFullScreen(context)
@@ -242,7 +242,9 @@ class SettingsContainerOpenPage extends StatelessWidget {
                 : Row(
                     children: [
                       if (afterWidget != null) afterWidget!,
-                      MoreChevron(color: colorScheme.secondary,size: isOutlined == true ? 20 : 30),
+                      MoreChevron(
+                          color: colorScheme.secondary,
+                          size: isOutlined == true ? 20 : 30),
                     ],
                   ),
             isOutlined: isOutlined,
@@ -258,7 +260,11 @@ class SettingsContainerOpenPage extends StatelessWidget {
 }
 
 class MoreChevron extends StatelessWidget {
-  const MoreChevron({super.key, required this.color, this.size,});
+  const MoreChevron({
+    super.key,
+    required this.color,
+    this.size,
+  });
   final Color color;
   final double? size;
   @override

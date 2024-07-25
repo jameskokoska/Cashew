@@ -25,7 +25,7 @@ class LinearGradientFadedEdges extends StatelessWidget {
     // positioned cannot contain negative values
     // If it does, it will clip shadows for some reason...
     Color gradientColorFiltered =
-        gradientColor ?? Theme.of(context).canvasColor;
+        gradientColor ?? Theme.of(context).colorScheme.background;
     return Stack(
       children: [
         child,

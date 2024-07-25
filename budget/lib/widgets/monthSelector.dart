@@ -161,7 +161,7 @@ class MonthSelectorState extends State<MonthSelector> {
                             2 -
                         monthWidth / 2;
                     return Container(
-                      color: Theme.of(context).canvasColor,
+                      color: Theme.of(context).colorScheme.background,
                       padding: EdgeInsetsDirectional.only(
                         start: isFirst &&
                                 getDateFromIndex(index)

@@ -213,7 +213,8 @@ Map<String, dynamic> getSettingConstants(Map<String, dynamic> userSettings) {
 
   Map<String, dynamic> userSettingsNew = {...userSettings};
   userSettingsNew["theme"] = themeSetting[userSettings["theme"]];
-  userSettingsNew["accentColor"] = HexColor(userSettings["accentColor"]);
+  userSettingsNew["accentColor"] =
+      HexColor(userSettings["accentColor"]).withOpacity(1);
   return userSettingsNew;
 }
 

@@ -207,7 +207,7 @@ class App extends StatelessWidget {
                                     : Duration(milliseconds: 1500),
                                 curve: Curves.easeInOutCubicEmphasized,
                                 width: getWidthNavigationSidebar(context),
-                                color: Theme.of(context).canvasColor,
+                                color: Theme.of(context).colorScheme.background,
                               ),
                               Expanded(
                                 child: Builder(builder: (context) {
@@ -225,8 +225,9 @@ class App extends StatelessWidget {
                                     children: [
                                       hasRightSafeArea || hasLeftSafeArea
                                           ? Container(
-                                              color:
-                                                  Theme.of(context).canvasColor,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .background,
                                             )
                                           : SizedBox.shrink(),
                                       hasRightSafeArea || hasLeftSafeArea
@@ -261,7 +262,8 @@ class App extends StatelessWidget {
                                               child: Container(
                                                 width: rightPaddingSafeArea,
                                                 color: Theme.of(context)
-                                                    .canvasColor,
+                                                    .colorScheme
+                                                    .background,
                                               ),
                                             )
                                           : SizedBox.shrink(),
@@ -271,7 +273,8 @@ class App extends StatelessWidget {
                                               child: Container(
                                                 width: leftPaddingSafeArea,
                                                 color: Theme.of(context)
-                                                    .canvasColor,
+                                                    .colorScheme
+                                                    .background,
                                               ),
                                             )
                                           : SizedBox.shrink(),
@@ -289,9 +292,9 @@ class App extends StatelessWidget {
                                       //               gradient: LinearGradient(
                                       //                 colors: [
                                       //                   Theme.of(context)
-                                      //                       .canvasColor
+                                      //                       .colorScheme.background
                                       //                       .withOpacity(0.0),
-                                      //                   Theme.of(context).canvasColor,
+                                      //                   Theme.of(context).colorScheme.background,
                                       //                 ],
                                       //                 begin: Alignment.centerLeft,
                                       //                 end: Alignment.centerRight,

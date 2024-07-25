@@ -591,8 +591,8 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
               foregroundDecoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Theme.of(context).canvasColor.withOpacity(0.0),
-                    Theme.of(context).canvasColor,
+                    Theme.of(context).colorScheme.background.withOpacity(0.0),
+                    Theme.of(context).colorScheme.background,
                   ],
                   begin: AlignmentDirectional.topCenter,
                   end: AlignmentDirectional.bottomCenter,

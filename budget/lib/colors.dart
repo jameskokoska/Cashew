@@ -73,7 +73,7 @@ AppColors getAppColors(
                 ? Color(0x0F000000)
                 : Color(0xFFF0F0F0),
             "standardContainerColor": getPlatform() == PlatformOS.isIOS
-                ? themeData.canvasColor
+                ? themeData.colorScheme.background
                 : appStateSettings["materialYou"]
                     ? lightenPastel(
                         themeData.colorScheme.secondaryContainer,
@@ -111,7 +111,7 @@ AppColors getAppColors(
                 ? Color(0x13FFFFFF)
                 : Color(0xFF161616),
             "standardContainerColor": getPlatform() == PlatformOS.isIOS
-                ? themeData.canvasColor
+                ? themeData.colorScheme.background
                 : appStateSettings["materialYou"]
                     ? darkenPastel(
                         themeData.colorScheme.secondaryContainer,
@@ -516,10 +516,6 @@ ThemeData getLightTheme() {
     useMaterial3: true,
     applyElevationOverlayColor: false,
     typography: Typography.material2014(),
-    canvasColor: appStateSettings["materialYou"]
-        ? lightenPastel(getSettingConstants(appStateSettings)["accentColor"],
-            amount: 0.91)
-        : Colors.white,
     splashColor: getPlatform() == PlatformOS.isIOS
         ? Colors.transparent
         : appStateSettings["materialYou"]
@@ -553,12 +549,6 @@ ThemeData getDarkTheme() {
     colorScheme: getColorScheme(brightness),
     useMaterial3: true,
     typography: Typography.material2014(),
-    canvasColor: appStateSettings["forceFullDarkBackground"] == true
-        ? Colors.black
-        : appStateSettings["materialYou"]
-            ? darkenPastel(getSettingConstants(appStateSettings)["accentColor"],
-                amount: 0.92)
-            : Colors.black,
     splashColor: getPlatform() == PlatformOS.isIOS
         ? Colors.transparent
         : appStateSettings["materialYou"]

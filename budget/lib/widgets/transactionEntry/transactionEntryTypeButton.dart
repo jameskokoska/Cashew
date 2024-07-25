@@ -151,7 +151,7 @@ class ActionButton extends StatelessWidget {
                   iconData,
                   color: dealtWith
                       ? (containerColor == null
-                          ? Theme.of(context).canvasColor
+                          ? Theme.of(context).colorScheme.background
                           : containerColor)
                       : iconColor.withOpacity(0.8),
                   size: 23,

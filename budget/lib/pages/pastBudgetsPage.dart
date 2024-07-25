@@ -268,7 +268,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
             : appStateSettings["materialYou"]
                 ? dynamicPastel(context, Theme.of(context).colorScheme.primary,
                     amount: 0.92)
-                : Theme.of(context).canvasColor;
+                : Theme.of(context).colorScheme.background;
     double budgetAmount = budgetAmountToPrimaryCurrency(
         Provider.of<AllWallets>(context, listen: true), widget.budget);
 

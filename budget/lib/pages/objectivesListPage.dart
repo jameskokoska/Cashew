@@ -398,7 +398,7 @@ class ObjectiveContainer extends StatelessWidget {
             : 20;
     Color containerColor =
         getPlatform() == PlatformOS.isIOS && forceAndroidBubbleDesign == false
-            ? Theme.of(context).canvasColor
+            ? Theme.of(context).colorScheme.background
             : getColor(context, "lightDarkAccentHeavyLight");
     EdgeInsetsDirectional containerPadding = EdgeInsetsDirectional.only(
       start:
@@ -783,7 +783,7 @@ class ObjectiveContainerDifferenceLoan extends StatelessWidget {
         : 20;
     Color containerColor =
         getPlatform() == PlatformOS.isIOS && forceAndroidBubbleDesign == false
-            ? Theme.of(context).canvasColor
+            ? Theme.of(context).colorScheme.background
             : getColor(context, "lightDarkAccentHeavyLight");
     Widget child = WatchTotalAndAmountOfObjective(
       objective: objective,

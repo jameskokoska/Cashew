@@ -230,7 +230,8 @@ bool checkIfDefaultThemeData(BuildContext? context) {
         Theme.of(context).primaryColor == ThemeData().primaryColor &&
         Theme.of(context).secondaryHeaderColor ==
             ThemeData().secondaryHeaderColor &&
-        Theme.of(context).canvasColor == ThemeData().canvasColor &&
+        Theme.of(context).colorScheme.background ==
+            ThemeData().colorScheme.background &&
         Theme.of(context).cardColor == ThemeData().cardColor;
   } catch (e) {
     return true;

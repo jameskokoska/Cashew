@@ -38,8 +38,8 @@ class SaveBottomButton extends StatelessWidget {
             foregroundDecoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Theme.of(context).canvasColor.withOpacity(0),
-                  Theme.of(context).canvasColor,
+                  Theme.of(context).colorScheme.background.withOpacity(0),
+                  Theme.of(context).colorScheme.background,
                 ],
                 begin: AlignmentDirectional.topCenter,
                 end: AlignmentDirectional.bottomCenter,
@@ -170,7 +170,7 @@ class _KeyboardHeightAreaAnimatedState extends State<KeyboardHeightAreaAnimated>
     return AnimatedContainer(
       duration: Duration(milliseconds: 400),
       curve: Curves.easeInOutCubic,
-      color: Theme.of(context).canvasColor,
+      color: Theme.of(context).colorScheme.background,
       height: isKeyboardOpen ? getKeyboardHeight(context) : 0,
       child: Container(color: Colors.red),
     );
