@@ -462,16 +462,27 @@ class CustomColorTheme extends StatelessWidget {
   const CustomColorTheme(
       {required this.child, required this.accentColor, super.key});
   final Widget child;
-  final Color accentColor;
+  final Color? accentColor;
   @override
   Widget build(BuildContext context) {
+    if (accentColor == null) return child;
+
     ColorScheme colorScheme = ColorScheme.fromSeed(
-      seedColor: accentColor,
+      seedColor: accentColor!,
       brightness: determineBrightnessTheme(context),
+      background: determineBrightnessTheme(context) == Brightness.dark
+          ? (appStateSettings["forceFullDarkBackground"] == true
+              ? Colors.black
+              : appStateSettings["materialYou"]
+                  ? darkenPastel(accentColor!, amount: 0.92)
+                  : Colors.black)
+          : appStateSettings["materialYou"]
+              ? lightenPastel(accentColor!, amount: 0.91)
+              : Colors.white,
     );
     return Theme(
       data: generateThemeDataWithExtension(
-        accentColor: accentColor,
+        accentColor: accentColor!,
         brightness: Theme.of(context).brightness,
         themeData: Theme.of(context).copyWith(
           colorScheme: colorScheme,

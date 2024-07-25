@@ -46,10 +46,9 @@ class PastBudgetsPage extends StatelessWidget {
         stream: database.getBudget(budgetPk),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            Color accentColor = HexColor(snapshot.data?.colour,
-                defaultColor: Theme.of(context).colorScheme.primary);
+            Color? accentColor = HexColor(snapshot.data?.colour);
             return CustomColorTheme(
-              accentColor: accentColor,
+              accentColor: snapshot.data?.colour == null ? null : accentColor,
               child: _PastBudgetsPageContent(
                 budget: snapshot.data!,
               ),

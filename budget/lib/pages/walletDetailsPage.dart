@@ -110,10 +110,9 @@ class WatchedWalletDetailsPage extends StatelessWidget {
       stream: database.getWallet(walletPk),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          Color accentColor = HexColor(snapshot.data?.colour,
-              defaultColor: Theme.of(context).colorScheme.primary);
+          Color? accentColor = HexColor(snapshot.data?.colour);
           return CustomColorTheme(
-            accentColor: accentColor,
+            accentColor: snapshot.data?.colour == null ? null : accentColor,
             child: WalletDetailsPage(
               wallet: snapshot.data,
             ),
@@ -283,14 +282,6 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
           selectedDateTimeRange: selectedDateTimeRange),
       forceSetDateTimeRange: true,
     );
-
-    ColorScheme walletColorScheme = widget.wallet == null
-        ? Theme.of(context).colorScheme
-        : ColorScheme.fromSeed(
-            seedColor: HexColor(widget.wallet!.colour,
-                defaultColor: Theme.of(context).colorScheme.primary),
-            brightness: determineBrightnessTheme(context),
-          );
 
     List<String>? walletPks =
         widget.wallet == null ? null : [widget.wallet?.walletPk ?? ""];
@@ -1235,7 +1226,6 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
       ),
       WalletDetailsCategorySelection(
         walletPks: walletPks,
-        walletColorScheme: walletColorScheme,
         searchFilters: searchFilters,
         selectedDateTimeRange: selectedDateTimeRange,
         wallet: widget.wallet,
@@ -1897,7 +1887,6 @@ class _SizeOutState extends State<SizeOut> {
 class WalletDetailsCategorySelection extends StatefulWidget {
   const WalletDetailsCategorySelection({
     required this.walletPks,
-    required this.walletColorScheme,
     required this.searchFilters,
     required this.selectedDateTimeRange,
     required this.wallet,
@@ -1907,7 +1896,6 @@ class WalletDetailsCategorySelection extends StatefulWidget {
   });
 
   final List<String>? walletPks;
-  final ColorScheme walletColorScheme;
   final SearchFilters? searchFilters;
   final DateTimeRange? selectedDateTimeRange;
   final TransactionWallet? wallet;
@@ -1934,7 +1922,6 @@ class _WalletDetailsCategorySelectionState
           searchFilters: widget.searchFilters,
           isAllSpending: widget.wallet == null,
           walletPks: widget.walletPks,
-          walletColorScheme: widget.walletColorScheme,
           onSelectedCategory: (TransactionCategory? category) {
             // pageState.currentState?.scrollTo(500);
             setState(() {
@@ -2024,7 +2011,6 @@ class _WalletDetailsCategorySelectionState
 class WalletCategoryPieChart extends StatefulWidget {
   const WalletCategoryPieChart({
     required this.walletPks,
-    required this.walletColorScheme,
     required this.onSelectedCategory,
     required this.onSelectedIncome,
     required this.cycleSettingsExtension,
@@ -2035,7 +2021,6 @@ class WalletCategoryPieChart extends StatefulWidget {
   });
 
   final List<String>? walletPks;
-  final ColorScheme walletColorScheme;
   final Function(TransactionCategory?) onSelectedCategory;
   final Function(bool) onSelectedIncome;
   final String cycleSettingsExtension;

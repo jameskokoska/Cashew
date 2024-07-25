@@ -15,7 +15,6 @@ import 'package:budget/widgets/util/widgetSize.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart'
     hide SliverReorderableList, ReorderableDelayedDragStartListener;
-
 import 'addButton.dart';
 
 class BudgetsListPage extends StatefulWidget {
