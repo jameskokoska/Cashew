@@ -369,354 +369,348 @@ class _AddWalletPageState extends State<AddWalletPage> {
         }
         return false;
       },
-      child: GestureDetector(
-        onTap: () {
-          minimizeKeyboard(context);
+      child: PageFramework(
+        resizeToAvoidBottomInset: true,
+        dragDownToDismiss: true,
+        horizontalPadding: getHorizontalPaddingConstrained(context),
+        title: widget.wallet == null ? "add-account".tr() : "edit-account".tr(),
+        onBackButton: () async {
+          if (widget.wallet != null) {
+            discardChangesPopup(
+              context,
+              previousObject: walletInitial,
+              currentObject: await createTransactionWallet(),
+            );
+          } else {
+            showDiscardChangesPopupIfNotEditing();
+          }
         },
-        child: PageFramework(
-          resizeToAvoidBottomInset: true,
-          dragDownToDismiss: true,
-          horizontalPadding: getHorizontalPaddingConstrained(context),
-          title:
-              widget.wallet == null ? "add-account".tr() : "edit-account".tr(),
-          onBackButton: () async {
-            if (widget.wallet != null) {
-              discardChangesPopup(
-                context,
-                previousObject: walletInitial,
-                currentObject: await createTransactionWallet(),
-              );
-            } else {
-              showDiscardChangesPopupIfNotEditing();
-            }
-          },
-          onDragDownToDismiss: () async {
-            if (widget.wallet != null) {
-              discardChangesPopup(
-                context,
-                previousObject: walletInitial,
-                currentObject: await createTransactionWallet(),
-              );
-            } else {
-              showDiscardChangesPopupIfNotEditing();
-            }
-          },
-          actions: [
-            CustomPopupMenuButton(
-              showButtons: enableDoubleColumn(context),
-              keepOutFirst: true,
-              items: [
-                if (widget.wallet != null &&
-                    widget.wallet!.walletPk != "0" &&
-                    widget.routesToPopAfterDelete !=
-                        RoutesToPopAfterDelete.PreventDelete)
-                  DropdownItemMenu(
-                    id: "delete-account",
-                    label: "delete-account".tr(),
-                    icon: appStateSettings["outlinedIcons"]
-                        ? Icons.delete_outlined
-                        : Icons.delete_rounded,
-                    action: () {
-                      deleteWalletPopup(
-                        context,
-                        wallet: widget.wallet!,
-                        routesToPopAfterDelete: widget.routesToPopAfterDelete,
-                      );
-                    },
-                  ),
-              ],
+        onDragDownToDismiss: () async {
+          if (widget.wallet != null) {
+            discardChangesPopup(
+              context,
+              previousObject: walletInitial,
+              currentObject: await createTransactionWallet(),
+            );
+          } else {
+            showDiscardChangesPopupIfNotEditing();
+          }
+        },
+        actions: [
+          CustomPopupMenuButton(
+            showButtons: enableDoubleColumn(context),
+            keepOutFirst: true,
+            items: [
+              if (widget.wallet != null &&
+                  widget.wallet!.walletPk != "0" &&
+                  widget.routesToPopAfterDelete !=
+                      RoutesToPopAfterDelete.PreventDelete)
+                DropdownItemMenu(
+                  id: "delete-account",
+                  label: "delete-account".tr(),
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Icons.delete_outlined
+                      : Icons.delete_rounded,
+                  action: () {
+                    deleteWalletPopup(
+                      context,
+                      wallet: widget.wallet!,
+                      routesToPopAfterDelete: widget.routesToPopAfterDelete,
+                    );
+                  },
+                ),
+            ],
+          ),
+        ],
+        staticOverlay: Align(
+          alignment: AlignmentDirectional.bottomCenter,
+          child: selectedTitle == "" || selectedTitle == null
+              ? SaveBottomButton(
+                  label: "set-name".tr(),
+                  onTap: () async {
+                    FocusScope.of(context).unfocus();
+                    Future.delayed(Duration(milliseconds: 100), () {
+                      _titleFocusNode.requestFocus();
+                    });
+                  },
+                  disabled: false,
+                )
+              : SaveBottomButton(
+                  label: widget.wallet == null
+                      ? "add-account".tr()
+                      : "save-changes".tr(),
+                  onTap: () async {
+                    await addWallet();
+                  },
+                  disabled: !(canAddWallet ?? false),
+                ),
+        ),
+        slivers: [
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsetsDirectional.symmetric(horizontal: 20),
+              child: TextInput(
+                autoFocus: kIsWeb && getIsFullScreen(context),
+                focusNode: _titleFocusNode,
+                labelText: "name-placeholder".tr(),
+                bubbly: false,
+                initialValue: selectedTitle,
+                onChanged: (text) {
+                  setSelectedTitle(text);
+                },
+                padding: EdgeInsetsDirectional.only(start: 7, end: 7),
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                topContentPadding: 20,
+              ),
             ),
-          ],
-          staticOverlay: Align(
-            alignment: AlignmentDirectional.bottomCenter,
-            child: selectedTitle == "" || selectedTitle == null
-                ? SaveBottomButton(
-                    label: "set-name".tr(),
-                    onTap: () async {
-                      FocusScope.of(context).unfocus();
-                      Future.delayed(Duration(milliseconds: 100), () {
-                        _titleFocusNode.requestFocus();
-                      });
-                    },
-                    disabled: false,
-                  )
-                : SaveBottomButton(
-                    label: widget.wallet == null
-                        ? "add-account".tr()
-                        : "save-changes".tr(),
-                    onTap: () async {
-                      await addWallet();
-                    },
-                    disabled: !(canAddWallet ?? false),
+          ),
+          SliverToBoxAdapter(
+            child: SizedBox(height: 14),
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+              height: 65,
+              child: SelectColor(
+                horizontalList: true,
+                selectedColor: selectedColor,
+                setSelectedColor: setSelectedColor,
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: SizedBox(height: 15),
+          ),
+          SliverToBoxAdapter(
+            child: widget.wallet == null ||
+                    widget.routesToPopAfterDelete ==
+                        RoutesToPopAfterDelete.PreventDelete
+                ? SizedBox.shrink()
+                : Padding(
+                    padding: const EdgeInsetsDirectional.only(
+                      start: 24,
+                      end: 24,
+                      bottom: 10,
+                    ),
+                    child: SettingsContainer(
+                      isOutlined: true,
+                      onTap: () async {
+                        if (widget.wallet != null)
+                          mergeWalletPopup(
+                            context,
+                            walletOriginal: widget.wallet!,
+                            routesToPopAfterDelete:
+                                widget.routesToPopAfterDelete,
+                          );
+                      },
+                      title: "merge-account".tr(),
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.merge_outlined
+                          : Icons.merge_rounded,
+                      iconScale: 1,
+                      isWideOutlined: true,
+                    ),
                   ),
           ),
-          slivers: [
+          if (widget.wallet != null)
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsetsDirectional.symmetric(horizontal: 20),
-                child: TextInput(
-                  autoFocus: kIsWeb && getIsFullScreen(context),
-                  focusNode: _titleFocusNode,
-                  labelText: "name-placeholder".tr(),
-                  bubbly: false,
-                  initialValue: selectedTitle,
-                  onChanged: (text) {
-                    setSelectedTitle(text);
-                  },
-                  padding: EdgeInsetsDirectional.only(start: 7, end: 7),
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  topContentPadding: 20,
+                padding: const EdgeInsetsDirectional.only(
+                  start: 20,
+                  end: 20,
+                  bottom: 10,
                 ),
+                child: WidgetSizeBuilder(widgetBuilder: (Size? size) {
+                  return Container(
+                    height: size?.height,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsetsDirectional.symmetric(
+                                horizontal: 4),
+                            child: SettingsContainer(
+                              isOutlinedColumn: true,
+                              isOutlined: true,
+                              onTap: () async {
+                                // Save any changes made to the wallet
+                                await addWallet(popContext: false);
+                                TransactionWallet wallet =
+                                    await createTransactionWallet();
+                                openBottomSheet(
+                                  context,
+                                  fullSnap: true,
+                                  CorrectBalancePopup(wallet: wallet),
+                                );
+                              },
+                              title: "correct-total-balance".tr(),
+                              icon: appStateSettings["outlinedIcons"]
+                                  ? Icons.library_add_outlined
+                                  : Icons.library_add_rounded,
+                              iconScale: 1,
+                              isWideOutlined: true,
+                              horizontalPadding: 5,
+                            ),
+                          ),
+                        ),
+                        if (Provider.of<AllWallets>(context)
+                                .indexedByPk
+                                .keys
+                                .length >
+                            1)
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsetsDirectional.symmetric(
+                                  horizontal: 4),
+                              child: SettingsContainer(
+                                isOutlinedColumn: true,
+                                isOutlined: true,
+                                onTap: () async {
+                                  if (widget.wallet != null) {
+                                    // Save any changes made to the wallet
+                                    await addWallet(popContext: false);
+                                    TransactionWallet wallet =
+                                        await createTransactionWallet();
+                                    openBottomSheet(
+                                      context,
+                                      fullSnap: true,
+                                      TransferBalancePopup(
+                                        wallet: wallet,
+                                        allowEditWallet: false,
+                                      ),
+                                    );
+                                  }
+                                },
+                                title: "transfer-balance".tr(),
+                                icon: appStateSettings["outlinedIcons"]
+                                    ? Icons.compare_arrows_outlined
+                                    : Icons.compare_arrows_rounded,
+                                iconScale: 1,
+                                isWideOutlined: true,
+                                horizontalPadding: 5,
+                              ),
+                            ),
+                          ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsetsDirectional.symmetric(
+                                horizontal: 4),
+                            child: SettingsContainer(
+                              isOutlinedColumn: true,
+                              isOutlined: true,
+                              onTap: () async {
+                                openDecimalPrecisionPopup();
+                              },
+                              title: "decimal-precision".tr(),
+                              icon: appStateSettings["outlinedIcons"]
+                                  ? Symbols.decimal_increase_sharp
+                                  : Symbols.decimal_increase_rounded,
+                              iconScale: 1,
+                              isWideOutlined: true,
+                              horizontalPadding: 5,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
               ),
             ),
+          if (widget.wallet == null)
             SliverToBoxAdapter(
-              child: SizedBox(height: 14),
-            ),
-            SliverToBoxAdapter(
-              child: Container(
-                height: 65,
-                child: SelectColor(
-                  horizontalList: true,
-                  selectedColor: selectedColor,
-                  setSelectedColor: setSelectedColor,
+              child: Padding(
+                padding: const EdgeInsetsDirectional.only(
+                  bottom: 10,
+                  start: 20,
+                  end: 20,
                 ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: SizedBox(height: 15),
-            ),
-            SliverToBoxAdapter(
-              child: widget.wallet == null ||
-                      widget.routesToPopAfterDelete ==
-                          RoutesToPopAfterDelete.PreventDelete
-                  ? SizedBox.shrink()
-                  : Padding(
-                      padding: const EdgeInsetsDirectional.only(
-                        start: 24,
-                        end: 24,
-                        bottom: 10,
-                      ),
-                      child: SettingsContainer(
-                        isOutlined: true,
-                        onTap: () async {
-                          if (widget.wallet != null)
-                            mergeWalletPopup(
-                              context,
-                              walletOriginal: widget.wallet!,
-                              routesToPopAfterDelete:
-                                  widget.routesToPopAfterDelete,
-                            );
-                        },
-                        title: "merge-account".tr(),
-                        icon: appStateSettings["outlinedIcons"]
-                            ? Icons.merge_outlined
-                            : Icons.merge_rounded,
-                        iconScale: 1,
-                        isWideOutlined: true,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsetsDirectional.only(bottom: 14),
+                      child: TextFont(
+                        text: "starting-at".tr() + " ",
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-            ),
-            if (widget.wallet != null)
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsetsDirectional.only(
-                    start: 20,
-                    end: 20,
-                    bottom: 10,
-                  ),
-                  child: WidgetSizeBuilder(widgetBuilder: (Size? size) {
-                    return Container(
-                      height: size?.height,
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsetsDirectional.symmetric(
-                                  horizontal: 4),
-                              child: SettingsContainer(
-                                isOutlinedColumn: true,
-                                isOutlined: true,
-                                onTap: () async {
-                                  // Save any changes made to the wallet
-                                  await addWallet(popContext: false);
-                                  TransactionWallet wallet =
-                                      await createTransactionWallet();
-                                  openBottomSheet(
-                                    context,
-                                    fullSnap: true,
-                                    CorrectBalancePopup(wallet: wallet),
-                                  );
-                                },
-                                title: "correct-total-balance".tr(),
-                                icon: appStateSettings["outlinedIcons"]
-                                    ? Icons.library_add_outlined
-                                    : Icons.library_add_rounded,
-                                iconScale: 1,
-                                isWideOutlined: true,
-                                horizontalPadding: 5,
-                              ),
-                            ),
-                          ),
-                          if (Provider.of<AllWallets>(context)
-                                  .indexedByPk
-                                  .keys
-                                  .length >
-                              1)
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsetsDirectional.symmetric(
-                                    horizontal: 4),
-                                child: SettingsContainer(
-                                  isOutlinedColumn: true,
-                                  isOutlined: true,
-                                  onTap: () async {
-                                    if (widget.wallet != null) {
-                                      // Save any changes made to the wallet
-                                      await addWallet(popContext: false);
-                                      TransactionWallet wallet =
-                                          await createTransactionWallet();
-                                      openBottomSheet(
-                                        context,
-                                        fullSnap: true,
-                                        TransferBalancePopup(
-                                          wallet: wallet,
-                                          allowEditWallet: false,
-                                        ),
-                                      );
-                                    }
-                                  },
-                                  title: "transfer-balance".tr(),
-                                  icon: appStateSettings["outlinedIcons"]
-                                      ? Icons.compare_arrows_outlined
-                                      : Icons.compare_arrows_rounded,
-                                  iconScale: 1,
-                                  isWideOutlined: true,
-                                  horizontalPadding: 5,
-                                ),
-                              ),
-                            ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsetsDirectional.symmetric(
-                                  horizontal: 4),
-                              child: SettingsContainer(
-                                isOutlinedColumn: true,
-                                isOutlined: true,
-                                onTap: () async {
-                                  openDecimalPrecisionPopup();
-                                },
-                                title: "decimal-precision".tr(),
-                                icon: appStateSettings["outlinedIcons"]
-                                    ? Symbols.decimal_increase_sharp
-                                    : Symbols.decimal_increase_rounded,
-                                iconScale: 1,
-                                isWideOutlined: true,
-                                horizontalPadding: 5,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }),
-                ),
-              ),
-            if (widget.wallet == null)
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsetsDirectional.only(
-                    bottom: 10,
-                    start: 20,
-                    end: 20,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsetsDirectional.only(bottom: 14),
-                        child: TextFont(
-                          text: "starting-at".tr() + " ",
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
+                    Flexible(
+                      child: TappableTextEntry(
+                        title: convertToMoney(
+                          Provider.of<AllWallets>(context),
+                          currencyKey: selectedCurrency,
+                          initialBalance,
+                          decimals: selectedDecimals,
                         ),
-                      ),
-                      Flexible(
-                        child: TappableTextEntry(
-                          title: convertToMoney(
-                            Provider.of<AllWallets>(context),
-                            currencyKey: selectedCurrency,
-                            initialBalance,
-                            decimals: selectedDecimals,
-                          ),
-                          placeholder: convertToMoney(
-                            Provider.of<AllWallets>(context),
-                            currencyKey: selectedCurrency,
-                            initialBalance,
-                          ),
-                          showPlaceHolderWhenTextEquals: convertToMoney(
-                            Provider.of<AllWallets>(context),
-                            currencyKey: selectedCurrency,
-                            0,
-                          ),
-                          onTap: () {
-                            openEnterInitialBalanceBottomSheet();
-                          },
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          internalPadding: EdgeInsetsDirectional.symmetric(
-                              vertical: 2, horizontal: 4),
-                          padding: EdgeInsetsDirectional.symmetric(
-                              vertical: 10, horizontal: 3),
+                        placeholder: convertToMoney(
+                          Provider.of<AllWallets>(context),
+                          currencyKey: selectedCurrency,
+                          initialBalance,
                         ),
+                        showPlaceHolderWhenTextEquals: convertToMoney(
+                          Provider.of<AllWallets>(context),
+                          currencyKey: selectedCurrency,
+                          0,
+                        ),
+                        onTap: () {
+                          openEnterInitialBalanceBottomSheet();
+                        },
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        internalPadding: EdgeInsetsDirectional.symmetric(
+                            vertical: 2, horizontal: 4),
+                        padding: EdgeInsetsDirectional.symmetric(
+                            vertical: 10, horizontal: 3),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-            if (widget.wallet == null)
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsetsDirectional.only(
-                    start: 24,
-                    end: 24,
-                    bottom: 10,
-                  ),
-                  child: SettingsContainer(
-                    isOutlinedColumn: false,
-                    isOutlined: true,
-                    onTap: () async {
-                      openDecimalPrecisionPopup();
-                    },
-                    title: "decimal-precision".tr(),
-                    icon: appStateSettings["outlinedIcons"]
-                        ? Symbols.decimal_increase_sharp
-                        : Symbols.decimal_increase_rounded,
-                    iconScale: 1,
-                    isWideOutlined: true,
-                    horizontalPadding: 15,
-                  ),
-                ),
-              ),
-            SliverToBoxAdapter(child: SizedBox(height: 10)),
-            CurrencyPicker(
-              showExchangeRateInfoNotice: true,
-              onSelected: setSelectedCurrency,
-              initialCurrency: selectedCurrency,
-              onHasFocus: () {
-                // Disable scroll when focus - because iOS header height is different than that of Android.
-                // Future.delayed(Duration(milliseconds: 500), () {
-                //   addWalletPageKey.currentState?.scrollTo(250);
-                // });
-              },
             ),
-            SliverToBoxAdapter(child: SizedBox(height: 65)),
-            // SliverToBoxAdapter(
-            //   child: KeyboardHeightAreaAnimated(),
-            // ),
-          ],
-        ),
+          if (widget.wallet == null)
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsetsDirectional.only(
+                  start: 24,
+                  end: 24,
+                  bottom: 10,
+                ),
+                child: SettingsContainer(
+                  isOutlinedColumn: false,
+                  isOutlined: true,
+                  onTap: () async {
+                    openDecimalPrecisionPopup();
+                  },
+                  title: "decimal-precision".tr(),
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Symbols.decimal_increase_sharp
+                      : Symbols.decimal_increase_rounded,
+                  iconScale: 1,
+                  isWideOutlined: true,
+                  horizontalPadding: 15,
+                ),
+              ),
+            ),
+          SliverToBoxAdapter(child: SizedBox(height: 10)),
+          CurrencyPicker(
+            showExchangeRateInfoNotice: true,
+            onSelected: setSelectedCurrency,
+            initialCurrency: selectedCurrency,
+            onHasFocus: () {
+              // Disable scroll when focus - because iOS header height is different than that of Android.
+              // Future.delayed(Duration(milliseconds: 500), () {
+              //   addWalletPageKey.currentState?.scrollTo(250);
+              // });
+            },
+          ),
+          SliverToBoxAdapter(child: SizedBox(height: 65)),
+          // SliverToBoxAdapter(
+          //   child: KeyboardHeightAreaAnimated(),
+          // ),
+        ],
       ),
     );
   }

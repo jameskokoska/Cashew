@@ -2383,7 +2383,6 @@ class _AllSpendingPastSpendingGraphState
     required double incomeSpending,
     required double expenseSpending,
   }) {
-    print(netSpending);
     return FadeIn(
       duration: Duration(milliseconds: 400),
       child: Container(

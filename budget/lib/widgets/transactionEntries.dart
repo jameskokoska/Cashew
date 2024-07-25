@@ -687,7 +687,8 @@ class _TransactionEntriesState extends State<TransactionEntries> {
               for (int i = 0; i < 5 + random.nextInt(5); i++)
                 GhostTransactions(
                   i: random.nextInt(100),
-                  useHorizontalPaddingConstrained: true,
+                  useHorizontalPaddingConstrained:
+                      widget.useHorizontalPaddingConstrained,
                 ),
             ],
           );

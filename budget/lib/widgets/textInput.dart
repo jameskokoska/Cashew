@@ -13,8 +13,8 @@ FocusNode? _currentTextInputFocus;
 bool shouldAutoRefocus = false;
 
 void minimizeKeyboard(BuildContext context) {
-  FocusScopeNode currentFocus = FocusScope.of(context);
-  currentFocus.unfocus();
+  FocusNode? currentFocus = WidgetsBinding.instance.focusManager.primaryFocus;
+  currentFocus?.unfocus();
   Future.delayed(Duration(milliseconds: 10), () {
     shouldAutoRefocus = false;
   });
@@ -156,6 +156,7 @@ class TextInput extends StatelessWidget {
           ),
           child: Center(
             child: TextFormField(
+              onTapOutside: (event) => minimizeKeyboard(context),
               scrollController: scrollController,
               maxLength: maxLength,
               inputFormatters: inputFormatters,

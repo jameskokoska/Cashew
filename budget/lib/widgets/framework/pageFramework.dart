@@ -130,7 +130,8 @@ class PageFrameworkState extends State<PageFramework>
     with TickerProviderStateMixin, WidgetsBindingObserver {
   final double leftBackSwipeDetectionWidth = 50;
 
-  late ScrollController _scrollController;
+  late ScrollController _scrollController =
+      widget.scrollController ?? ScrollController();
   late AnimationController _animationControllerShift =
       AnimationController(vsync: this);
   late AnimationController _animationControllerOpacity;
@@ -143,20 +144,31 @@ class PageFrameworkState extends State<PageFramework>
 
   final double scrollingLimit = 50000;
 
-  double getDistanceToBottom() {
-    final double currentScrollPosition = _scrollController.position.pixels;
-    final double maxScrollExtent = _scrollController.position.maxScrollExtent;
-    final double distanceToEnd = maxScrollExtent - currentScrollPosition;
-    return distanceToEnd;
+  double? getDistanceToBottom() {
+    try {
+      if (_scrollController.hasClients == false) return 0;
+      final double currentScrollPosition = _scrollController.position.pixels;
+      final double maxScrollExtent = _scrollController.position.maxScrollExtent;
+      final double distanceToEnd = maxScrollExtent - currentScrollPosition;
+      return distanceToEnd;
+    } catch (e) {
+      return null;
+    }
   }
 
-  double getDistanceToTop() {
-    final double currentScrollPosition = _scrollController.position.pixels;
-    return currentScrollPosition;
+  double? getDistanceToTop() {
+    try {
+      final double currentScrollPosition = _scrollController.position.pixels;
+      return currentScrollPosition;
+    } catch (e) {
+      return null;
+    }
   }
 
   void scrollToTop({int duration = 1200}) {
-    if (getDistanceToTop() > scrollingLimit || duration == 0) {
+    if (getDistanceToTop() == null ||
+        (getDistanceToTop() ?? 0) > scrollingLimit ||
+        duration == 0) {
       _scrollController.jumpTo(0);
       print("Scrolling via jump, list too long!");
     } else {
@@ -173,7 +185,9 @@ class PageFrameworkState extends State<PageFramework>
   }
 
   void scrollToBottom({int duration = 1200}) {
-    if (getDistanceToBottom() > scrollingLimit || duration == 0) {
+    if (getDistanceToBottom() == null ||
+        (getDistanceToBottom() ?? 0) > scrollingLimit ||
+        duration == 0) {
       _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
       print("Scrolling via jump, list too long!");
     } else {
@@ -208,7 +222,6 @@ class PageFrameworkState extends State<PageFramework>
     _animationControllerOpacity = AnimationController(vsync: this, value: 0.5);
     _animationControllerDragY = AnimationController(vsync: this, value: 0);
     _animationControllerDragY.duration = Duration(milliseconds: 1000);
-    _scrollController = widget.scrollController ?? ScrollController();
     _scrollController.addListener(_scrollListener);
 
     WidgetsBinding.instance.addObserver(this);
@@ -560,7 +573,8 @@ class PageFrameworkState extends State<PageFramework>
       animation: _scrollToTopAnimationController,
       builder: (_, child) {
         // Don't show scroll to bottom button if list is way too long!
-        if (getDistanceToBottom() > scrollingLimit) {
+        if (getDistanceToBottom() == null ||
+            (getDistanceToBottom() ?? 0) > scrollingLimit) {
           return scrollToTopButton;
         }
         return IgnorePointer(
@@ -861,7 +875,8 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
           titlePadding:
               EdgeInsetsDirectional.symmetric(vertical: 15, horizontal: 18),
           title: MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            data: MediaQuery.of(context)
+                .copyWith(textScaler: TextScaler.linear(1.0)),
             child: Transform.translate(
               offset: centeredTitleWithDefault
                   ? Offset(
@@ -1084,8 +1099,11 @@ List<Widget> getAppBarBackgroundColorLayers({
                       animation: animationControllerOpacity,
                       builder: (_, child) {
                         return Opacity(
-                          opacity:
-                              (animationControllerOpacity.value - 0.5) / 0.5,
+                          opacity: clampDouble(
+                            (animationControllerOpacity.value - 0.5) / 0.5,
+                            0,
+                            1,
+                          ),
                           child: child,
                         );
                       },
