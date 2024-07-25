@@ -51,6 +51,7 @@ class PageFramework extends StatefulWidget {
     this.textColor,
     this.dragDownToDismiss = false,
     this.dragDownToDismissEnabled = true,
+    this.backSwipeToDismissEnabled = true,
     this.onBackButton,
     this.onDragDownToDismiss,
     this.actions,
@@ -72,6 +73,7 @@ class PageFramework extends StatefulWidget {
     this.bodyBuilder,
     this.scrollController,
     this.selectedTransactionsAppBar,
+    this.backButtonOpacity,
   }) : super(key: key);
 
   final String title;
@@ -96,6 +98,7 @@ class PageFramework extends StatefulWidget {
   final Color? textColor;
   final bool dragDownToDismiss;
   final bool dragDownToDismissEnabled;
+  final bool backSwipeToDismissEnabled;
   final VoidCallback? onBackButton;
   final VoidCallback? onDragDownToDismiss;
   final List<Widget>? actions;
@@ -121,6 +124,7 @@ class PageFramework extends StatefulWidget {
       ScrollPhysics? scrollPhysics, Widget sliverAppBar)? bodyBuilder;
   final ScrollController? scrollController;
   final Widget? selectedTransactionsAppBar;
+  final double? backButtonOpacity;
 
   @override
   State<PageFramework> createState() => PageFrameworkState();
@@ -128,7 +132,7 @@ class PageFramework extends StatefulWidget {
 
 class PageFrameworkState extends State<PageFramework>
     with TickerProviderStateMixin, WidgetsBindingObserver {
-  final double leftBackSwipeDetectionWidth = 50;
+  final double leftBackSwipeDetectionWidth = 30;
 
   late ScrollController _scrollController =
       widget.scrollController ?? ScrollController();
@@ -260,17 +264,20 @@ class PageFrameworkState extends State<PageFramework>
       if (percent < 0) offset = 0;
 
       if (getExpandedHeaderHeight(context, widget.expandedHeight) - 56 == 0) {
-        _animationControllerOpacity.value = 0.5 +
-            (offset /
-                (getExpandedHeaderHeight(context, widget.expandedHeight)) /
-                2);
+        _animationControllerOpacity.value = widget.backButtonOpacity ??
+            (0.5 +
+                (offset /
+                    (getExpandedHeaderHeight(context, widget.expandedHeight)) /
+                    2));
         _animationControllerShift.value = (offset /
             (getExpandedHeaderHeight(context, widget.expandedHeight)));
       } else {
-        _animationControllerOpacity.value = 0.5 +
-            (offset /
-                (getExpandedHeaderHeight(context, widget.expandedHeight) - 56) /
-                2);
+        _animationControllerOpacity.value = widget.backButtonOpacity ??
+            (0.5 +
+                (offset /
+                    (getExpandedHeaderHeight(context, widget.expandedHeight) -
+                        56) /
+                    2));
         _animationControllerShift.value = (offset /
             (getExpandedHeaderHeight(context, widget.expandedHeight) - 56));
       }
@@ -308,9 +315,9 @@ class PageFrameworkState extends State<PageFramework>
   _onPointerMove(PointerMoveEvent ptr) {
     if ((widget.onDragDownToDismiss != null ||
             Navigator.of(context).canPop()) &&
-        widget.dragDownToDismissEnabled &&
+        (widget.dragDownToDismissEnabled || widget.backSwipeToDismissEnabled) &&
         selectingTransactionsActive == 0) {
-      if (isBackSideSwiping) {
+      if (isBackSideSwiping && widget.backSwipeToDismissEnabled) {
         totalDragX = totalDragX + ptr.delta.dx;
         calculatedYOffsetForX = totalDragX / 500;
 
@@ -319,7 +326,7 @@ class PageFrameworkState extends State<PageFramework>
           isSwipingToDismissPageDown.notifyListeners();
         }
       }
-      if (swipeDownToDismiss) {
+      if (swipeDownToDismiss && widget.dragDownToDismissEnabled) {
         totalDragY = totalDragY + ptr.delta.dy;
         calculatedYOffsetForY = totalDragY / 500;
 
@@ -335,7 +342,7 @@ class PageFrameworkState extends State<PageFramework>
 
   _onPointerUp(PointerUpEvent event) async {
     //How far you need to drag to dismiss
-    if (widget.dragDownToDismissEnabled) {
+    if (widget.dragDownToDismissEnabled || widget.backSwipeToDismissEnabled) {
       if ((totalDragX >= 90 || totalDragY >= 125) &&
           !(ModalRoute.of(context)?.isFirst ?? true)) {
         // HapticFeedback.lightImpact();
