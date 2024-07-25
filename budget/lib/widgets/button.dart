@@ -85,7 +85,7 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
       textColor: widget.textColor ??
           (appStateSettings["materialYou"]
               ? dynamicPastel(context, Theme.of(context).colorScheme.onPrimary,
-                  amount: 0.3)
+                  amount: 0.2)
               : Theme.of(context).colorScheme.onSecondaryContainer),
       maxLines: 5,
       textAlign: TextAlign.center,
@@ -113,7 +113,7 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
                   : appStateSettings["materialYou"]
                       ? dynamicPastel(
                           context, Theme.of(context).colorScheme.primary,
-                          amount: 0.3)
+                          amount: 0.15)
                       : Theme.of(context).colorScheme.secondaryContainer,
           onHighlightChanged: (value) {
             if (appStateSettings["appAnimations"] == AppAnimations.all.index)
