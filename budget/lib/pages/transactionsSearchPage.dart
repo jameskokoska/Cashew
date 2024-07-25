@@ -196,7 +196,9 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                             ? Icons.search_outlined
                             : Icons.search_rounded,
                         onSubmitted: (value) {
-                          searchFilters.searchQuery = value;
+                          setState(() {
+                            searchFilters.searchQuery = value;
+                          });
                         },
                         onChanged: (value) {
                           _debouncer.run(() {
