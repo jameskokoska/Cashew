@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
-
 import 'package:flutter/scheduler.dart';
 
 ValueNotifier<bool> cancelParentScroll = ValueNotifier<bool>(false);
@@ -14,26 +13,30 @@ class MultiDirectionalInfiniteScroll extends StatefulWidget {
     this.overBoundsDetection = 50,
     this.startingScrollPosition = 0,
     this.duration = const Duration(milliseconds: 100),
-    this.height = 40,
+    this.height,
+    this.axis = Axis.horizontal,
     this.onTopLoaded,
     this.onBottomLoaded,
     this.onScroll,
     required this.shouldAddTop,
     required this.shouldAddBottom,
     this.physics,
+    this.scrollController,
   }) : super(key: key);
   final int? initialItems;
   final int overBoundsDetection;
   final Function(int index, bool isFirst, bool isLast) itemBuilder;
   final double startingScrollPosition;
   final Duration duration;
-  final double height;
+  final double? height;
+  final Axis axis;
   final Function? onTopLoaded;
   final Function? onBottomLoaded;
   final Function? onScroll;
   final bool Function(int top) shouldAddTop;
   final bool Function(int bottom) shouldAddBottom;
   final ScrollPhysics? physics;
+  final ScrollController? scrollController;
 
   @override
   State<MultiDirectionalInfiniteScroll> createState() =>
@@ -56,8 +59,9 @@ class MultiDirectionalInfiniteScrollState
         bottom.add(i);
       }
     }
-    _scrollController = ScrollController();
+    _scrollController = widget.scrollController ?? ScrollController();
     _scrollController.addListener(_scrollListener);
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollController.animateTo(
         widget.startingScrollPosition,
@@ -69,7 +73,10 @@ class MultiDirectionalInfiniteScrollState
 
   @override
   void dispose() {
-    _scrollController.dispose();
+    if (widget.scrollController == null) {
+      _scrollController.removeListener(_scrollListener);
+      _scrollController.dispose();
+    }
     super.dispose();
   }
 
@@ -106,6 +113,13 @@ class MultiDirectionalInfiniteScrollState
   }
 
   _scrollListener() {
+    _onScrollCheck();
+    if (widget.onScroll != null) {
+      widget.onScroll!(_scrollController.offset);
+    }
+  }
+
+  _onScrollCheck() {
     if (_scrollController.offset >=
         _scrollController.position.maxScrollExtent -
             widget.overBoundsDetection) {
@@ -121,9 +135,6 @@ class MultiDirectionalInfiniteScrollState
       if (widget.onBottomLoaded != null) {
         widget.onBottomLoaded!();
       }
-    }
-    if (widget.onScroll != null) {
-      widget.onScroll!(_scrollController.offset);
     }
   }
 
@@ -164,11 +175,17 @@ class MultiDirectionalInfiniteScrollState
             );
           }
         },
+        onPointerDown: (event) {
+          if (_scrollController.offset >=
+                  _scrollController.position.maxScrollExtent ||
+              _scrollController.offset <=
+                  _scrollController.position.minScrollExtent) _onScrollCheck();
+        },
         child: Container(
           height: widget.height,
           child: CustomScrollView(
             physics: widget.physics,
-            scrollDirection: Axis.horizontal,
+            scrollDirection: widget.axis,
             controller: _scrollController,
             center: ValueKey('second-sliver-list'),
             slivers: <Widget>[
