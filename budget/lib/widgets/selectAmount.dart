@@ -23,6 +23,7 @@ import 'package:budget/widgets/util/contextMenu.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/number_symbols_data.dart';
 import 'package:math_expressions/math_expressions.dart';
 import 'package:budget/colors.dart';
@@ -578,16 +579,19 @@ class _SelectAmountState extends State<SelectAmount> {
                           child: Padding(
                             padding: const EdgeInsetsDirectional.only(
                                 bottom: 3.0, start: 8, top: 5),
-                            child: TextFont(
-                              text: (includesOperations(amount, false) &&
-                                      onlyOneOperationAndIsNegativeSign(
-                                              amount) ==
-                                          false
-                                  ? operationsWithSpaces(amount)
-                                  : ""),
-                              textAlign: TextAlign.left,
-                              fontSize: 18,
-                              maxLines: 5,
+                            child: Directionality(
+                              textDirection: ui.TextDirection.ltr,
+                              child: TextFont(
+                                text: (includesOperations(amount, false) &&
+                                        onlyOneOperationAndIsNegativeSign(
+                                                amount) ==
+                                            false
+                                    ? operationsWithSpaces(amount)
+                                    : ""),
+                                textAlign: TextAlign.left,
+                                fontSize: 18,
+                                maxLines: 5,
+                              ),
                             ),
                           ),
                         ),
@@ -791,8 +795,8 @@ class _SelectAmountState extends State<SelectAmount> {
                                           ),
                                         ),
                                       ),
-                                      data: MediaQuery.of(context)
-                                          .copyWith(textScaleFactor: 1.0),
+                                      data: MediaQuery.of(context).copyWith(
+                                          textScaler: TextScaler.linear(1.0)),
                                     ),
                             ],
                           ),
