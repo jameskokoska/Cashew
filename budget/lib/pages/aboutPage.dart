@@ -673,7 +673,7 @@ void deleteAllDataFlow(BuildContext context) {
                 ),
                 child: TextFont(
                   text: "erase-cloud-data-description".tr(),
-                  fontSize: 18,
+                  fontSize: 16.5,
                   textAlign: TextAlign.center,
                   maxLines: 10,
                 ),

@@ -23,11 +23,13 @@ class PullDownToRefreshSync extends StatefulWidget {
   const PullDownToRefreshSync({
     required this.child,
     required this.scrollController,
+    this.checkEnabled,
     Key? key,
   }) : super(key: key);
 
   final Widget child;
   final ScrollController scrollController;
+  final bool Function()? checkEnabled;
 
   @override
   State<PullDownToRefreshSync> createState() => _PullDownToRefreshSyncState();
@@ -82,7 +84,8 @@ class _PullDownToRefreshSyncState extends State<PullDownToRefreshSync>
   }
 
   _onPointerMove(PointerMoveEvent ptr) {
-    if (enableSwipeDownToRefresh(context)) {
+    if ((widget.checkEnabled == null || widget.checkEnabled!()) &&
+        enableSwipeDownToRefresh(context)) {
       if (swipeDownToRefresh) {
         if (totalDragX > totalDragXToCancel) return;
         totalDragY = totalDragY + ptr.delta.dy * speed;

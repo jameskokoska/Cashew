@@ -74,7 +74,7 @@ class GlobalSnackbarState extends State<GlobalSnackbar>
     }
     if (currentQueue.length >= 1) {
       Future.delayed(Duration(milliseconds: 150), () {
-        animateIn(currentQueue[0]);
+        if (currentQueue.length >= 1) animateIn(currentQueue[0]);
       });
     }
   }

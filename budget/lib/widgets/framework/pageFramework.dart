@@ -74,6 +74,7 @@ class PageFramework extends StatefulWidget {
     this.scrollController,
     this.selectedTransactionsAppBar,
     this.backButtonOpacity,
+    this.forceBackgroundColors = false,
   }) : super(key: key);
 
   final String title;
@@ -125,6 +126,7 @@ class PageFramework extends StatefulWidget {
   final ScrollController? scrollController;
   final Widget? selectedTransactionsAppBar;
   final double? backButtonOpacity;
+  final bool forceBackgroundColors;
 
   @override
   State<PageFramework> createState() => PageFrameworkState();
@@ -412,6 +414,7 @@ class PageFrameworkState extends State<PageFramework>
       centeredTitleSmall: centeredTitleSmall,
       belowAppBarPaddingWhenCenteredTitleSmall:
           widget.belowAppBarPaddingWhenCenteredTitleSmall,
+      forceBackgroundColors: widget.forceBackgroundColors,
     );
 
     List<Widget> slivers = [
@@ -510,6 +513,7 @@ class PageFrameworkState extends State<PageFramework>
                 centeredTitle: centeredTitle,
                 centeredTitleSmall: centeredTitleSmall,
                 context: context,
+                forceBackgroundColors: widget.forceBackgroundColors,
               ),
             AnimatedBuilder(
               animation: _animationControllerDragY,
@@ -746,7 +750,7 @@ class PageFrameworkState extends State<PageFramework>
                 callRefreshToPages.value = false;
               }));
         }
-        return Container(child: child);
+        return child;
       },
     );
 
@@ -754,6 +758,7 @@ class PageFrameworkState extends State<PageFramework>
       return PullDownToRefreshSync(
         child: childListener,
         scrollController: _scrollController,
+        checkEnabled: () => widget.dragDownToDismissEnabled != false,
       );
     } else {
       return childListener;
@@ -787,6 +792,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
     this.centeredTitle,
     this.centeredTitleSmall,
     this.belowAppBarPaddingWhenCenteredTitleSmall,
+    this.forceBackgroundColors = false,
   }) : super(key: key);
 
   final String title;
@@ -813,6 +819,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
   final bool? centeredTitle;
   final bool? centeredTitleSmall;
   final double? belowAppBarPaddingWhenCenteredTitleSmall;
+  final bool forceBackgroundColors;
   @override
   Widget build(BuildContext context) {
     bool backButtonEnabled =
@@ -938,6 +945,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                 centeredTitle: centeredTitleWithDefault,
                 centeredTitleSmall: centeredTitleSmallWithDefault,
                 context: context,
+                forceBackgroundColors: forceBackgroundColors,
               ),
               subtitle != null &&
                       centeredTitleSmallWithDefault == false &&
@@ -1025,6 +1033,7 @@ List<Widget> getAppBarBackgroundColorLayers({
   // Supply one of (animationControllerOpacity or percent)
   required AnimationController? animationControllerOpacity,
   required double? percent,
+  bool forceBackgroundColors = false,
 }) {
   // animationControllerOpacity does from top:1 to bottom: 0
   // and to make it into a percent: we use (animationControllerOpacity.value - 0.5) / 0.5
@@ -1051,7 +1060,9 @@ List<Widget> getAppBarBackgroundColorLayers({
                 ? Theme.of(context).colorScheme.background
                 : appBarBackgroundColorStart,
           ),
-    (animationControllerOpacity != null || percent != null) &&
+    (animationControllerOpacity != null ||
+                percent != null ||
+                forceBackgroundColors) &&
             centeredTitleSmall
         ? Builder(
             builder: (context) {
@@ -1060,37 +1071,43 @@ List<Widget> getAppBarBackgroundColorLayers({
                 width: MediaQuery.sizeOf(context).width,
                 height: MediaQuery.sizeOf(context).height - 1,
 
-                color: appBarBackgroundColor ??
-                    dynamicPastel(
-                      context,
-                      Theme.of(context).colorScheme.secondaryContainer,
-                      amount: appStateSettings["materialYou"] ? 0.4 : 0.55,
-                    ),
+                color: forceBackgroundColors || appBarBackgroundColor == null
+                    ? dynamicPastel(
+                        context,
+                        Theme.of(context).colorScheme.secondaryContainer,
+                        amount: appStateSettings["materialYou"] ? 0.4 : 0.55,
+                      )
+                    : appBarBackgroundColor,
               );
-              return animationControllerOpacity != null
-                  ? AnimatedBuilder(
-                      animation: animationControllerOpacity,
-                      builder: (_, child) {
-                        return Opacity(
-                          opacity: clampDouble(
-                              (animationControllerOpacity.value - 0.5) / 0.5,
-                              0,
-                              1),
-                          child: child,
-                        );
-                      },
-                      child: container,
-                    )
-                  : percent != null
-                      ? Opacity(
-                          opacity: clampDouble(percent, 0, 1),
+              return forceBackgroundColors
+                  ? container
+                  : animationControllerOpacity != null
+                      ? AnimatedBuilder(
+                          animation: animationControllerOpacity,
+                          builder: (_, child) {
+                            return Opacity(
+                              opacity: clampDouble(
+                                  (animationControllerOpacity.value - 0.5) /
+                                      0.5,
+                                  0,
+                                  1),
+                              child: child,
+                            );
+                          },
                           child: container,
                         )
-                      : SizedBox.shrink();
+                      : percent != null
+                          ? Opacity(
+                              opacity: clampDouble(percent, 0, 1),
+                              child: container,
+                            )
+                          : SizedBox.shrink();
             },
           )
         : SizedBox.shrink(),
-    (animationControllerOpacity != null || percent != null) &&
+    (animationControllerOpacity != null ||
+                percent != null ||
+                forceBackgroundColors) &&
             centeredTitleSmall == false
         ? Builder(
             builder: (context) {
@@ -1101,31 +1118,35 @@ List<Widget> getAppBarBackgroundColorLayers({
 
                 color: appBarBGColorCalculated,
               );
-              return animationControllerOpacity != null
-                  ? AnimatedBuilder(
-                      animation: animationControllerOpacity,
-                      builder: (_, child) {
-                        return Opacity(
-                          opacity: clampDouble(
-                            (animationControllerOpacity.value - 0.5) / 0.5,
-                            0,
-                            1,
-                          ),
-                          child: child,
-                        );
-                      },
-                      child: container,
-                    )
-                  : percent != null
-                      ? Opacity(
-                          opacity: clampDouble(percent, 0, 1),
+              return forceBackgroundColors
+                  ? container
+                  : animationControllerOpacity != null
+                      ? AnimatedBuilder(
+                          animation: animationControllerOpacity,
+                          builder: (_, child) {
+                            return Opacity(
+                              opacity: clampDouble(
+                                (animationControllerOpacity.value - 0.5) / 0.5,
+                                0,
+                                1,
+                              ),
+                              child: child,
+                            );
+                          },
                           child: container,
                         )
-                      : SizedBox.shrink();
+                      : percent != null
+                          ? Opacity(
+                              opacity: clampDouble(percent, 0, 1),
+                              child: container,
+                            )
+                          : SizedBox.shrink();
             },
           )
         : SizedBox.shrink(),
-    (animationControllerOpacity != null || percent != null) &&
+    (animationControllerOpacity != null ||
+                percent != null ||
+                forceBackgroundColors) &&
             centeredTitleSmall &&
             getPlatform() == PlatformOS.isIOS
         ? Builder(
@@ -1136,37 +1157,40 @@ List<Widget> getAppBarBackgroundColorLayers({
                   height: 1.2,
                   color: dynamicPastel(
                     context,
-                    appBarBackgroundColor != null
-                        ? appBarBackgroundColor
-                        : dynamicPastel(context,
+                    forceBackgroundColors || appBarBackgroundColor == null
+                        ? dynamicPastel(context,
                             Theme.of(context).colorScheme.secondaryContainer,
                             amount:
-                                appStateSettings["materialYou"] ? 0.4 : 0.55),
+                                appStateSettings["materialYou"] ? 0.4 : 0.55)
+                        : appBarBackgroundColor,
                     inverse: true,
                     amount: 0.05,
                   ),
                 ),
               );
-              return animationControllerOpacity != null
-                  ? AnimatedBuilder(
-                      animation: animationControllerOpacity,
-                      builder: (_, child) {
-                        return Opacity(
-                          opacity: clampDouble(
-                              (animationControllerOpacity.value - 0.5) / 0.5,
-                              0,
-                              1),
-                          child: child,
-                        );
-                      },
-                      child: container,
-                    )
-                  : percent != null
-                      ? Opacity(
-                          opacity: clampDouble(percent, 0, 1),
+              return forceBackgroundColors
+                  ? container
+                  : animationControllerOpacity != null
+                      ? AnimatedBuilder(
+                          animation: animationControllerOpacity,
+                          builder: (_, child) {
+                            return Opacity(
+                              opacity: clampDouble(
+                                  (animationControllerOpacity.value - 0.5) /
+                                      0.5,
+                                  0,
+                                  1),
+                              child: child,
+                            );
+                          },
                           child: container,
                         )
-                      : SizedBox.shrink();
+                      : percent != null
+                          ? Opacity(
+                              opacity: clampDouble(percent, 0, 1),
+                              child: container,
+                            )
+                          : SizedBox.shrink();
             },
           )
         : SizedBox.shrink(),

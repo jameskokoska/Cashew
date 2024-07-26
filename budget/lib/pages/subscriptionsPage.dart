@@ -86,8 +86,8 @@ class SubscriptionsPageState extends State<SubscriptionsPage> {
                 id: "settings",
                 label: "settings".tr(),
                 icon: appStateSettings["outlinedIcons"]
-                    ? Icons.settings_outlined
-                    : Icons.settings_rounded,
+                    ? Icons.more_vert_outlined
+                    : Icons.more_vert_rounded,
                 action: () {
                   openBottomSheet(
                     context,
