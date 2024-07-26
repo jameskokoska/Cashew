@@ -1,6 +1,9 @@
 import 'dart:math';
 
+import 'package:budget/functions.dart';
+import 'package:budget/widgets/tappable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 // Modified from:
 // https://medium.com/@mhstoller.it/how-i-made-a-custom-color-picker-slider-using-flutter-and-dart-e2350ec693a1
@@ -419,4 +422,107 @@ double findClosestColorPosition(
 
   double position = (closestIndex + closestT) / (colors.length - 1);
   return position;
+}
+
+class RingColorPicker extends StatefulWidget {
+  const RingColorPicker({
+    Key? key,
+    required this.pickerColor,
+    required this.onColorChanged,
+    this.colorPickerHeight = 250.0,
+    this.hueRingStrokeWidth = 20.0,
+    this.pickerAreaBorderRadius = const BorderRadius.all(Radius.zero),
+    this.onSelect,
+    this.previewBuilder,
+  }) : super(key: key);
+
+  final Color pickerColor;
+  final ValueChanged<Color> onColorChanged;
+  final double colorPickerHeight;
+  final double hueRingStrokeWidth;
+  final BorderRadius pickerAreaBorderRadius;
+  final VoidCallback? onSelect;
+  final Widget Function(Color color)? previewBuilder;
+
+  @override
+  State<RingColorPicker> createState() => _RingColorPickerState();
+}
+
+class _RingColorPickerState extends State<RingColorPicker> {
+  HSVColor currentHsvColor = const HSVColor.fromAHSV(0.0, 0.0, 0.0, 0.0);
+  Widget? previewWidget = null;
+
+  @override
+  void initState() {
+    currentHsvColor = HSVColor.fromColor(widget.pickerColor);
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(RingColorPicker oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    currentHsvColor = HSVColor.fromColor(widget.pickerColor);
+  }
+
+  void onColorChanging(HSVColor color) {
+    setState(() => currentHsvColor = color);
+    widget.onColorChanged(currentHsvColor.toColor().withOpacity(1));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: widget.colorPickerHeight,
+      child: Stack(alignment: AlignmentDirectional.center, children: <Widget>[
+        widget.previewBuilder != null
+            ? Align(
+                alignment: Alignment.topRight,
+                child: widget
+                    .previewBuilder!(currentHsvColor.toColor().withOpacity(1)),
+              )
+            : Align(
+                alignment: Alignment.topRight,
+                child: Container(
+                  height: 45,
+                  width: 45,
+                  decoration: BoxDecoration(
+                    boxShadow: boxShadowCheck(boxShadowSharp(context)),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Tappable(
+                    onTap: widget.onSelect,
+                    borderRadius: 100,
+                    color: currentHsvColor.toColor().withOpacity(1),
+                    child: SizedBox(),
+                  ),
+                ),
+              ),
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: SizedBox(
+            width: widget.colorPickerHeight,
+            height: widget.colorPickerHeight,
+            child: ColorPickerHueRing(
+              currentHsvColor,
+              onColorChanging,
+              displayThumbColor: true,
+              strokeWidth: widget.hueRingStrokeWidth,
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: SizedBox(
+            width: widget.colorPickerHeight / 1.8,
+            height: widget.colorPickerHeight / 1.8,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(5),
+              child: ColorPickerArea(
+                  currentHsvColor, onColorChanging, PaletteType.hsv),
+            ),
+          ),
+        )
+      ]),
+    );
+  }
 }

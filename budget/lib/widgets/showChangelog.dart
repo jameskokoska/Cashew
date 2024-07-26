@@ -32,6 +32,8 @@ String getChangelogString() {
     Improve performance of heatmap homepage section
     Adjust popup heights and fix emoji category selection
     Allow pattern unlock instead of just biometrics
+    New color picker
+    Preview when selecting background color for icons
     When budget/loan/objective archived, it is unpinned
     Add amount of times a transaction will repeat with a set end date
     Heatmap homepage section first weekday setting

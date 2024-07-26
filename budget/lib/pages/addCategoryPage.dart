@@ -544,37 +544,10 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                         );
                       },
                       color: Colors.transparent,
-                      child: Container(
-                        height: 126,
-                        padding: const EdgeInsetsDirectional.only(
-                            start: 13, end: 18),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            AnimatedSwitcher(
-                              duration: Duration(milliseconds: 300),
-                              child: CategoryIcon(
-                                key: ValueKey((selectedImage ?? "") +
-                                    selectedColor.toString()),
-                                categoryPk: "-1",
-                                category: TransactionCategory(
-                                  categoryPk: "-1",
-                                  name: "",
-                                  dateCreated: DateTime.now(),
-                                  dateTimeModified: null,
-                                  order: 0,
-                                  income: false,
-                                  iconName: selectedImage,
-                                  colour: toHexString(selectedColor),
-                                  emojiIconName: selectedEmoji,
-                                ),
-                                size: 50,
-                                sizePadding: 30,
-                                canEditByLongPress: false,
-                              ),
-                            ),
-                          ],
-                        ),
+                      child: IconPreview(
+                        selectedImage: selectedImage,
+                        selectedEmoji: selectedEmoji,
+                        selectedColor: selectedColor,
                       ),
                     ),
                     Expanded(
@@ -637,6 +610,13 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                     horizontalList: true,
                     selectedColor: selectedColor,
                     setSelectedColor: setSelectedColor,
+                    previewBuilder: (color) => IconPreview(
+                      selectedImage: selectedImage,
+                      selectedEmoji: selectedEmoji,
+                      selectedColor: color,
+                      switcherDuration: Duration.zero,
+                      smallPreview: true,
+                    ),
                   ),
                 ),
                 if (widget.category?.categoryPk == "0")
@@ -1571,6 +1551,59 @@ class FakeCategoryEntryPlaceholder extends StatelessWidget {
           fontSize: 20,
         ),
       ],
+    );
+  }
+}
+
+class IconPreview extends StatelessWidget {
+  const IconPreview({
+    required this.selectedImage,
+    required this.selectedEmoji,
+    required this.selectedColor,
+    this.smallPreview = false,
+    this.switcherDuration = const Duration(milliseconds: 300),
+    super.key,
+  });
+  final String? selectedImage;
+  final String? selectedEmoji;
+  final Color? selectedColor;
+  final bool smallPreview;
+  final Duration switcherDuration;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: smallPreview ? 80 : 126,
+      padding: smallPreview
+          ? null
+          : const EdgeInsetsDirectional.only(start: 13, end: 18),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          AnimatedSwitcher(
+            duration: switcherDuration,
+            child: CategoryIcon(
+              key: ValueKey((selectedImage ?? "") +
+                  (selectedEmoji ?? "") +
+                  selectedColor.toString()),
+              categoryPk: "-1",
+              category: TransactionCategory(
+                categoryPk: "-1",
+                name: "",
+                dateCreated: DateTime.now(),
+                dateTimeModified: null,
+                order: 0,
+                income: false,
+                iconName: selectedImage,
+                colour: toHexString(selectedColor),
+                emojiIconName: selectedEmoji,
+              ),
+              size: smallPreview ? 35 : 50,
+              sizePadding: smallPreview ? 25 : 30,
+              canEditByLongPress: false,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

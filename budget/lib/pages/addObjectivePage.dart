@@ -3,6 +3,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/accountsPage.dart';
 import 'package:budget/pages/addBudgetPage.dart';
+import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/editObjectivesPage.dart';
@@ -616,37 +617,10 @@ class _AddObjectivePageState extends State<AddObjectivePage>
                     );
                   },
                   color: Colors.transparent,
-                  child: Container(
-                    height: 126,
-                    padding:
-                        const EdgeInsetsDirectional.only(start: 13, end: 18),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        AnimatedSwitcher(
-                          duration: Duration(milliseconds: 300),
-                          child: CategoryIcon(
-                            key: ValueKey((selectedImage ?? "") +
-                                selectedColor.toString()),
-                            categoryPk: "-1",
-                            category: TransactionCategory(
-                              categoryPk: "-1",
-                              name: "",
-                              dateCreated: DateTime.now(),
-                              dateTimeModified: null,
-                              order: 0,
-                              income: false,
-                              iconName: selectedImage,
-                              colour: toHexString(selectedColor),
-                              emojiIconName: selectedEmoji,
-                            ),
-                            size: 50,
-                            sizePadding: 30,
-                            canEditByLongPress: false,
-                          ),
-                        ),
-                      ],
-                    ),
+                  child: IconPreview(
+                    selectedImage: selectedImage,
+                    selectedEmoji: selectedEmoji,
+                    selectedColor: selectedColor,
                   ),
                 ),
                 Expanded(
@@ -681,6 +655,13 @@ class _AddObjectivePageState extends State<AddObjectivePage>
                 horizontalList: true,
                 selectedColor: selectedColor,
                 setSelectedColor: setSelectedColor,
+                previewBuilder: (color) => IconPreview(
+                  selectedImage: selectedImage,
+                  selectedEmoji: selectedEmoji,
+                  selectedColor: color,
+                  switcherDuration: Duration.zero,
+                  smallPreview: true,
+                ),
               ),
             ),
           ),

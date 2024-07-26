@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:budget/colors.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addTransactionPage.dart';
@@ -16,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:flutter/services.dart';
 import 'package:gradient_borders/gradient_borders.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class SelectColor extends StatefulWidget {
   SelectColor({
@@ -29,6 +32,7 @@ class SelectColor extends StatefulWidget {
     this.useSystemColorPrompt =
         false, // Will show the option to use the system color (horizontalList must be disabled)
     this.selectableColorsList,
+    this.previewBuilder,
   }) : super(key: key);
   final Function(Color?)? setSelectedColor;
   final Color? selectedColor;
@@ -38,6 +42,7 @@ class SelectColor extends StatefulWidget {
   final bool includeThemeColor;
   final bool? useSystemColorPrompt;
   final List<Color>? selectableColorsList;
+  final Widget Function(Color color)? previewBuilder;
 
   @override
   _SelectColorState createState() => _SelectColorState();
@@ -125,6 +130,7 @@ class _SelectColorState extends State<SelectColor> {
                             index + 1 == selectableColorsList.length
                         ? KeepAliveClientMixin(
                             child: ColorIconCustom(
+                              previewBuilder: widget.previewBuilder,
                               initialSelectedColor: selectedColor ??
                                   Theme.of(context).colorScheme.primary,
                               outline: selectedIndex == -1 ||
@@ -222,6 +228,7 @@ class _SelectColorState extends State<SelectColor> {
                                 index + 1 == selectableColorsList.length
                             ? KeepAliveClientMixin(
                                 child: ColorIconCustom(
+                                  previewBuilder: widget.previewBuilder,
                                   initialSelectedColor: selectedColor ??
                                       Theme.of(context).colorScheme.primary,
                                   margin: EdgeInsetsDirectional.all(5),
@@ -395,6 +402,7 @@ class ColorIconCustom extends StatefulWidget {
     this.margin,
     required this.outline,
     required this.initialSelectedColor,
+    this.previewBuilder,
   }) : super(key: key);
 
   final double size;
@@ -402,6 +410,7 @@ class ColorIconCustom extends StatefulWidget {
   final EdgeInsetsDirectional? margin;
   final bool outline;
   final Color initialSelectedColor;
+  final Widget Function(Color color)? previewBuilder;
 
   @override
   State<ColorIconCustom> createState() => _ColorIconCustomState();
@@ -439,25 +448,36 @@ class _ColorIconCustomState extends State<ColorIconCustom> {
       ),
       child: Column(
         children: [
-          Center(
-            child: ColorPicker(
-              initialColor: widget.initialSelectedColor,
-              colorSliderPosition: colorSliderPosition,
-              shadeSliderPosition: shadeSliderPosition,
-              ringColor: getColor(context, "black"),
-              ringSize: 10,
-              width: getWidthBottomSheet(context) - 100,
-              onChange: (color, colorSliderPositionPassed,
-                  shadeSliderPositionPassed) {
-                setState(() {
-                  // only set selected color after a slider change, we want to keep the
-                  // value of widget.initialSelectedColor for the hex picker
-                  selectedColor = color;
-                  colorSliderPosition = colorSliderPositionPassed;
-                  shadeSliderPosition = shadeSliderPositionPassed;
-                });
-              },
-            ),
+          // Center(
+          //   child: ColorPicker(
+          //     initialColor: widget.initialSelectedColor,
+          //     colorSliderPosition: colorSliderPosition,
+          //     shadeSliderPosition: shadeSliderPosition,
+          //     ringColor: getColor(context, "black"),
+          //     ringSize: 10,
+          //     width: getWidthBottomSheet(context) - 100,
+          //     onChange: (color, colorSliderPositionPassed,
+          //         shadeSliderPositionPassed) {
+          //       setState(() {
+          //         // only set selected color after a slider change, we want to keep the
+          //         // value of widget.initialSelectedColor for the hex picker
+          //         selectedColor = color;
+          //         colorSliderPosition = colorSliderPositionPassed;
+          //         shadeSliderPosition = shadeSliderPositionPassed;
+          //       });
+          //     },
+          //   ),
+          // ),
+          RingColorPicker(
+            onColorChanged: (value) => selectedColor = value,
+            pickerColor: selectedColor,
+            hueRingStrokeWidth: 15,
+            colorPickerHeight: min(225, getWidthBottomSheet(context) - 100),
+            onSelect: () {
+              Navigator.pop(context);
+              widget.onTap(selectedColor);
+            },
+            previewBuilder: widget.previewBuilder,
           ),
           SizedBox(
             height: 8,
