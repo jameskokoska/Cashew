@@ -1400,47 +1400,42 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                               Flexible(
                                 child: ConstrainedBox(
                                   constraints: BoxConstraints(maxWidth: 700),
-                                  child: SwipeToSelectTransactions(
-                                    listID: listID,
-                                    child: ScrollbarWrap(
-                                      child: CustomScrollView(
-                                        controller: _scrollController,
-                                        slivers: [
-                                          SliverToBoxAdapter(
-                                              child: SizedBox(height: 20)),
-                                          SliverToBoxAdapter(
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsetsDirectional
-                                                      .symmetric(
-                                                      horizontal: 13),
-                                              child: Stack(
-                                                alignment:
-                                                    AlignmentDirectional.center,
-                                                children: [
-                                                  selectedTabCurrent,
-                                                  selectedTabPeriodSelected(
-                                                    () {
-                                                      selectAllSpendingPeriod(
-                                                          onlyShowCycleOption:
-                                                              false);
-                                                    },
-                                                  ),
-                                                  PositionedDirectional(
-                                                    end: 0,
-                                                    child:
-                                                        clearSelectedPeriodButton,
-                                                  )
-                                                ],
-                                              ),
+                                  child: ScrollbarWrap(
+                                    child: CustomScrollView(
+                                      controller: _scrollController,
+                                      slivers: [
+                                        SliverToBoxAdapter(
+                                            child: SizedBox(height: 20)),
+                                        SliverToBoxAdapter(
+                                          child: Padding(
+                                            padding: const EdgeInsetsDirectional
+                                                .symmetric(horizontal: 13),
+                                            child: Stack(
+                                              alignment:
+                                                  AlignmentDirectional.center,
+                                              children: [
+                                                selectedTabCurrent,
+                                                selectedTabPeriodSelected(
+                                                  () {
+                                                    selectAllSpendingPeriod(
+                                                        onlyShowCycleOption:
+                                                            false);
+                                                  },
+                                                ),
+                                                PositionedDirectional(
+                                                  end: 0,
+                                                  child:
+                                                      clearSelectedPeriodButton,
+                                                )
+                                              ],
                                             ),
                                           ),
-                                          SliverToBoxAdapter(
-                                            child: appliedFilterChipsWidget,
-                                          ),
-                                          ...currentTabPage,
-                                        ],
-                                      ),
+                                        ),
+                                        SliverToBoxAdapter(
+                                          child: appliedFilterChipsWidget,
+                                        ),
+                                        ...currentTabPage,
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -1448,25 +1443,20 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                               Flexible(
                                 child: ConstrainedBox(
                                   constraints: BoxConstraints(maxWidth: 700),
-                                  child: SwipeToSelectTransactions(
-                                    listID: listID,
-                                    child: ScrollbarWrap(
-                                      child: CustomScrollView(
-                                        slivers: [
-                                          SliverToBoxAdapter(
-                                              child: SizedBox(height: 20)),
-                                          SliverToBoxAdapter(
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsetsDirectional
-                                                      .symmetric(
-                                                      horizontal: 13),
-                                              child: selectedTabHistory,
-                                            ),
+                                  child: ScrollbarWrap(
+                                    child: CustomScrollView(
+                                      slivers: [
+                                        SliverToBoxAdapter(
+                                            child: SizedBox(height: 20)),
+                                        SliverToBoxAdapter(
+                                          child: Padding(
+                                            padding: const EdgeInsetsDirectional
+                                                .symmetric(horizontal: 13),
+                                            child: selectedTabHistory,
                                           ),
-                                          ...historyTabPage,
-                                        ],
-                                      ),
+                                        ),
+                                        ...historyTabPage,
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -1523,9 +1513,20 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                     return TabBarView(
                       controller: _tabController,
                       children: [
-                        SwipeToSelectTransactions(
-                          listID: listID,
-                          child: ScrollbarWrap(
+                        ScrollbarWrap(
+                          child: CustomScrollView(
+                            slivers: [
+                              SliverPinnedOverlapInjector(
+                                handle: NestedScrollView
+                                    .sliverOverlapAbsorberHandleFor(
+                                        contextPageView),
+                              ),
+                              ...currentTabPage,
+                            ],
+                          ),
+                        ),
+                        if (widget.wallet == null)
+                          ScrollbarWrap(
                             child: CustomScrollView(
                               slivers: [
                                 SliverPinnedOverlapInjector(
@@ -1533,25 +1534,8 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                                       .sliverOverlapAbsorberHandleFor(
                                           contextPageView),
                                 ),
-                                ...currentTabPage,
+                                ...historyTabPage,
                               ],
-                            ),
-                          ),
-                        ),
-                        if (widget.wallet == null)
-                          SwipeToSelectTransactions(
-                            listID: listID,
-                            child: ScrollbarWrap(
-                              child: CustomScrollView(
-                                slivers: [
-                                  SliverPinnedOverlapInjector(
-                                    handle: NestedScrollView
-                                        .sliverOverlapAbsorberHandleFor(
-                                            contextPageView),
-                                  ),
-                                  ...historyTabPage,
-                                ],
-                              ),
                             ),
                           ),
                       ],

@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
@@ -10,10 +8,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/globalSnackbar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
-import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openSnackbar.dart';
-import 'package:budget/widgets/textWidgets.dart';
-import 'package:budget/widgets/transactionEntry/swipeToSelectTransactions.dart';
 import 'package:drift/drift.dart' hide Query, Column;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
@@ -21,9 +16,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' hide Transaction;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:budget/struct/firebaseAuthGlobal.dart';
-import 'package:flutter/services.dart';
-import 'package:timer_builder/timer_builder.dart';
-import 'package:budget/widgets/pullDownToRefreshSync.dart';
 
 Future<bool> shareBudget(Budget? budgetToShare, context) async {
   if (appStateSettings["sharedBudgets"] == false) return false;

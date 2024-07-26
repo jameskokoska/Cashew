@@ -9,30 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:budget/widgets/util/multiDirectionalInfiniteScroll.dart';
 import 'package:budget/pages/transactionFilters.dart';
-import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
-import 'package:budget/struct/settings.dart';
-import 'package:budget/widgets/framework/popupFramework.dart';
-import 'package:budget/widgets/navigationSidebar.dart';
-import 'package:budget/widgets/openBottomSheet.dart';
-import 'package:budget/widgets/scrollbarWrap.dart';
 import 'package:budget/database/tables.dart';
-import 'package:budget/functions.dart';
-import 'package:budget/pages/transactionsSearchPage.dart';
-import 'package:budget/struct/shareBudget.dart';
-import 'package:budget/widgets/selectedTransactionsAppBar.dart';
-import 'package:budget/widgets/monthSelector.dart';
-import 'package:budget/widgets/framework/pageFramework.dart';
-import 'package:budget/widgets/settingsContainers.dart';
-import 'package:budget/widgets/textInput.dart';
-import 'package:budget/widgets/textWidgets.dart';
-import 'package:budget/widgets/transactionEntries.dart';
-import 'package:budget/widgets/transactionEntry/swipeToSelectTransactions.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sliver_tools/sliver_tools.dart';
-import 'package:budget/widgets/util/sliverPinnedOverlapInjector.dart';
-import 'package:budget/widgets/util/multiDirectionalInfiniteScroll.dart';
 
 class MonthSelector extends StatefulWidget {
   const MonthSelector({

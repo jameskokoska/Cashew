@@ -1,11 +1,7 @@
 import 'dart:convert';
-
-import 'package:animations/animations.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
-import 'package:budget/pages/objectivePage.dart';
-import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/listenableSelector.dart';
 import 'package:budget/struct/settings.dart';
@@ -18,7 +14,6 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntryTypeButton.dart';
 import 'package:budget/widgets/transactionEntry/transactionLabel.dart';
-import 'package:budget/widgets/util/widgetSize.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -26,11 +21,10 @@ import 'package:provider/provider.dart';
 import 'package:budget/colors.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:visibility_detector/visibility_detector.dart';
-
-import 'swipeToSelectTransactions.dart';
-import 'transactionEntryAmount.dart';
-import 'transactionEntryNote.dart';
-import 'transactionEntryTag.dart';
+import 'package:budget/widgets/transactionEntry/swipeToSelectTransactions.dart';
+import 'package:budget/widgets/transactionEntry/transactionEntryAmount.dart';
+import 'package:budget/widgets/transactionEntry/transactionEntryNote.dart';
+import 'package:budget/widgets/transactionEntry/transactionEntryTag.dart';
 
 ValueNotifier<Map<String, List<String>>> globalSelectedID =
     ValueNotifier<Map<String, List<String>>>({});
