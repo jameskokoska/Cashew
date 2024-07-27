@@ -154,10 +154,15 @@ Changes and progress about development is all heavily documented in GitHub [comm
 ## App Links
 
 A discussion/thread on App Links (example usage and how to harness the power of App Links) can be found at this issue: https://github.com/jameskokoska/Cashew/issues/127#issuecomment-1975096357. 
+App links allow direct navigation and automation of actions using application URLs. Some examples are below.
 
-App Links are only supported in the Android and Web App versions as of now. App links allow direct navigation and automation of actions using application URLs. Some examples are below:
+### Changelog
+* Introduce iOS support (Cashew v5.3.5+400 and up)
+* **Breaking:** Remove unsupported app link domain - `cashew://budget.app` (Cashew v5.3.4+396 and up)
+* Support for more parameters documented under `Detailed Parameters` (Cashew v5.2.9+358 and up)
+* Introduce Android and web support (Cashew v5.2.3+328 and up)
 
-### Examples (for Android)
+### Examples (for Android and iOS)
 
 Ensure Cashew is installed on the device you are launching these URLs from.
 
@@ -181,7 +186,7 @@ See `JSON List of Transactions` below to view how the link is formatted.
 
 ### Routes
 
-| Routes for Android                          | Routes for Web App                             |
+| Routes for Android and iOS                  | Routes for Web App                             |
 | ------------------------------------------- | ---------------------------------------------- |
 | `https://cashewapp.web.app/[Endpoint here]` | `https://budget-track.web.app/[Endpoint here]` |
 
