@@ -398,10 +398,12 @@ class DebugPage extends StatelessWidget {
           icon: Icons.dark_mode,
         ),
         SettingsContainerSwitch(
-          title: "Show Transaction ID",
-          description: "On transactions page",
+          title: "Show Extra Transaction Info",
+          description:
+              "Show the transaction ID and method added in the transactions page",
           onSwitched: (value) {
-            updateSettings("showTransactionPk", value, updateGlobalState: true);
+            updateSettings("showTransactionPk", value,
+                updateGlobalState: false);
           },
           initialValue: appStateSettings["showTransactionPk"] == true,
           icon: Icons.password,
