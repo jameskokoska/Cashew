@@ -1,7 +1,5 @@
 import 'dart:math';
 import 'dart:ui';
-
-import 'package:budget/colors.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/fab.dart';
@@ -9,10 +7,10 @@ import 'package:budget/widgets/globalSnackbar.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/util/showTimePicker.dart';
-import 'package:budget/widgets/util/widgetSize.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/struct/dateTimePickerLocalizationsDelegate.dart';
 
 Future<DateTime?> showCustomDatePicker(
   BuildContext context,
@@ -33,21 +31,24 @@ Future<DateTime?> showCustomDatePicker(
     cancelText: cancelText,
     confirmText: confirmText,
     builder: (BuildContext context, Widget? child) {
-      return Theme(
-        data: Theme.of(context).copyWith(
-          useMaterial3: appStateSettings["materialYou"],
-          datePickerTheme: DatePickerTheme.of(context).copyWith(
-            headerHeadlineStyle: const TextStyle(
-              fontSize: 26,
-              fontWeight: FontWeight.bold,
+      return ApplyStartOfTheWeekSetting(
+        child: Theme(
+          data: Theme.of(context).copyWith(
+            // ignore: deprecated_member_use
+            useMaterial3: appStateSettings["materialYou"],
+            datePickerTheme: DatePickerTheme.of(context).copyWith(
+              headerHeadlineStyle: const TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+              ),
             ),
+            shadowColor: getPlatform() == PlatformOS.isIOS &&
+                    appStateSettings["materialYou"]
+                ? Theme.of(context).colorScheme.secondaryContainer
+                : null,
           ),
-          shadowColor: getPlatform() == PlatformOS.isIOS &&
-                  appStateSettings["materialYou"]
-              ? Theme.of(context).colorScheme.secondaryContainer
-              : null,
+          child: child ?? SizedBox.shrink(),
         ),
-        child: child ?? SizedBox.shrink(),
       );
     },
   );
@@ -96,67 +97,70 @@ Future<DateTimeRangeOrAllTime> showCustomDateRangePicker(
     initialDateRange: initialDateRange?.dateTimeRange,
     builder: (BuildContext context2, Widget? child) {
       double fabSize = 50;
-      return Theme(
-        data: Theme.of(context2).copyWith(
-          useMaterial3: appStateSettings["materialYou"],
-          datePickerTheme: DatePickerTheme.of(context2).copyWith(
-            headerHeadlineStyle: const TextStyle(
-              fontSize: 18,
+      return ApplyStartOfTheWeekSetting(
+        child: Theme(
+          data: Theme.of(context2).copyWith(
+            // ignore: deprecated_member_use
+            useMaterial3: appStateSettings["materialYou"],
+            datePickerTheme: DatePickerTheme.of(context2).copyWith(
+              headerHeadlineStyle: const TextStyle(
+                fontSize: 18,
+              ),
             ),
           ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            MediaQuery(
-              data: MediaQuery.of(context).copyWith(
-                viewInsets: EdgeInsets.only(
-                  top: MediaQuery.viewInsetsOf(context).top,
-                  right: MediaQuery.viewInsetsOf(context).right,
-                  left: MediaQuery.viewInsetsOf(context).left,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              MediaQuery(
+                data: MediaQuery.of(context).copyWith(
+                  viewInsets: EdgeInsets.only(
+                    top: MediaQuery.viewInsetsOf(context).top,
+                    right: MediaQuery.viewInsetsOf(context).right,
+                    left: MediaQuery.viewInsetsOf(context).left,
+                  ),
                 ),
+                child: child ?? SizedBox.shrink(),
               ),
-              child: child ?? SizedBox.shrink(),
-            ),
-            if (allTimeButton)
-              Align(
-                alignment: AlignmentDirectional.centerEnd,
-                child: Transform.translate(
-                  offset: Offset(0, -10),
-                  child: Padding(
-                    padding: EdgeInsetsDirectional.only(
-                        end: max(
-                            (MediaQuery.sizeOf(context).width / 2 - 300), 30)),
-                    child: Opacity(
-                      opacity: allTime ? 1 : 0.7,
-                      child: FAB(
-                        borderRadius: 15,
-                        fabSize: fabSize,
-                        iconData: appStateSettings["outlinedIcons"]
-                            ? Icons.event_outlined
-                            : Icons.event_rounded,
-                        label: "all-time".tr(),
-                        labelSize: 16,
-                        onTap: () {
-                          allTime = !allTime;
-                          Navigator.pop(context, null);
-                        },
-                        isOutlined: allTime == false,
+              if (allTimeButton)
+                Align(
+                  alignment: AlignmentDirectional.centerEnd,
+                  child: Transform.translate(
+                    offset: Offset(0, -10),
+                    child: Padding(
+                      padding: EdgeInsetsDirectional.only(
+                          end: max((MediaQuery.sizeOf(context).width / 2 - 300),
+                              30)),
+                      child: Opacity(
+                        opacity: allTime ? 1 : 0.7,
+                        child: FAB(
+                          borderRadius: 15,
+                          fabSize: fabSize,
+                          iconData: appStateSettings["outlinedIcons"]
+                              ? Icons.event_outlined
+                              : Icons.event_rounded,
+                          label: "all-time".tr(),
+                          labelSize: 16,
+                          onTap: () {
+                            allTime = !allTime;
+                            Navigator.pop(context, null);
+                          },
+                          isOutlined: allTime == false,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            Builder(builder: (context) {
-              return SizedBox(
-                  height: clampDouble(
-                getKeyboardHeightForceBuild(context) - fabSize * 2,
-                0,
-                double.infinity,
-              ));
-            }),
-          ],
+              Builder(builder: (context) {
+                return SizedBox(
+                    height: clampDouble(
+                  getKeyboardHeightForceBuild(context) - fabSize * 2,
+                  0,
+                  double.infinity,
+                ));
+              }),
+            ],
+          ),
         ),
       );
     },
@@ -216,4 +220,27 @@ Future<DateTime?> selectDateAndTimeSequence(
     minute: selectedTime.minute,
   );
   return selectedDateTime;
+}
+
+class ApplyStartOfTheWeekSetting extends StatelessWidget {
+  const ApplyStartOfTheWeekSetting({required this.child, super.key});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    if (appStateSettings["firstDayOfWeek"] == -1) return child;
+    DateTimePickerLocalizationsDelegate translations =
+        DateTimePickerLocalizationsDelegate(
+      materialLocalizations: MaterialLocalizations.of(context),
+      customFirstDayOfWeekIndex:
+          int.tryParse(appStateSettings["firstDayOfWeek"].toString()),
+    );
+
+    return Localizations.override(
+      context: context,
+      locale: Locale("en", "US"),
+      delegates: [translations],
+      child: child,
+    );
+  }
 }

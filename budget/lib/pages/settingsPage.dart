@@ -702,6 +702,7 @@ class MoreOptionsPagePreferences extends StatelessWidget {
         NumberFormattingSetting(),
         PercentagePrecisionSetting(),
         Time24HourFormatSetting(),
+        FirstDayOfWeekSetting(updateHomePage: true),
         NumberPadFormatSetting(),
       ],
     );
