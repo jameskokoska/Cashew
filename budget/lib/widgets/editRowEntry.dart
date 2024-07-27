@@ -380,30 +380,40 @@ class EditRowEntry extends StatelessWidget {
           ? Duration.zero
           : Duration(milliseconds: 200),
       opacity: currentReorder ? 0.6 : (opacity ?? 1),
-      child: Column(
+      child: Stack(
         children: [
-          getPlatform() == PlatformOS.isIOS && index == 0
-              ? Container(
+          if (getPlatform() == PlatformOS.isIOS)
+            PositionedDirectional(
+              start: 0,
+              end: 0,
+              top: 0,
+              child: Transform.translate(
+                offset: Offset(0, -1.5),
+                child: Container(
                   height: 1.5,
                   color: getColor(context, "dividerColor"),
-                )
-              : SizedBox.shrink(),
-          Padding(
-            padding: EdgeInsetsDirectional.symmetric(
-                horizontal: getPlatform() == PlatformOS.isIOS ? 0 : 10,
-                vertical: getPlatform() == PlatformOS.isIOS ? 0 : 5),
-            child: ReorderableDelayedDragStartListener(
-              index: index,
-              child: container,
-              enabled: canReorder,
+                ),
+              ),
             ),
-          ),
-          getPlatform() == PlatformOS.isIOS
-              ? Container(
+          Column(
+            children: [
+              Padding(
+                padding: EdgeInsetsDirectional.symmetric(
+                    horizontal: getPlatform() == PlatformOS.isIOS ? 0 : 10,
+                    vertical: getPlatform() == PlatformOS.isIOS ? 0 : 5),
+                child: ReorderableDelayedDragStartListener(
+                  index: index,
+                  child: container,
+                  enabled: canReorder,
+                ),
+              ),
+              if (getPlatform() == PlatformOS.isIOS)
+                Container(
                   height: 1.5,
                   color: getColor(context, "dividerColor"),
                 )
-              : SizedBox.shrink(),
+            ],
+          ),
         ],
       ),
     );

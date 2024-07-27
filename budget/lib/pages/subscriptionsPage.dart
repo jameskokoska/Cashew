@@ -53,10 +53,12 @@ class SubscriptionsPageState extends State<SubscriptionsPage> {
 
   @override
   Widget build(BuildContext context) {
+    String pageId = "Subscriptions";
+
     return WillPopScope(
       onWillPop: () async {
-        if ((globalSelectedID.value["Subscriptions"] ?? []).length > 0) {
-          globalSelectedID.value["Subscriptions"] = [];
+        if ((globalSelectedID.value[pageId] ?? []).length > 0) {
+          globalSelectedID.value[pageId] = [];
           globalSelectedID.notifyListeners();
           return false;
         } else {
@@ -65,7 +67,7 @@ class SubscriptionsPageState extends State<SubscriptionsPage> {
       },
       child: PageFramework(
         key: pageState,
-        listID: "Subscriptions",
+        listID: pageId,
         floatingActionButton: AnimateFABDelayed(
           fab: AddFAB(
             tooltip: "add-subscription".tr(),
@@ -155,8 +157,12 @@ class SubscriptionsPageState extends State<SubscriptionsPage> {
                                   RoutesToPopAfterDelete.One,
                             ),
                             transaction: transaction,
-                            listID: "Subscriptions",
+                            listID: pageId,
                           ),
+                          if (index == (snapshot.data?.length ?? 0) - 1)
+                            HorizontalBreak(
+                                padding: EdgeInsetsDirectional.only(
+                                    top: 4, bottom: 6)),
                         ],
                       );
                     },
@@ -171,7 +177,7 @@ class SubscriptionsPageState extends State<SubscriptionsPage> {
           SliverToBoxAdapter(child: SizedBox(height: 55)),
         ],
         selectedTransactionsAppBar: SelectedTransactionsAppBar(
-          pageID: "Subscriptions",
+          pageID: pageId,
         ),
       ),
     );

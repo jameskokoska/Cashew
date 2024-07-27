@@ -289,6 +289,10 @@ class UpcomingOverdueTransactionsState
                             transaction: item,
                             listID: pageId,
                           ),
+                          if (index == (snapshot.data?.length ?? 0) - 1)
+                            HorizontalBreak(
+                                padding: EdgeInsetsDirectional.only(
+                                    top: 4, bottom: 6)),
                         ],
                       ),
                     );
