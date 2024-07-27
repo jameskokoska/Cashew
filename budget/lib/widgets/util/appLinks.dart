@@ -27,32 +27,31 @@ import 'package:budget/struct/commonDateFormats.dart';
 import 'package:budget/widgets/tableEntry.dart';
 import 'package:provider/provider.dart';
 
-Throttler deepLinksThrottler = Throttler(duration: Duration(milliseconds: 350));
+Throttler appLinksThrottler = Throttler(duration: Duration(milliseconds: 350));
 
-class InitializeDeepLinks extends StatelessWidget {
-  const InitializeDeepLinks({required this.child, super.key});
+class InitializeAppLinks extends StatelessWidget {
+  const InitializeAppLinks({required this.child, super.key});
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    if (getPlatform(ignoreEmulation: true) == PlatformOS.isAndroid) {
-      return DeepLinks(child: child);
-    } else if (kIsWeb) {
-      return DeepLinksWeb(child: child);
+    if (kIsWeb) {
+      return AppLinksWeb(child: child);
+    } else {
+      return AppLinksNative(child: child);
     }
-    return child;
   }
 }
 
-class DeepLinksWeb extends StatefulWidget {
-  const DeepLinksWeb({required this.child, super.key});
+class AppLinksWeb extends StatefulWidget {
+  const AppLinksWeb({required this.child, super.key});
   final Widget child;
 
   @override
-  State<DeepLinksWeb> createState() => _DeepLinksWebState();
+  State<AppLinksWeb> createState() => _AppLinksWebState();
 }
 
-class _DeepLinksWebState extends State<DeepLinksWeb> {
+class _AppLinksWebState extends State<AppLinksWeb> {
   @override
   void initState() {
     super.initState();
@@ -68,22 +67,22 @@ class _DeepLinksWebState extends State<DeepLinksWeb> {
   }
 }
 
-class DeepLinks extends StatefulWidget {
-  const DeepLinks({required this.child, super.key});
+class AppLinksNative extends StatefulWidget {
+  const AppLinksNative({required this.child, super.key});
   final Widget child;
 
   @override
-  State<DeepLinks> createState() => _DeepLinksState();
+  State<AppLinksNative> createState() => _AppLinksNativeState();
 }
 
-class _DeepLinksState extends State<DeepLinks> {
+class _AppLinksNativeState extends State<AppLinksNative> {
   AppLinks _appLinks = AppLinks();
   StreamSubscription<Uri>? _linkSubscription;
 
   @override
   void initState() {
     super.initState();
-    initDeepLinks();
+    initAppLinks();
   }
 
   @override
@@ -92,7 +91,7 @@ class _DeepLinksState extends State<DeepLinks> {
     super.dispose();
   }
 
-  Future<void> initDeepLinks() async {
+  Future<void> initAppLinks() async {
     Uri? appLink = await _appLinks.getInitialLink();
     if (appLink != null) {
       // This delay may or may not be needed...
@@ -282,7 +281,7 @@ Future processMessageToParse(
 Future executeAppLink(BuildContext? context, Uri uri,
     {Function(dynamic)? onDebug}) async {
   if (appStateSettings["hasOnboarded"] != true) return;
-  if (!deepLinksThrottler.canProceed()) return;
+  if (!appLinksThrottler.canProceed()) return;
 
   String endPoint = getApiEndpoint(uri);
   Map<String, String> params = parseAppLink(uri);

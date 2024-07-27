@@ -21,7 +21,7 @@ import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/statusBox.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:budget/widgets/util/deepLinks.dart';
+import 'package:budget/widgets/util/appLinks.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/main.dart';

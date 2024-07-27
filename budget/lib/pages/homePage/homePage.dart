@@ -33,7 +33,7 @@ import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/pieChart.dart';
 import 'package:budget/widgets/ratingPopup.dart';
 import 'package:budget/widgets/selectedTransactionsAppBar.dart';
-import 'package:budget/widgets/util/deepLinks.dart';
+import 'package:budget/widgets/util/appLinks.dart';
 import 'package:budget/widgets/util/keepAliveClientMixin.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/swipeToSelectTransactions.dart';
