@@ -16,24 +16,25 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 Future<String?> initializeNotifications() async {
   // Since iOS cannot send scheduled notifications when the app is open
   // There is no need to listen to incoming notification payloads
-  if (getPlatform(ignoreEmulation: true) == PlatformOS.isIOS) {
-    return "";
-  }
-  const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('notification_icon_android2');
-  final DarwinInitializationSettings initializationSettingsDarwin =
-      DarwinInitializationSettings(
-          onDidReceiveLocalNotification: (_, __, ___, ____) {});
+  if (getPlatform(ignoreEmulation: true) != PlatformOS.isIOS) {
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('notification_icon_android2');
+    final DarwinInitializationSettings initializationSettingsDarwin =
+        DarwinInitializationSettings(
+            onDidReceiveLocalNotification: (_, __, ___, ____) {});
 
-  final InitializationSettings initializationSettings = InitializationSettings(
-    android: initializationSettingsAndroid,
-    iOS: initializationSettingsDarwin,
-  );
-  await flutterLocalNotificationsPlugin.initialize(
-    initializationSettings,
-    onDidReceiveBackgroundNotificationResponse: onSelectNotification,
-    onDidReceiveNotificationResponse: onSelectNotification,
-  );
+    final InitializationSettings initializationSettings =
+        InitializationSettings(
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsDarwin,
+    );
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveBackgroundNotificationResponse: onSelectNotification,
+      onDidReceiveNotificationResponse: onSelectNotification,
+    );
+  }
+
   final NotificationAppLaunchDetails? notificationAppLaunchDetails =
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
   NotificationResponse? payload =
