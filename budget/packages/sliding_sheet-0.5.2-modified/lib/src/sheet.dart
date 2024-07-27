@@ -698,6 +698,7 @@ class _SlidingSheetState extends State<SlidingSheet>
     };
     sheetController!._expand = () => snapToExtent(maxExtent);
     sheetController!._collapse = () => snapToExtent(minExtent);
+    sheetController!._reMeasure = () => reMeasure();
 
     if (!isDialog) {
       sheetController!._rebuild = () {
@@ -713,6 +714,16 @@ class _SlidingSheetState extends State<SlidingSheet>
         if (state.isShown) return snapToExtent(0.0, clamp: false);
       };
     }
+  }
+
+  Future<void> reMeasure() async {
+    if (!isLaidOut) return;
+
+    await controller.snapToExtent(
+      maxExtent,
+      this,
+      duration: const Duration(milliseconds: 800),
+    );
   }
 
   Future<void> snapToExtent(
@@ -1364,6 +1375,9 @@ class SheetController {
   /// Short-hand for calling `snapToExtent(minExtent)`.
   Future<void>? collapse() => _collapse?.call();
   Future<void> Function()? _collapse;
+
+  Future<void>? reMeasure() => _reMeasure?.call();
+  Future<void> Function()? _reMeasure;
 
   /// Fully expands the sheet.
   ///

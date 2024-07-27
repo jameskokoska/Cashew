@@ -102,9 +102,6 @@ class _ContextMenuRegionState extends State<ContextMenuRegion> {
   }
 }
 
-
-
-
 // Another method using showMenu built in
 
 // void showContextMenu(BuildContext context, Offset position) async {
