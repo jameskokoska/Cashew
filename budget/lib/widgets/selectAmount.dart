@@ -486,42 +486,22 @@ class _SelectAmountState extends State<SelectAmount> {
   }
 
   pasteFromClipboard() async {
-    String? clipboardText = await readClipboard(showSnackbar: false);
-    double? amount = getAmountFromString(clipboardText ?? "");
+    double? amount = await readAmountFromClipboard();
     if (amount != null) {
       setState(() {
         this.amount = amount.toString();
       });
       widget.setSelectedAmount(amount, amount.toString());
       bottomSheetControllerGlobal.reMeasure();
-      openSnackbar(
-        SnackbarMessage(
-          title: "pasted-from-clipboard".tr(),
-          icon: appStateSettings["outlinedIcons"]
-              ? Icons.paste_outlined
-              : Icons.paste_rounded,
-          timeout: Duration(milliseconds: 2500),
-        ),
-      );
     }
   }
 
   pasteFromClipboardIntoCalculation() async {
-    String? clipboardText = await readClipboard(showSnackbar: false);
-    double? amount = getAmountFromString(clipboardText ?? "");
+    double? amount = await readAmountFromClipboard();
     if (amount != null) {
       for (String number in removeTrailingZeroes(amount.toString()).split("")) {
         addToAmount(number, hapticFeedback: false);
       }
-      openSnackbar(
-        SnackbarMessage(
-          title: "pasted-from-clipboard".tr(),
-          icon: appStateSettings["outlinedIcons"]
-              ? Icons.paste_outlined
-              : Icons.paste_rounded,
-          timeout: Duration(milliseconds: 2500),
-        ),
-      );
     }
   }
 

@@ -1275,6 +1275,35 @@ Future<String?> readClipboard({bool showSnackbar = true}) async {
   return clipboardText;
 }
 
+Future<double?> readAmountFromClipboard({bool showSnackbar = true}) async {
+  String? clipboardText = await readClipboard(showSnackbar: false);
+  double? amount = getAmountFromString(clipboardText ?? "");
+  if (showSnackbar) {
+    if (amount != null) {
+      openSnackbar(
+        SnackbarMessage(
+          title: "pasted-from-clipboard".tr(),
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.paste_outlined
+              : Icons.paste_rounded,
+          timeout: Duration(milliseconds: 2500),
+        ),
+      );
+    } else {
+      openSnackbar(
+        SnackbarMessage(
+          title: "clipboard-error".tr(),
+          description: "no-value".tr(),
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.assignment_late_outlined
+              : Icons.assignment_late_rounded,
+        ),
+      );
+    }
+  }
+  return amount;
+}
+
 double? getAmountFromString(String inputString) {
   bool isNegative = false;
   if (inputString.contains("-") ||
