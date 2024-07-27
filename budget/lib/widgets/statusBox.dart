@@ -7,16 +7,20 @@ class StatusBox extends StatelessWidget {
     Key? key,
     required this.title,
     required this.description,
-    required this.icon,
     required this.color,
+    this.icon,
+    this.smallIcon,
+    this.padding,
     this.onTap,
     this.forceDark,
   }) : super(key: key);
 
   final String title;
   final String description;
-  final IconData icon;
+  final IconData? icon;
+  final IconData? smallIcon;
   final Color color;
+  final EdgeInsetsDirectional? padding;
   final Function()? onTap;
   final bool? forceDark;
 
@@ -27,7 +31,7 @@ class StatusBox extends StatelessWidget {
         borderRadius: BorderRadiusDirectional.all(Radius.circular(15)),
         border: Border.all(color: color, width: 2),
       ),
-      margin: EdgeInsetsDirectional.all(10),
+      margin: padding ?? EdgeInsetsDirectional.all(10),
       child: Tappable(
         borderRadius: 12,
         onTap: onTap,
@@ -37,20 +41,32 @@ class StatusBox extends StatelessWidget {
               EdgeInsetsDirectional.symmetric(horizontal: 17, vertical: 10),
           child: Row(
             children: [
-              Icon(icon, size: 35),
-              SizedBox(
-                width: 14,
-              ),
+              if (icon != null)
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(end: 14),
+                  child: Icon(icon, size: 35),
+                ),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextFont(
-                      text: title,
-                      maxLines: 10,
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                      textColor: forceDark == true ? Colors.black : null,
+                    Row(
+                      children: [
+                        if (smallIcon != null)
+                          Padding(
+                            padding: const EdgeInsetsDirectional.only(end: 4),
+                            child: Icon(smallIcon, size: 25),
+                          ),
+                        Expanded(
+                          child: TextFont(
+                            text: title,
+                            maxLines: 10,
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            textColor: forceDark == true ? Colors.black : null,
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(
                       height: 2,

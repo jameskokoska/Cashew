@@ -258,7 +258,7 @@ class AccountsPageState extends State<AccountsPage> {
                                   await chooseBackup(context);
                                 },
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),

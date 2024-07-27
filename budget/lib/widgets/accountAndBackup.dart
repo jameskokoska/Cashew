@@ -16,6 +16,7 @@ import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/struct/syncClient.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/exportCSV.dart';
 import 'package:budget/widgets/globalSnackbar.dart';
 import 'package:budget/widgets/importDB.dart';
 import 'package:budget/widgets/moreIcons.dart';
@@ -1510,12 +1511,9 @@ Future<bool> saveDriveFileToDevice({
   }
   String fileName = "cashew-" +
       ((fileToSave.name ?? "") +
-              (fileToSave.modifiedTime ?? DateTime.now()).toString())
-          .replaceAll(".sqlite", "")
-          .replaceAll(".", "-")
-          .replaceAll("-", "-")
-          .replaceAll(" ", "-")
-          .replaceAll(":", "-") +
+              cleanFileNameString(
+                  (fileToSave.modifiedTime ?? DateTime.now()).toString()))
+          .replaceAll(".sqlite", "") +
       ".sql";
 
   return await saveFile(

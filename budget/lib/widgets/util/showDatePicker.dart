@@ -87,6 +87,7 @@ Future<DateTimeRangeOrAllTime> showCustomDateRangePicker(
   DateTimeRangeOrAllTime? initialDateRange, {
   DatePickerEntryMode initialEntryMode = DatePickerEntryMode.calendar,
   bool allTimeButton = false,
+  bool vibrantButtonColors = false,
 }) async {
   minimizeKeyboard(context);
   bool allTime = initialDateRange?.allTime ?? false;
@@ -95,6 +96,7 @@ Future<DateTimeRangeOrAllTime> showCustomDateRangePicker(
     firstDate: DateTime(DateTime.now().year - 1000),
     lastDate: DateTime(DateTime.now().year + 1000),
     initialDateRange: initialDateRange?.dateTimeRange,
+    initialEntryMode: initialEntryMode,
     builder: (BuildContext context2, Widget? child) {
       double fabSize = 50;
       return ApplyStartOfTheWeekSetting(
@@ -102,11 +104,23 @@ Future<DateTimeRangeOrAllTime> showCustomDateRangePicker(
           data: Theme.of(context2).copyWith(
             // ignore: deprecated_member_use
             useMaterial3: appStateSettings["materialYou"],
-            datePickerTheme: DatePickerTheme.of(context2).copyWith(
-              headerHeadlineStyle: const TextStyle(
-                fontSize: 18,
-              ),
-            ),
+            datePickerTheme: DatePickerTheme.of(context2)
+                .copyWith(headerHeadlineStyle: const TextStyle(fontSize: 18)),
+            textButtonTheme: vibrantButtonColors
+                ? TextButtonThemeData(
+                    style: TextButton.styleFrom(
+                      backgroundColor: Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withOpacity(0.5),
+                      disabledBackgroundColor: Theme.of(context)
+                          .colorScheme
+                          .secondaryContainer
+                          .withOpacity(0.5),
+                      animationDuration: Duration(milliseconds: 250),
+                    ),
+                  )
+                : null,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -164,7 +178,6 @@ Future<DateTimeRangeOrAllTime> showCustomDateRangePicker(
         ),
       );
     },
-    initialEntryMode: initialEntryMode,
   );
   return DateTimeRangeOrAllTime(
     allTime: allTime,

@@ -4,6 +4,7 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/transactionFilters.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
@@ -12,11 +13,14 @@ import 'package:budget/widgets/globalSnackbar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
+import 'package:budget/widgets/outlinedButtonStacked.dart';
 import 'package:budget/widgets/progressBar.dart';
 import 'package:budget/widgets/settingsContainers.dart';
+import 'package:budget/widgets/statusBox.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/util/saveFile.dart';
+import 'package:budget/widgets/util/showDatePicker.dart';
 import 'package:drift/drift.dart' hide Column, Table;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
@@ -60,15 +64,52 @@ Map<String, String> createRowOutput(
   return output;
 }
 
+String cleanFileNameString(String inputString) {
+  final invalidChars = [
+    ' ',
+    '\\',
+    '/',
+    '?',
+    '%',
+    '*',
+    ':',
+    '|',
+    '"',
+    '<',
+    '>',
+    '.'
+  ];
+
+  for (var char in invalidChars) {
+    inputString = inputString.replaceAll(char, '-');
+  }
+
+  // Trim any leading or trailing hyphens
+  inputString = inputString.trim().replaceAll(RegExp('^-+|-+\$'), '');
+
+  return inputString;
+}
+
 class ExportCSV extends StatelessWidget {
   const ExportCSV({super.key});
 
-  Future exportCSV({required BuildContext boxContext}) async {
+  Future exportCSV({
+    required BuildContext boxContext,
+    required DateTimeRange? dateTimeRange,
+  }) async {
     await openLoadingPopupTryCatch(() async {
       List<Map<String, String>> output = [];
       List<TransactionWithCategory> transactions = await database
           .getAllTransactionsWithCategoryWalletBudgetObjectiveSubCategory(
-              (tbl) => tbl.paid.equals(true));
+        (tbl) =>
+            tbl.paid.equals(true) &
+            database.onlyShowBasedOnTimeRange(
+              tbl,
+              dateTimeRange?.start,
+              dateTimeRange?.end,
+              null,
+            ),
+      );
       for (TransactionWithCategory transactionWithCategory in transactions) {
         Map<
             String,
@@ -117,14 +158,28 @@ class ExportCSV extends StatelessWidget {
       // print(csvData);
       String csv = ListToCsvConverter().convert(csvData);
 
-      String fileName = "cashew-" +
-          DateTime.now()
-              .toString()
-              .replaceAll(".", "-")
-              .replaceAll("-", "-")
-              .replaceAll(" ", "-")
-              .replaceAll(":", "-") +
-          ".csv";
+      String fileName;
+      if (dateTimeRange != null) {
+        fileName = "cashew-" +
+            (DateTime.now().millisecondsSinceEpoch).toString() +
+            "-" +
+            dateTimeRange.start.year.toString() +
+            "-" +
+            dateTimeRange.start.month.toString() +
+            "-" +
+            dateTimeRange.start.day.toString() +
+            "-to-" +
+            dateTimeRange.end.year.toString() +
+            "-" +
+            dateTimeRange.end.month.toString() +
+            "-" +
+            dateTimeRange.end.day.toString() +
+            ".csv";
+      } else {
+        fileName =
+            "cashew-" + cleanFileNameString(DateTime.now().toString()) + ".csv";
+      }
+
       await saveCSV(boxContext: boxContext, csv: csv, fileName: fileName);
     });
   }
@@ -134,20 +189,78 @@ class ExportCSV extends StatelessWidget {
     return Builder(builder: (boxContext) {
       return SettingsContainer(
         onTap: () async {
-          await openPopup(
+          await openBottomSheet(
             context,
-            barrierDismissible: false,
-            onSubmit: () {
-              Navigator.pop(context);
-            },
-            onSubmitLabel: "ok".tr(),
-            icon: appStateSettings["outlinedIcons"]
-                ? Icons.warning_amber_outlined
-                : Icons.warning_amber_rounded,
-            title: "export-csv-warning".tr(),
-            description: "export-csv-warning-description".tr(),
+            PopupFramework(
+              title: "export-csv".tr(),
+              child: Column(
+                children: [
+                  StatusBox(
+                    title: "export-csv-warning".tr(),
+                    description: "export-csv-warning-description".tr(),
+                    color: Colors.orange,
+                    padding: EdgeInsetsDirectional.zero,
+                    smallIcon: appStateSettings["outlinedIcons"]
+                        ? Icons.warning_outlined
+                        : Icons.warning_rounded,
+                  ),
+                  SizedBox(height: 15),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButtonStacked(
+                          text: "all-time".tr().capitalizeFirstofEach,
+                          iconData: appStateSettings["outlinedIcons"]
+                              ? Icons.calendar_month_outlined
+                              : Icons.calendar_month_rounded,
+                          onTap: () async {
+                            Navigator.pop(context);
+                            await exportCSV(
+                                boxContext: boxContext, dateTimeRange: null);
+                          },
+                        ),
+                      ),
+                      SizedBox(width: 15),
+                      Expanded(
+                        child: OutlinedButtonStacked(
+                          text: "date-range".tr().capitalizeFirstofEach,
+                          iconData: appStateSettings["outlinedIcons"]
+                              ? Icons.date_range_outlined
+                              : Icons.date_range_rounded,
+                          onTap: () async {
+                            Navigator.pop(context);
+                            DateTimeRangeOrAllTime? dateRange =
+                                await showCustomDateRangePicker(
+                              context,
+                              null,
+                              vibrantButtonColors: true,
+                              initialEntryMode:
+                                  DatePickerEntryMode.calendarOnly,
+                            );
+                            if (dateRange.dateTimeRange == null) {
+                              openSnackbar(
+                                SnackbarMessage(
+                                  icon: appStateSettings["outlinedIcons"]
+                                      ? Icons.event_busy_outlined
+                                      : Icons.event_busy_rounded,
+                                  title: "date-not-selected".tr(),
+                                ),
+                              );
+                            } else {
+                              await exportCSV(
+                                boxContext: boxContext,
+                                dateTimeRange: dateRange.dateTimeRange,
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           );
-          await exportCSV(boxContext: boxContext);
         },
         title: "export-csv".tr(),
         icon: appStateSettings["outlinedIcons"]
