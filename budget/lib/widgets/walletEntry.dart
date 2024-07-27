@@ -94,11 +94,11 @@ class WalletEntry extends StatelessWidget {
                           ),
                           AmountAccount(
                             walletWithDetails: walletWithDetails,
-                            textAlign: TextAlign.left,
+                            textAlign: TextAlign.start,
                             fontSize: 17,
                           ),
                           TextFont(
-                            textAlign: TextAlign.left,
+                            textAlign: TextAlign.start,
                             text: walletWithDetails.numberTransactions
                                     .toString() +
                                 " " +
@@ -233,7 +233,7 @@ class WalletEntryRow extends StatelessWidget {
                               start: 10,
                             ),
                             child: TextFont(
-                              textAlign: TextAlign.left,
+                              textAlign: TextAlign.start,
                               text: "",
                               maxLines: 1,
                               richTextSpan: [
@@ -275,7 +275,7 @@ class WalletEntryRow extends StatelessWidget {
                   ),
                   AmountAccount(
                     walletWithDetails: walletWithDetails,
-                    textAlign: TextAlign.right,
+                    textAlign: TextAlign.end,
                     fontSize: 18,
                   )
                 ],

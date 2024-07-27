@@ -131,7 +131,7 @@ class _RadioItemsState<T> extends State<RadioItems<T>> {
                               ? ""
                               : widget.getEndInfo!(item),
                           maxLines: 3,
-                          textAlign: TextAlign.right,
+                          textAlign: TextAlign.end,
                         ),
                       ),
                   ],

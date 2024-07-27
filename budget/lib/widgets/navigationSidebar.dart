@@ -24,7 +24,6 @@ import 'package:timer_builder/timer_builder.dart';
 
 // returns 0 if no navigation sidebar should be shown
 double getWidthNavigationSidebar(BuildContext context) {
-  if (context == null) return 0;
   double screenPercent = 0.3;
   double maxWidthNavigation = 270;
   double minScreenWidth = 700;
@@ -350,7 +349,8 @@ class SidebarClock extends StatelessWidget {
         ? Center(
             key: ValueKey(appStateSettings["expandedNavigationSidebar"]),
             child: MediaQuery(
-              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+              data: MediaQuery.of(context)
+                  .copyWith(textScaler: TextScaler.linear(1.0)),
               child: TimerBuilder.periodic(
                 Duration(seconds: 5),
                 builder: (context) {
@@ -498,7 +498,7 @@ class _SyncButtonState extends State<SyncButton> {
                                         dateTimeLastSynced ?? DateTime.now())
                                     .inDays;
                                 return TextFont(
-                                  textAlign: TextAlign.left,
+                                  textAlign: TextAlign.start,
                                   textColor: diff > 1
                                       ? Theme.of(context)
                                           .colorScheme

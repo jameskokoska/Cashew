@@ -836,7 +836,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                                       if (snapshot.hasData &&
                                           snapshot.data != null) {
                                         return TextFont(
-                                          textAlign: TextAlign.left,
+                                          textAlign: TextAlign.start,
                                           text: snapshot.data![0].toString() +
                                               " " +
                                               (snapshot.data![0] == 1
@@ -852,7 +852,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                                         );
                                       } else {
                                         return TextFont(
-                                          textAlign: TextAlign.left,
+                                          textAlign: TextAlign.start,
                                           text: "/ transactions",
                                           fontSize: 14,
                                           textColor: getColor(context, "black")

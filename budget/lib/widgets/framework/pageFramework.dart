@@ -923,7 +923,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                             : textColor,
                         textAlign: centeredTitleWithDefault
                             ? TextAlign.center
-                            : TextAlign.left,
+                            : TextAlign.start,
                       ),
                     ),
               ),

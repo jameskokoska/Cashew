@@ -1264,7 +1264,7 @@ class _TotalSpentState extends State<TotalSpent> {
                                     ? widget.totalSpent
                                     : budgetAmount - widget.totalSpent),
                             fontSize: 22,
-                            textAlign: TextAlign.left,
+                            textAlign: TextAlign.start,
                             fontWeight: FontWeight.bold,
                             textColor: Theme.of(context)
                                 .colorScheme
@@ -1280,7 +1280,7 @@ class _TotalSpentState extends State<TotalSpent> {
                             convertToMoney(
                                 Provider.of<AllWallets>(context), budgetAmount),
                         fontSize: 15,
-                        textAlign: TextAlign.left,
+                        textAlign: TextAlign.start,
                         textColor:
                             Theme.of(context).colorScheme.onSecondaryContainer,
                       ),
@@ -1306,7 +1306,7 @@ class _TotalSpentState extends State<TotalSpent> {
                                     ? widget.totalSpent
                                     : widget.totalSpent - budgetAmount),
                             fontSize: 22,
-                            textAlign: TextAlign.left,
+                            textAlign: TextAlign.start,
                             fontWeight: FontWeight.bold,
                             textColor: Theme.of(context)
                                 .colorScheme
@@ -1322,7 +1322,7 @@ class _TotalSpentState extends State<TotalSpent> {
                             convertToMoney(
                                 Provider.of<AllWallets>(context), budgetAmount),
                         fontSize: 15,
-                        textAlign: TextAlign.left,
+                        textAlign: TextAlign.start,
                         textColor:
                             Theme.of(context).colorScheme.onSecondaryContainer,
                       ),

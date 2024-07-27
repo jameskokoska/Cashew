@@ -249,7 +249,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
                     overflow: TextOverflow.fade,
                     maxLines: 1,
                     softWrap: false,
-                    textAlign: TextAlign.right,
+                    textAlign: TextAlign.end,
                     text: getWordedNumber(context,
                         Provider.of<AllWallets>(context, listen: false), value),
                     textColor: dynamicPastel(context, widget.color,

@@ -224,7 +224,7 @@ class GlobalSnackbarState extends State<GlobalSnackbar>
                                       text: currentMessage?.title ?? "",
                                       textAlign: currentMessage?.icon == null
                                           ? TextAlign.center
-                                          : TextAlign.left,
+                                          : TextAlign.start,
                                       fontSize: 15,
                                       maxLines: 3,
                                     ),
@@ -237,7 +237,7 @@ class GlobalSnackbarState extends State<GlobalSnackbar>
                                             textAlign:
                                                 currentMessage?.icon == null
                                                     ? TextAlign.center
-                                                    : TextAlign.left,
+                                                    : TextAlign.start,
                                             fontSize: 13,
                                           ),
                                   ],

@@ -324,7 +324,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                                         if (snapshot.hasData &&
                                             snapshot.data != null) {
                                           return TextFont(
-                                            textAlign: TextAlign.left,
+                                            textAlign: TextAlign.start,
                                             text: snapshot.data!.toString() +
                                                 " " +
                                                 (snapshot.data! == 1
@@ -341,7 +341,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                                           );
                                         } else {
                                           return TextFont(
-                                            textAlign: TextAlign.left,
+                                            textAlign: TextAlign.start,
                                             text:
                                                 "/" + " " + "transactions".tr(),
                                             fontSize: 14,

@@ -310,7 +310,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                                             fontSize: 19,
                                           ),
                                           TextFont(
-                                            textAlign: TextAlign.left,
+                                            textAlign: TextAlign.start,
                                             text: category.categoryPk == "0"
                                                 ? "balance-correction".tr()
                                                 : category.income
@@ -322,7 +322,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                                                     .withOpacity(0.65),
                                           ),
                                           TextFont(
-                                            textAlign: TextAlign.left,
+                                            textAlign: TextAlign.start,
                                             text: categoryDetails
                                                     .numberTransactions
                                                     .toString() +

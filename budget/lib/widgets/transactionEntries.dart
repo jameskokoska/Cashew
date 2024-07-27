@@ -814,7 +814,7 @@ class PastTransactionsDivider extends StatelessWidget {
                           child: TextFont(
                             text: "past-transactions".tr(),
                             maxLines: 1,
-                            textAlign: TextAlign.left,
+                            textAlign: TextAlign.start,
                             fontSize: 15,
                           ),
                         ),
@@ -875,7 +875,7 @@ class FutureTransactionsDivider extends StatelessWidget {
                               child: TextFont(
                                 text: "future-transactions".tr(),
                                 maxLines: 1,
-                                textAlign: TextAlign.left,
+                                textAlign: TextAlign.start,
                                 fontSize: 15,
                               ),
                             ),
@@ -910,7 +910,7 @@ class FutureTransactionsDivider extends StatelessWidget {
                                                 addCommaWithExtraText: false,
                                               ),
                                               maxLines: 1,
-                                              textAlign: TextAlign.left,
+                                              textAlign: TextAlign.start,
                                               fontSize: 14,
                                               textColor:
                                                   getColor(context, "black"),
@@ -923,7 +923,7 @@ class FutureTransactionsDivider extends StatelessWidget {
                                                 addCommaWithExtraText: false,
                                               ),
                                               maxLines: 1,
-                                              textAlign: TextAlign.left,
+                                              textAlign: TextAlign.start,
                                               fontSize: 14,
                                               textColor: getColor(
                                                   context, "textLight"),

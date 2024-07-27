@@ -588,7 +588,7 @@ class _SelectAmountState extends State<SelectAmount> {
                                             false
                                     ? operationsWithSpaces(amount)
                                     : ""),
-                                textAlign: TextAlign.left,
+                                textAlign: TextAlign.start,
                                 fontSize: 18,
                                 maxLines: 5,
                               ),
@@ -644,7 +644,7 @@ class _SelectAmountState extends State<SelectAmount> {
                                           minFontSize: 16,
                                           text: amountConverted,
                                           // text: amount,
-                                          textAlign: TextAlign.right,
+                                          textAlign: TextAlign.end,
                                           fontSize: 35,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -1503,7 +1503,7 @@ class _SelectAmountValueState extends State<SelectAmountValue> {
                   maxLines: 1,
                   minFontSize: 16,
                   text: amountConverted + widget.suffix,
-                  textAlign: TextAlign.right,
+                  textAlign: TextAlign.end,
                   fontSize: 35,
                   fontWeight: FontWeight.bold,
                 ),

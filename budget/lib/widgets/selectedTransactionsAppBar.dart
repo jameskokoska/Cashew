@@ -180,7 +180,7 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                                                       " " +
                                                       "selected".tr(),
                                               fontSize: 17.5,
-                                              textAlign: TextAlign.left,
+                                              textAlign: TextAlign.start,
                                               maxLines: 1,
                                               overflow: TextOverflow.fade,
                                               softWrap: false,
@@ -227,7 +227,7 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                                                     ? snapshot.data!
                                                     : 0),
                                             fontSize: 17.5,
-                                            textAlign: TextAlign.left,
+                                            textAlign: TextAlign.start,
                                             maxLines: 1,
                                           ),
                                         ),

@@ -2430,7 +2430,7 @@ class _AllSpendingPastSpendingGraphState
                                 netSpending,
                               ),
                               fontSize: 16,
-                              textAlign: TextAlign.left,
+                              textAlign: TextAlign.start,
                               fontWeight: FontWeight.bold,
                               textColor: appStateSettings[
                                           "netTotalsColorful"] ==
@@ -2971,7 +2971,7 @@ class AmountSpentEntryRow extends StatelessWidget {
                                     child: TextFont(
                                       text: "",
                                       maxLines: 1,
-                                      textAlign: TextAlign.left,
+                                      textAlign: TextAlign.start,
                                       richTextSpan: [
                                         TextSpan(
                                           text: label,
@@ -3023,7 +3023,7 @@ class AmountSpentEntryRow extends StatelessWidget {
                           initialCount: 0,
                           textBuilder: (number) {
                             return TextFont(
-                              textAlign: TextAlign.right,
+                              textAlign: TextAlign.end,
                               text: convertToMoney(
                                 Provider.of<AllWallets>(context),
                                 number,

@@ -1925,7 +1925,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                     selectedAmount.toString()),
                                 alignment: AlignmentDirectional.centerEnd,
                                 child: TextFont(
-                                  textAlign: TextAlign.right,
+                                  textAlign: TextAlign.end,
                                   text: convertToMoney(
                                     Provider.of<AllWallets>(context),
                                     selectedAmount ?? 0,
@@ -1965,7 +1965,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                           selectedCategory?.name ?? ""),
                                       width: double.infinity,
                                       child: TextFont(
-                                        textAlign: TextAlign.right,
+                                        textAlign: TextAlign.end,
                                         fontSize: 18,
                                         text: selectedCategory?.name ?? "",
                                         maxLines: 2,
@@ -1977,7 +1977,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                     child: Align(
                                       alignment: AlignmentDirectional.centerEnd,
                                       child: TextFont(
-                                        textAlign: TextAlign.right,
+                                        textAlign: TextAlign.end,
                                         text: convertToMoney(
                                           Provider.of<AllWallets>(context),
                                           (selectedAmount ?? 0) *
@@ -3317,7 +3317,7 @@ class _SelectExcludeBudgetState extends State<SelectExcludeBudget> {
                   TextFont(
                     text: "no-budgets-found".tr(),
                     fontSize: 15,
-                    textAlign: TextAlign.left,
+                    textAlign: TextAlign.start,
                   ),
                 ],
               ),

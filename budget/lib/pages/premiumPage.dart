@@ -355,7 +355,7 @@ class _FreePremiumMessageState extends State<FreePremiumMessage> {
         TextFont(
             maxLines: 80,
             fontSize: 15.5,
-            textAlign: TextAlign.left,
+            textAlign: TextAlign.start,
             text: "developer-message-1".tr() +
                 (appStateSettings["premiumPopupFreeSeen"]
                     ? "."
@@ -364,7 +364,7 @@ class _FreePremiumMessageState extends State<FreePremiumMessage> {
         TextFont(
             maxLines: 80,
             fontSize: 15.5,
-            textAlign: TextAlign.left,
+            textAlign: TextAlign.start,
             text: "developer-message-2".tr()),
         SizedBox(height: 15),
         Row(

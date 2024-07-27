@@ -165,7 +165,7 @@ class BarGraphState extends State<BarGraph> {
                     return Padding(
                       padding: const EdgeInsetsDirectional.only(end: 8.0),
                       child: TextFont(
-                        textAlign: TextAlign.right,
+                        textAlign: TextAlign.end,
                         text: getWordedNumber(
                             context, Provider.of<AllWallets>(context), value),
                         textColor: dynamicPastel(context, widget.color,

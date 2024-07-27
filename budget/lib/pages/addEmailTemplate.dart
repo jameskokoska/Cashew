@@ -164,7 +164,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
             text: "Only these messages that contain this text will be scanned.",
             fontSize: 14,
             maxLines: 10,
-            textAlign: TextAlign.left,
+            textAlign: TextAlign.start,
           ),
           SizedBox(height: 5),
           TextFont(
@@ -172,7 +172,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                 "Long press/double tap to select text. Press the 'Done' button at the bottom after selected",
             fontSize: 14,
             maxLines: 10,
-            textAlign: TextAlign.left,
+            textAlign: TextAlign.start,
           ),
           SizedBox(height: 15),
           Container(
@@ -221,7 +221,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
             fontSize: 14,
             fontWeight: FontWeight.bold,
             maxLines: 10,
-            textAlign: TextAlign.left,
+            textAlign: TextAlign.start,
           ),
           SizedBox(height: 5),
           TextFont(
@@ -229,7 +229,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                 "Long press/double tap to select text. Press the 'Done' button at the bottom after selected",
             fontSize: 14,
             maxLines: 10,
-            textAlign: TextAlign.left,
+            textAlign: TextAlign.start,
           ),
           SizedBox(height: 15),
           Container(
@@ -295,7 +295,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
             fontSize: 14,
             fontWeight: FontWeight.bold,
             maxLines: 10,
-            textAlign: TextAlign.left,
+            textAlign: TextAlign.start,
           ),
           SizedBox(height: 5),
           TextFont(
@@ -303,7 +303,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                 "Long press/double tap to select text. Press the 'Done' button at the bottom after selected",
             fontSize: 14,
             maxLines: 10,
-            textAlign: TextAlign.left,
+            textAlign: TextAlign.start,
           ),
           SizedBox(height: 15),
           Container(

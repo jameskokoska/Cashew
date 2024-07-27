@@ -683,7 +683,7 @@ class _BudgetHistoryLineGraphState extends State<_BudgetHistoryLineGraph> {
                         overflow: TextOverflow.fade,
                         maxLines: 1,
                         softWrap: false,
-                        textAlign: TextAlign.right,
+                        textAlign: TextAlign.end,
                         text: getWordedNumber(
                             context, Provider.of<AllWallets>(context), value),
                         textColor: dynamicPastel(context, widget.color,

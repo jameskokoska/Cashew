@@ -1098,7 +1098,7 @@ class PastBudgetContainer extends StatelessWidget {
                                                       : budgetAmount -
                                                           totalSpent),
                                               fontSize: 16,
-                                              textAlign: TextAlign.left,
+                                              textAlign: TextAlign.start,
                                               fontWeight: FontWeight.bold,
                                             );
                                           },
@@ -1117,7 +1117,7 @@ class PastBudgetContainer extends StatelessWidget {
                                                         context),
                                                     budgetAmount),
                                             fontSize: 12,
-                                            textAlign: TextAlign.left,
+                                            textAlign: TextAlign.start,
                                           ),
                                         ),
                                       ),
@@ -1146,7 +1146,7 @@ class PastBudgetContainer extends StatelessWidget {
                                                   ? totalSpent
                                                   : totalSpent - budgetAmount),
                                           fontSize: 16,
-                                          textAlign: TextAlign.left,
+                                          textAlign: TextAlign.start,
                                           fontWeight: FontWeight.bold,
                                         );
                                       },
@@ -1164,7 +1164,7 @@ class PastBudgetContainer extends StatelessWidget {
                                                     context),
                                                 budgetAmount),
                                         fontSize: 12,
-                                        textAlign: TextAlign.left,
+                                        textAlign: TextAlign.start,
                                       ),
                                     ),
                                   ),

@@ -51,7 +51,7 @@ class TappableTextEntry extends StatelessWidget {
         autoSizeText: autoSizeText,
         maxLines: 2,
         minFontSize: 16,
-        textAlign: TextAlign.left,
+        textAlign: TextAlign.start,
         fontSize: fontSize ?? 35,
         fontWeight: fontWeight ?? FontWeight.bold,
         text: titlePassed == null ||

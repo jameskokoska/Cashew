@@ -246,7 +246,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                           ),
                           Container(height: 2),
                           TextFont(
-                            textAlign: TextAlign.left,
+                            textAlign: TextAlign.start,
                             text: convertToMoney(
                               Provider.of<AllWallets>(context),
                               walletWithDetails.totalSpent ?? 0,
@@ -281,7 +281,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                                     : Container(),
                               ),
                               TextFont(
-                                textAlign: TextAlign.left,
+                                textAlign: TextAlign.start,
                                 text: walletWithDetails.numberTransactions
                                         .toString() +
                                     " " +

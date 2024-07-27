@@ -639,7 +639,7 @@ class PanelSectionSeparator extends StatelessWidget {
             TextFont(
               text: "left-panel".tr(),
               fontSize: 16,
-              textAlign: TextAlign.left,
+              textAlign: TextAlign.start,
             ),
           Expanded(
               child: HorizontalBreak(
@@ -649,7 +649,7 @@ class PanelSectionSeparator extends StatelessWidget {
             TextFont(
               text: "top-center".tr(),
               fontSize: 16,
-              textAlign: TextAlign.right,
+              textAlign: TextAlign.end,
             ),
           if (orderKey == "ORDER:CENTER")
             Expanded(
@@ -660,7 +660,7 @@ class PanelSectionSeparator extends StatelessWidget {
             TextFont(
               text: "right-panel".tr(),
               fontSize: 16,
-              textAlign: TextAlign.right,
+              textAlign: TextAlign.end,
             ),
         ],
       ),
@@ -735,7 +735,7 @@ class _TransactionsListHomePageBottomSheetSettingsState
                     fontSize: getPlatform() == PlatformOS.isIOS ? 14 : 16,
                     textAlign: getPlatform() == PlatformOS.isIOS
                         ? TextAlign.center
-                        : TextAlign.left,
+                        : TextAlign.start,
                   ),
                 ),
                 SizedBox(height: 15),

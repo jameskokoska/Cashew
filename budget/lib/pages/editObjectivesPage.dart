@@ -240,7 +240,7 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
                                   fontSize: 19,
                                 ),
                                 TextFont(
-                                  textAlign: TextAlign.left,
+                                  textAlign: TextAlign.start,
                                   text: getIsDifferenceOnlyLoan(objective)
                                       ? "difference-loan".tr()
                                       : objective.income
@@ -290,7 +290,7 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
                                                     : "to-collect".tr())
                                             : "";
                                     return TextFont(
-                                      textAlign: TextAlign.left,
+                                      textAlign: TextAlign.start,
                                       text: getIsDifferenceOnlyLoan(objective)
                                           ? (amountSpentLabel +
                                               " " +
@@ -314,7 +314,7 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
                                 //     if (snapshot.hasData &&
                                 //         snapshot.data != null) {
                                 //       return TextFont(
-                                //         textAlign: TextAlign.left,
+                                //         textAlign: TextAlign.start,
                                 //         text: snapshot.data.toString() +
                                 //             " " +
                                 //             (snapshot.data == 1
@@ -331,7 +331,7 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
                                 //       );
                                 //     } else {
                                 //       return TextFont(
-                                //         textAlign: TextAlign.left,
+                                //         textAlign: TextAlign.start,
                                 //         text: "/ transactions",
                                 //         fontSize: 14,
                                 //         textColor:
