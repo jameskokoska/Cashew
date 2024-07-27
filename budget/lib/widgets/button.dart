@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/defaultPreferences.dart';
@@ -88,7 +87,7 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
                   amount: 0.2)
               : Theme.of(context).colorScheme.onSecondaryContainer),
       maxLines: 5,
-      textAlign: TextAlign.center,
+      textAlign: widget.icon != null ? TextAlign.start : TextAlign.center,
     );
     return Padding(
       padding: EdgeInsetsDirectional.only(
@@ -148,20 +147,19 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    widget.icon != null
-                        ? Padding(
-                            padding: const EdgeInsetsDirectional.only(end: 6),
-                            child: Icon(
-                              widget.icon,
-                              size: 21,
-                              color: widget.iconColor == null
-                                  ? Theme.of(context)
-                                      .colorScheme
-                                      .onSecondaryContainer
-                                  : widget.iconColor,
-                            ),
-                          )
-                        : SizedBox.shrink(),
+                    if (widget.icon != null)
+                      Padding(
+                        padding: const EdgeInsetsDirectional.only(end: 8),
+                        child: Icon(
+                          widget.icon,
+                          size: 21,
+                          color: widget.iconColor == null
+                              ? Theme.of(context)
+                                  .colorScheme
+                                  .onSecondaryContainer
+                              : widget.iconColor,
+                        ),
+                      ),
                     widget.flexibleLayout
                         ? Flexible(child: text)
                         : widget.expandedLayout
