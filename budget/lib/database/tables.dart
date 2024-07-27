@@ -1415,6 +1415,8 @@ class FinanceDatabase extends _$FinanceDatabase {
                 budget: budget,
                 budgetTransactionFilters: budgetTransactionFilters,
                 memberTransactionFilters: memberTransactionFilters) &
+            onlyShowBasedOnExcludedCategoryFks(
+                transactions, categoryFksExclude) &
             (onlyShowBasedOnCategoryFks(
                     transactions, categoryFks, categoryFksExclude) |
                 onlyShowBasedOnSubcategoryFks(transactions, categoryFks)) &
@@ -1502,6 +1504,8 @@ class FinanceDatabase extends _$FinanceDatabase {
                 budgetTransactionFilters: budgetTransactionFilters,
                 memberTransactionFilters: memberTransactionFilters) &
             onlyShowBasedOnTimeRange(transactions, start, end, budget) &
+            onlyShowBasedOnExcludedCategoryFks(
+                transactions, categoryFksExclude) &
             (onlyShowBasedOnCategoryFks(
                     transactions, categoryFks, categoryFksExclude) |
                 onlyShowBasedOnSubcategoryFks(transactions, categoryFks)) &
@@ -1604,6 +1608,8 @@ class FinanceDatabase extends _$FinanceDatabase {
                 budgetTransactionFilters: budgetTransactionFilters,
                 memberTransactionFilters: memberTransactionFilters) &
             onlyShowBasedOnTimeRange(transactions, startDate, endDate, budget) &
+            onlyShowBasedOnExcludedCategoryFks(
+                transactions, categoryFksExclude) &
             (onlyShowBasedOnCategoryFks(
                     transactions, categoryFks, categoryFksExclude) |
                 onlyShowBasedOnSubcategoryFks(transactions, categoryFks)) &
@@ -6154,6 +6160,11 @@ class FinanceDatabase extends _$FinanceDatabase {
   Expression<bool> onlyShowBasedOnCategoryFks($TransactionsTable tbl,
       List<String>? categoryFks, List<String>? categoryFksExclude) {
     return isInCategory(tbl, categoryFks, categoryFksExclude);
+  }
+
+  Expression<bool> onlyShowBasedOnExcludedCategoryFks(
+      $TransactionsTable tbl, List<String>? categoryFksExclude) {
+    return isInCategory(tbl, null, categoryFksExclude);
   }
 
   Expression<bool> onlyShowBasedOnSubcategoryFks(
