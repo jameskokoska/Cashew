@@ -2790,6 +2790,12 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   Future<int> createOrUpdateCategoryLimit(CategoryBudgetLimit categoryLimit,
       {bool insert = false}) {
+    double maxAmount = 999999999999;
+    if (categoryLimit.amount >= maxAmount)
+      categoryLimit = categoryLimit.copyWith(amount: maxAmount);
+    else if (categoryLimit.amount <= -maxAmount)
+      categoryLimit = categoryLimit.copyWith(amount: -maxAmount);
+
     categoryLimit =
         categoryLimit.copyWith(dateTimeModified: Value(DateTime.now()));
 
