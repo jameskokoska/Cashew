@@ -22,36 +22,39 @@ double getWidthBottomSheet(context) {
       : MediaQuery.sizeOf(context).width - getWidthNavigationSidebar(context);
 }
 
-double getHorizontalPaddingConstrained(context, {bool enabled = true}) {
+double getHorizontalPaddingConstrained(context,
+    {bool enabled = true, double? customWidthToCalculateOn}) {
   if (enabled == false) return 0;
-  if (MediaQuery.sizeOf(context).width >= 550 &&
-      MediaQuery.sizeOf(context).width <= 1000 &&
+  double fullWidth =
+      customWidthToCalculateOn ?? MediaQuery.sizeOf(context).width;
+  if (fullWidth >= 550 &&
+      fullWidth <= 1000 &&
       getIsFullScreen(context) == false) {
     double returnedPadding = 0;
-    returnedPadding = MediaQuery.sizeOf(context).width / 3 - 140;
+    returnedPadding = fullWidth / 3 - 140;
     return returnedPadding < 0 ? 0 : returnedPadding;
-  } else if (MediaQuery.sizeOf(context).width <= 1000 &&
+  } else if (fullWidth <= 1000 &&
       getIsFullScreen(context) &&
       appStateSettings["expandedNavigationSidebar"] == true) {
     double returnedPadding = 0;
-    returnedPadding = MediaQuery.sizeOf(context).width / 5 - 125;
+    returnedPadding = fullWidth / 5 - 125;
     return returnedPadding < 0 ? 0 : returnedPadding;
   }
   // When the navigation bar is closed
-  else if (MediaQuery.sizeOf(context).width <= 1000 &&
+  else if (fullWidth <= 1000 &&
       getIsFullScreen(context) &&
       appStateSettings["expandedNavigationSidebar"] == false) {
     double returnedPadding = 0;
-    returnedPadding = MediaQuery.sizeOf(context).width / 3.5 - 125;
+    returnedPadding = fullWidth / 3.5 - 125;
     return returnedPadding < 0 ? 0 : returnedPadding;
   } else if (getIsFullScreen(context) &&
       appStateSettings["expandedNavigationSidebar"] == false) {
     double returnedPadding = 0;
-    returnedPadding = (MediaQuery.sizeOf(context).width - 500) / 3;
+    returnedPadding = (fullWidth - 500) / 3;
     return returnedPadding < 0 ? 0 : returnedPadding;
   }
 
-  return (MediaQuery.sizeOf(context).width - getWidthBottomSheet(context)) / 3;
+  return (fullWidth - getWidthBottomSheet(context)) / 3;
 }
 
 SheetController? bottomSheetControllerGlobalCustomAssigned;
