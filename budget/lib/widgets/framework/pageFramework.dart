@@ -75,6 +75,7 @@ class PageFramework extends StatefulWidget {
     this.selectedTransactionsAppBar,
     this.backButtonOpacity,
     this.forceBackgroundColors = false,
+    this.scrollbar = true,
   }) : super(key: key);
 
   final String title;
@@ -127,6 +128,7 @@ class PageFramework extends StatefulWidget {
   final Widget? selectedTransactionsAppBar;
   final double? backButtonOpacity;
   final bool forceBackgroundColors;
+  final bool scrollbar;
 
   @override
   State<PageFramework> createState() => PageFrameworkState();
@@ -465,6 +467,7 @@ class PageFrameworkState extends State<PageFramework>
           : Stack(
               children: [
                 ScrollbarWrap(
+                  enabled: widget.scrollbar,
                   child: widget.customScrollViewBuilder != null
                       ? widget.customScrollViewBuilder!(
                           _scrollController,

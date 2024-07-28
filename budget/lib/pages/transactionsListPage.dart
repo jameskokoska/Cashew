@@ -36,6 +36,13 @@ class TransactionsListPage extends StatefulWidget {
 
 class TransactionsListPageState extends State<TransactionsListPage>
     with TickerProviderStateMixin {
+  final pageId = "Transactions";
+  ScrollController _scrollController = ScrollController();
+  PageController _pageController = PageController(initialPage: 1000000);
+  List<int> selectedTransactionIDs = [];
+  GlobalKey<MonthSelectorState> monthSelectorStateKey = GlobalKey();
+  SearchFilters searchFilters = SearchFilters();
+
   void refreshState() {
     setState(() {});
   }
@@ -56,31 +63,9 @@ class TransactionsListPageState extends State<TransactionsListPage>
     }
   }
 
-  bool showAppBarPaddingOffset = false;
-  bool alreadyChanged = false;
-
-  bool scaleInSearchIcon = false;
-
-  late ScrollController _scrollController;
-  late PageController _pageController;
-  late List<int> selectedTransactionIDs = [];
-
-  GlobalKey<MonthSelectorState> monthSelectorStateKey = GlobalKey();
-
-  late SearchFilters searchFilters;
-
-  onSelected(Transaction transaction, bool selected) {
-    // print(transaction.transactionPk.toString() + " selected!");
-    // print(globalSelectedID["Transactions"]);
-  }
-
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
-    _pageController = PageController(initialPage: 1000000);
-
-    searchFilters = SearchFilters();
     searchFilters.loadFilterString(
       appStateSettings["transactionsListPageSetFiltersString"],
       skipDateTimeRange: true,
@@ -129,291 +114,276 @@ class TransactionsListPageState extends State<TransactionsListPage>
     setState(() {});
   }
 
+  void changePage(int difference) {
+    _pageController.animateToPage(
+      (_pageController.page ?? _pageController.initialPage).round() +
+          difference,
+      duration: Duration(milliseconds: 1000),
+      curve: Curves.easeInOutCubicEmphasized,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: cancelParentScroll,
-      builder: (context, value, widget) {
-        return PullDownToRefreshSync(
-          scrollController: _scrollController,
-          child: Stack(
-            children: [
-              NestedScrollView(
-                controller: _scrollController,
-                physics: value ? NeverScrollableScrollPhysics() : null,
-                headerSliverBuilder:
-                    (BuildContext contextHeader, bool innerBoxIsScrolled) {
-                  return <Widget>[
-                    SliverOverlapAbsorber(
-                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                          contextHeader),
-                      sliver: MultiSliver(
-                        children: [
-                          PageFrameworkSliverAppBar(
-                            belowAppBarPaddingWhenCenteredTitleSmall: 0,
-                            title: "transactions".tr(),
-                            actions: [
-                              IconButton(
-                                tooltip: "filters".tr(),
-                                onPressed: () {
-                                  selectFilters(context);
-                                },
-                                padding: EdgeInsetsDirectional.all(15 - 8),
-                                icon: AnimatedContainer(
-                                  duration: Duration(milliseconds: 500),
-                                  decoration: BoxDecoration(
-                                    color: searchFilters.isClear()
-                                        ? Colors.transparent
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .tertiary
-                                            .withOpacity(0.1),
-                                    borderRadius:
-                                        BorderRadiusDirectional.circular(100),
-                                  ),
-                                  padding: EdgeInsetsDirectional.all(8),
-                                  child: Icon(
-                                    appStateSettings["outlinedIcons"]
-                                        ? Icons.filter_alt_outlined
-                                        : Icons.filter_alt_rounded,
-                                    color: searchFilters.isClear()
-                                        ? null
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .tertiary,
-                                  ),
-                                ),
+    return PageFramework(
+      title: "transactions".tr(),
+      listID: pageId,
+      scrollController: _scrollController,
+      selectedTransactionsAppBar: SelectedTransactionsAppBar(pageID: pageId),
+      scrollbar: false,
+      actions: [
+        IconButton(
+          tooltip: "filters".tr(),
+          onPressed: () {
+            selectFilters(context);
+          },
+          padding: EdgeInsetsDirectional.all(15 - 8),
+          icon: AnimatedContainer(
+            duration: Duration(milliseconds: 500),
+            decoration: BoxDecoration(
+              color: searchFilters.isClear()
+                  ? Colors.transparent
+                  : Theme.of(context).colorScheme.tertiary.withOpacity(0.1),
+              borderRadius: BorderRadiusDirectional.circular(100),
+            ),
+            padding: EdgeInsetsDirectional.all(8),
+            child: Icon(
+              appStateSettings["outlinedIcons"]
+                  ? Icons.filter_alt_outlined
+                  : Icons.filter_alt_rounded,
+              color: searchFilters.isClear()
+                  ? null
+                  : Theme.of(context).colorScheme.tertiary,
+            ),
+          ),
+        ),
+        IconButton(
+          padding: EdgeInsetsDirectional.all(15),
+          tooltip: "search-transactions".tr(),
+          onPressed: () {
+            pushRoute(context, TransactionsSearchPage());
+          },
+          icon: Icon(
+            appStateSettings["outlinedIcons"]
+                ? Icons.search_outlined
+                : Icons.search_rounded,
+          ),
+        ),
+      ],
+      customScrollViewBuilder: (_, scrollPhysics, sliverAppBar) {
+        return ValueListenableBuilder(
+          valueListenable: cancelParentScroll,
+          builder: (context, value, widget) {
+            return NestedScrollView(
+              controller: _scrollController,
+              physics: value ? NeverScrollableScrollPhysics() : scrollPhysics,
+              headerSliverBuilder:
+                  (BuildContext contextHeader, bool innerBoxIsScrolled) {
+                return <Widget>[
+                  SliverOverlapAbsorber(
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                        contextHeader),
+                    sliver: MultiSliver(
+                      children: [
+                        sliverAppBar,
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding:
+                                const EdgeInsetsDirectional.only(bottom: 5),
+                            child: MonthSelector(
+                              key: monthSelectorStateKey,
+                              setSelectedDateStart:
+                                  (DateTime currentDateTime, int index) {
+                                if (((_pageController.page ?? 0) -
+                                            index -
+                                            _pageController.initialPage)
+                                        .abs() ==
+                                    1) {
+                                  _pageController.animateToPage(
+                                    _pageController.initialPage + index,
+                                    duration: Duration(milliseconds: 1000),
+                                    curve: Curves.easeInOutCubicEmphasized,
+                                  );
+                                } else {
+                                  _pageController.jumpToPage(
+                                    _pageController.initialPage + index,
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                        SliverToBoxAdapter(
+                          child: AppliedFilterChips(
+                            searchFilters: searchFilters,
+                            openFiltersSelection: () {
+                              selectFilters(context);
+                            },
+                            clearSearchFilters: clearSearchFilters,
+                            padding:
+                                EdgeInsetsDirectional.symmetric(vertical: 5),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ];
+              },
+              body: ChangePagesArrows(
+                onArrowLeft: () => changePage(-1),
+                onArrowRight: () => changePage(1),
+                child: Builder(
+                  builder: (contextPageView) {
+                    return PageView.builder(
+                      controller: _pageController,
+                      onPageChanged: (int index) {
+                        final int pageOffset =
+                            index - _pageController.initialPage;
+                        DateTime startDate = DateTime(DateTime.now().year,
+                            DateTime.now().month + pageOffset);
+                        monthSelectorStateKey.currentState
+                            ?.setSelectedDateStart(startDate, pageOffset);
+                        double middle = -(MediaQuery.sizeOf(context).width -
+                                    getWidthNavigationSidebar(context)) /
+                                2 +
+                            100 / 2;
+                        monthSelectorStateKey.currentState
+                            ?.scrollTo(middle + (pageOffset - 1) * 100 + 100);
+                      },
+                      itemBuilder: (BuildContext context, int index) {
+                        final int pageOffset =
+                            index - _pageController.initialPage;
+                        DateTime startDate = DateTime(DateTime.now().year,
+                            DateTime.now().month + pageOffset);
+
+                        return ScrollbarWrap(
+                          child: CustomScrollView(
+                            slivers: [
+                              SliverPinnedOverlapInjector(
+                                handle: NestedScrollView
+                                    .sliverOverlapAbsorberHandleFor(
+                                        contextPageView),
                               ),
-                              IconButton(
-                                padding: EdgeInsetsDirectional.all(15),
-                                tooltip: "search-transactions".tr(),
-                                onPressed: () {
-                                  pushRoute(context, TransactionsSearchPage());
+                              TransactionEntries(
+                                searchFilters: searchFilters,
+                                renderType: appStateSettings["appAnimations"] !=
+                                        AppAnimations.all.index
+                                    ? TransactionEntriesRenderType
+                                        .sliversNotSticky
+                                    : TransactionEntriesRenderType
+                                        .implicitlyAnimatedSlivers,
+                                startDate,
+                                new DateTime(startDate.year,
+                                    startDate.month + 1, startDate.day - 1),
+                                listID: pageId,
+                                noResultsMessage: "no-transactions-for".tr() +
+                                    " " +
+                                    getMonth(startDate,
+                                        includeYear: startDate.year !=
+                                            DateTime.now().year) +
+                                    ".",
+                                showTotalCashFlow: true,
+                                enableSpendingSummary: true,
+                                showSpendingSummary: appStateSettings[
+                                    "showTransactionsMonthlySpendingSummary"],
+                                onLongPressSpendingSummary: () {
+                                  openBottomSheet(
+                                    context,
+                                    PopupFramework(
+                                      hasPadding: false,
+                                      child: Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsetsDirectional
+                                                .symmetric(horizontal: 8),
+                                            child: TextFont(
+                                              text:
+                                                  "enabled-in-settings-at-any-time"
+                                                      .tr(),
+                                              fontSize: 14,
+                                              maxLines: 5,
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          SizedBox(height: 5),
+                                          ShowTransactionsMonthlySpendingSummarySettingToggle(),
+                                        ],
+                                      ),
+                                    ),
+                                  );
                                 },
-                                icon: Icon(
-                                  appStateSettings["outlinedIcons"]
-                                      ? Icons.search_outlined
-                                      : Icons.search_rounded,
+                              ),
+                              SliverToBoxAdapter(
+                                child: SizedBox(
+                                  height: 40,
                                 ),
                               ),
                             ],
                           ),
-                          SliverToBoxAdapter(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsetsDirectional.only(bottom: 5),
-                              child: MonthSelector(
-                                key: monthSelectorStateKey,
-                                setSelectedDateStart:
-                                    (DateTime currentDateTime, int index) {
-                                  if (((_pageController.page ?? 0) -
-                                              index -
-                                              _pageController.initialPage)
-                                          .abs() ==
-                                      1) {
-                                    _pageController.animateToPage(
-                                      _pageController.initialPage + index,
-                                      duration: Duration(milliseconds: 1000),
-                                      curve: Curves.easeInOutCubicEmphasized,
-                                    );
-                                  } else {
-                                    _pageController.jumpToPage(
-                                      _pageController.initialPage + index,
-                                    );
-                                  }
-                                },
-                              ),
-                            ),
-                          ),
-                          SliverToBoxAdapter(
-                            child: AppliedFilterChips(
-                              searchFilters: searchFilters,
-                              openFiltersSelection: () {
-                                selectFilters(context);
-                              },
-                              clearSearchFilters: clearSearchFilters,
-                              padding:
-                                  EdgeInsetsDirectional.symmetric(vertical: 5),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ];
-                },
-                body: Stack(
-                  children: [
-                    Builder(
-                      builder: (contextPageView) {
-                        return PageView.builder(
-                          controller: _pageController,
-                          onPageChanged: (int index) {
-                            final int pageOffset =
-                                index - _pageController.initialPage;
-                            DateTime startDate = DateTime(DateTime.now().year,
-                                DateTime.now().month + pageOffset);
-                            monthSelectorStateKey.currentState
-                                ?.setSelectedDateStart(startDate, pageOffset);
-                            double middle = -(MediaQuery.sizeOf(context).width -
-                                        getWidthNavigationSidebar(context)) /
-                                    2 +
-                                100 / 2;
-                            monthSelectorStateKey.currentState?.scrollTo(
-                                middle + (pageOffset - 1) * 100 + 100);
-                            // transactionsListPageStateKey.currentState!
-                            //     .scrollToTop();
-                          },
-                          itemBuilder: (BuildContext context, int index) {
-                            final int pageOffset =
-                                index - _pageController.initialPage;
-                            DateTime startDate = DateTime(DateTime.now().year,
-                                DateTime.now().month + pageOffset);
-
-                            return SwipeToSelectTransactions(
-                              listID: "Transactions",
-                              child: ScrollbarWrap(
-                                child: CustomScrollView(
-                                  slivers: [
-                                    SliverPinnedOverlapInjector(
-                                      handle: NestedScrollView
-                                          .sliverOverlapAbsorberHandleFor(
-                                              contextPageView),
-                                    ),
-                                    TransactionEntries(
-                                      searchFilters: searchFilters,
-                                      renderType:
-                                          appStateSettings["appAnimations"] !=
-                                                  AppAnimations.all.index
-                                              ? TransactionEntriesRenderType
-                                                  .sliversNotSticky
-                                              : TransactionEntriesRenderType
-                                                  .implicitlyAnimatedSlivers,
-                                      startDate,
-                                      new DateTime(
-                                          startDate.year,
-                                          startDate.month + 1,
-                                          startDate.day - 1),
-                                      onSelected: onSelected,
-                                      listID: "Transactions",
-                                      noResultsMessage: "no-transactions-for"
-                                              .tr() +
-                                          " " +
-                                          getMonth(startDate,
-                                              includeYear: startDate.year !=
-                                                  DateTime.now().year) +
-                                          ".",
-                                      showTotalCashFlow: true,
-                                      enableSpendingSummary: true,
-                                      showSpendingSummary: appStateSettings[
-                                          "showTransactionsMonthlySpendingSummary"],
-                                      onLongPressSpendingSummary: () {
-                                        openBottomSheet(
-                                          context,
-                                          PopupFramework(
-                                            hasPadding: false,
-                                            child: Column(
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsetsDirectional
-                                                          .symmetric(
-                                                          horizontal: 8),
-                                                  child: TextFont(
-                                                    text:
-                                                        "enabled-in-settings-at-any-time"
-                                                            .tr(),
-                                                    fontSize: 14,
-                                                    maxLines: 5,
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                ),
-                                                SizedBox(height: 5),
-                                                ShowTransactionsMonthlySpendingSummarySettingToggle(),
-                                              ],
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-
-                                    // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
-                                    SliverToBoxAdapter(
-                                      child: SizedBox(
-                                        height: 40,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
                         );
                       },
-                    ),
-                    getIsFullScreen(context) == false
-                        ? SizedBox.shrink()
-                        : Padding(
-                            padding: const EdgeInsetsDirectional.all(8.0),
-                            child: Align(
-                              alignment: AlignmentDirectional.centerStart,
-                              child: IconButton(
-                                padding: EdgeInsetsDirectional.all(15),
-                                icon: Icon(
-                                  appStateSettings["outlinedIcons"]
-                                      ? Icons.arrow_left_outlined
-                                      : Icons.arrow_left_rounded,
-                                  size: 30,
-                                ),
-                                onPressed: () {
-                                  _pageController.animateToPage(
-                                    (_pageController.page ??
-                                                _pageController.initialPage)
-                                            .round() -
-                                        1,
-                                    duration: Duration(milliseconds: 1000),
-                                    curve: Curves.easeInOutCubicEmphasized,
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                    getIsFullScreen(context) == false
-                        ? SizedBox.shrink()
-                        : Padding(
-                            padding: const EdgeInsetsDirectional.all(8.0),
-                            child: Align(
-                              alignment: AlignmentDirectional.centerEnd,
-                              child: IconButton(
-                                padding: EdgeInsetsDirectional.all(15),
-                                icon: Icon(
-                                  appStateSettings["outlinedIcons"]
-                                      ? Icons.arrow_right_outlined
-                                      : Icons.arrow_right_rounded,
-                                  size: 30,
-                                ),
-                                onPressed: () {
-                                  _pageController.animateToPage(
-                                    (_pageController.page ??
-                                                _pageController.initialPage)
-                                            .round() +
-                                        1,
-                                    duration: Duration(milliseconds: 1000),
-                                    curve: Curves.easeInOutCubicEmphasized,
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                  ],
+                    );
+                  },
                 ),
               ),
-              SelectedTransactionsAppBar(
-                pageID: "Transactions",
-              ),
-            ],
-          ),
+            );
+          },
         );
       },
+    );
+  }
+}
+
+class ChangePagesArrows extends StatelessWidget {
+  const ChangePagesArrows(
+      {required this.onArrowLeft,
+      required this.onArrowRight,
+      required this.child,
+      super.key});
+  final VoidCallback onArrowLeft;
+  final VoidCallback onArrowRight;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        child,
+        getIsFullScreen(context) == false
+            ? SizedBox.shrink()
+            : Padding(
+                padding: const EdgeInsetsDirectional.all(8.0),
+                child: Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: IconButton(
+                      padding: EdgeInsetsDirectional.all(15),
+                      icon: Icon(
+                        appStateSettings["outlinedIcons"]
+                            ? Icons.arrow_left_outlined
+                            : Icons.arrow_left_rounded,
+                        size: 30,
+                      ),
+                      onPressed: onArrowLeft),
+                ),
+              ),
+        getIsFullScreen(context) == false
+            ? SizedBox.shrink()
+            : Padding(
+                padding: const EdgeInsetsDirectional.all(8.0),
+                child: Align(
+                  alignment: AlignmentDirectional.centerEnd,
+                  child: IconButton(
+                      padding: EdgeInsetsDirectional.all(15),
+                      icon: Icon(
+                        appStateSettings["outlinedIcons"]
+                            ? Icons.arrow_right_outlined
+                            : Icons.arrow_right_rounded,
+                        size: 30,
+                      ),
+                      onPressed: onArrowRight),
+                ),
+              ),
+      ],
     );
   }
 }

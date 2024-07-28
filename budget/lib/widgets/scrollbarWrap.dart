@@ -3,13 +3,18 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ScrollbarWrap extends StatelessWidget {
-  const ScrollbarWrap({required this.child, super.key});
+  const ScrollbarWrap({
+    required this.child,
+    this.enabled = true,
+    super.key,
+  });
   final Widget child;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
     // disable in debug mode because of scroll controller warnings
-    if (kIsWeb || kDebugMode) {
+    if (kIsWeb || kDebugMode || enabled == false) {
       return child;
     }
     return MediaQuery.removePadding(

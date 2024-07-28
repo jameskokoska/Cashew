@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'package:flutter/scheduler.dart';
 
+// Prevent scrolling of the parent scroll when scrolling through the infinite list
 ValueNotifier<bool> cancelParentScroll = ValueNotifier<bool>(false);
 
 class MultiDirectionalInfiniteScroll extends StatefulWidget {
@@ -192,8 +193,11 @@ class MultiDirectionalInfiniteScrollState
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
-                    return widget.itemBuilder(
-                        top[index], index == top.length - 1, false);
+                    return SizedBox(
+                      key: ValueKey(index * -1),
+                      child: widget.itemBuilder(
+                          top[index], index == top.length - 1, false),
+                    );
                   },
                   childCount: top.length,
                 ),
@@ -202,8 +206,11 @@ class MultiDirectionalInfiniteScrollState
                 key: ValueKey('second-sliver-list'),
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
-                    return widget.itemBuilder(
-                        bottom[index], false, index == bottom.length - 1);
+                    return SizedBox(
+                      key: ValueKey(index),
+                      child: widget.itemBuilder(
+                          bottom[index], false, index == bottom.length - 1),
+                    );
                   },
                   childCount: bottom.length,
                 ),
