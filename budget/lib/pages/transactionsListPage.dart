@@ -19,6 +19,7 @@ import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntries.dart';
 import 'package:budget/widgets/transactionEntry/swipeToSelectTransactions.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -186,33 +187,30 @@ class TransactionsListPageState extends State<TransactionsListPage>
                     sliver: MultiSliver(
                       children: [
                         sliverAppBar,
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding:
-                                const EdgeInsetsDirectional.only(bottom: 5),
-                            child: MonthSelector(
-                              key: monthSelectorStateKey,
-                              setSelectedDateStart:
-                                  (DateTime currentDateTime, int index) {
-                                if (((_pageController.page ?? 0) -
-                                            index -
-                                            _pageController.initialPage)
-                                        .abs() ==
-                                    1) {
-                                  _pageController.animateToPage(
-                                    _pageController.initialPage + index,
-                                    duration: Duration(milliseconds: 1000),
-                                    curve: Curves.easeInOutCubicEmphasized,
-                                  );
-                                } else {
-                                  _pageController.jumpToPage(
-                                    _pageController.initialPage + index,
-                                  );
-                                }
-                              },
-                            ),
+                        SliverStickyHeaderIfTall(
+                          child: MonthSelector(
+                            key: monthSelectorStateKey,
+                            setSelectedDateStart:
+                                (DateTime currentDateTime, int index) {
+                              if (((_pageController.page ?? 0) -
+                                          index -
+                                          _pageController.initialPage)
+                                      .abs() ==
+                                  1) {
+                                _pageController.animateToPage(
+                                  _pageController.initialPage + index,
+                                  duration: Duration(milliseconds: 1000),
+                                  curve: Curves.easeInOutCubicEmphasized,
+                                );
+                              } else {
+                                _pageController.jumpToPage(
+                                  _pageController.initialPage + index,
+                                );
+                              }
+                            },
                           ),
                         ),
+                        SliverToBoxAdapter(child: SizedBox(height: 5)),
                         SliverToBoxAdapter(
                           child: AppliedFilterChips(
                             searchFilters: searchFilters,
@@ -331,6 +329,21 @@ class TransactionsListPageState extends State<TransactionsListPage>
         );
       },
     );
+  }
+}
+
+class SliverStickyHeaderIfTall extends StatelessWidget {
+  const SliverStickyHeaderIfTall({required this.child, super.key});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    print(MediaQuery.sizeOf(context).height);
+    return MediaQuery.sizeOf(context).height > 800
+        ? SliverPinnedHeader(
+            child: Container(
+                color: Theme.of(context).colorScheme.background, child: child))
+        : SliverToBoxAdapter(child: child);
   }
 }
 
