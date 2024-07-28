@@ -77,26 +77,65 @@ class _CategoryLimitsState extends State<CategoryLimits> {
                   return CountNumber(
                     count: snapshot.data ?? 0,
                     duration: Duration(milliseconds: 700),
-                    initialCount: (0),
+                    initialCount: 0,
                     textBuilder: (number) {
-                      return TextFont(
-                        fontSize: 15,
-                        textColor: isOver
-                            ? getColor(context, "expenseAmount")
-                            : getColor(context, "textLight"),
-                        text: widget.isAbsoluteSpendingLimit
-                            ? (convertToMoney(
-                                    Provider.of<AllWallets>(context), number,
-                                    finalNumber: snapshot.data ?? 0) +
-                                " / " +
-                                convertToMoney(Provider.of<AllWallets>(context),
-                                    widget.budgetLimit))
-                            : (convertToPercent(number,
-                                    numberDecimals: 2,
-                                    shouldRemoveTrailingZeroes: true,
-                                    finalNumber: snapshot.data ?? 0) +
-                                " / " +
-                                "100%"),
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          TextFont(
+                            fontSize: 15,
+                            textColor: isOver
+                                ? getColor(context, "expenseAmount")
+                                : getColor(context, "black").withOpacity(
+                                    appStateSettings["increaseTextContrast"] ==
+                                            true
+                                        ? 0.7
+                                        : 0.5),
+                            text: widget.isAbsoluteSpendingLimit
+                                ? (convertToMoney(
+                                        Provider.of<AllWallets>(context),
+                                        number,
+                                        finalNumber: number) +
+                                    " / " +
+                                    convertToMoney(
+                                        Provider.of<AllWallets>(context),
+                                        widget.budgetLimit))
+                                : (convertToPercent(number,
+                                        numberDecimals: 2,
+                                        shouldRemoveTrailingZeroes: true,
+                                        finalNumber: number) +
+                                    " / " +
+                                    "100%"),
+                          ),
+                          Opacity(
+                            opacity: appStateSettings["increaseTextContrast"] ==
+                                        false &&
+                                    isOver
+                                ? 0.6
+                                : 1,
+                            child: TextFont(
+                              fontSize: 15,
+                              textColor: isOver
+                                  ? getColor(context, "expenseAmount")
+                                  : getColor(context, "textLight"),
+                              text: (widget.isAbsoluteSpendingLimit
+                                      ? (convertToMoney(
+                                          Provider.of<AllWallets>(context),
+                                          (widget.budgetLimit - number).abs(),
+                                          finalNumber:
+                                              (widget.budgetLimit - number)
+                                                  .abs()))
+                                      : (convertToPercent((100 - number).abs(),
+                                          numberDecimals: 2,
+                                          shouldRemoveTrailingZeroes: true,
+                                          finalNumber: (100 - number).abs()))) +
+                                  " " +
+                                  (isOver
+                                      ? "over".tr().toLowerCase()
+                                      : "remaining".tr().toLowerCase()),
+                            ),
+                          ),
+                        ],
                       );
                     },
                   );
