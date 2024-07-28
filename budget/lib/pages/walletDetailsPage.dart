@@ -1258,6 +1258,9 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
             enableDoubleColumn(context) == true && widget.wallet == null
                 ? Theme.of(context).colorScheme.secondaryContainer
                 : null,
+        dragDownToDismiss: true,
+        dragDownToDismissEnabled: enableDoubleColumn(context) ? false : true,
+        expandedHeight: enableDoubleColumn(context) ? 56 : null,
         backgroundColor: Theme.of(context).colorScheme.background,
         scrollController: _scrollController,
         key: pageState,
@@ -1367,108 +1370,60 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                     ),
                   ),
               ],
-        dragDownToDismiss: true,
-        dragDownToDismissEnabled: enableDoubleColumn(context) ? false : true,
-        expandedHeight: enableDoubleColumn(context) ? 56 : null,
         bodyBuilder: (scrollController, scrollPhysics, sliverAppBar) {
           if (widget.wallet == null && enableDoubleColumn(context)) {
-            double heightOfBanner = 56;
-            double topPaddingOfBanner = MediaQuery.viewPaddingOf(context).top;
-            double totalHeaderHeight = heightOfBanner + topPaddingOfBanner;
-            return Column(
-              children: [
-                Container(
-                  height: totalHeaderHeight,
-                  decoration: BoxDecoration(
-                      boxShadow: boxShadowCheck(boxShadowSharp(context))),
-                  child: CustomScrollView(
-                    slivers: [sliverAppBar],
-                  ),
-                ),
-                ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: 1800),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          height: MediaQuery.sizeOf(context).height -
-                              totalHeaderHeight,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Flexible(
-                                child: ConstrainedBox(
-                                  constraints: BoxConstraints(maxWidth: 700),
-                                  child: ScrollbarWrap(
-                                    child: CustomScrollView(
-                                      controller: _scrollController,
-                                      slivers: [
-                                        SliverToBoxAdapter(
-                                            child: SizedBox(height: 20)),
-                                        SliverToBoxAdapter(
-                                          child: Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .symmetric(horizontal: 13),
-                                            child: Stack(
-                                              alignment:
-                                                  AlignmentDirectional.center,
-                                              children: [
-                                                selectedTabCurrent,
-                                                selectedTabPeriodSelected(
-                                                  () {
-                                                    selectAllSpendingPeriod(
-                                                        onlyShowCycleOption:
-                                                            false);
-                                                  },
-                                                ),
-                                                PositionedDirectional(
-                                                  end: 0,
-                                                  child:
-                                                      clearSelectedPeriodButton,
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        SliverToBoxAdapter(
-                                          child: appliedFilterChipsWidget,
-                                        ),
-                                        ...currentTabPage,
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Flexible(
-                                child: ConstrainedBox(
-                                  constraints: BoxConstraints(maxWidth: 700),
-                                  child: ScrollbarWrap(
-                                    child: CustomScrollView(
-                                      slivers: [
-                                        SliverToBoxAdapter(
-                                            child: SizedBox(height: 20)),
-                                        SliverToBoxAdapter(
-                                          child: Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .symmetric(horizontal: 13),
-                                            child: selectedTabHistory,
-                                          ),
-                                        ),
-                                        ...historyTabPage,
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+            return FullPageDoubleColumnLayout(
+              heightOfBanner: 56,
+              sliverAppBar: sliverAppBar,
+              leftWidget: ScrollbarWrap(
+                child: CustomScrollView(
+                  controller: _scrollController,
+                  slivers: [
+                    SliverToBoxAdapter(child: SizedBox(height: 20)),
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsetsDirectional.symmetric(
+                            horizontal: 13),
+                        child: Stack(
+                          alignment: AlignmentDirectional.center,
+                          children: [
+                            selectedTabCurrent,
+                            selectedTabPeriodSelected(
+                              () {
+                                selectAllSpendingPeriod(
+                                    onlyShowCycleOption: false);
+                              },
+                            ),
+                            PositionedDirectional(
+                              end: 0,
+                              child: clearSelectedPeriodButton,
+                            )
+                          ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: appliedFilterChipsWidget,
+                    ),
+                    ...currentTabPage,
+                  ],
                 ),
-              ],
+              ),
+              rightWidget: ScrollbarWrap(
+                child: CustomScrollView(
+                  slivers: [
+                    SliverToBoxAdapter(child: SizedBox(height: 20)),
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsetsDirectional.symmetric(
+                            horizontal: 13),
+                        child: selectedTabHistory,
+                      ),
+                    ),
+                    ...historyTabPage,
+                  ],
+                ),
+              ),
             );
           }
           return Stack(
@@ -1621,6 +1576,67 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
           pageID: listID,
         ),
       ),
+    );
+  }
+}
+
+class FullPageDoubleColumnLayout extends StatelessWidget {
+  const FullPageDoubleColumnLayout(
+      {required this.heightOfBanner,
+      required this.sliverAppBar,
+      required this.leftWidget,
+      required this.rightWidget,
+      super.key});
+  final double heightOfBanner;
+  final Widget sliverAppBar;
+  final Widget leftWidget;
+  final Widget rightWidget;
+
+  @override
+  Widget build(BuildContext context) {
+    double topPaddingOfBanner = MediaQuery.viewPaddingOf(context).top;
+    double totalHeaderHeight = heightOfBanner + topPaddingOfBanner;
+    return Stack(
+      children: [
+        Container(
+          height: totalHeaderHeight,
+          decoration:
+              BoxDecoration(boxShadow: boxShadowCheck(boxShadowSharp(context))),
+          child: CustomScrollView(
+            slivers: [sliverAppBar],
+          ),
+        ),
+        Padding(
+          padding: EdgeInsetsDirectional.only(top: totalHeaderHeight),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 1600),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Flexible(
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(maxWidth: 700),
+                          child: leftWidget,
+                        ),
+                      ),
+                      Flexible(
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(maxWidth: 700),
+                          child: rightWidget,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
