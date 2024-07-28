@@ -9,24 +9,20 @@ import 'package:budget/widgets/scrollbarWrap.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
-import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/selectedTransactionsAppBar.dart';
 import 'package:budget/widgets/monthSelector.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/settingsContainers.dart';
-import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntries.dart';
-import 'package:budget/widgets/transactionEntry/swipeToSelectTransactions.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:budget/widgets/util/sliverPinnedOverlapInjector.dart';
 import 'package:budget/widgets/util/multiDirectionalInfiniteScroll.dart';
-
-import '../widgets/pullDownToRefreshSync.dart';
+import 'package:budget/widgets/sliverStickyHeaderIfTall.dart';
+import 'package:budget/widgets/changePagesArrows.dart';
 
 class TransactionsListPage extends StatefulWidget {
   const TransactionsListPage({Key? key}) : super(key: key);
@@ -328,75 +324,6 @@ class TransactionsListPageState extends State<TransactionsListPage>
           },
         );
       },
-    );
-  }
-}
-
-class SliverStickyHeaderIfTall extends StatelessWidget {
-  const SliverStickyHeaderIfTall({required this.child, super.key});
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    print(MediaQuery.sizeOf(context).height);
-    return MediaQuery.sizeOf(context).height > 800
-        ? SliverPinnedHeader(
-            child: Container(
-                color: Theme.of(context).colorScheme.background, child: child))
-        : SliverToBoxAdapter(child: child);
-  }
-}
-
-class ChangePagesArrows extends StatelessWidget {
-  const ChangePagesArrows(
-      {required this.onArrowLeft,
-      required this.onArrowRight,
-      required this.child,
-      super.key});
-  final VoidCallback onArrowLeft;
-  final VoidCallback onArrowRight;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        child,
-        getIsFullScreen(context) == false
-            ? SizedBox.shrink()
-            : Padding(
-                padding: const EdgeInsetsDirectional.all(8.0),
-                child: Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: IconButton(
-                      padding: EdgeInsetsDirectional.all(15),
-                      icon: Icon(
-                        appStateSettings["outlinedIcons"]
-                            ? Icons.arrow_left_outlined
-                            : Icons.arrow_left_rounded,
-                        size: 30,
-                      ),
-                      onPressed: onArrowLeft),
-                ),
-              ),
-        getIsFullScreen(context) == false
-            ? SizedBox.shrink()
-            : Padding(
-                padding: const EdgeInsetsDirectional.all(8.0),
-                child: Align(
-                  alignment: AlignmentDirectional.centerEnd,
-                  child: IconButton(
-                      padding: EdgeInsetsDirectional.all(15),
-                      icon: Icon(
-                        appStateSettings["outlinedIcons"]
-                            ? Icons.arrow_right_outlined
-                            : Icons.arrow_right_rounded,
-                        size: 30,
-                      ),
-                      onPressed: onArrowRight),
-                ),
-              ),
-      ],
     );
   }
 }
