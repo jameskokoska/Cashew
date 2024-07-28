@@ -1,7 +1,5 @@
 import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
-import 'package:budget/widgets/bottomNavBar.dart';
-import 'package:budget/widgets/util/checkWidgetLaunch.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

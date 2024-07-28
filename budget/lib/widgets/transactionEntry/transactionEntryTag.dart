@@ -1,14 +1,11 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/objectivesListPage.dart';
-import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
-import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/util/infiniteRotationAnimation.dart';
-import 'package:budget/widgets/util/widgetSize.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';

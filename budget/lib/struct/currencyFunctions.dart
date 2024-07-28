@@ -2,12 +2,7 @@ import 'package:budget/struct/settings.dart';
 import 'dart:convert';
 import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/number_symbols.dart';
-import 'package:intl/number_symbols.dart';
-import 'package:intl/number_symbols_data.dart';
-import 'package:universal_io/io.dart';
 
 Future<bool> getExchangeRates() async {
   print("Getting exchange rates for current wallets");

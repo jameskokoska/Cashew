@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:budget/colors.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:flutter/material.dart';

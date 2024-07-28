@@ -1,5 +1,3 @@
-import "package:flutter/material.dart";
-
 class Throttler {
   DateTime? _lastCallTime;
   bool _throttling = false;

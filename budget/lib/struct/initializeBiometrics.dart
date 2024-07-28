@@ -1,5 +1,4 @@
 import 'package:animations/animations.dart';
-import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';

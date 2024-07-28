@@ -21,7 +21,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
-import 'package:googleapis/gmail/v1.dart' as gMail;
 import 'package:provider/provider.dart';
 
 class AddEmailTemplate extends StatefulWidget {

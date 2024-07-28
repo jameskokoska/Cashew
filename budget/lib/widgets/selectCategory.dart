@@ -6,7 +6,6 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
-import 'package:budget/widgets/incomeExpenseTabSelector.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -17,7 +16,7 @@ import 'package:flutter/material.dart'
 import 'package:flutter/services.dart';
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';
 
-import '../pages/addButton.dart';
+import 'package:budget/pages/addButton.dart';
 
 class SelectCategory extends StatefulWidget {
   SelectCategory({

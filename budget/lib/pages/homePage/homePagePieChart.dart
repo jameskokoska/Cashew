@@ -11,29 +11,19 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/spendingSummaryHelper.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/categoryEntry.dart';
-import 'package:budget/widgets/fadeIn.dart';
-import 'package:budget/widgets/framework/popupFramework.dart';
-import 'package:budget/widgets/iconButtonScaled.dart';
-import 'package:budget/widgets/incomeExpenseTabSelector.dart';
 import 'package:budget/widgets/navigationFramework.dart';
-import 'package:budget/widgets/openBottomSheet.dart';
-import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/transactionEntry/incomeAmountArrow.dart';
 import 'package:budget/widgets/util/keepAliveClientMixin.dart';
-import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/pieChart.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:budget/widgets/transactionsAmountBox.dart';
-import 'package:budget/widgets/util/widgetSize.dart';
 import 'package:budget/widgets/viewAllTransactionsButton.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
-
-import '../../widgets/pageIndicator.dart';
+import 'package:budget/widgets/pageIndicator.dart';
 
 class HomePagePieChart extends StatefulWidget {
   const HomePagePieChart({super.key});

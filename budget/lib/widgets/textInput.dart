@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
@@ -8,7 +6,7 @@ import 'package:budget/widgets/util/onAppResume.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../colors.dart';
+import 'package:budget/colors.dart';
 
 FocusNode? _currentTextInputFocus;
 bool shouldAutoRefocus = false;

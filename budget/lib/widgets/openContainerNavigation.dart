@@ -1,7 +1,6 @@
 import 'package:budget/functions.dart';
 import 'package:budget/struct/defaultPreferences.dart';
 import 'package:budget/struct/settings.dart';
-import 'package:budget/widgets/textInput.dart';
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
 

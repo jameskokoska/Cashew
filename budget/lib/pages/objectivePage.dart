@@ -1,13 +1,8 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addObjectivePage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
-import 'package:budget/pages/editBudgetLimitsPage.dart';
-import 'package:budget/pages/editObjectivesPage.dart';
 import 'package:budget/pages/objectivesListPage.dart';
-import 'package:budget/pages/pastBudgetsPage.dart';
-import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/pages/transactionFilters.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/defaultPreferences.dart';
@@ -18,21 +13,14 @@ import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/extraInfoBoxes.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
-import 'package:budget/widgets/listItem.dart';
 import 'package:budget/widgets/openPopup.dart';
-import 'package:budget/widgets/outlinedButtonStacked.dart';
 import 'package:budget/widgets/selectCategoryImage.dart';
 import 'package:budget/widgets/selectedTransactionsAppBar.dart';
-import 'package:budget/widgets/budgetContainer.dart';
-import 'package:budget/widgets/categoryEntry.dart';
-import 'package:budget/widgets/categoryLimits.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
-import 'package:budget/widgets/lineGraph.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
-import 'package:budget/widgets/pieChart.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntries.dart';
@@ -42,14 +30,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
-import 'package:async/async.dart' show StreamZip;
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/widgets/countNumber.dart';
-import 'package:budget/struct/currencyFunctions.dart';
 import 'package:confetti/confetti.dart';
-
-import '../widgets/util/widgetSize.dart';
 
 class ObjectivePage extends StatelessWidget {
   const ObjectivePage({

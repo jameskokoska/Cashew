@@ -1,7 +1,6 @@
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:flutter/material.dart'
     hide SliverReorderableList, ReorderCallback, ReorderItemProxyDecorator;
-import 'package:budget/widgets/editRowEntry.dart';
 import 'package:budget/modified/reorderable_list.dart';
 import 'dart:async';
 // Still in development and testing...

@@ -1,7 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
-import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/pages/settingsPage.dart';
@@ -10,11 +9,8 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
-import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/globalSnackbar.dart';
-import 'package:budget/widgets/iconButtonScaled.dart';
-import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -31,11 +27,7 @@ import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/currencyPicker.dart';
 import 'package:budget/widgets/transactionEntry/incomeAmountArrow.dart';
-import 'package:budget/widgets/transactionEntry/transactionEntryAmount.dart';
-import 'package:budget/widgets/util/showDatePicker.dart';
-import 'package:budget/widgets/util/showTimePicker.dart';
 import 'package:budget/widgets/util/widgetSize.dart';
-import 'package:budget/widgets/walletEntry.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -43,9 +35,6 @@ import 'dart:async';
 import 'package:budget/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
-
-import '../widgets/sliverStickyLabelDivider.dart';
-import 'exchangeRatesPage.dart';
 
 class AddWalletPage extends StatefulWidget {
   AddWalletPage({

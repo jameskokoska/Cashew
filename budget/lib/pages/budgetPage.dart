@@ -1,9 +1,6 @@
-import 'dart:developer';
 import 'dart:math';
-
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/pages/accountsPage.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editBudgetLimitsPage.dart';
@@ -16,7 +13,6 @@ import 'package:budget/struct/defaultPreferences.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/spendingSummaryHelper.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
-import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/extraInfoBoxes.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -31,7 +27,6 @@ import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/pieChart.dart';
-import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntries.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
@@ -45,7 +40,7 @@ import 'package:provider/provider.dart';
 import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/struct/currencyFunctions.dart';
 
-import '../widgets/util/widgetSize.dart';
+import 'package:budget/widgets/util/widgetSize.dart';
 
 class BudgetPage extends StatelessWidget {
   const BudgetPage({
@@ -79,7 +74,6 @@ class BudgetPage extends StatelessWidget {
           }
           return SizedBox.shrink();
         });
-    ;
   }
 }
 

@@ -24,7 +24,6 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:googleapis/drive/v3.dart' as drive;
-import 'package:universal_html/html.dart' as html;
 import 'dart:io';
 
 bool isSyncBackupFile(String? backupFileName) {

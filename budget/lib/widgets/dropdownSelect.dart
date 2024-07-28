@@ -4,7 +4,7 @@ import 'package:budget/widgets/breathingAnimation.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
-import '../colors.dart';
+import 'package:budget/colors.dart';
 
 class DropdownSelect extends StatefulWidget {
   final String initial;

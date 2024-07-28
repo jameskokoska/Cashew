@@ -3,7 +3,6 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class AddButton extends StatelessWidget {

@@ -22,11 +22,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sa3_liquid/sa3_liquid.dart';
-import '../colors.dart';
-import '../functions.dart';
+import 'package:budget/colors.dart';
+import 'package:budget/functions.dart';
 import 'package:async/async.dart' show StreamZip;
 import 'package:budget/struct/randomConstants.dart';
-import 'dart:ui' as ui;
 
 class BudgetContainer extends StatelessWidget {
   BudgetContainer({

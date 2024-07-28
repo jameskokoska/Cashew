@@ -10,17 +10,11 @@ import 'package:budget/struct/upcomingTransactionsFunctions.dart';
 import 'package:budget/widgets/globalSnackbar.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
-import 'package:budget/widgets/selectedTransactionsAppBar.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/transactionLabel.dart';
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/material/colors.dart';
-import 'package:flutter/src/material/theme.dart';
-import 'package:flutter/src/widgets/basic.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class TransactionEntryActionButton extends StatelessWidget {
   const TransactionEntryActionButton({

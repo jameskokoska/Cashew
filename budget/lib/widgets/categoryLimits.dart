@@ -20,7 +20,7 @@ import 'package:budget/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 
-import '../pages/addButton.dart';
+import 'package:budget/pages/addButton.dart';
 import 'sliverStickyLabelDivider.dart';
 import 'tappableTextEntry.dart';
 

@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/accountsPage.dart';
@@ -17,7 +16,6 @@ import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
-import 'package:budget/widgets/outlinedButtonStacked.dart';
 import 'package:budget/widgets/ratingPopup.dart';
 import 'package:budget/widgets/showChangelog.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -26,7 +24,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
-import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class AboutPage extends StatelessWidget {

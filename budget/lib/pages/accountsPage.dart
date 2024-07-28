@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:budget/colors.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
@@ -23,9 +21,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
-
-import '../widgets/extraInfoBoxes.dart';
-import '../widgets/outlinedButtonStacked.dart';
+import 'package:budget/widgets/extraInfoBoxes.dart';
+import 'package:budget/widgets/outlinedButtonStacked.dart';
 
 class AccountsPage extends StatefulWidget {
   const AccountsPage({Key? key}) : super(key: key);

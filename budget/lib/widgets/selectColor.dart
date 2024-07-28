@@ -18,7 +18,6 @@ import 'package:flutter/material.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:flutter/services.dart';
 import 'package:gradient_borders/gradient_borders.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class SelectColor extends StatefulWidget {
   SelectColor({

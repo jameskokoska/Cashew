@@ -3,7 +3,6 @@ import 'package:budget/database/generatePreviewData.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
-import 'package:budget/pages/homePage/homePagePieChart.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/languageMap.dart';
 import 'package:budget/struct/settings.dart';
@@ -16,7 +15,6 @@ import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
-import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/viewAllTransactionsButton.dart';
@@ -24,11 +22,10 @@ import 'package:drift/drift.dart' hide Column;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import '../functions.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/database/initializeDefaultDatabase.dart';
 
-import '../widgets/pageIndicator.dart';
+import 'package:budget/widgets/pageIndicator.dart';
 
 class OnBoardingPage extends StatelessWidget {
   const OnBoardingPage({

@@ -1,15 +1,12 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/modified/reorderable_list.dart';
-import 'package:budget/pages/accountsPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editAssociatedTitlesPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
-import 'package:budget/widgets/animatedExpanded.dart';
-import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/editRowEntry.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
@@ -17,9 +14,7 @@ import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/globalSnackbar.dart';
 import 'package:budget/widgets/iconButtonScaled.dart';
 import 'package:budget/widgets/incomeExpenseTabSelector.dart';
-import 'package:budget/widgets/listItem.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
-import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/outlinedButtonStacked.dart';
@@ -39,8 +34,7 @@ import 'package:flutter/material.dart' hide SliverReorderableList;
 import 'dart:async';
 import 'package:budget/colors.dart';
 import 'package:flutter/services.dart' hide TextInput;
-
-import '../widgets/extraInfoBoxes.dart';
+import 'package:budget/widgets/extraInfoBoxes.dart';
 import 'addButton.dart';
 
 class AddCategoryPage extends StatefulWidget {

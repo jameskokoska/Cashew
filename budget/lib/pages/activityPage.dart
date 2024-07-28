@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'dart:convert';
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart' hide AppSettings;
@@ -21,7 +20,7 @@ import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
 import 'package:budget/widgets/transactionEntry/transactionLabel.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import '../functions.dart';
+import 'package:budget/functions.dart';
 
 List<MapEntry<String, Transaction>> recentlyDeletedTransactions = [];
 

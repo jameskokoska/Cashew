@@ -1,16 +1,7 @@
-import 'dart:ui';
-import 'package:budget/colors.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/sliverStickyLabelDivider.dart';
-import 'package:budget/widgets/textWidgets.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/material/theme.dart';
-import 'package:flutter/src/painting/alignment.dart';
-import 'package:flutter/src/painting/edge_insets.dart';
-import 'package:flutter/src/rendering/flex.dart';
 import 'package:flutter/src/widgets/basic.dart';
-import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 class DateDivider extends StatelessWidget {

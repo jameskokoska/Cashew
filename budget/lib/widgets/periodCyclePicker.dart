@@ -1,40 +1,19 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addBudgetPage.dart';
-import 'package:budget/pages/addWalletPage.dart';
-import 'package:budget/pages/editHomePage.dart';
-import 'package:budget/pages/homePage/homePageLineGraph.dart';
-import 'package:budget/pages/transactionsSearchPage.dart';
-import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
-import 'package:budget/widgets/animatedExpanded.dart';
-import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
-import 'package:budget/widgets/iconButtonScaled.dart';
-import 'package:budget/widgets/incomeExpenseTabSelector.dart';
-import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
-import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/outlinedButtonStacked.dart';
 import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/selectAmount.dart';
-import 'package:budget/widgets/selectedTransactionsAppBar.dart';
-import 'package:budget/widgets/categoryEntry.dart';
-import 'package:budget/widgets/framework/pageFramework.dart';
-import 'package:budget/widgets/pieChart.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/tappableTextEntry.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:budget/widgets/transactionEntries.dart';
-import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
-import 'package:budget/widgets/transactionsAmountBox.dart';
 import 'package:budget/widgets/util/showDatePicker.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
-import 'package:budget/widgets/viewAllTransactionsButton.dart';
-import 'package:provider/provider.dart';
-
 import 'selectDateRange.dart';
 
 enum CycleType {

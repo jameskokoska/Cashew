@@ -19,7 +19,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
 import 'package:provider/provider.dart';
-import '../functions.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
 
 class ExchangeRates extends StatefulWidget {

@@ -2,12 +2,8 @@ import 'dart:convert';
 
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/pages/accountsPage.dart';
 import 'package:budget/pages/addBudgetPage.dart';
-import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
-import 'package:budget/pages/editBudgetPage.dart';
-import 'package:budget/pages/objectivesListPage.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
@@ -24,7 +20,6 @@ import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/saveBottomButton.dart';
 import 'package:budget/widgets/selectAmount.dart';
-import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/sliverStickyLabelDivider.dart';
 import 'package:budget/widgets/textInput.dart';
@@ -38,7 +33,7 @@ import 'package:provider/provider.dart';
 import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 
-import '../widgets/tappableTextEntry.dart';
+import 'package:budget/widgets/tappableTextEntry.dart';
 import 'addButton.dart';
 
 class BillSplitterItem {

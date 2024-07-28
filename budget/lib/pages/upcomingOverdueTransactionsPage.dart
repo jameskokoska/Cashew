@@ -24,16 +24,14 @@ import 'package:budget/widgets/slidingSelectorIncomeExpense.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
-import 'package:budget/widgets/transactionEntry/transactionEntryAmount.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
 import 'package:implicitly_animated_reorderable_list/transitions.dart';
 import 'package:provider/provider.dart';
-import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/textInput.dart';
 
-import '../widgets/transactionEntry/incomeAmountArrow.dart';
+import 'package:budget/widgets/transactionEntry/incomeAmountArrow.dart';
 
 class UpcomingOverdueTransactions extends StatefulWidget {
   const UpcomingOverdueTransactions(

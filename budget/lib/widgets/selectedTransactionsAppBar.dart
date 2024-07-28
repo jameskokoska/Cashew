@@ -1,11 +1,8 @@
-import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
-import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
-import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/pages/editObjectivesPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/struct/currencyFunctions.dart';
@@ -13,7 +10,6 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/listenableSelector.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
-import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/globalSnackbar.dart';
 import 'package:budget/widgets/moreIcons.dart';
@@ -22,14 +18,11 @@ import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/outlinedButtonStacked.dart';
-import 'package:budget/widgets/selectAmount.dart';
-import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
 import 'package:budget/widgets/transactionEntry/transactionLabel.dart';
 import 'package:budget/widgets/util/showDatePicker.dart';
-import 'package:budget/widgets/util/showTimePicker.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
@@ -37,9 +30,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
-import 'package:share_plus/share_plus.dart';
-import 'tappableTextEntry.dart';
-import 'tappableTextEntry.dart';
 
 class SelectedTransactionsAppBar extends StatelessWidget {
   const SelectedTransactionsAppBar(

@@ -1,33 +1,23 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addObjectivePage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
-import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/editObjectivesPage.dart';
 import 'package:budget/pages/objectivesListPage.dart';
-import 'package:budget/pages/transactionsSearchPage.dart';
-import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/util/keepAliveClientMixin.dart';
-import 'package:budget/widgets/linearGradientFadedEdges.dart';
-import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/selectItems.dart';
-import 'package:budget/widgets/transactionsAmountBox.dart';
-import 'package:budget/widgets/util/rightSideClipper.dart';
 import 'package:budget/widgets/util/widgetSize.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../addButton.dart';
+import 'package:budget/pages/addButton.dart';
 
 class HomePageObjectives extends StatefulWidget {
   const HomePageObjectives({super.key, required this.objectiveType});

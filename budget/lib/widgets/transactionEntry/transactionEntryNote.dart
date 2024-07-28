@@ -1,19 +1,10 @@
-import 'dart:ui';
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
-import 'package:budget/widgets/openPopup.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/material/icons.dart';
-import 'package:flutter/src/material/theme.dart';
-import 'package:flutter/src/material/tooltip.dart';
-import 'package:flutter/src/material/tooltip_theme.dart';
-import 'package:flutter/src/widgets/basic.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/icon.dart';
 
 class TransactionEntryNote extends StatelessWidget {
   const TransactionEntryNote({

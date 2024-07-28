@@ -1,7 +1,6 @@
 import 'package:budget/functions.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/iconButtonScaled.dart';
-import 'package:budget/widgets/periodCyclePicker.dart';
 import 'package:budget/widgets/tappableTextEntry.dart';
 import 'package:budget/widgets/util/showDatePicker.dart';
 import 'package:easy_localization/easy_localization.dart';

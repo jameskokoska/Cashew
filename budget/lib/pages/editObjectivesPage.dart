@@ -1,10 +1,7 @@
 import 'dart:async';
-import 'dart:math';
-
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addObjectivePage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/objectivePage.dart';
@@ -24,7 +21,6 @@ import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/radioItems.dart';
-import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -33,8 +29,7 @@ import 'package:flutter/services.dart' hide TextInput;
 import 'package:budget/widgets/editRowEntry.dart';
 import 'package:budget/modified/reorderable_list.dart';
 import 'package:provider/provider.dart';
-
-import 'addButton.dart';
+import 'package:budget/pages/addButton.dart';
 
 class EditObjectivesPage extends StatefulWidget {
   EditObjectivesPage({
