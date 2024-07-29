@@ -168,8 +168,31 @@ Future<bool> runAllCloudFunctions(BuildContext context,
 }
 
 class PageNavigationFrameworkState extends State<PageNavigationFramework> {
-  late List<Widget> pages;
-  late List<Widget> pagesExtended;
+  final List<Widget> pages = [
+    HomePage(key: homePageStateKey), // 0
+    TransactionsListPage(key: transactionsListPageStateKey), //1
+    BudgetsListPage(key: budgetsListPageStateKey, enableBackButton: false), //2
+    MoreActionsPage(key: settingsPageStateKey), //3
+  ];
+  final List<Widget> pagesExtended = [
+    MoreActionsPage(), //4
+    SubscriptionsPage(key: subscriptionsPageStateKey), //5
+    NotificationsPage(), //6
+    WalletDetailsPage(
+        key: walletDetailsAllSpendingPageStateKey, wallet: null), //7
+    AccountsPage(key: accountsPageStateKey), // 8
+    EditWalletsPage(), //9
+    EditBudgetPage(), //10
+    EditCategoriesPage(), //11
+    EditAssociatedTitlesPage(), //12
+    AboutPage(), //13
+    ObjectivesListPage(key: objectivesListPageStateKey, backButton: false), //14
+    EditObjectivesPage(objectiveType: ObjectiveType.goal), //15
+    UpcomingOverdueTransactions(
+        key: upcomingOverdueTransactionsStateKey,
+        overdueTransactions: null), //16
+    CreditDebtTransactions(key: creditDebtTransactionsKey, isCredit: null), //17
+  ];
 
   late int currentPage = widget.widthSideNavigationBar <= 0
       ? (int.tryParse(navBarIconsData[appStateSettings["customNavBarShortcut0"]]
@@ -264,35 +287,6 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
         BrowserContextMenu.disableContextMenu();
       }
     });
-
-    pages = [
-      HomePage(key: homePageStateKey), // 0
-      TransactionsListPage(key: transactionsListPageStateKey), //1
-      BudgetsListPage(
-          key: budgetsListPageStateKey, enableBackButton: false), //2
-      MoreActionsPage(key: settingsPageStateKey), //3
-    ];
-    pagesExtended = [
-      MoreActionsPage(), //4
-      SubscriptionsPage(key: subscriptionsPageStateKey), //5
-      NotificationsPage(), //6
-      WalletDetailsPage(
-          key: walletDetailsAllSpendingPageStateKey, wallet: null), //7
-      AccountsPage(key: accountsPageStateKey), // 8
-      EditWalletsPage(), //9
-      EditBudgetPage(), //10
-      EditCategoriesPage(), //11
-      EditAssociatedTitlesPage(), //12
-      AboutPage(), //13
-      ObjectivesListPage(
-          key: objectivesListPageStateKey, backButton: false), //14
-      EditObjectivesPage(objectiveType: ObjectiveType.goal), //15
-      UpcomingOverdueTransactions(
-          key: upcomingOverdueTransactionsStateKey,
-          overdueTransactions: null), //16
-      CreditDebtTransactions(
-          key: creditDebtTransactionsKey, isCredit: null), //17
-    ];
 
     // SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
     //   FeatureDiscovery.discoverFeatures(
@@ -1062,7 +1056,9 @@ class FadeIndexedStackState extends State<FadeIndexedStack>
     return FadeTransition(
       opacity: _controller,
       child: LazyIndexedStack(
-        index: widget.index,
+        index: (widget.index >= 0 && widget.index < widget.children.length)
+            ? widget.index
+            : 0,
         alignment: widget.alignment,
         textDirection: widget.textDirection,
         sizing: widget.sizing,
