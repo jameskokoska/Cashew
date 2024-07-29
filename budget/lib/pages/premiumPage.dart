@@ -1372,6 +1372,7 @@ class PremiumBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (kIsWeb) return SizedBox.shrink();
     double borderRadius = 15;
     bool purchased = appStateSettings["purchaseID"] != null;
 
