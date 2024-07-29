@@ -1164,10 +1164,8 @@ String getDomainNameFromURL(String text) {
 }
 
 String cleanupNoteStringWithURLs(String text) {
-  RegExp regExp = RegExp(
-      r'^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/?\n]+)',
-      multiLine: true,
-      caseSensitive: false);
+  RegExp regExp = RegExp(r'https?:\/\/(?:www\.)?\S+(?=\s)',
+      multiLine: true, caseSensitive: false);
 
   Iterable<Match> matches = regExp.allMatches(text);
 
@@ -1179,7 +1177,7 @@ String cleanupNoteStringWithURLs(String text) {
           match.group(0)!, getDomainNameFromURL(match.group(0)!));
   }
 
-  return modifiedText;
+  return modifiedText.trim();
 }
 
 void openUrl(String link) async {
