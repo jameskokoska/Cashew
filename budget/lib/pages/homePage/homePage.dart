@@ -253,6 +253,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
             Scaffold(
               resizeToAvoidBottomInset: false,
               body: ScrollbarWrap(
+                scrollController: _scrollController,
                 child: ListView(
                   controller: _scrollController,
                   children: [
