@@ -219,16 +219,28 @@ class MorePages extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              notificationsGlobalEnabled
+              appStateSettings["showBillSplitterShortcut"] == true &&
+                      hasSideNavigation == false
                   ? Expanded(
                       child: SettingsContainerOpenPage(
-                        openPage: NotificationsPage(),
-                        title: navBarIconsData["notifications"]!.label.tr(),
-                        icon: navBarIconsData["notifications"]!.iconData,
+                        openPage: BillSplitter(),
+                        title: "bill-splitter".tr(),
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.summarize_outlined
+                            : Icons.summarize_rounded,
                         isOutlined: true,
                       ),
                     )
-                  : SizedBox.shrink(),
+                  : notificationsGlobalEnabled
+                      ? Expanded(
+                          child: SettingsContainerOpenPage(
+                            openPage: NotificationsPage(),
+                            title: navBarIconsData["notifications"]!.label.tr(),
+                            icon: navBarIconsData["notifications"]!.iconData,
+                            isOutlined: true,
+                          ),
+                        )
+                      : SizedBox.shrink(),
               if (hasSideNavigation == false)
                 Expanded(child: GoogleAccountLoginButton()),
             ],

@@ -32,6 +32,7 @@ class DebugPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return PageFramework(
       dragDownToDismiss: true,
+      horizontalPaddingConstrained: true,
       title: "Debug Flags",
       subtitle: TextFont(
         text: "Use at your own risk",
@@ -390,9 +391,28 @@ class DebugPage extends StatelessWidget {
           icon: Icons.dark_mode,
         ),
         SettingsContainerSwitch(
-          title: "Show Extra Transaction Info",
+          title: "Replace notification setting button with Bill Splitter",
+          description: "In the More page",
+          onSwitched: (value) {
+            updateSettings("showBillSplitterShortcut", value,
+                updateGlobalState: false, pagesNeedingRefresh: [3]);
+          },
+          initialValue: appStateSettings["showBillSplitterShortcut"] == true,
+          icon: Icons.bookmark_add,
+        ),
+        SettingsContainerSwitch(
+          title: "Method Added",
           description:
-              "Show the transaction ID and method added in the transactions page",
+              "Show the method added in the transactions page and filters",
+          onSwitched: (value) {
+            updateSettings("showMethodAdded", value, updateGlobalState: false);
+          },
+          initialValue: appStateSettings["showMethodAdded"] == true,
+          icon: Icons.bookmark_add,
+        ),
+        SettingsContainerSwitch(
+          title: "Show Transaction ID",
+          description: "Show the transaction ID in the transactions page",
           onSwitched: (value) {
             updateSettings("showTransactionPk", value,
                 updateGlobalState: false);
@@ -429,219 +449,256 @@ class DebugPage extends StatelessWidget {
             updateSettings("animationSpeed", value, updateGlobalState: true);
           },
         ),
-        Button(
-          label: "Redo migration (from db 37 above)",
-          onTap: () async {
-            await database.customStatement('PRAGMA user_version = 37');
-            if (kIsWeb) {
-              final html.Storage localStorage = html.window.localStorage;
-              localStorage["moor_db_version_db"] = "37";
-            }
-            restartAppPopup(context);
-          },
-        ),
-        SizedBox(height: 20),
-        Button(
-          label: "Fix transaction polarity",
-          onTap: () async {
-            await database.fixTransactionPolarity();
-          },
-        ),
-        SizedBox(height: 20),
-        Button(
-          label: "Vacuum/Clean DB",
-          onTap: () async {
-            try {
-              await database.customStatement('VACUUM');
-              openSnackbar(
-                SnackbarMessage(
-                  title: "Done",
-                  icon: Icons.time_to_leave,
-                  timeout: Duration(milliseconds: 1000),
-                ),
-              );
-            } catch (e) {
-              openSnackbar(
-                SnackbarMessage(
-                  title: e.toString(),
-                  icon: Icons.time_to_leave,
-                  timeout: Duration(milliseconds: 1000),
-                ),
-              );
-            }
-          },
-        ),
-        SizedBox(height: 20),
-        Button(
-          expandedLayout: true,
-          label:
-              "Clean database delete logs (WARNING: Make sure you sync with all other devices first!)",
-          onTap: () async {
-            await database.deleteAllDeleteLogs();
-          },
-        ),
-        SizedBox(height: 20),
-        Button(
-            label: "View Delete Logs",
-            onTap: () async {
-              pushRoute(
-                context,
-                PageFramework(
-                  title: "Delete logs",
-                  slivers: [
-                    StreamBuilder<List<DeleteLog>>(
-                      stream: database.watchAllDeleteLogs(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return SliverPadding(
-                            padding: EdgeInsetsDirectional.symmetric(
-                                vertical: 7, horizontal: 13),
-                            sliver: SliverList(
-                              delegate: SliverChildBuilderDelegate(
-                                (BuildContext context, int index) {
-                                  DeleteLog deletelog = snapshot.data![index];
-                                  return Padding(
-                                    padding: const EdgeInsetsDirectional.only(
-                                        bottom: 4),
-                                    child: TextFont(
-                                      text: (index + 1).toString() +
-                                          ") " +
-                                          deletelog.type.toString() +
-                                          " " +
-                                          deletelog.dateTimeModified
-                                              .toString() +
-                                          ": " +
-                                          deletelog.deleteLogPk +
-                                          " for " +
-                                          deletelog.entryPk,
-                                      maxLines: 10,
-                                      fontSize: 12,
-                                    ),
-                                  );
-                                },
-                                childCount: snapshot.data?.length,
-                              ),
-                            ),
-                          );
-                        } else {
-                          return SliverToBoxAdapter();
-                        }
-                      },
+        Padding(
+          padding: const EdgeInsetsDirectional.symmetric(horizontal: 20),
+          child: Column(
+            children: [
+              Button(
+                label: "Redo migration (from db 37 above)",
+                onTap: () async {
+                  await database.customStatement('PRAGMA user_version = 37');
+                  if (kIsWeb) {
+                    final html.Storage localStorage = html.window.localStorage;
+                    localStorage["moor_db_version_db"] = "37";
+                  }
+                  restartAppPopup(context);
+                },
+              ),
+              SizedBox(height: 20),
+              Button(
+                label: "Fix transaction polarity",
+                onTap: () async {
+                  int result = await database.fixTransactionPolarity();
+                  openSnackbar(
+                    SnackbarMessage(
+                      title: "Done",
+                      description:
+                          "Applied to " + result.toString() + " transactions",
+                      icon: Icons.check,
                     ),
-                  ],
+                  );
+                },
+              ),
+              SizedBox(height: 20),
+              Button(
+                label: "Capitalize first letter in all transactions",
+                onTap: () async {
+                  int result = await database.capitalizeFirst();
+                  openSnackbar(
+                    SnackbarMessage(
+                      title: "Done",
+                      description:
+                          "Applied to " + result.toString() + " transactions",
+                      icon: Icons.check,
+                    ),
+                  );
+                },
+              ),
+              SizedBox(height: 20),
+              Button(
+                label: "Vacuum/Clean DB",
+                onTap: () async {
+                  try {
+                    await database.customStatement('VACUUM');
+                    openSnackbar(
+                      SnackbarMessage(
+                        title: "Done",
+                        icon: Icons.check,
+                      ),
+                    );
+                  } catch (e) {
+                    openSnackbar(
+                      SnackbarMessage(
+                        title: e.toString(),
+                        icon: Icons.error,
+                      ),
+                    );
+                  }
+                },
+              ),
+              SizedBox(height: 20),
+              Button(
+                expandedLayout: true,
+                label:
+                    "Clean database delete logs (WARNING: Make sure you sync with all other devices first!)",
+                onTap: () async {
+                  int result = await database.deleteAllDeleteLogs();
+                  openSnackbar(
+                    SnackbarMessage(
+                      title: "Done",
+                      description: "Deleted " + result.toString() + " logs",
+                      icon: Icons.check,
+                    ),
+                  );
+                },
+              ),
+              SizedBox(height: 20),
+              Button(
+                  label: "View Delete Logs",
+                  onTap: () async {
+                    pushRoute(
+                      context,
+                      PageFramework(
+                        title: "Delete logs",
+                        slivers: [
+                          StreamBuilder<List<DeleteLog>>(
+                            stream: database.watchAllDeleteLogs(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return SliverPadding(
+                                  padding: EdgeInsetsDirectional.symmetric(
+                                      vertical: 7, horizontal: 13),
+                                  sliver: SliverList(
+                                    delegate: SliverChildBuilderDelegate(
+                                      (BuildContext context, int index) {
+                                        DeleteLog deletelog =
+                                            snapshot.data![index];
+                                        return Padding(
+                                          padding:
+                                              const EdgeInsetsDirectional.only(
+                                                  bottom: 4),
+                                          child: TextFont(
+                                            text: (index + 1).toString() +
+                                                ") " +
+                                                deletelog.type.toString() +
+                                                " " +
+                                                deletelog.dateTimeModified
+                                                    .toString() +
+                                                ": " +
+                                                deletelog.deleteLogPk +
+                                                " for " +
+                                                deletelog.entryPk,
+                                            maxLines: 10,
+                                            fontSize: 12,
+                                          ),
+                                        );
+                                      },
+                                      childCount: snapshot.data?.length,
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                return SliverToBoxAdapter();
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+              SizedBox(height: 20),
+              Button(
+                  label: "Send Notification",
+                  onTap: () async {
+                    initializeNotificationsPlatform();
+                    scheduleDailyNotification(context, TimeOfDay.now(),
+                        scheduleNowDebug: true);
+                  }),
+              SizedBox(height: 20),
+              Button(
+                  label: "Force auto backup next launch",
+                  onTap: () async {
+                    updateSettings(
+                      "lastBackup",
+                      DateTime.now().subtract(Duration(days: 50)).toString(),
+                      updateGlobalState: false,
+                    );
+                  }),
+              SizedBox(height: 20),
+              DangerousDebugFlag(
+                child: Button(
+                  label: "Create preview data",
+                  onTap: () async {
+                    generatePreviewData();
+                  },
                 ),
-              );
-            }),
-        SizedBox(height: 20),
-        Button(
-            label: "Send Notification",
-            onTap: () async {
-              initializeNotificationsPlatform();
-              scheduleDailyNotification(context, TimeOfDay.now(),
-                  scheduleNowDebug: true);
-            }),
-        SizedBox(height: 20),
-        Button(
-            label: "Force auto backup next launch",
-            onTap: () async {
-              updateSettings(
-                "lastBackup",
-                DateTime.now().subtract(Duration(days: 50)).toString(),
-                updateGlobalState: false,
-              );
-            }),
-        SizedBox(height: 20),
-        DangerousDebugFlag(
-          child: Button(
-            label: "Create preview data",
-            onTap: () async {
-              generatePreviewData();
-            },
+              ),
+              SizedBox(height: 10),
+              DangerousDebugFlag(
+                child: Button(
+                  label: "Create random transactions",
+                  onTap: () async {
+                    List<TransactionCategory> categories =
+                        await database.getAllCategories();
+                    for (int i = 0; i < 10; i++) {
+                      await database.createOrUpdateTransaction(
+                        insert: true,
+                        Transaction(
+                          transactionPk: "-1",
+                          name: "Test" + randomDouble[i].toString(),
+                          amount: randomInt[i].toDouble(),
+                          note: "",
+                          categoryFk: categories[i].categoryPk,
+                          walletFk: "0",
+                          dateCreated: DateTime.now(),
+                          income: false,
+                          paid: true,
+                          skipPaid: false,
+                          methodAdded: MethodAdded.preview,
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ),
+              SizedBox(height: 20),
+              Button(
+                  label: "Snackbar Test",
+                  onTap: () {
+                    openSnackbar(
+                      SnackbarMessage(
+                        title:
+                            '${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}.${DateTime.now().millisecond}',
+                        icon: Icons.time_to_leave,
+                        timeout: Duration(milliseconds: 1000),
+                      ),
+                    );
+                    openSnackbar(
+                      SnackbarMessage(
+                        title: "Test",
+                        description:
+                            '${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}.${DateTime.now().millisecond}',
+                        icon: Icons.abc,
+                        timeout: Duration(milliseconds: 1000),
+                        onTap: () {},
+                      ),
+                    );
+                    openSnackbar(
+                      SnackbarMessage(
+                        title:
+                            '${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}.${DateTime.now().millisecond}',
+                        timeout: Duration(milliseconds: 1000),
+                      ),
+                    );
+                    openSnackbar(
+                      SnackbarMessage(
+                        title:
+                            '${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}.${DateTime.now().millisecond}',
+                        description: "Some description",
+                        timeout: Duration(milliseconds: 7000),
+                      ),
+                    );
+                    openSnackbar(
+                      SnackbarMessage(
+                        title:
+                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation',
+                        timeout: Duration(milliseconds: 10000),
+                      ),
+                    );
+                  }),
+              SizedBox(height: 10),
+              HorizontalBreak(),
+              AppLinkTesting(),
+              HorizontalBreak(),
+              SizedBox(height: 10),
+              TextFont(
+                  maxLines: 10,
+                  text: kIsWeb
+                      ? html.window.navigator.userAgent.toString().toLowerCase()
+                      : ""),
+            ],
           ),
         ),
-        SizedBox(height: 10),
-        DangerousDebugFlag(
-          child: Button(
-            label: "Create random transactions",
-            onTap: () async {
-              List<TransactionCategory> categories =
-                  await database.getAllCategories();
-              for (int i = 0; i < 10; i++) {
-                await database.createOrUpdateTransaction(
-                  insert: true,
-                  Transaction(
-                    transactionPk: "-1",
-                    name: "Test" + randomDouble[i].toString(),
-                    amount: randomInt[i].toDouble(),
-                    note: "",
-                    categoryFk: categories[i].categoryPk,
-                    walletFk: "0",
-                    dateCreated: DateTime.now(),
-                    income: false,
-                    paid: true,
-                    skipPaid: false,
-                    methodAdded: MethodAdded.preview,
-                  ),
-                );
-              }
-            },
-          ),
-        ),
-        SizedBox(height: 20),
-        Button(
-            label: "Snackbar Test",
-            onTap: () {
-              openSnackbar(
-                SnackbarMessage(
-                  title:
-                      '${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}.${DateTime.now().millisecond}',
-                  icon: Icons.time_to_leave,
-                  timeout: Duration(milliseconds: 1000),
-                ),
-              );
-              openSnackbar(
-                SnackbarMessage(
-                  title: "Test",
-                  description:
-                      '${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}.${DateTime.now().millisecond}',
-                  icon: Icons.abc,
-                  timeout: Duration(milliseconds: 1000),
-                  onTap: () {},
-                ),
-              );
-              openSnackbar(
-                SnackbarMessage(
-                  title:
-                      '${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}.${DateTime.now().millisecond}',
-                  timeout: Duration(milliseconds: 1000),
-                ),
-              );
-              openSnackbar(
-                SnackbarMessage(
-                  title:
-                      '${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}.${DateTime.now().millisecond}',
-                  description: "Some description",
-                  timeout: Duration(milliseconds: 7000),
-                ),
-              );
-              openSnackbar(
-                SnackbarMessage(
-                  title:
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation',
-                  timeout: Duration(milliseconds: 10000),
-                ),
-              );
-            }),
-        SizedBox(height: 10),
-        HorizontalBreak(),
-        AppLinkTesting(),
-        HorizontalBreak(),
-        SizedBox(height: 10),
-        TextFont(
-            maxLines: 10,
-            text: kIsWeb
-                ? html.window.navigator.userAgent.toString().toLowerCase()
-                : ""),
         ColorBox(color: Theme.of(context).colorScheme.surface, name: "surface"),
         ColorBox(
             color: Theme.of(context).colorScheme.onSurface, name: "onSurface"),

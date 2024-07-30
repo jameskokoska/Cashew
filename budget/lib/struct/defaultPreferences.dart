@@ -189,7 +189,9 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "locale": "System", // the locale code or "System"
     "firstDayOfWeek": -1, // -1: Locale/System, 0: Sunday, 1: Monday,
     "disableShadows": false,
+    "showBillSplitterShortcut": false,
     "showTransactionPk": false,
+    "showMethodAdded": false,
     "showBackupLimit": false,
     "outlinedIcons": false,
     "premiumPopupAddTransactionCount": -5,

@@ -79,7 +79,7 @@ class SearchFilters {
   List<TransactionSpecialType?> transactionTypes;
   List<BudgetTransactionFilters> budgetTransactionFilters;
   // List<BudgetReoccurence> reoccurence;
-  List<MethodAdded> methodAdded;
+  List<MethodAdded?> methodAdded;
   RangeValues? amountRange;
   DateTimeRange? dateTimeRange;
   String? searchQuery;
@@ -358,9 +358,9 @@ class SearchFilters {
       outString +=
           "budgetTransactionFilters:-:" + (element.index).toString() + ":-:";
     }
-    for (MethodAdded element in methodAdded) {
+    for (MethodAdded? element in methodAdded) {
       outString +=
-          "methodAdded:-:" + (element.index).toString().toString() + ":-:";
+          "methodAdded:-:" + (element?.index ?? null).toString() + ":-:";
     }
     outString += "amountRange:-:" + amountRange.toString() + ":-:";
     outString += "dateTimeRange:-:" + dateTimeRange.toString() + ":-:";
@@ -636,6 +636,33 @@ class _TransactionFiltersSelectionState
             return selectedFilters.paidStatus.contains(item);
           },
         ),
+        if (appStateSettings["showMethodAdded"] == true)
+          StreamBuilder<List<MethodAdded?>>(
+            stream: database.watchAllDistinctMethodAdded(),
+            builder: (context, snapshot) {
+              if (snapshot.data == null || (snapshot.data?.length ?? 0) <= 1)
+                return SizedBox.shrink();
+              List<MethodAdded?> possibleMethodAdded = snapshot.data ?? [];
+              return SelectChips(
+                items: possibleMethodAdded,
+                getLabel: (MethodAdded? item) {
+                  return item?.name.capitalizeFirst ?? "default".tr();
+                },
+                onSelected: (MethodAdded? item) {
+                  if (selectedFilters.methodAdded.contains(item)) {
+                    selectedFilters.methodAdded.remove(item);
+                  } else {
+                    selectedFilters.methodAdded.add(item);
+                  }
+                  setSearchFilters();
+                },
+                getSelected: (MethodAdded? item) {
+                  return selectedFilters.methodAdded.contains(item);
+                },
+              );
+            },
+          ),
+
         StreamBuilder<List<TransactionWallet>>(
           stream: database.watchAllWallets(),
           builder: (context, snapshot) {
@@ -1347,6 +1374,14 @@ class AppliedFilterChips extends StatelessWidget {
                   searchFilters.dateTimeRange!.end != DateTime.now().year,
             ),
         openFiltersSelection: () => {openSelectDate!()},
+      ));
+    }
+
+    // Method Added
+    for (MethodAdded? methodAdded in searchFilters.methodAdded) {
+      out.add(AppliedFilterChip(
+        label: methodAdded?.name.toString().capitalizeFirst ?? "default".tr(),
+        openFiltersSelection: openFiltersSelection,
       ));
     }
 

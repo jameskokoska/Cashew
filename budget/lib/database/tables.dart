@@ -2913,6 +2913,22 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
+  Stream<List<MethodAdded?>> watchAllDistinctMethodAdded(
+      {SearchFilters? searchFilters}) {
+    final query = selectOnly(transactions, distinct: true)
+      ..addColumns([transactions.methodAdded])
+      ..where(onlyShowIfFollowsSearchFilters(transactions, searchFilters,
+          joinedWithSubcategoriesTable: null,
+          joinedWithCategories: false,
+          joinedWithBudgets: false,
+          joinedWithObjectives: false));
+    return query
+        .map((row) => row.read(transactions.methodAdded) == null
+            ? null
+            : MethodAdded.values[row.read(transactions.methodAdded) ?? 0])
+        .watch();
+  }
+
   Future<List<TransactionAssociatedTitle>> getAllAssociatedTitlesInCategory(
     String categoryFk,
   ) {
@@ -6190,7 +6206,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Expression<bool> onlyShowBasedOnMethodAdded(
-      $TransactionsTable tbl, List<MethodAdded>? methodAdded) {
+      $TransactionsTable tbl, List<MethodAdded?>? methodAdded) {
     return (methodAdded != null && methodAdded.length > 0
         ? tbl.methodAdded.isInValues(methodAdded)
         : Constant(true));
@@ -7183,8 +7199,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     return true;
   }
 
-  Future deleteAllDeleteLogs() async {
-    await delete(deleteLogs).go();
+  Future<int> deleteAllDeleteLogs() async {
+    return await delete(deleteLogs).go();
   }
 
   Stream<List<DeleteLog>> watchAllDeleteLogs() {
@@ -7322,15 +7338,31 @@ class FinanceDatabase extends _$FinanceDatabase {
     });
   }
 
-  Future fixTransactionPolarity() async {
+  Future<int> fixTransactionPolarity() async {
     List<Transaction> allTransactions = await (select(transactions)).get();
     List<Transaction> transactionsToUpdate = [];
     for (Transaction transaction in allTransactions) {
-      transactionsToUpdate.add(transaction.copyWith(
-          amount: transaction.amount.abs() * (transaction.income ? 1 : -1),
-          dateTimeModified: Value(DateTime.now())));
+      double newAmount =
+          transaction.amount.abs() * (transaction.income ? 1 : -1);
+      if (transaction.amount != newAmount)
+        transactionsToUpdate.add(transaction.copyWith(
+            amount: newAmount, dateTimeModified: Value(DateTime.now())));
     }
     await updateBatchTransactionsOnly(transactionsToUpdate);
+    return transactionsToUpdate.length;
+  }
+
+  Future<int> capitalizeFirst() async {
+    List<Transaction> allTransactions = await (select(transactions)).get();
+    List<Transaction> transactionsToUpdate = [];
+    for (Transaction transaction in allTransactions) {
+      String newName = transaction.name.capitalizeFirst;
+      if (transaction.name != newName)
+        transactionsToUpdate.add(transaction.copyWith(
+            name: newName, dateTimeModified: Value(DateTime.now())));
+    }
+    await updateBatchTransactionsOnly(transactionsToUpdate);
+    return transactionsToUpdate.length;
   }
 }
 
