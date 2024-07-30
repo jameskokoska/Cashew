@@ -49,17 +49,16 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/util/checkWidgetLaunch.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
 import 'package:flutter/services.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:provider/provider.dart';
-import '../functions.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:app_settings/app_settings.dart';
-import '../widgets/outlinedButtonStacked.dart';
+import 'package:budget/widgets/outlinedButtonStacked.dart';
 
 //To get SHA1 Key run
 // ./gradlew signingReport
@@ -94,7 +93,7 @@ class MoreActionsPageState extends State<MoreActionsPage> {
         key: pageState,
         title: "more-actions".tr(),
         backButton: false,
-        horizontalPadding: getHorizontalPaddingConstrained(context),
+        horizontalPaddingConstrained: true,
         actions: [
           CustomPopupMenuButton(
             showButtons: true,
@@ -675,7 +674,7 @@ class MoreOptionsPagePreferences extends StatelessWidget {
     return PageFramework(
       title: "more".tr(),
       dragDownToDismiss: true,
-      horizontalPadding: getHorizontalPaddingConstrained(context),
+      horizontalPaddingConstrained: true,
       listWidgets: [
         SettingsHeader(title: "style".tr()),
         HeaderHeightSetting(),

@@ -25,7 +25,8 @@ class _DetailedChangelogPageState extends State<DetailedChangelogPage> {
     return PageFramework(
       dragDownToDismiss: true,
       title: "changelog".tr(),
-      horizontalPadding: 20,
+      horizontalPaddingConstrained: true,
+      getExtraHorizontalPadding: (_) => 20,
       slivers: [
         SliverList(
           delegate: SliverChildBuilderDelegate(

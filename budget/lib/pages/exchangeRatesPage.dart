@@ -111,7 +111,7 @@ class _ExchangeRatesState extends State<ExchangeRates> {
     }
 
     return PageFramework(
-      horizontalPadding: getHorizontalPaddingConstrained(context),
+      horizontalPaddingConstrained: true,
       dragDownToDismiss: true,
       title: "exchange-rates".tr(),
       actions: [

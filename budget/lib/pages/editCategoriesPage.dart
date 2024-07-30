@@ -63,7 +63,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
         }
       },
       child: PageFramework(
-        horizontalPadding: getHorizontalPaddingConstrained(context),
+        horizontalPaddingConstrained: true,
         dragDownToDismiss: true,
         dragDownToDismissEnabled: dragDownToDismissEnabled,
         title: "edit-categories".tr(),

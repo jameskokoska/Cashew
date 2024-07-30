@@ -62,7 +62,7 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
         }
       },
       child: PageFramework(
-        horizontalPadding: getHorizontalPaddingConstrained(context),
+        horizontalPaddingConstrained: true,
         dragDownToDismiss: true,
         dragDownToDismissEnabled: dragDownToDismissEnabled,
         title: "edit-titles".tr(),

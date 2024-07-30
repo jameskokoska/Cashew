@@ -22,7 +22,7 @@ double getWidthBottomSheet(context) {
       : MediaQuery.sizeOf(context).width - getWidthNavigationSidebar(context);
 }
 
-double getHorizontalPaddingConstrained(context,
+double getHorizontalPaddingConstrained(BuildContext context,
     {bool enabled = true, double? customWidthToCalculateOn}) {
   if (enabled == false) return 0;
   double fullWidth =

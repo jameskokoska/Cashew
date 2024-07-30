@@ -639,6 +639,14 @@ class NavigationSidebarButton extends StatelessWidget {
             onTap();
           },
           child: AnimatedSizeSwitcher(
+            sizeDuration:
+                appStateSettings["appAnimations"] != AppAnimations.all.index
+                    ? Duration.zero
+                    : Duration(milliseconds: 800),
+            switcherDuration:
+                appStateSettings["appAnimations"] != AppAnimations.all.index
+                    ? Duration.zero
+                    : Duration(milliseconds: 250),
             child: appStateSettings["expandedNavigationSidebar"]
                 ? Padding(
                     key:
@@ -728,6 +736,14 @@ class _EdiDatatButtonsState extends State<EditDataButtons> {
           padding: EdgeInsetsDirectional.only(
               start: appStateSettings["expandedNavigationSidebar"] ? 8 : 0),
           child: AnimatedSizeSwitcher(
+            sizeDuration:
+                appStateSettings["appAnimations"] != AppAnimations.all.index
+                    ? Duration.zero
+                    : Duration(milliseconds: 800),
+            switcherDuration:
+                appStateSettings["appAnimations"] != AppAnimations.all.index
+                    ? Duration.zero
+                    : Duration(milliseconds: 250),
             child: !showEditDataButtons
                 ? Container(key: ValueKey(1))
                 : Column(

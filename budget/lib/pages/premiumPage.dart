@@ -1194,14 +1194,17 @@ class LockedFeature extends StatelessWidget {
 }
 
 class FadeOutAndLockFeature extends StatefulWidget {
-  const FadeOutAndLockFeature(
-      {required this.child,
-      this.actionAfter,
-      this.hasInitiallyDismissed = false,
-      super.key});
+  const FadeOutAndLockFeature({
+    required this.child,
+    this.actionAfter,
+    this.hasInitiallyDismissed = false,
+    this.fadeOutQuick = false,
+    super.key,
+  });
   final Widget child;
   final VoidCallback? actionAfter;
   final bool hasInitiallyDismissed;
+  final bool fadeOutQuick;
 
   @override
   State<FadeOutAndLockFeature> createState() => _FadeOutAndLockFeatureState();
@@ -1249,7 +1252,9 @@ class _FadeOutAndLockFeatureState extends State<FadeOutAndLockFeature> {
           IgnorePointer(
             child: AnimatedOpacity(
               opacity: fadeIn ? 0.23 : 1,
-              duration: Duration(milliseconds: 5000),
+              duration: widget.fadeOutQuick
+                  ? Duration(milliseconds: 0)
+                  : Duration(milliseconds: 5000),
               child: AnimatedOpacity(
                 opacity: fadeIn ? 0.25 : 1,
                 duration: Duration(milliseconds: 500),

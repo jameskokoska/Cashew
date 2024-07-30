@@ -405,7 +405,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
         return false;
       },
       child: PageFramework(
-        horizontalPadding: getHorizontalPaddingConstrained(context),
+        horizontalPaddingConstrained: true,
         resizeToAvoidBottomInset: true,
         dragDownToDismiss: true,
         title: objectiveType == ObjectiveType.goal

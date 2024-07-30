@@ -41,7 +41,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
         await _checkNotificationEnabled();
       },
       child: PageFramework(
-        horizontalPadding: getHorizontalPaddingConstrained(context),
+        horizontalPaddingConstrained: true,
         dragDownToDismiss: true,
         title: "notifications".tr(),
         listWidgets: [

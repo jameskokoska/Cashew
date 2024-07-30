@@ -60,7 +60,7 @@ class AccountsPageState extends State<AccountsPage> {
       ),
     );
     return PageFramework(
-      horizontalPadding: getHorizontalPaddingConstrained(context),
+      horizontalPaddingConstrained: true,
       dragDownToDismiss: true,
       expandedHeight: 56,
       title: getPlatform() == PlatformOS.isIOS

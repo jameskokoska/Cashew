@@ -41,9 +41,7 @@ class BudgetsListPageState extends State<BudgetsListPage> {
       title: "budgets".tr(),
       backButton: widget.enableBackButton,
       dragDownToDismiss: widget.enableBackButton,
-      horizontalPadding: enableDoubleColumn(context) == false
-          ? getHorizontalPaddingConstrained(context)
-          : 0,
+      horizontalPaddingConstrained: enableDoubleColumn(context) == false,
       actions: [
         IconButton(
           padding: EdgeInsetsDirectional.all(15),

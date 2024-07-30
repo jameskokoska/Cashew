@@ -70,7 +70,7 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
         }
       },
       child: PageFramework(
-        horizontalPadding: getHorizontalPaddingConstrained(context),
+        horizontalPaddingConstrained: true,
         dragDownToDismiss: true,
         dragDownToDismissEnabled: dragDownToDismissEnabled,
         title: widget.objectiveType == ObjectiveType.loan

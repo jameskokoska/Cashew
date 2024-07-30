@@ -370,7 +370,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
       },
       child: PageFramework(
         dragDownToDismissEnabled: dragDownToDismissEnabled,
-        horizontalPadding: getHorizontalPaddingConstrained(context),
+        horizontalPaddingConstrained: true,
         resizeToAvoidBottomInset: true,
         dragDownToDismiss: true,
         subtitle: widget.mainCategoryPkWhenSubCategory == null

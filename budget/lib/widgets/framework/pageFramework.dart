@@ -52,7 +52,8 @@ class PageFramework extends StatefulWidget {
     this.actions,
     this.expandedHeight,
     this.listID,
-    this.horizontalPadding = 0,
+    this.horizontalPaddingConstrained = false,
+    this.getExtraHorizontalPadding,
     this.backgroundColor,
     this.resizeToAvoidBottomInset = false,
     this.overlay,
@@ -101,7 +102,8 @@ class PageFramework extends StatefulWidget {
   final List<Widget>? actions;
   final double? expandedHeight;
   final String? listID;
-  final double horizontalPadding;
+  final bool horizontalPaddingConstrained;
+  final double Function(BuildContext context)? getExtraHorizontalPadding;
   final Color? backgroundColor;
   final bool resizeToAvoidBottomInset;
   final Widget? overlay;
@@ -414,21 +416,27 @@ class PageFrameworkState extends State<PageFramework>
       forceBackgroundColors: widget.forceBackgroundColors,
     );
 
+    double horizontalPadding = (widget.getExtraHorizontalPadding != null
+            ? widget.getExtraHorizontalPadding!(context)
+            : 0) +
+        (widget.horizontalPaddingConstrained
+            ? getHorizontalPaddingConstrained(context)
+            : 0);
+
     List<Widget> slivers = [
       for (Widget sliver in widget.slivers)
-        widget.horizontalPadding == 0
-            ? sliver
-            : SliverPadding(
-                padding: EdgeInsetsDirectional.symmetric(
-                    horizontal: widget.horizontalPadding),
-                sliver: sliver)
+        SliverPadding(
+          padding:
+              EdgeInsetsDirectional.symmetric(horizontal: horizontalPadding),
+          sliver: sliver,
+        )
     ];
 
     List<Widget> listWidgets = [
       widget.listWidgets != null
           ? SliverPadding(
               padding: EdgeInsetsDirectional.symmetric(
-                  horizontal: widget.horizontalPadding),
+                  horizontal: horizontalPadding),
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
                   ...widget.listWidgets!,

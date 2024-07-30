@@ -62,9 +62,7 @@ class ObjectivesListPageState extends State<ObjectivesListPage> {
       dragDownToDismiss: true,
       title: "goals".tr(),
       backButton: widget.backButton,
-      horizontalPadding: enableDoubleColumn(context) == false
-          ? getHorizontalPaddingConstrained(context)
-          : 0,
+      horizontalPaddingConstrained: enableDoubleColumn(context) == false,
       actions: [
         IconButton(
           padding: EdgeInsetsDirectional.all(15),

@@ -393,17 +393,17 @@ class AboutPage extends StatelessWidget {
       ),
     ];
 
-    double maxWidth = 900;
-    double widthOfScreen =
-        MediaQuery.sizeOf(context).width - getWidthNavigationSidebar(context);
-    double padding = enableDoubleColumn(context)
-        ? max(0, (widthOfScreen - maxWidth) / 2)
-        : getHorizontalPaddingConstrained(context);
-
     return PageFramework(
       dragDownToDismiss: true,
       title: "about".tr(),
-      horizontalPadding: padding,
+      getExtraHorizontalPadding: (context) {
+        double maxWidth = 900;
+        double widthOfScreen = MediaQuery.sizeOf(context).width -
+            getWidthNavigationSidebar(context);
+        return enableDoubleColumn(context)
+            ? max(0, (widthOfScreen - maxWidth) / 2)
+            : getHorizontalPaddingConstrained(context);
+      },
       sliversBefore: false,
       slivers: [
         SliverPadding(

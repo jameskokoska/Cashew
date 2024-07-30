@@ -70,7 +70,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
         }
       },
       child: PageFramework(
-        horizontalPadding: getHorizontalPaddingConstrained(context),
+        horizontalPaddingConstrained: true,
         dragDownToDismiss: true,
         dragDownToDismissEnabled: dragDownToDismissEnabled,
         scrollToTopButton: true,

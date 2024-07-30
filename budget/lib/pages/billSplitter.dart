@@ -244,7 +244,7 @@ class _BillSplitterState extends State<BillSplitter> {
           ),
         ),
       ],
-      horizontalPadding: getHorizontalPaddingConstrained(context),
+      horizontalPaddingConstrained: true,
       floatingActionButton: AnimateFABDelayed(
         fab: AddFAB(
           enableLongPress: false,
@@ -935,7 +935,8 @@ class _AddBillItemPageState extends State<AddBillItemPage> {
             ? "add-item".tr()
             : "edit-item".tr(),
         dragDownToDismiss: true,
-        horizontalPadding: getHorizontalPaddingConstrained(context) + 13,
+        horizontalPaddingConstrained: true,
+        getExtraHorizontalPadding: (_) => 13,
         listWidgets: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -1231,7 +1232,7 @@ class _PeoplePageState extends State<PeoplePage> {
     return PageFramework(
       title: "names".tr(),
       dragDownToDismiss: true,
-      horizontalPadding: getHorizontalPaddingConstrained(context),
+      horizontalPaddingConstrained: true,
       listWidgets: [
         widget.splitPersons.length <= 0
             ? NoResults(
@@ -1388,7 +1389,7 @@ class SummaryPage extends StatelessWidget {
           ),
         ),
       ],
-      horizontalPadding: getHorizontalPaddingConstrained(context),
+      horizontalPaddingConstrained: true,
     );
   }
 }

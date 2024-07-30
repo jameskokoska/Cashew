@@ -5,11 +5,12 @@ import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
-import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/lineGraph.dart';
+import 'package:budget/widgets/linearGradientFadedEdges.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/transactionEntry/incomeAmountArrow.dart';
 import 'package:budget/widgets/util/keepAliveClientMixin.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -17,9 +18,6 @@ import 'package:budget/widgets/transactionEntries.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../../widgets/linearGradientFadedEdges.dart';
-import '../../widgets/transactionEntry/incomeAmountArrow.dart';
 
 class HomePageHeatMap extends StatefulWidget {
   const HomePageHeatMap({super.key});
