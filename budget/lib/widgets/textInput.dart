@@ -1,8 +1,11 @@
 import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/util/contextMenu.dart';
 import 'package:budget/widgets/util/onAppResume.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -155,6 +158,7 @@ class TextInput extends StatelessWidget {
           ),
           child: Center(
             child: TextFormField(
+              contextMenuBuilder: contextMenuBuilder,
               onTapOutside: (event) {
                 Widget? popupFramework =
                     context.findAncestorWidgetOfExactType<PopupFramework>();

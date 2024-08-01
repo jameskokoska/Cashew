@@ -1,5 +1,9 @@
+import 'package:budget/colors.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
+import 'package:budget/widgets/tappable.dart';
+import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -34,12 +38,19 @@ class CustomContextMenu extends StatelessWidget {
             ),
             FadeIn(
               duration: Duration(milliseconds: 125),
-              child: AdaptiveTextSelectionToolbar.buttonItems(
-                anchors: TextSelectionToolbarAnchors(
-                  primaryAnchor: newOffset,
-                ),
-                buttonItems: buttonItems,
-              ),
+              child: getPlatform() == PlatformOS.isAndroid
+                  ? CustomTabBar.buttonItems(
+                      anchors: TextSelectionToolbarAnchors(
+                        primaryAnchor: newOffset,
+                      ),
+                      buttonItems: buttonItems,
+                    )
+                  : AdaptiveTextSelectionToolbar.buttonItems(
+                      anchors: TextSelectionToolbarAnchors(
+                        primaryAnchor: newOffset,
+                      ),
+                      buttonItems: buttonItems,
+                    ),
             ),
           ],
         );
@@ -100,6 +111,134 @@ class _ContextMenuRegionState extends State<ContextMenuRegion> {
       }),
     );
   }
+}
+
+class CustomTabBar extends AdaptiveTextSelectionToolbar {
+  const CustomTabBar({
+    super.key,
+    required this.children,
+    required this.anchors,
+  })  : buttonItems = null,
+        super(children: children, anchors: anchors);
+
+  const CustomTabBar.buttonItems({
+    super.key,
+    required this.buttonItems,
+    required this.anchors,
+  })  : children = null,
+        super(children: const [], anchors: anchors);
+
+  final List<ContextMenuButtonItem>? buttonItems;
+  final List<Widget>? children;
+  final TextSelectionToolbarAnchors anchors;
+
+  @override
+  Widget build(BuildContext context) {
+    if ((children != null && children!.isEmpty) ||
+        (buttonItems != null && buttonItems!.isEmpty)) {
+      return const SizedBox.shrink();
+    }
+
+    final List<Widget> resultChildren = children != null
+        ? children!
+        : AdaptiveTextSelectionToolbar.getAdaptiveButtons(context, buttonItems!)
+            .toList();
+
+    switch (Theme.of(context).platform) {
+      case TargetPlatform.android:
+        return TextSelectionToolbar(
+          anchorAbove: anchors.primaryAnchor,
+          anchorBelow: anchors.secondaryAnchor == null
+              ? anchors.primaryAnchor
+              : anchors.secondaryAnchor!,
+          children: resultChildren,
+          toolbarBuilder: (BuildContext context, Widget child) {
+            return _TextSelectionToolbarContainer(
+              child: child,
+            );
+          },
+        );
+      default:
+        return const SizedBox.shrink();
+    }
+  }
+}
+
+class _TextSelectionToolbarContainer extends StatelessWidget {
+  const _TextSelectionToolbarContainer({
+    required this.child,
+  });
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return Material(
+      borderRadius: const BorderRadius.all(Radius.circular(9)),
+      clipBehavior: Clip.antiAlias,
+      color: getToolbarColor(context, theme.colorScheme),
+      elevation: 1.0,
+      type: MaterialType.card,
+      child: child,
+    );
+  }
+}
+
+Color getToolbarColor(BuildContext context, ColorScheme colorScheme) {
+  return dynamicPastel(context, colorScheme.secondaryContainer,
+      amountDark: 0.5, amountLight: 0.8);
+}
+
+Widget contextMenuBuilder(
+    BuildContext context, EditableTextState editableTextState) {
+  List<ContextMenuButtonItem> buttonItems =
+      editableTextState.contextMenuButtonItems;
+  final List<Widget> buttons = <Widget>[];
+  for (int i = 0; i < buttonItems.length; i++) {
+    final ContextMenuButtonItem buttonItem = buttonItems[i];
+    buttons.add(
+      Tappable(
+        color: getToolbarColor(context, Theme.of(context).colorScheme),
+        onTap: buttonItem.onPressed,
+        child: ConstrainedBox(
+          constraints: new BoxConstraints(
+              minHeight:
+                  const Size(kMinInteractiveDimension, kMinInteractiveDimension)
+                      .height,
+              minWidth:
+                  const Size(kMinInteractiveDimension, kMinInteractiveDimension)
+                      .width),
+          child: Padding(
+            padding: TextSelectionToolbarTextButton.getPadding(
+                i, buttonItems.length),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                TextFont(
+                  fontSize: 14,
+                  text: AdaptiveTextSelectionToolbar.getButtonLabel(
+                    context,
+                    buttonItem,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+  return getPlatform() == PlatformOS.isAndroid
+      ? CustomTabBar(
+          anchors: editableTextState.contextMenuAnchors,
+          children: buttons,
+        )
+      : AdaptiveTextSelectionToolbar(
+          anchors: editableTextState.contextMenuAnchors,
+          children: buttons,
+        );
 }
 
 // Another method using showMenu built in

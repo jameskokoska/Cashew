@@ -1,5 +1,6 @@
 import 'package:budget/colors.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/util/contextMenu.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
@@ -27,7 +28,6 @@ class TextFont extends StatelessWidget {
   final bool? softWrap;
   final List<TextSpan>? richTextSpan;
   final bool selectableText;
-  final Widget Function(BuildContext, EditableTextState)? contextMenuBuilder;
 
   const TextFont({
     Key? key,
@@ -40,7 +40,6 @@ class TextFont extends StatelessWidget {
     this.fixParagraphMargin = false,
     this.shadow = false,
     this.selectableText = false,
-    this.contextMenuBuilder = null,
     this.richTextSpan,
     this.autoSizeText = false,
     this.maxFontSize,
@@ -107,7 +106,6 @@ class TextFont extends StatelessWidget {
                 )
               : richTextSpan != null
                   ? RichText(
-                      textScaleFactor: MediaQuery.of(context).textScaleFactor,
                       textAlign: textAlign,
                       maxLines: maxLines,
                       overflow: overflow ?? TextOverflow.ellipsis,
@@ -115,6 +113,8 @@ class TextFont extends StatelessWidget {
                         text: textPassed,
                         children: richTextSpan,
                       ),
+                      textScaler: TextScaler.linear(
+                          MediaQuery.of(context).textScaleFactor),
                     )
                   : autoSizeText
                       ? AutoSizeText(
