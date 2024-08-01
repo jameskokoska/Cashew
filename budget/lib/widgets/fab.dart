@@ -92,6 +92,22 @@ class FAB extends StatelessWidget {
         : isOutlined
             ? Theme.of(context).colorScheme.secondary
             : Theme.of(context).colorScheme.onSecondary;
+
+    // Experiment with more vibrant FAB colors
+    // Color? containerColor = color != null
+    //     ? color
+    //     : isOutlined
+    //         ? Theme.of(context).colorScheme.onSecondary
+    //         : blend(Theme.of(context).colorScheme.secondary,
+    //             Theme.of(context).colorScheme.primary,
+    //             amount: 0.35);
+    // Color? iconColor = color != null
+    //     ? colorIcon
+    //     : isOutlined
+    //         ? Theme.of(context).colorScheme.secondary
+    //         : blend(Theme.of(context).colorScheme.onSecondary,
+    //             Theme.of(context).colorScheme.onPrimary,
+    //             amount: 0.35);
     return OpenContainerNavigation(
       closedElevation: 10,
       borderRadius: borderRadius,

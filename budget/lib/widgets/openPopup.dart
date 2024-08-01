@@ -58,6 +58,37 @@ Future<T?> openPopup<T extends Object?>(
     transitionDuration: Duration(milliseconds: 200),
     pageBuilder: (_, __, ___) {
       double borderRadius = getPlatform() == PlatformOS.isIOS ? 10 : 25;
+      Color tertiaryButtonColor = appStateSettings["materialYou"] == false &&
+              Theme.of(context).brightness == Brightness.light
+          ? dynamicPastel(context, Theme.of(context).colorScheme.tertiary,
+              amount: 0.3)
+          : appStateSettings["materialYou"]
+              ? dynamicPastel(context, Theme.of(context).colorScheme.tertiary,
+                  amount: 0.15)
+              : dynamicPastel(
+                  context, Theme.of(context).colorScheme.tertiaryContainer,
+                  amount: 0.15);
+      Color onTertiaryButtonColor = appStateSettings["materialYou"] ||
+              Theme.of(context).brightness == Brightness.light
+          ? dynamicPastel(context, Theme.of(context).colorScheme.onTertiary,
+              amount: 0.25)
+          : Theme.of(context).colorScheme.onTertiaryContainer;
+      Color primaryButtonColor = appStateSettings["materialYou"] == false &&
+              Theme.of(context).brightness == Brightness.light
+          ? dynamicPastel(context, Theme.of(context).colorScheme.primary,
+              amount: 0.3)
+          : appStateSettings["materialYou"]
+              ? dynamicPastel(context, Theme.of(context).colorScheme.primary,
+                  amount: 0.15)
+              : Theme.of(context).colorScheme.secondaryContainer;
+      Color onPrimaryButtonColor = appStateSettings["materialYou"] ||
+              Theme.of(context).brightness == Brightness.light
+          ? dynamicPastel(
+              context,
+              Theme.of(context).colorScheme.onPrimary,
+              amount: 0.25,
+            )
+          : Theme.of(context).colorScheme.onSecondaryContainer;
       return WillPopScope(
         //Stop back button
         onWillPop: () async => barrierDismissible,
@@ -162,12 +193,9 @@ Future<T?> openPopup<T extends Object?>(
                                             child:
                                                 Builder(builder: (boxContext) {
                                               return Button(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .tertiaryContainer,
-                                                textColor: Theme.of(context)
-                                                    .colorScheme
-                                                    .onTertiaryContainer,
+                                                color: tertiaryButtonColor,
+                                                textColor:
+                                                    onTertiaryButtonColor,
                                                 label: onCancelLabel,
                                                 onTap: () {
                                                   if (onCancel != null) {
@@ -191,12 +219,8 @@ Future<T?> openPopup<T extends Object?>(
                                                 .symmetric(horizontal: 8.0),
                                             child: Button(
                                               expandedLayout: true,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .secondaryContainer,
-                                              textColor: Theme.of(context)
-                                                  .colorScheme
-                                                  .onSecondaryContainer,
+                                              color: primaryButtonColor,
+                                              textColor: onPrimaryButtonColor,
                                               label: onExtraLabel,
                                               onTap: onExtra ?? () {},
                                             ),
@@ -209,12 +233,8 @@ Future<T?> openPopup<T extends Object?>(
                                             padding: const EdgeInsetsDirectional
                                                 .symmetric(horizontal: 8.0),
                                             child: Button(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .secondaryContainer,
-                                              textColor: Theme.of(context)
-                                                  .colorScheme
-                                                  .onSecondaryContainer,
+                                              color: primaryButtonColor,
+                                              textColor: onPrimaryButtonColor,
                                               label: onSubmitLabel,
                                               onTap: onSubmit ?? () {},
                                             ),
@@ -240,10 +260,8 @@ Future<T?> openPopup<T extends Object?>(
                         child: Button(
                           borderRadius: borderRadius,
                           expandedLayout: true,
-                          color:
-                              Theme.of(context).colorScheme.tertiaryContainer,
-                          textColor:
-                              Theme.of(context).colorScheme.onTertiaryContainer,
+                          color: tertiaryButtonColor,
+                          textColor: onTertiaryButtonColor,
                           label: onExtraLabel2,
                           onTap: onExtra2 ?? () {},
                         ),

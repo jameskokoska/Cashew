@@ -202,6 +202,13 @@ Color darkenPastel(Color color, {double amount = 0.1}) {
   );
 }
 
+Color blend(Color colorToBlend, Color baseColor, {double amount = 0.1}) {
+  return Color.alphaBlend(
+    baseColor.withOpacity(amount),
+    colorToBlend,
+  );
+}
+
 Color dynamicPastel(
   BuildContext context,
   Color color, {
