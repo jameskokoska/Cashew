@@ -159,6 +159,7 @@ class TextInput extends StatelessWidget {
           child: Center(
             child: TextFormField(
               contextMenuBuilder: contextMenuBuilder,
+              magnifierConfiguration: TextMagnifierConfiguration.disabled,
               onTapOutside: (event) {
                 Widget? popupFramework =
                     context.findAncestorWidgetOfExactType<PopupFramework>();

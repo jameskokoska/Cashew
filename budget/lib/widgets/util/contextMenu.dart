@@ -230,6 +230,21 @@ Widget contextMenuBuilder(
       ),
     );
   }
+  // Offset primaryAnchor = editableTextState.contextMenuAnchors.primaryAnchor;
+  // Offset? secondaryAnchor =
+  //     editableTextState.contextMenuAnchors.secondaryAnchor;
+  // TextSelectionToolbarAnchors anchor = TextSelectionToolbarAnchors(
+  //   primaryAnchor: Offset(
+  //     primaryAnchor.dx + getWidthNavigationSidebar(context),
+  //     primaryAnchor.dy,
+  //   ),
+  //   secondaryAnchor: secondaryAnchor == null
+  //       ? null
+  //       : (Offset(
+  //           secondaryAnchor.dx,
+  //           secondaryAnchor.dy,
+  //         )),
+  // );
   return getPlatform() == PlatformOS.isAndroid
       ? CustomTabBar(
           anchors: editableTextState.contextMenuAnchors,
