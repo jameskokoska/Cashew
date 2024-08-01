@@ -1395,6 +1395,7 @@ class FinanceDatabase extends _$FinanceDatabase {
             (end == null
                 ? onlyShowBasedOnTimeRange(transactions, start, end, budget)
                 : budget == null
+                    // Does this need to be isSmallerThanValue?
                     ? transactions.dateCreated.isSmallerOrEqualValue(end)
                     : onlyShowBasedOnTimeRange(
                         transactions, start, end, budget)) &
@@ -7011,7 +7012,10 @@ class FinanceDatabase extends _$FinanceDatabase {
         ..addColumns([totalAmt])
         ..where(
           transactions.walletFk.equals(wallet.walletPk) &
-              transactions.dateCreated.isSmallerOrEqualValue(startDate) &
+              // This needs to be isSmallerThanValue
+              // otherwise midnight transactions on start of month
+              // will be counted twice in all spending page cumulative total!
+              transactions.dateCreated.isSmallerThanValue(startDate) &
               onlyShowIfFollowsSearchFilters(transactions, searchFilters,
                   joinedWithSubcategoriesTable: null,
                   joinedWithCategories: false,
@@ -7366,18 +7370,28 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 }
 
-class TransactionWithCount {
-  final Transaction transaction;
-  final int count;
-
-  TransactionWithCount({required this.transaction, required this.count});
-}
-
 class TotalWithCount {
   final double total;
   final int count;
 
   TotalWithCount({required this.total, required this.count});
+
+  @override
+  String toString() {
+    return 'TotalWithCount(total: $total, count: $count)';
+  }
+}
+
+class TransactionWithCount {
+  final Transaction transaction;
+  final int count;
+
+  TransactionWithCount({required this.transaction, required this.count});
+
+  @override
+  String toString() {
+    return 'TransactionWithCount(transaction: $transaction, count: $count)';
+  }
 }
 
 class EarliestLatestDateTime {
@@ -7385,6 +7399,11 @@ class EarliestLatestDateTime {
   final DateTime latest;
 
   EarliestLatestDateTime({required this.earliest, required this.latest});
+
+  @override
+  String toString() {
+    return 'EarliestLatestDateTime(earliest: $earliest, latest: $latest)';
+  }
 }
 
 enum TitleType {

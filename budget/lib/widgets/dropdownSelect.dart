@@ -5,6 +5,7 @@ import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
+import 'package:flutter/services.dart';
 
 class DropdownSelect extends StatefulWidget {
   final String initial;
@@ -187,7 +188,12 @@ class CustomPopupMenuButton extends StatelessWidget {
             ),
           ),
           GestureDetector(
-            onLongPress: menuItem.actionOnLongPress,
+            onLongPress: menuItem.actionOnLongPress == null
+                ? null
+                : () {
+                    HapticFeedback.heavyImpact();
+                    menuItem.actionOnLongPress!();
+                  },
             child: IconButton(
                 padding: EdgeInsetsDirectional.all(buttonPadding),
                 onPressed: () {
@@ -297,6 +303,7 @@ class CustomPopupMenuButton extends StatelessWidget {
                         ? null
                         : () {
                             Navigator.maybePop(context);
+                            HapticFeedback.heavyImpact();
                             menuItem.actionOnLongPress!();
                           },
                     child: Container(

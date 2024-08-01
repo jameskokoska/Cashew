@@ -147,7 +147,6 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
       appStateSettings["netAllSpendingTotal"] == true;
 
   void scrollToTop() {
-    print("SCROLLING TO TOP");
     pageState.currentState?.scrollToTop();
   }
 
@@ -2011,7 +2010,6 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                 showAllSubcategories: showAllSubcategories,
                 multiplyTotalBy: -1,
               );
-              // print(s.totalSpent);
               List<Widget> categoryEntries = [];
               double totalSpentPercent = 45 / 360;
               snapshot.data!.asMap().forEach((index, category) {

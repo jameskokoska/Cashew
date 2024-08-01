@@ -200,7 +200,8 @@ class App extends StatelessWidget {
                             children: [
                               AnimatedContainer(
                                 duration: appStateSettings["appAnimations"] !=
-                                        AppAnimations.all.index
+                                            AppAnimations.all.index ||
+                                        getWidthNavigationSidebar(context) <= 0
                                     ? Duration.zero
                                     : Duration(milliseconds: 1500),
                                 curve: Curves.easeInOutCubicEmphasized,

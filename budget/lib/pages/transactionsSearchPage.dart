@@ -121,14 +121,17 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
       allTimeButton: true,
     );
     if (picked != null) {
-      setState(() {
-        searchFilters.dateTimeRange = picked.dateTimeRange;
-      });
-      updateSettings(
-        "searchTransactionsSetFiltersString",
-        searchFilters.getFilterString(),
-        updateGlobalState: false,
-      );
+      if (searchFilters.dateTimeRange != picked.dateTimeRange)
+        Future.delayed(Duration(milliseconds: 175), () {
+          setState(() {
+            searchFilters.dateTimeRange = picked.dateTimeRange;
+          });
+          updateSettings(
+            "searchTransactionsSetFiltersString",
+            searchFilters.getFilterString(),
+            updateGlobalState: false,
+          );
+        });
     }
   }
 
@@ -200,26 +203,31 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                       ),
                     ),
                     SizedBox(width: 7),
-                    AnimatedSwitcher(
-                      duration: Duration(milliseconds: 500),
-                      child: ButtonIcon(
-                        key: ValueKey(
-                          (searchFilters.dateTimeRange == null).toString(),
+                    Builder(builder: (context) {
+                      // Wrap in a builder to prevent entire page from reloading with popup
+                      return AnimatedSwitcher(
+                        duration: Duration(milliseconds: 500),
+                        child: ButtonIcon(
+                          key: ValueKey(
+                            (searchFilters.dateTimeRange == null).toString(),
+                          ),
+                          color: searchFilters.dateTimeRange == null
+                              ? null
+                              : Theme.of(context).colorScheme.tertiaryContainer,
+                          iconColor: searchFilters.dateTimeRange == null
+                              ? null
+                              : Theme.of(context)
+                                  .colorScheme
+                                  .onTertiaryContainer,
+                          onTap: () {
+                            selectDateRange(context);
+                          },
+                          icon: appStateSettings["outlinedIcons"]
+                              ? Icons.calendar_month_outlined
+                              : Icons.calendar_month_rounded,
                         ),
-                        color: searchFilters.dateTimeRange == null
-                            ? null
-                            : Theme.of(context).colorScheme.tertiaryContainer,
-                        iconColor: searchFilters.dateTimeRange == null
-                            ? null
-                            : Theme.of(context).colorScheme.onTertiaryContainer,
-                        onTap: () {
-                          selectDateRange(context);
-                        },
-                        icon: appStateSettings["outlinedIcons"]
-                            ? Icons.calendar_month_outlined
-                            : Icons.calendar_month_rounded,
-                      ),
-                    ),
+                      );
+                    }),
                     SizedBox(width: 7),
                     AnimatedSwitcher(
                       duration: Duration(milliseconds: 500),
