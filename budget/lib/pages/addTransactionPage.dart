@@ -3224,6 +3224,7 @@ class _SelectObjectiveState extends State<SelectObjective> {
                         objective: item,
                         routesToPopAfterDelete:
                             RoutesToPopAfterDelete.PreventDelete,
+                        objectiveType: widget.objectiveType,
                       ),
                     );
                   },

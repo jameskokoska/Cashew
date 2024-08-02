@@ -481,6 +481,7 @@ Future<dynamic> selectObjectivePopup(
                       AddObjectivePage(
                         routesToPopAfterDelete: RoutesToPopAfterDelete.One,
                         objective: objective,
+                        objectiveType: objectiveType,
                       ),
                     );
                   },

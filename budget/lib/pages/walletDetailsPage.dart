@@ -2233,7 +2233,8 @@ class _AllSpendingPastSpendingGraphState
       watchedStreamsIncome.add(
         database.watchTotalWithCountOfWallet(
           isIncome: true,
-          includeBalanceCorrection: widget.appStateSettingsNetAllSpendingTotal,
+          includeBalanceCorrection: true,
+          // includeBalanceCorrection: widget.appStateSettingsNetAllSpendingTotal,
           allWallets: Provider.of<AllWallets>(context, listen: false),
           followCustomPeriodCycle: false,
           cycleSettingsExtension: "",
@@ -2244,7 +2245,8 @@ class _AllSpendingPastSpendingGraphState
       watchedStreamsExpense.add(
         database.watchTotalWithCountOfWallet(
           isIncome: false,
-          includeBalanceCorrection: widget.appStateSettingsNetAllSpendingTotal,
+          includeBalanceCorrection: true,
+          // includeBalanceCorrection: widget.appStateSettingsNetAllSpendingTotal,
           allWallets: Provider.of<AllWallets>(context, listen: false),
           followCustomPeriodCycle: false,
           cycleSettingsExtension: "",
