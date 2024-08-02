@@ -125,6 +125,7 @@ Future<bool> runAllCloudFunctions(BuildContext context,
   errorSigningInDuringCloud = false;
   try {
     loadingIndeterminateKey.currentState?.setVisibility(true);
+    await runForceSignIn(context);
     await syncData(context);
     if (appStateSettings["emailScanningPullToRefresh"] ||
         entireAppLoaded == false) {

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
@@ -10,6 +12,7 @@ import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/struct/syncClient.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/periodCyclePicker.dart';
+import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/walletEntry.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
@@ -5739,8 +5742,10 @@ class FinanceDatabase extends _$FinanceDatabase {
         onlyShowBasedOnMethodAdded(tbl, searchFilters.methodAdded);
 
     Expression<bool> isInAmountRange = searchFilters.amountRange != null
-        ? tbl.amount.isBetweenValues(searchFilters.amountRange?.start ?? 0,
-            searchFilters.amountRange?.end ?? 0)
+        ? tbl.amount
+                .isBiggerOrEqualValue(searchFilters.amountRange?.start ?? 0) &
+            tbl.amount
+                .isSmallerOrEqualValue(searchFilters.amountRange?.end ?? 0)
         : Constant(true);
 
     Expression<bool> isInDateTimeRange = onlyShowBasedOnTimeRange(
@@ -5833,64 +5838,34 @@ class FinanceDatabase extends _$FinanceDatabase {
                 : Constant(false)) |
             tbl.name.collate(Collate.noCase).like("%" + searchQuery + "%") |
             tbl.note.collate(Collate.noCase).like("%" + searchQuery + "%") |
-            onlyShowIfSearchQueryDateIsDate(searchQuery, tbl.dateCreated);
+            onlyShowIfSearchQueryDateIsDate(searchQuery, tbl) |
+            onlyShowIfSearchQueryAmount(searchQuery, tbl.amount);
+  }
+
+  Expression<bool> onlyShowIfSearchQueryAmount(
+      String searchQuery, GeneratedColumn<num> amount) {
+    (double, double)? bounds = parseSearchQueryForAmountText(searchQuery);
+    if (bounds == null) return Constant(false);
+    double lowerBound = bounds.$1;
+    double upperBound = bounds.$2;
+
+    final Expression<bool> condition =
+        (amount.isBiggerOrEqualValue(lowerBound.abs()) &
+                amount.isSmallerThanValue(upperBound.abs())) |
+            (amount.isSmallerOrEqualValue(-lowerBound.abs()) &
+                amount.isBiggerThanValue(-upperBound.abs()));
+
+    return condition;
   }
 
   Expression<bool> onlyShowIfSearchQueryDateIsDate(
-      String searchQuery, GeneratedColumn<DateTime> dateTime) {
-    final List<String> words = searchQuery.toLowerCase().split(' ');
-
-    int? year;
-    int? day;
-    int? month;
-
-    for (final word in words) {
-      if (localizedMonthNames.contains(word)) {
-        month = localizedMonthNames.indexOf(word) + 1;
-      } else {
-        final intNumber = int.tryParse(word);
-        if (intNumber != null) {
-          if (intNumber >= 1 && intNumber <= 31) {
-            day = intNumber;
-          } else if (intNumber >= 1000 && intNumber <= 9999) {
-            year = intNumber;
-          }
-        }
-      }
-    }
-
-    Expression<bool>? yearExpression;
-    Expression<bool>? monthExpression;
-    Expression<bool>? dayExpression;
-
-    if (month != null) {
-      // Only parse the date if the user entered a month name
-      monthExpression = dateTime.month.equals(month);
-
-      if (year != null) {
-        yearExpression = dateTime.year.equals(year);
-      }
-      if (day != null) {
-        dayExpression = dateTime.day.equals(day);
-      }
-    }
-
-    Expression<bool>? resultExpression;
-    if (yearExpression != null) {
-      resultExpression = yearExpression;
-    }
-    if (monthExpression != null) {
-      resultExpression = resultExpression == null
-          ? monthExpression
-          : resultExpression & monthExpression;
-    }
-    if (dayExpression != null) {
-      resultExpression = resultExpression == null
-          ? dayExpression
-          : resultExpression & dayExpression;
-    }
-
-    return resultExpression ?? Constant(false);
+      String searchQuery, $TransactionsTable tbl) {
+    return Expression.or([
+      for (DateTimeRange dateTimeRange
+          in createDateTimeRanges(parseSearchQueryForDateTimeText(searchQuery)))
+        onlyShowBasedOnTimeRange(
+            tbl, dateTimeRange.start, dateTimeRange.end, null)
+    ]);
   }
 
   Expression<bool> onlyShowIfFollowsFilters(

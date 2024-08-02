@@ -191,6 +191,17 @@ Future<dynamic> cancelAndPreventSyncOperation() async {
   return await syncDataCompleter.operation.cancel();
 }
 
+Future<bool> runForceSignIn(BuildContext context) async {
+  if (appStateSettings["forceAutoLogin"] == false) return false;
+  if (appStateSettings["hasSignedIn"] == false) return false;
+  return await signInGoogle(
+    gMailPermissions: false,
+    waitForCompletion: false,
+    silentSignIn: true,
+    context: context,
+  );
+}
+
 Future<bool> syncData(BuildContext context) async {
   // Create a new instance of the completer
   if (syncDataCompleter.isCompleted) {

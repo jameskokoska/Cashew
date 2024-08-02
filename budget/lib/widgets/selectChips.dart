@@ -171,7 +171,16 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
                           : widget.selectedColor ??
                               (appStateSettings["materialYou"]
                                   ? null
-                                  : getColor(context, "lightDarkAccentHeavy")),
+                                  : (Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? dynamicPastel(
+                                          context,
+                                          getColor(
+                                              context, "lightDarkAccentHeavy"),
+                                          inverse: true,
+                                          amount: 0.05)
+                                      : getColor(
+                                          context, "lightDarkAccentHeavy"))),
                       side: widget.getCustomBorderColor == null ||
                               widget.getCustomBorderColor!(item) == null ||
                               widget.getCustomBorderColor!(item) == null

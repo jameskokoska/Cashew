@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addBudgetPage.dart';
@@ -11,6 +13,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/iconButtonScaled.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -370,6 +373,154 @@ class SearchFilters {
     //print(outString);
     return outString;
   }
+}
+
+(double, double)? parseSearchQueryForAmountText(String searchQuery) {
+  final String query = searchQuery.trim();
+  final double? number = double.tryParse(query)?.abs();
+
+  if (number == null) return null;
+
+  final bool isWholeNumber = query.contains(getDecimalSeparator()) == false;
+  final double lowerBound;
+  final double upperBound;
+
+  if (isWholeNumber) {
+    lowerBound = number.toInt().toDouble();
+    upperBound = number.toInt().toDouble() + 1;
+  } else {
+    final int decimalPlaces = query.split('.')[1].length;
+    final double step = 1 / pow(10, decimalPlaces);
+    lowerBound = number;
+    upperBound = number + step;
+  }
+
+  return (lowerBound, upperBound);
+}
+
+ParsedDateTimeQuery? parseSearchQueryForDateTimeText(String searchQuery) {
+  ParsedDateTimeQuery parsed = ParsedDateTimeQuery();
+  final List<String> words = searchQuery.toLowerCase().split(' ');
+  for (String word in words) {
+    if (localizedMonthNames.contains(word)) {
+      parsed.month = localizedMonthNames.indexOf(word) + 1;
+    } else {
+      int? intNumber = int.tryParse(word);
+      if (intNumber != null) {
+        if (intNumber >= 1 && intNumber <= 31) {
+          parsed.day = intNumber;
+        } else if (intNumber >= 1000 && intNumber <= 9999) {
+          parsed.year = intNumber;
+        }
+      }
+    }
+  }
+  // Require a month name to start a successful parse
+  if (parsed.month == null) return null;
+
+  return parsed;
+}
+
+class ParsedDateTimeQuery {
+  int? year;
+  int? day;
+  int? month;
+  ParsedDateTimeQuery({this.year, this.day, this.month});
+
+  @override
+  String toString() {
+    final yearStr = year != null ? 'Year: $year' : 'null';
+    final monthStr = month != null ? 'Month: $month' : 'null';
+    final dayStr = day != null ? 'Day: $day' : 'null';
+
+    return '$yearStr, $monthStr, $dayStr';
+  }
+
+  String formatDate(String locale) {
+    final now = DateTime.now();
+
+    int? finalYear = year ?? now.year;
+    int? finalMonth = month ?? 1;
+    int? finalDay = day ?? 1;
+
+    DateTime date = DateTime(finalYear, finalMonth, finalDay);
+    DateFormat formatter;
+
+    if (year != null && month != null && day != null) {
+      formatter = DateFormat.yMMMMd(locale);
+    } else if (year != null && month != null) {
+      formatter = DateFormat.yMMMM(locale);
+    } else if (year != null && day != null) {
+      // This should never happen, since a month should always be required
+      formatter = DateFormat.yMd(locale);
+    } else if (month != null && day != null) {
+      formatter = DateFormat.MMMMd(locale);
+    } else if (year != null) {
+      formatter = DateFormat.y(locale);
+    } else if (month != null) {
+      formatter = DateFormat.MMMM(locale);
+    } else if (day != null) {
+      formatter = DateFormat.d(locale);
+    } else {
+      return "";
+    }
+
+    return formatter.format(date);
+  }
+}
+
+// We need to create separate date time ranges because doing something like
+// dayExpression = dateTime.day.equals(day);
+// Won't work as data stored directly in the database uses different time zone
+List<DateTimeRange> createDateTimeRanges(ParsedDateTimeQuery? parsed) {
+  if (parsed == null) return [];
+  List<DateTimeRange> ranges = [];
+
+  int? year = parsed.year;
+  int? month = parsed.month;
+  int? day = parsed.day;
+
+  if (year != null) {
+    if (month != null) {
+      if (day != null) {
+        // Exact date
+        final startDate = DateTime(year, month, day);
+        final endDate =
+            DateTime(year, month, day + 1).subtract(Duration(milliseconds: 1));
+        ranges.add(DateTimeRange(start: startDate, end: endDate));
+      } else {
+        // Full month
+        final startDate = DateTime(year, month, 1);
+        final endDate = DateTime(year, month + 1, 1);
+        ranges.add(DateTimeRange(start: startDate, end: endDate));
+      }
+    } else {
+      // Full year
+      final startDate = DateTime(year, 1, 1);
+      final endDate = DateTime(year + 1, 1, 1);
+      ranges.add(DateTimeRange(start: startDate, end: endDate));
+    }
+  } else if (month != null) {
+    final startDate = DateTime.now();
+    if (day != null) {
+      // No year, month provided, day is not null
+      for (int i = -200; i < 100; i++) {
+        final rangeStart = DateTime(startDate.year + i, month, day);
+        final rangeEnd = DateTime(startDate.year + i, month, day + 1)
+            .subtract(Duration(milliseconds: 1));
+        ranges.add(DateTimeRange(start: rangeStart, end: rangeEnd));
+      }
+    } else {
+      // No year, month provided, day is null
+      for (int i = -200; i < 100; i++) {
+        final rangeStart = DateTime(startDate.year + i, month, 1);
+        final rangeEnd = DateTime(startDate.year + i, month + 1, 0);
+        ranges.add(DateTimeRange(start: rangeStart, end: rangeEnd));
+      }
+    }
+  }
+
+  return ranges;
 }
 
 class HighlightStringInList extends TextEditingController {
@@ -931,6 +1082,7 @@ class _TransactionFiltersSelectionState
                       objective: item,
                       routesToPopAfterDelete:
                           RoutesToPopAfterDelete.PreventDelete,
+                      objectiveType: ObjectiveType.loan,
                     ),
                   );
                 },
@@ -1373,6 +1525,29 @@ class AppliedFilterChips extends StatelessWidget {
               includeYear:
                   searchFilters.dateTimeRange!.end != DateTime.now().year,
             ),
+        openFiltersSelection: () => {openSelectDate!()},
+      ));
+    }
+    // Date from search text
+    ParsedDateTimeQuery? parsedDateTimeQuery = searchFilters.searchQuery == null
+        ? null
+        : parseSearchQueryForDateTimeText(searchFilters.searchQuery ?? "");
+    if (parsedDateTimeQuery != null) {
+      out.add(AppliedFilterChip(
+        customBorderColor: Theme.of(context).colorScheme.tertiary,
+        label: parsedDateTimeQuery.formatDate(context.locale.toString()),
+        openFiltersSelection: () => {openSelectDate!()},
+      ));
+    }
+    // Amount from search text
+    (double, double)? bounds = searchFilters.searchQuery == null
+        ? null
+        : parseSearchQueryForAmountText(searchFilters.searchQuery ?? "");
+    if (bounds != null) {
+      double lowerBound = bounds.$1;
+      out.add(AppliedFilterChip(
+        customBorderColor: Theme.of(context).colorScheme.tertiary,
+        label: "= " + lowerBound.toString(),
         openFiltersSelection: () => {openSelectDate!()},
       ));
     }

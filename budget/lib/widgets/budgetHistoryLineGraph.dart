@@ -617,11 +617,9 @@ class _BudgetHistoryLineGraphState extends State<_BudgetHistoryLineGraph> {
                       padding: const EdgeInsets.only(top: 7),
                       child: MediaQuery(
                         data: MediaQuery.of(context)
-                            .copyWith(textScaleFactor: 1.0),
+                            .copyWith(textScaler: TextScaler.linear(1.0)),
                         child: TextFont(
-                          overflow: TextOverflow.fade,
                           maxLines: 1,
-                          softWrap: false,
                           textAlign: TextAlign.center,
                           fontSize: 13,
                           text: widget.budget.reoccurrence ==
@@ -677,8 +675,8 @@ class _BudgetHistoryLineGraphState extends State<_BudgetHistoryLineGraph> {
                   return Padding(
                     padding: const EdgeInsets.only(right: 8.0),
                     child: MediaQuery(
-                      data:
-                          MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                      data: MediaQuery.of(context)
+                          .copyWith(textScaler: TextScaler.linear(1.0)),
                       child: TextFont(
                         overflow: TextOverflow.fade,
                         maxLines: 1,

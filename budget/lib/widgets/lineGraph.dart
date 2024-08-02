@@ -192,13 +192,12 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
               // );
 
               return MediaQuery(
-                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                data: MediaQuery.of(context)
+                    .copyWith(textScaler: TextScaler.linear(1.0)),
                 child: Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: TextFont(
-                    overflow: TextOverflow.fade,
                     maxLines: 1,
-                    softWrap: false,
                     textAlign: TextAlign.center,
                     fontSize: 13,
                     text: text,
@@ -242,7 +241,8 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
               return Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: MediaQuery(
-                  data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                  data: MediaQuery.of(context)
+                      .copyWith(textScaler: TextScaler.linear(1.0)),
                   child: TextFont(
                     overflow: TextOverflow.fade,
                     maxLines: 1,

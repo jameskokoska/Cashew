@@ -141,6 +141,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "canShowBackupReminderPopup": true,
     "canShowTransactionActionButtonTip": true,
     "autoLoginDisabledOnWebTip": true,
+    "forceAutoLogin": false,
     "allSpendingPageTip": true,
     "notifications": true,
     "notificationHour": 20,
