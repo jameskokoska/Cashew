@@ -1177,12 +1177,13 @@ String cleanupNoteStringWithURLs(String text) {
   return modifiedText.trim();
 }
 
-void openUrl(String link) async {
+Future<bool> openUrl(String link) async {
   if (await canLaunchUrl(Uri.parse(link)))
-    await launchUrl(
+    return await launchUrl(
       Uri.parse(link),
       mode: LaunchMode.externalApplication,
     );
+  return false;
 }
 
 List<String> popularCurrencies = [

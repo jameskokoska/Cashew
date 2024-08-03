@@ -114,8 +114,8 @@ class PremiumPage extends StatelessWidget {
                                       SubscriptionFeature(
                                         iconData:
                                             appStateSettings["outlinedIcons"]
-                                                ? Icons.thumb_up_outlined
-                                                : Icons.thumb_up_rounded,
+                                                ? Icons.favorite_outlined
+                                                : Icons.favorite_rounded,
                                         label: "support-the-developer".tr(),
                                         description:
                                             "support-the-developer-description"
@@ -683,9 +683,37 @@ Future restorePurchases(BuildContext context) async {
     await InAppPurchase.instance.restorePurchases();
     SnackBar snackBar = SnackBar(
       content: Text('any-previous-purchases-restored'.tr()),
+      action: getPlatform(ignoreEmulation: true) == PlatformOS.isAndroid
+          ? SnackBarAction(
+              label: "help".tr().capitalizeFirst,
+              onPressed: () {
+                showHelpRestorePopup(context);
+              })
+          : null,
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
+}
+
+showHelpRestorePopup(BuildContext context) {
+  openPopup(
+    context,
+    icon: appStateSettings["outlinedIcons"]
+        ? Icons.shop_2_outlined
+        : Icons.shop_2_rounded,
+    title: "restore-purchases".tr(),
+    description: "restore-purchases-help".tr(),
+    onCancel: () => popRoute(context),
+    onCancelLabel: "close".tr(),
+    onSubmitLabel: "contact".tr(),
+    onSubmit: () async {
+      bool openResult = await openUrl('mailto:dapperappdeveloper@gmail.com');
+      if (openResult == false) copyToClipboard("dapperappdeveloper@gmail.com");
+    },
+    onExtra: () =>
+        openUrl("https://cashewapp.web.app/faq.html#restoring-purchases"),
+    onExtraLabel: "FAQ".tr(),
+  );
 }
 
 bool hidePremiumPopup() {

@@ -14,7 +14,6 @@ class SaveBottomButton extends StatelessWidget {
     this.disabled = false,
     this.color,
     this.labelColor,
-    this.margin = EdgeInsetsDirectional.zero,
   });
 
   final String label;
@@ -22,47 +21,61 @@ class SaveBottomButton extends StatelessWidget {
   final bool disabled;
   final Color? color;
   final Color? labelColor;
-  final EdgeInsetsDirectional margin;
 
   @override
   Widget build(BuildContext context) {
     // print(getKeyboardHeight(context));
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Transform.translate(
-          offset: Offset(0, 1),
-          child: Container(
-            height: 12,
-            foregroundDecoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Theme.of(context).colorScheme.background.withOpacity(0),
-                  Theme.of(context).colorScheme.background,
-                ],
-                begin: AlignmentDirectional.topCenter,
-                end: AlignmentDirectional.bottomCenter,
-                stops: [0.1, 1],
+    return AddGradientOnTop(
+      child: Button(
+        label: label,
+        disabled: disabled,
+        onTap: onTap,
+        hasBottomExtraSafeArea: true,
+        expandToFillBottomExtraSafeArea: false,
+        color: color,
+        textColor: labelColor,
+      ),
+    );
+  }
+}
+
+class AddGradientOnTop extends StatelessWidget {
+  const AddGradientOnTop({
+    required this.child,
+  });
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    // print(getKeyboardHeight(context));
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Transform.translate(
+            offset: Offset(0, 1),
+            child: Container(
+              height: 12,
+              foregroundDecoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Theme.of(context).colorScheme.background.withOpacity(0),
+                    Theme.of(context).colorScheme.background,
+                  ],
+                  begin: AlignmentDirectional.topCenter,
+                  end: AlignmentDirectional.bottomCenter,
+                  stops: [0.1, 1],
+                ),
               ),
             ),
           ),
-        ),
-        Tappable(
-          onTap: disabled ? () {} : onTap,
-          child: Padding(
-            padding: margin,
-            child: Button(
-              label: label,
-              disabled: disabled,
-              onTap: onTap,
-              hasBottomExtraSafeArea: true,
-              expandToFillBottomExtraSafeArea: false,
-              color: color,
-              textColor: labelColor,
-            ),
+          Container(
+            color: Theme.of(context).colorScheme.background,
+            child: child,
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

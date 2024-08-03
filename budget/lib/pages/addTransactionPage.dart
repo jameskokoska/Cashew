@@ -2091,93 +2091,87 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         overlay: MinimizeKeyboardFABOverlay(isEnabled: notesInputFocused),
         staticOverlay: Align(
           alignment: AlignmentDirectional.bottomCenter,
-          child: Row(
-            children: [
-              Expanded(
-                child: selectedCategory == null
-                    ? SaveBottomButton(
-                        label: "select-category".tr(),
-                        onTap: () {
-                          selectCategorySequence(
-                            context,
-                            selectedCategory: selectedCategory,
-                            setSelectedCategory: setSelectedCategory,
-                            selectedSubCategory: selectedSubCategory,
-                            setSelectedSubCategory: setSelectedSubCategory,
-                            skipIfSet: false,
-                            selectedIncomeInitial: selectedIncome,
-                          );
-                        },
-                      )
-                    : selectedAmount == null
-                        ? SaveBottomButton(
-                            label: "enter-amount".tr(),
-                            onTap: () {
-                              selectAmountPopup();
-                            },
-                          )
-                        : SaveBottomButton(
-                            label: widget.transaction != null
-                                ? "save-changes".tr()
-                                : textAddTransaction ?? "",
-                            onTap: () async {
-                              bool result = await addTransaction();
-                              if (result) popRoute(context);
-                            },
-                          ),
-              ),
-              AnimatedSizeSwitcher(
-                child: widget.transaction != null && selectedType != null
-                    ? WidgetSizeBuilder(
-                        // Change the key to re-render the widget when transaction type changed
-                        key: ValueKey(widget.transaction != null
-                            ? getTransactionActionNameFromType(
-                                createTransaction())
-                            : ""),
-                        widgetBuilder: (Size? size) {
-                          return Container(
-                            key: ValueKey(1),
-                            width: size?.width,
-                            child: SaveBottomButton(
-                              margin: EdgeInsetsDirectional.only(start: 5),
-                              color: isTransactionActionDealtWith(
-                                      createTransaction())
-                                  ? Theme.of(context)
-                                      .colorScheme
-                                      .tertiaryContainer
-                                  : null,
-                              labelColor: isTransactionActionDealtWith(
-                                      createTransaction())
-                                  ? Theme.of(context)
-                                      .colorScheme
-                                      .onTertiaryContainer
-                                  : null,
+          child: AddGradientOnTop(
+            child: Row(
+              children: [
+                Expanded(
+                  child: selectedCategory == null
+                      ? Button(
+                          label: "select-category".tr(),
+                          onTap: () {
+                            selectCategorySequence(
+                              context,
+                              selectedCategory: selectedCategory,
+                              setSelectedCategory: setSelectedCategory,
+                              selectedSubCategory: selectedSubCategory,
+                              setSelectedSubCategory: setSelectedSubCategory,
+                              skipIfSet: false,
+                              selectedIncomeInitial: selectedIncome,
+                            );
+                          },
+                        )
+                      : selectedAmount == null
+                          ? Button(
+                              label: "enter-amount".tr(),
+                              onTap: () {
+                                selectAmountPopup();
+                              },
+                            )
+                          : Button(
                               label: widget.transaction != null
-                                  ? getTransactionActionNameFromType(
-                                      createTransaction())
-                                  : "",
+                                  ? "save-changes".tr()
+                                  : textAddTransaction ?? "",
                               onTap: () async {
-                                if (widget.transaction != null &&
-                                    selectedType != null) {
-                                  await openTransactionActionFromType(
-                                    context,
-                                    createTransaction(),
-                                    runBefore: () async {
-                                      await addTransaction();
-                                      popRoute(context);
-                                    },
-                                  );
-                                }
+                                bool result = await addTransaction();
+                                if (result) popRoute(context);
                               },
                             ),
-                          );
-                        },
-                      )
-                    : Container(
-                        key: ValueKey(2),
-                      ),
-              ),
-            ],
+                ),
+                AnimatedSizeSwitcher(
+                  clipBehavior: Clip.none,
+                  child: widget.transaction != null && selectedType != null
+                      ? Container(
+                          key: ValueKey(1),
+                          padding: EdgeInsetsDirectional.only(start: 5),
+                          child: Button(
+                            color: isTransactionActionDealtWith(
+                                    createTransaction())
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .tertiaryContainer
+                                : null,
+                            textColor: isTransactionActionDealtWith(
+                                    createTransaction())
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .onTertiaryContainer
+                                : null,
+                            label: widget.transaction != null
+                                ? getTransactionActionNameFromType(
+                                        createTransaction())
+                                    .tr()
+                                : "",
+                            onTap: () async {
+                              if (widget.transaction != null &&
+                                  selectedType != null) {
+                                await openTransactionActionFromType(
+                                  context,
+                                  createTransaction(),
+                                  runBefore: () async {
+                                    await addTransaction();
+                                    popRoute(context);
+                                  },
+                                );
+                              }
+                            },
+                          ),
+                        )
+                      : Container(
+                          key: ValueKey(2),
+                        ),
+                ),
+              ],
+            ),
           ),
         ),
         listWidgets: [
