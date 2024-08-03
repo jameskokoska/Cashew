@@ -26,6 +26,7 @@ import 'package:budget/pages/activityPage.dart';
 Map<String, dynamic> appStateSettings = {};
 bool isDatabaseCorrupted = false;
 bool isDatabaseImportedOnThisSession = false;
+PackageInfo? packageInfoGlobal;
 
 Future<bool> initializeSettings() async {
   packageInfoGlobal = await PackageInfo.fromPlatform();

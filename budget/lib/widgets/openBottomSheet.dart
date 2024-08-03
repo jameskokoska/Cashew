@@ -103,6 +103,7 @@ Future openBottomSheet(
 
   return await showSlidingBottomSheet(
     context,
+    useRootNavigator: false,
     resizeToAvoidBottomInset: resizeForKeyboard,
     // getOSInsideWeb() == "iOS" ? false : resizeForKeyboard,
     builder: (context) {

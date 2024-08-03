@@ -1,11 +1,11 @@
 import "package:budget/database/tables.dart";
 import "package:budget/functions.dart";
-import "package:budget/main.dart";
 import "package:budget/pages/addTransactionPage.dart";
 import "package:budget/pages/budgetPage.dart";
 import "package:budget/struct/databaseGlobal.dart";
 import "package:budget/struct/settings.dart";
 import "package:budget/struct/throttler.dart";
+import "package:budget/widgets/navigationFramework.dart";
 import "package:budget/widgets/openBottomSheet.dart";
 import "package:budget/widgets/openPopup.dart";
 import "package:easy_localization/easy_localization.dart";

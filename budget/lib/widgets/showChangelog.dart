@@ -18,6 +18,7 @@ import 'package:budget/widgets/outlinedButtonStacked.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'listItem.dart';
 
 // Device legend
@@ -2456,7 +2457,7 @@ bool showChangelog(
   bool majorChangesOnly = false,
   Widget? extraWidget,
 }) {
-  String version = packageInfoGlobal.version;
+  String version = packageInfoGlobal?.version ?? "";
 
   List<Widget>? changelogPoints = getChangelogPointsWidgets(
     context,
@@ -2503,7 +2504,7 @@ List<Widget>? getChangelogPointsWidgets(BuildContext context,
     {bool forceShow = false, bool majorChangesOnly = false}) {
   String changelog = getChangelogString();
   Map<String, List<MajorChanges>> majorChanges = getMajorChanges();
-  String version = packageInfoGlobal.version;
+  String version = packageInfoGlobal?.version ?? "";
   int versionInt = parseVersionInt(version);
   int lastLoginVersionInt =
       parseVersionInt(appStateSettings["lastLoginVersion"]);
@@ -2601,8 +2602,8 @@ int parseVersionInt(String versionString) {
 }
 
 String getVersionString() {
-  String version = packageInfoGlobal.version;
-  String buildNumber = packageInfoGlobal.buildNumber;
+  String version = packageInfoGlobal?.version ?? "";
+  String buildNumber = packageInfoGlobal?.buildNumber ?? "";
   return "v" +
       version +
       "+" +

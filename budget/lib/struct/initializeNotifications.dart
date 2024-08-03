@@ -7,6 +7,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/notificationsGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/upcomingTransactionsFunctions.dart';
+import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/notificationsSettings.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:flutter/foundation.dart';

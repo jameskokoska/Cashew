@@ -2,7 +2,15 @@ import 'package:budget/struct/settings.dart';
 import 'dart:convert';
 import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+
+Map<String, dynamic> currenciesJSON = {};
+
+loadCurrencyJSON() async {
+  currenciesJSON = await json.decode(
+      await rootBundle.loadString('assets/static/generated/currencies.json'));
+}
 
 Future<bool> getExchangeRates() async {
   print("Getting exchange rates for current wallets");
