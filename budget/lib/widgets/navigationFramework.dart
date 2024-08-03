@@ -466,7 +466,7 @@ class AddMoreThingsPopup extends StatelessWidget {
     required Map<String, TransactionCategory> categoriesIndexed,
     double? customAmount,
   }) async {
-    Navigator.pop(context);
+    popRoute(context);
     await duplicateTransaction(
       context,
       transactionWithCount.transaction.transactionPk,
@@ -509,7 +509,7 @@ class AddMoreThingsPopup extends StatelessWidget {
             },
             onSelected: (String selection) async {
               if (selection == "transfer-balance") {
-                Navigator.pop(context);
+                popRoute(context);
                 openBottomSheet(
                   context,
                   fullSnap: true,
@@ -533,7 +533,7 @@ class AddMoreThingsPopup extends StatelessWidget {
                   );
                 }
                 if (wallet != null) {
-                  Navigator.pop(context);
+                  popRoute(context);
                   openBottomSheet(
                     context,
                     fullSnap: true,
@@ -598,7 +598,7 @@ class AddMoreThingsPopup extends StatelessWidget {
                         description:
                             "most-common-transactions-description".tr(),
                         onSubmit: () {
-                          Navigator.pop(context);
+                          popRoute(context);
                         },
                         onSubmitLabel: "ok".tr(),
                       );
@@ -729,7 +729,7 @@ class AddMoreThingsPopup extends StatelessWidget {
             // ),
             // extraWidgetAtBeginning: true,
             onSelected: (String selection) async {
-              Navigator.pop(context);
+              popRoute(context);
               if (selection == "long-term") {
                 pushRoute(
                   context,
@@ -792,7 +792,7 @@ class AddMoreThingsPopup extends StatelessWidget {
               if (navigatorKey.currentContext == null) {
                 startCreatingInstallment(context: context);
               } else {
-                Navigator.pop(context);
+                popRoute(context);
                 startCreatingInstallment(context: navigatorKey.currentContext!);
               }
             },
@@ -878,7 +878,7 @@ class AddThing extends StatelessWidget {
                 if (onTap != null) {
                   onTap!();
                 } else {
-                  Navigator.pop(context);
+                  popRoute(context);
                   pushRoute(context, openPage);
                 }
               },

@@ -392,6 +392,7 @@ class TotalUpcomingHeaderPeriodSwitcher extends StatelessWidget {
           Padding(
             padding: EdgeInsetsDirectional.only(top: 5),
             child: AnimatedSizeSwitcher(
+              clipBehavior: Clip.none,
               child: TextFont(
                 key: ValueKey(selectedType.toString()),
                 text: selectedSubtitleTranslation(selectedType),

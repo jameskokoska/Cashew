@@ -258,7 +258,7 @@ bool checkIfDefaultThemeData(BuildContext? context) {
 //         padding: EdgeInsetsDirectional.only(top: MediaQuery.paddingOf(context).top),
 //         child: GestureDetector(
 //           onTap: () {
-//             Navigator.pop(context);
+//             popRoute(context);
 //           },
 //           child: Align(
 //             alignment: AlignmentDirectional.bottomCenter,

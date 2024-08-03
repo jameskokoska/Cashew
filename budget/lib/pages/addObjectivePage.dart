@@ -168,7 +168,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
             determineBottomButton();
           },
           next: () async {
-            Navigator.pop(context);
+            popRoute(context);
           },
           nextLabel: "set-amount".tr(),
           enableWalletPicker: true,
@@ -266,7 +266,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
       }
     }
     savingHapticFeedback();
-    Navigator.pop(context);
+    popRoute(context);
   }
 
   Future<Objective> createObjective() async {
@@ -315,7 +315,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
     if (objectiveCreated != objectiveInitial && widget.objective == null) {
       discardChangesPopup(context, forceShow: true);
     } else {
-      Navigator.pop(context);
+      popRoute(context);
     }
   }
 
@@ -801,7 +801,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
                                                   ? Icons.exposure_outlined
                                                   : Icons.exposure_rounded,
                                           onSubmit: () {
-                                            Navigator.pop(context);
+                                            popRoute(context);
                                           },
                                           onSubmitLabel: "ok".tr(),
                                         );
@@ -960,7 +960,7 @@ class SelectObjectiveTypePopup extends StatelessWidget {
                       : Icons.savings_rounded,
                   onTap: () {
                     setObjectiveIncome(true);
-                    Navigator.pop(context);
+                    popRoute(context);
                   },
                   afterWidget: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -999,7 +999,7 @@ class SelectObjectiveTypePopup extends StatelessWidget {
                       : Icons.request_quote_rounded,
                   onTap: () async {
                     setObjectiveIncome(false);
-                    Navigator.pop(context);
+                    popRoute(context);
                   },
                   afterWidget: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -1104,7 +1104,7 @@ class _InstallmentObjectivePopupState extends State<InstallmentObjectivePopup> {
             });
           },
           next: () {
-            Navigator.pop(context);
+            popRoute(context);
           },
           nextLabel: "set-amount".tr(),
         ),
@@ -1129,7 +1129,7 @@ class _InstallmentObjectivePopupState extends State<InstallmentObjectivePopup> {
             });
           },
           next: () async {
-            Navigator.pop(context);
+            popRoute(context);
           },
           nextLabel: "set-amount".tr(),
         ),
@@ -1469,7 +1469,7 @@ class _InstallmentObjectivePopupState extends State<InstallmentObjectivePopup> {
                     );
                     await database.createOrUpdateTransaction(transaction,
                         insert: true);
-                    Navigator.maybePop(context, true);
+                    maybePopRoute(context, true);
                   },
                 ),
               ),

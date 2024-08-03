@@ -1,4 +1,5 @@
 import 'package:budget/database/tables.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -69,7 +70,7 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
       ),
     );
     savingHapticFeedback();
-    Navigator.pop(context);
+    popRoute(context);
   }
 
   @override

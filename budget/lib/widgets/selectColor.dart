@@ -240,7 +240,7 @@ class _SelectColorState extends State<SelectColor> {
                                     });
                                     Future.delayed(Duration(milliseconds: 70),
                                         () {
-                                      Navigator.pop(context);
+                                      popRoute(context);
                                       if (widget.next != null) {
                                         widget.next!();
                                       }
@@ -263,7 +263,7 @@ class _SelectColorState extends State<SelectColor> {
                                     });
                                     Future.delayed(Duration(milliseconds: 70),
                                         () {
-                                      Navigator.pop(context);
+                                      popRoute(context);
                                       if (widget.next != null) {
                                         widget.next!();
                                       }
@@ -473,7 +473,7 @@ class _ColorIconCustomState extends State<ColorIconCustom> {
             hueRingStrokeWidth: 15,
             colorPickerHeight: min(225, getWidthBottomSheet(context) - 100),
             onSelect: () {
-              Navigator.pop(context);
+              popRoute(context);
               widget.onTap(selectedColor);
             },
             previewBuilder: widget.previewBuilder,
@@ -484,7 +484,7 @@ class _ColorIconCustomState extends State<ColorIconCustom> {
           Button(
             label: "select".tr(),
             onTap: () {
-              Navigator.pop(context);
+              popRoute(context);
               widget.onTap(selectedColor);
             },
           )
@@ -549,7 +549,7 @@ Future enterColorCodeBottomSheet(
   required Color initialSelectedColor,
   required Function(Color) setSelectedColor,
 }) async {
-  Navigator.pop(context);
+  popRoute(context);
   return await openBottomSheet(
     context,
     popupWithKeyboard: true,

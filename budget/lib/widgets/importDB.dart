@@ -58,11 +58,11 @@ Future importDB(BuildContext context, {ignoreOverwriteWarning = false}) async {
           title: "data-overwrite-warning".tr(),
           description: "data-overwrite-warning-description".tr(),
           onCancel: () {
-            Navigator.pop(context, false);
+            popRoute(context, false);
           },
           onCancelLabel: "cancel".tr(),
           onSubmit: () {
-            Navigator.pop(context, true);
+            popRoute(context, true);
           },
           onSubmitLabel: "ok".tr(),
         );
@@ -75,7 +75,7 @@ Future importDB(BuildContext context, {ignoreOverwriteWarning = false}) async {
       title: "select-backup-file".tr(),
       description: "select-backup-file-description".tr(),
       onSubmit: () {
-        Navigator.pop(context);
+        popRoute(context);
       },
       onSubmitLabel: "ok".tr(),
     );

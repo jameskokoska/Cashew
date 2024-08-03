@@ -350,7 +350,7 @@ class PageFrameworkState extends State<PageFramework>
         if (widget.onDragDownToDismiss != null) {
           widget.onDragDownToDismiss!();
         } else {
-          await Navigator.of(context).maybePop();
+          await maybePopRoute(context);
         }
       }
       // This cannot be in an else statement
@@ -851,7 +851,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                   if (onBackButton != null)
                     onBackButton!();
                   else
-                    Navigator.of(context).maybePop();
+                    maybePopRoute(context);
                 },
                 icon: Icon(
                   getPlatform() == PlatformOS.isIOS

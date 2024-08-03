@@ -193,7 +193,7 @@ class ExportCSV extends StatelessWidget {
                               ? Icons.calendar_month_outlined
                               : Icons.calendar_month_rounded,
                           onTap: () async {
-                            Navigator.pop(context);
+                            popRoute(context);
                             await exportCSV(
                                 boxContext: boxContext, dateTimeRange: null);
                           },
@@ -207,7 +207,7 @@ class ExportCSV extends StatelessWidget {
                               ? Icons.date_range_outlined
                               : Icons.date_range_rounded,
                           onTap: () async {
-                            Navigator.pop(context);
+                            popRoute(context);
                             DateTimeRangeOrAllTime? dateRange =
                                 await showCustomDateRangePicker(
                               context,

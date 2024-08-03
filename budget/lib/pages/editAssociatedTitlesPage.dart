@@ -276,9 +276,9 @@ Future<DeletePopupAction?> deleteAssociatedTitlePopup(
   );
   if (action == DeletePopupAction.Delete) {
     if (routesToPopAfterDelete == RoutesToPopAfterDelete.All) {
-      Navigator.of(context).popUntil((route) => route.isFirst);
+      popAllRoutes(context);
     } else if (routesToPopAfterDelete == RoutesToPopAfterDelete.One) {
-      Navigator.of(context).pop();
+      popRoute(context);
     }
     openLoadingPopupTryCatch(() async {
       await database.deleteAssociatedTitle(

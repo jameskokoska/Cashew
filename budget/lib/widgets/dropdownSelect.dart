@@ -302,7 +302,7 @@ class CustomPopupMenuButton extends StatelessWidget {
                     onLongPress: menuItem.actionOnLongPress == null
                         ? null
                         : () {
-                            Navigator.maybePop(context);
+                            maybePopRoute(context);
                             HapticFeedback.heavyImpact();
                             menuItem.actionOnLongPress!();
                           },

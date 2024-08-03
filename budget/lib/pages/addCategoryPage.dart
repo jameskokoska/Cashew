@@ -170,7 +170,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
       );
     }
     savingHapticFeedback();
-    Navigator.pop(context);
+    popRoute(context);
   }
 
   Future<TransactionCategory> createTransactionCategory() async {
@@ -222,7 +222,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
     if (categoryCreated != categoryInitial && widget.category == null) {
       discardChangesPopup(context, forceShow: true);
     } else {
-      Navigator.pop(context);
+      popRoute(context);
     }
   }
 

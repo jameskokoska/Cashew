@@ -107,7 +107,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
 
     if (popContext) {
       savingHapticFeedback();
-      Navigator.pop(context);
+      popRoute(context);
     } else {
       walletInitial = await createTransactionWallet();
     }
@@ -150,7 +150,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
     if (walletCreated != walletInitial && widget.wallet == null) {
       discardChangesPopup(context, forceShow: true);
     } else {
-      Navigator.pop(context);
+      popRoute(context);
     }
   }
 
@@ -244,7 +244,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
             setState(() {});
           },
           next: () async {
-            Navigator.pop(context);
+            popRoute(context);
           },
           nextLabel: "set-amount".tr(),
         ),
@@ -284,7 +284,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
             });
           },
           next: () async {
-            Navigator.pop(context);
+            popRoute(context);
           },
           currencyKey: selectedCurrency,
           nextLabel: "set-amount".tr(),
@@ -740,7 +740,7 @@ class _CorrectBalancePopupState extends State<CorrectBalancePopup> {
           onEditingComplete: widget.showAllEditDetails == true
               ? null
               : () {
-                  if (widget.showAllEditDetails) Navigator.maybePop(context);
+                  if (widget.showAllEditDetails) maybePopRoute(context);
                 },
           initialValue: selectedTitle,
           labelText: "transfer-balance".tr(),
@@ -908,7 +908,7 @@ class _CorrectBalancePopupState extends State<CorrectBalancePopup> {
                     selectedDateTime,
                     selectedTitle,
                   );
-                  Navigator.pop(context);
+                  popRoute(context);
                 },
                 nextLabel: "update-total-balance".tr(),
               ),
@@ -1147,7 +1147,7 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
           onEditingComplete: widget.showAllEditDetails == true
               ? null
               : () {
-                  if (widget.showAllEditDetails) Navigator.maybePop(context);
+                  if (widget.showAllEditDetails) maybePopRoute(context);
                 },
           initialValue: selectedTitle,
           labelText: "transfer-balance".tr(),
@@ -1386,7 +1386,7 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
               //             },
               //             amountPassed: transferFee.toString(),
               //             next: () {
-              //               Navigator.pop(context);
+              //               popRoute(context);
               //             },
               //             nextLabel: "set-amount".tr(),
               //             currencyKey: null,
@@ -1527,7 +1527,7 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
                       ),
                     );
 
-                    Navigator.pop(context, true);
+                    popRoute(context, true);
                   },
                 ),
               ),

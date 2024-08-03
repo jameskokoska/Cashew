@@ -485,7 +485,7 @@ class NavBarShortcutSelection extends StatelessWidget {
               onTap: () async {
                 await updateSettings(shortcutAppSettingKey, navBarIconDataKey,
                     updateGlobalState: false);
-                Navigator.pop(context, true);
+                popRoute(context, true);
               },
               infoButton: onSettings == null
                   ? null

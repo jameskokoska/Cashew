@@ -1,5 +1,6 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
@@ -86,7 +87,7 @@ class _SelectCategoryState extends State<SelectCategory> {
     super.initState();
     Future.delayed(Duration(milliseconds: 0), () {
       if (widget.selectedCategory != null && widget.skipIfSet == true) {
-        if (widget.popRoute) Navigator.pop(context, widget.selectedCategory);
+        if (widget.popRoute) popRoute(context, widget.selectedCategory);
         if (widget.next != null) {
           widget.next!();
         }
@@ -190,8 +191,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                             selectedCategories.add(category.categoryPk);
                           });
                           Future.delayed(Duration(milliseconds: 70), () {
-                            if (widget.popRoute)
-                              Navigator.pop(context, category);
+                            if (widget.popRoute) popRoute(context, category);
                             if (widget.next != null) {
                               widget.next!();
                             }
@@ -330,7 +330,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                           selectedCategories.add(category.categoryPk);
                         });
                         Future.delayed(Duration(milliseconds: 70), () {
-                          if (widget.popRoute) Navigator.pop(context, category);
+                          if (widget.popRoute) popRoute(context, category);
                           if (widget.next != null) {
                             widget.next!();
                           }
@@ -462,7 +462,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                 //                     Future.delayed(Duration(milliseconds: 70),
                 //                         () {
                 //                       if (widget.popRoute)
-                //                         Navigator.pop(context);
+                //                         popRoute(context);
                 //                       if (widget.next != null) {
                 //                         widget.next!();
                 //                       }

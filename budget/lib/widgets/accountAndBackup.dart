@@ -165,8 +165,7 @@ Future<bool> signInGoogle(
         throw ("Login failed");
       }
     }
-    if (waitForCompletion == true && context != null)
-      Navigator.of(context).pop();
+    if (waitForCompletion == true && context != null) popRoute(context);
     if (next != null) next();
 
     if (appStateSettings["hasSignedIn"] == false) {
@@ -176,8 +175,7 @@ Future<bool> signInGoogle(
     return true;
   } catch (e) {
     print(e);
-    if (waitForCompletion == true && context != null)
-      Navigator.of(context).pop();
+    if (waitForCompletion == true && context != null) popRoute(context);
     openSnackbar(
       SnackbarMessage(
         title: "sign-in-error".tr(),
@@ -233,10 +231,9 @@ Future<bool> signInAndSync(BuildContext context,
     {required dynamic Function() next}) async {
   dynamic result = true;
   if (getPlatform() == PlatformOS.isIOS &&
-      navigatorKey.currentContext != null &&
       appStateSettings["hasSignedIn"] != true) {
     result = await openPopup(
-      navigatorKey.currentContext!,
+      null,
       icon: appStateSettings["outlinedIcons"]
           ? Icons.badge_outlined
           : Icons.badge_rounded,
@@ -244,10 +241,10 @@ Future<bool> signInAndSync(BuildContext context,
       description: "google-drive-backup-disclaimer".tr(),
       onSubmitLabel: "continue".tr(),
       onSubmit: () {
-        Navigator.pop(navigatorKey.currentContext!, true);
+        popRoute(null, true);
       },
       onCancel: () {
-        Navigator.pop(navigatorKey.currentContext!);
+        popRoute(null);
       },
       onCancelLabel: "cancel".tr(),
     );
@@ -351,12 +348,12 @@ bool openDatabaseCorruptedPopup(BuildContext context) {
       description: "database-corrupted-description".tr(),
       barrierDismissible: false,
       onSubmit: () async {
-        Navigator.pop(context);
+        popRoute(context);
         await importDB(context, ignoreOverwriteWarning: true);
       },
       onSubmitLabel: "import-backup".tr(),
       onCancel: () async {
-        Navigator.pop(context);
+        popRoute(context);
         await openLoadingPopupTryCatch(() async {
           await forceDeleteDB();
           await sharedPreferences.clear();
@@ -386,7 +383,7 @@ Future<void> createBackup(
     await backupSettings();
   } catch (e) {
     if (silentBackup == false || silentBackup == null) {
-      Navigator.of(context).maybePop();
+      maybePopRoute(context);
     }
     openSnackbar(
       SnackbarMessage(
@@ -533,7 +530,7 @@ Future<void> chooseBackup(context,
       ),
     );
   } catch (e) {
-    Navigator.of(context).pop();
+    popRoute(context);
     openSnackbar(
       SnackbarMessage(
           title: e.toString(),
@@ -564,7 +561,7 @@ Future<void> loadBackup(
 
         // if this is added, it doesn't restore the database properly on web
         // await database.close();
-        Navigator.of(context).pop();
+        popRoute(context);
         await resetLanguageToSystem(context);
         await updateSettings("databaseJustImported", true,
             pagesNeedingRefresh: [], updateGlobalState: false);
@@ -576,7 +573,7 @@ Future<void> loadBackup(
                   ? Icons.settings_backup_restore_outlined
                   : Icons.settings_backup_restore_rounded),
         );
-        Navigator.pop(context);
+        popRoute(context);
         restartAppPopup(
           context,
           description: kIsWeb
@@ -604,7 +601,7 @@ Future<void> loadBackup(
       },
     );
   } catch (e) {
-    Navigator.of(context).pop();
+    popRoute(context);
     openSnackbar(
       SnackbarMessage(
           title: e.toString(),
@@ -996,11 +993,11 @@ class _BackupManagementState extends State<BackupManagement> {
                         onSubmit: () async {
                           updateSettings("backupLimit", int.parse(value),
                               updateGlobalState: false);
-                          Navigator.pop(context);
+                          popRoute(context);
                         },
                         onSubmitLabel: "change".tr(),
                         onCancel: () {
-                          Navigator.pop(context);
+                          popRoute(context);
                           setState(() {
                             dropDownKey = UniqueKey();
                           });
@@ -1075,12 +1072,12 @@ class _BackupManagementState extends State<BackupManagement> {
                                       ? Icons.warning_outlined
                                       : Icons.warning_rounded,
                                   onSubmit: () async {
-                                    Navigator.pop(context, true);
+                                    popRoute(context, true);
                                   },
                                   onSubmitLabel: "load".tr(),
                                   onCancelLabel: "cancel".tr(),
                                   onCancel: () {
-                                    Navigator.pop(context);
+                                    popRoute(context);
                                   },
                                 );
                                 if (result == true)
@@ -1098,7 +1095,7 @@ class _BackupManagementState extends State<BackupManagement> {
                               //         (file.value.description ?? ""),
                               //     icon: appStateSettings["outlinedIcons"] ? Icons.warning_outlined : Icons.warning_rounded,
                               //     onSubmit: () async {
-                              //       Navigator.pop(context, true);
+                              //       popRoute(context, true);
                               //     },
                               //     onSubmitLabel: "Close",
                               //   );
@@ -1303,7 +1300,7 @@ class _BackupManagementState extends State<BackupManagement> {
                                                             .tr()
                                                         : null),
                                                     onSubmit: () async {
-                                                      Navigator.pop(context);
+                                                      popRoute(context);
                                                       loadingIndeterminateKey
                                                           .currentState!
                                                           .setVisibility(true);
@@ -1352,7 +1349,7 @@ class _BackupManagementState extends State<BackupManagement> {
                                                     onSubmitLabel:
                                                         "delete".tr(),
                                                     onCancel: () {
-                                                      Navigator.pop(context);
+                                                      popRoute(context);
                                                     },
                                                     onCancelLabel:
                                                         "cancel".tr(),
@@ -1538,18 +1535,18 @@ bool openBackupReminderPopupCheck(BuildContext context) {
           "google-drive".tr(),
       onSubmitLabel: "backup".tr().capitalizeFirst,
       onSubmit: () async {
-        Navigator.pop(context);
+        popRoute(context);
         await signInAndSync(context, next: () {});
       },
       onCancelLabel: "never".tr().capitalizeFirst,
       onCancel: () {
-        Navigator.pop(context);
+        popRoute(context);
         updateSettings("canShowBackupReminderPopup", false,
             updateGlobalState: false);
       },
       onExtraLabel: "later".tr().capitalizeFirst,
       onExtra: () {
-        Navigator.pop(context);
+        popRoute(context);
       },
     );
     return true;

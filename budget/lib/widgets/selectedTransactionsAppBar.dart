@@ -507,7 +507,7 @@ class SelectedTransactionsAppBarMenu extends StatelessWidget {
                                               unfocusWhenRecommendedTapped:
                                                   false,
                                               onSubmitted: (_) {
-                                                Navigator.pop(context, true);
+                                                popRoute(context, true);
                                               },
                                               autoFocus: true,
                                             ),
@@ -520,7 +520,7 @@ class SelectedTransactionsAppBarMenu extends StatelessWidget {
                                       Button(
                                         label: "set-title".tr(),
                                         onTap: () {
-                                          Navigator.pop(context, true);
+                                          popRoute(context, true);
                                         },
                                       ),
                                     ],
@@ -892,7 +892,7 @@ class EditSelectedTransactionsContainer extends StatelessWidget {
               iconData: iconData,
               iconScale: iconScale,
               onTap: () {
-                Navigator.pop(context);
+                popRoute(context);
                 onTap();
               },
             ),
@@ -958,10 +958,9 @@ Future duplicateTransaction(
           title: "created-copy-for-current-time".tr(),
           description: "copied".tr() + " " + transactionName,
           onTap: () {
-            if (navigatorKey.currentContext != null &&
-                transactionJustAdded != null)
+            if (transactionJustAdded != null)
               pushRoute(
-                navigatorKey.currentContext!,
+                null,
                 AddTransactionPage(
                   routesToPopAfterDelete: RoutesToPopAfterDelete.One,
                   transaction: transactionJustAdded,
@@ -979,10 +978,9 @@ Future duplicateTransaction(
           title: "created-copy".tr(),
           description: "copied".tr() + " " + transactionName,
           onTap: () {
-            if (navigatorKey.currentContext != null &&
-                transactionJustAdded != null)
+            if (transactionJustAdded != null)
               pushRoute(
-                navigatorKey.currentContext!,
+                null,
                 AddTransactionPage(
                   routesToPopAfterDelete: RoutesToPopAfterDelete.One,
                   transaction: transactionJustAdded,

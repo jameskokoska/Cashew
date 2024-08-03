@@ -1,4 +1,5 @@
 import 'package:animations/animations.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
@@ -96,9 +97,8 @@ class _InitializeBiometricsState extends State<InitializeBiometrics> {
     // Since Initialize biometrics does not have access to Material navigator in the widget tree
     // because we want to keep the app fully locked
     Future.delayed(Duration(milliseconds: 500), () {
-      if (navigatorKey.currentContext == null) return;
       openPopup(
-        navigatorKey.currentContext!,
+        null,
         barrierDismissible: false,
         icon: appStateSettings["outlinedIcons"]
             ? Icons.warning_outlined
@@ -108,7 +108,7 @@ class _InitializeBiometricsState extends State<InitializeBiometrics> {
         onSubmitLabel: "ok".tr(),
         onSubmit: () {
           updateSettings("requireAuth", false, updateGlobalState: false);
-          Navigator.pop(navigatorKey.currentContext!);
+          popRoute(null);
         },
       );
     });

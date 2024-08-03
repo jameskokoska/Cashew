@@ -93,7 +93,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
     // print(selectedIndex);
     return Listener(
       onPointerDown: (_) {
-        if (isCalendarOpened) Navigator.maybePop(navigatorKey.currentContext!);
+        if (isCalendarOpened) maybePopRoute(navigatorKey.currentContext!);
         // Remove any open context menus when sidebar clicked
         ContextMenuController.removeAny();
       },

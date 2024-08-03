@@ -389,11 +389,11 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                           ? Icons.block_outlined
                           : Icons.block_rounded,
                       onCancel: () {
-                        Navigator.pop(context);
+                        popRoute(context);
                       },
                       onCancelLabel: "cancel".tr(),
                       onSubmit: () async {
-                        Navigator.pop(context);
+                        popRoute(context);
                         openLoadingPopup(context);
                         bool status =
                             await removedSharedFromBudget(widget.budget);
@@ -409,8 +409,8 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                           );
                           return;
                         }
-                        Navigator.pop(context);
-                        Navigator.pop(context);
+                        popRoute(context);
+                        popRoute(context);
                       },
                       onSubmitLabel: "delete".tr(),
                     );
@@ -442,7 +442,7 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                       );
                       return;
                     }
-                    Navigator.pop(context);
+                    popRoute(context);
                     openPopup(
                       context,
                       title: "Delete " + widget.budget.name + " budget?",
@@ -452,22 +452,22 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                           ? Icons.delete_outlined
                           : Icons.delete_rounded,
                       onCancel: () {
-                        Navigator.pop(context);
-                        Navigator.pop(context);
+                        popRoute(context);
+                        popRoute(context);
                       },
                       onCancelLabel: "cancel".tr(),
                       onSubmit: () {
                         database.deleteBudget(context, widget.budget);
                         // database.deleteBudgetTransactions(
                         //     widget.category.categoryPk);
-                        Navigator.pop(context);
+                        popRoute(context);
                         openSnackbar(
                           SnackbarMessage(
                             title: "Deleted " + widget.budget.name,
                             icon: Icons.delete,
                           ),
                         );
-                        Navigator.pop(context);
+                        popRoute(context);
                       },
                       onSubmitLabel: "delete".tr(),
                     );
@@ -603,12 +603,12 @@ class CategoryMemberContainer extends StatelessWidget {
                             : Icons.delete_rounded,
                         onSubmitLabel: "Remove",
                         onSubmit: () {
-                          Navigator.pop(context);
+                          popRoute(context);
                           onDelete();
                         },
                         onCancelLabel: "cancel".tr(),
                         onCancel: () {
-                          Navigator.pop(context);
+                          popRoute(context);
                         },
                       );
                     },

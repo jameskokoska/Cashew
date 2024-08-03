@@ -352,7 +352,7 @@ class _EditHomePageState extends State<EditHomePage> {
                           updateGlobalState: false,
                         );
                       }
-                      Navigator.of(context).pop();
+                      popRoute(context);
                     },
                   ),
                 ),
@@ -785,7 +785,7 @@ Future openPieChartHomePageBottomSheetSettings(BuildContext context) async {
       //       initial: appStateSettings["pieChartTotal"],
       //       onChanged: (type) async {
       //         updateSettings("pieChartTotal", type, updateGlobalState: false);
-      //         Navigator.of(context).pop();
+      //         popRoute(context, );
       //       },
       //     ),
       //     Padding(

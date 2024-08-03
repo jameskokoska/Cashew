@@ -237,7 +237,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         appStateSettings["sharedBudgets"] == true) {
       openLoadingPopup(context);
       bool result2 = await shareBudget(createdBudget, context);
-      Navigator.pop(context);
+      popRoute(context);
       if (result2 == false) {
         Future.delayed(Duration.zero, () {
           openPopup(
@@ -249,7 +249,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
             description:
                 "You can only update the details of a shared budget online.",
             onSubmit: () {
-              Navigator.pop(context);
+              popRoute(context);
             },
             onSubmitLabel: "ok".tr(),
           );
@@ -269,18 +269,18 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         description:
             "You can only update the details of a shared category online.",
         onCancel: () {
-          Navigator.pop(context);
-          Navigator.pop(context);
+          popRoute(context);
+          popRoute(context);
         },
         onSubmit: () {
-          Navigator.pop(context);
+          popRoute(context);
         },
         onSubmitLabel: "ok".tr(),
         onCancelLabel: "Exit Without Saving",
       );
     } else {
       savingHapticFeedback();
-      Navigator.pop(context);
+      popRoute(context);
     }
   }
 
@@ -350,7 +350,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     if (budgetCreated != budgetInitial && widget.budget == null) {
       discardChangesPopup(context, forceShow: true);
     } else {
-      Navigator.pop(context);
+      popRoute(context);
     }
   }
 
@@ -525,11 +525,11 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
             : Icons.bar_chart_rounded,
         description: "balance-correction-selected-info".tr(),
         onSubmit: () {
-          Navigator.pop(context);
+          popRoute(context);
         },
         onSubmitLabel: "ok".tr(),
         onCancel: () {
-          Navigator.pop(context);
+          popRoute(context);
           openBottomSheet(
             context,
             fullSnap: false,
@@ -766,7 +766,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                             : Icons.warning_rounded,
                         onSubmitLabel: "ok".tr(),
                         onSubmit: () {
-                          Navigator.pop(context);
+                          popRoute(context);
                         },
                       );
                     }
@@ -1455,7 +1455,7 @@ class _BudgetDetailsState extends State<BudgetDetails> {
             widget.determineBottomButton();
           },
           next: () async {
-            Navigator.pop(context);
+            popRoute(context);
           },
           nextLabel: "set-amount".tr(),
           enableWalletPicker: true,
@@ -1491,7 +1491,7 @@ class _BudgetDetailsState extends State<BudgetDetails> {
             setSelectedPeriodLength(amount);
           },
           next: () async {
-            Navigator.pop(context);
+            popRoute(context);
           },
           nextLabel: "set-period-length".tr(),
         ),
@@ -1549,7 +1549,7 @@ class _BudgetDetailsState extends State<BudgetDetails> {
                 selectedRecurrenceDisplay = namesRecurrence[value];
               }
             });
-            Navigator.of(context).pop();
+            popRoute(context);
             widget.determineBottomButton();
           },
         ),
@@ -1863,7 +1863,7 @@ class SelectBudgetIncomeTypePopup extends StatelessWidget {
                       : Icons.savings_rounded,
                   onTap: () {
                     setBudgetIncome(true);
-                    Navigator.pop(context);
+                    popRoute(context);
                   },
                   afterWidget: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -1893,7 +1893,7 @@ class SelectBudgetIncomeTypePopup extends StatelessWidget {
                       : Icons.request_quote_rounded,
                   onTap: () async {
                     setBudgetIncome(false);
-                    Navigator.pop(context);
+                    popRoute(context);
                   },
                   afterWidget: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -1946,7 +1946,7 @@ class SelectBudgetTypePopup extends StatelessWidget {
                       : Icons.folder_rounded,
                   onTap: () {
                     setBudgetType("Added Only");
-                    Navigator.pop(context, "Added Only");
+                    popRoute(context, "Added Only");
                   },
                   afterWidget: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -1986,7 +1986,7 @@ class SelectBudgetTypePopup extends StatelessWidget {
                       : Icons.category_rounded,
                   onTap: () async {
                     setBudgetType("All Transactions");
-                    Navigator.pop(context, "All Transactions");
+                    popRoute(context, "All Transactions");
                   },
                   afterWidget: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -2104,7 +2104,7 @@ class _ViewBudgetTransactionFilterInfoState
                     if (widget.popOnDefault == true &&
                         selectedBudgetFilters.contains(BudgetTransactionFilters
                             .defaultBudgetTransactionFilters)) {
-                      Navigator.pop(context);
+                      popRoute(context);
                     } else {
                       onTap(BudgetTransactionFilters
                           .defaultBudgetTransactionFilters);

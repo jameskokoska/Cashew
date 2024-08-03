@@ -119,7 +119,7 @@ class _DailyNotificationsSettingsState
                             setState(() {
                               selectedReminderType = option;
                             });
-                            Navigator.pop(context);
+                            popRoute(context);
                           },
                         ),
                       ),

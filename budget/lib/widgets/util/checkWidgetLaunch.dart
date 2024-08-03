@@ -75,7 +75,7 @@ class _CheckWidgetLaunchState extends State<CheckWidgetLaunch> {
       // the route when this is called so the first time routing does not persist (i.e. we end with one route)
       if (Provider.of<AllWallets>(context, listen: false)
               .indexedByPk[appStateSettings["selectedWalletPk"]] ==
-          null) Navigator.of(context).popUntil((route) => route.isFirst);
+          null) popAllRoutes(context);
 
       openBottomSheet(
         context,

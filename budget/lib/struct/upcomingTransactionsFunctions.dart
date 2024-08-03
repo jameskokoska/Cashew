@@ -221,12 +221,12 @@ Future openPayPopup(
         : "pay-description".tr(),
     onCancelLabel: "cancel".tr().tr(),
     onCancel: () {
-      Navigator.pop(context, false);
+      popRoute(context, false);
     },
     onExtraLabel: "skip".tr(),
     onExtra: () async {
       if (runBefore != null) await runBefore();
-      Navigator.pop(context);
+      popRoute(context);
       await markAsSkipped(
         transaction: transaction,
       );
@@ -251,7 +251,7 @@ Future openPayPopup(
       //   );
       //   amount = amount.abs() * (transaction.income ? 1 : -1);
       // }
-      Navigator.pop(context);
+      popRoute(context);
       await markAsPaid(
         transaction: transaction,
       );
@@ -338,7 +338,7 @@ Future openPayDebtCreditPopup(
             : "",
     onCancelLabel: "cancel".tr(),
     onCancel: () {
-      Navigator.pop(context, false);
+      popRoute(context, false);
     },
     onSubmitLabel: transaction.type == TransactionSpecialType.credit
         ? "collect-all".tr()
@@ -351,7 +351,7 @@ Future openPayDebtCreditPopup(
         //we don't want it to count towards the total - net is zero now
         paid: false,
       );
-      Navigator.pop(context, true);
+      popRoute(context, true);
       await database.createOrUpdateTransaction(transactionNew);
 
       // Make a separate transaction for one time loan collections... something like below?
@@ -361,7 +361,7 @@ Future openPayDebtCreditPopup(
       //   income: !transaction.income,
       //   pairedTransactionFk: Value(transaction.transactionPk),
       // );
-      // Navigator.pop(context, true);
+      // popRoute(context, true);
       // await database.createOrUpdateTransaction(transactionNew, insert: true);
     },
     onExtraLabel2: transaction.type == TransactionSpecialType.credit
@@ -400,7 +400,7 @@ Future openPayDebtCreditPopup(
               selectedAmount = amount;
             },
             next: () {
-              Navigator.pop(context, true);
+              popRoute(context, true);
             },
             nextLabel: "set-amount".tr(),
             currencyKey: null,
@@ -410,7 +410,7 @@ Future openPayDebtCreditPopup(
       );
       if (selectedAmount == 0 || result != true) return;
 
-      Navigator.pop(context, true);
+      popRoute(context, true);
 
       TransactionCategory category =
           await database.getCategory(transaction.categoryFk).$2;
@@ -483,14 +483,14 @@ Future openRemoveSkipPopup(
     description: "remove-skip-description".tr(),
     onCancelLabel: "cancel".tr(),
     onCancel: () {
-      Navigator.pop(context, false);
+      popRoute(context, false);
     },
     onSubmitLabel: "remove".tr(),
     onSubmit: () async {
       if (runBefore != null) await runBefore();
 
       Transaction transactionNew = transaction.copyWith(skipPaid: false);
-      Navigator.pop(context, true);
+      popRoute(context, true);
       await database.createOrUpdateTransaction(transactionNew);
       await setUpcomingNotifications(navigatorKey.currentContext!);
     },
@@ -512,7 +512,7 @@ Future openUnpayPopup(
       description: "remove-payment-description".tr(),
       onCancelLabel: "cancel".tr(),
       onCancel: () {
-        Navigator.pop(context, false);
+        popRoute(context, false);
       },
       onSubmitLabel: "remove".tr(),
       onSubmit: () async {
@@ -525,7 +525,7 @@ Future openUnpayPopup(
           sharedDateUpdated: Value(null),
           sharedStatus: Value(null),
         );
-        Navigator.pop(context, true);
+        popRoute(context, true);
         await database.createOrUpdateTransaction(transactionNew);
         await setUpcomingNotifications(navigatorKey.currentContext!);
       });
@@ -547,7 +547,7 @@ Future openUnpayDebtCreditPopup(
     description: "remove-payment-description".tr(),
     onCancelLabel: "cancel".tr(),
     onCancel: () {
-      Navigator.pop(context, false);
+      popRoute(context, false);
     },
     onSubmitLabel: "remove".tr(),
     onSubmit: () async {
@@ -556,7 +556,7 @@ Future openUnpayDebtCreditPopup(
         //we want it to count towards the total now - net is not zero
         paid: true,
       );
-      Navigator.pop(context, true);
+      popRoute(context, true);
       await database.createOrUpdateTransaction(transactionNew,
           updateSharedEntry: false);
     },

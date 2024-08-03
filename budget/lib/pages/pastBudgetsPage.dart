@@ -226,7 +226,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                         selectedCategoryFks = [];
                         updateSetting([]);
                       });
-                      Navigator.pop(context);
+                      popRoute(context);
                     },
                     color: Theme.of(context).colorScheme.tertiaryContainer,
                     textColor:
@@ -239,7 +239,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                     expandedLayout: true,
                     label: "done".tr(),
                     onTap: () {
-                      Navigator.pop(context);
+                      popRoute(context);
                     },
                   ),
                 ),

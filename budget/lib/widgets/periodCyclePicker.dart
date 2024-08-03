@@ -251,7 +251,7 @@ class _CyclePeriodSelectionState extends State<CyclePeriodSelection> {
             setSelectedPeriodLength(amount);
           },
           next: () async {
-            Navigator.pop(context);
+            popRoute(context);
           },
           nextLabel: "set-period-length".tr(),
         ),
@@ -312,7 +312,7 @@ class _CyclePeriodSelectionState extends State<CyclePeriodSelection> {
                 selectedRecurrenceDisplay = namesRecurrence[value];
               }
             });
-            Navigator.of(context).pop();
+            popRoute(context);
           },
         ),
       ),
@@ -662,7 +662,7 @@ class _PastDaysSelectionState extends State<PastDaysSelection> {
             setSelectedPeriodLength(amount);
           },
           next: () async {
-            Navigator.pop(context);
+            popRoute(context);
           },
           nextLabel: "set-period-length".tr(),
         ),

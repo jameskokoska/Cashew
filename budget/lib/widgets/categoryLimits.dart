@@ -581,10 +581,10 @@ void enterCategoryLimitPopup(
         margin: EdgeInsetsDirectional.zero,
         canEditByLongPress: true,
         onLongPress: () {
-          Navigator.pop(context);
+          popRoute(context);
         },
         onTap: () {
-          Navigator.pop(context);
+          popRoute(context);
           pushRoute(
             context,
             AddCategoryPage(
@@ -607,7 +607,7 @@ void enterCategoryLimitPopup(
               // Keep all the decimals, so don't use convertToPercent(amount)
               amountPassed: removeTrailingZeroes(amount.toString()),
               next: () async {
-                Navigator.pop(context);
+                popRoute(context);
               },
               nextLabel: "set-limit".tr(),
               allowZero: true,
@@ -621,7 +621,7 @@ void enterCategoryLimitPopup(
                 amount = selectedAmountPassed;
               },
               next: () async {
-                Navigator.pop(context);
+                popRoute(context);
               },
               nextLabel: "set-limit".tr(),
               onlyShowCurrencyIcon: true,

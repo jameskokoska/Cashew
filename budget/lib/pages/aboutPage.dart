@@ -617,7 +617,7 @@ void showChangelogForce(BuildContext context) {
       child: Button(
         label: "view-detailed-changelog".tr(),
         onTap: () {
-          Navigator.pop(context);
+          popRoute(context);
           pushRoute(context, DetailedChangelogPage());
         },
       ),
@@ -655,7 +655,7 @@ void deleteAllDataFlow(BuildContext context) {
         : Icons.warning_rounded,
     onExtraLabel2: "erase-synced-data-and-cloud-backups".tr(),
     onExtra2: () {
-      Navigator.pop(context);
+      popRoute(context);
       openBottomSheet(
         context,
         PopupFramework(
@@ -680,7 +680,7 @@ void deleteAllDataFlow(BuildContext context) {
                   Expanded(
                     child: SyncCloudBackupButton(
                       onTap: () async {
-                        Navigator.pop(context);
+                        popRoute(context);
                         pushRoute(context, AccountsPage());
                       },
                     ),
@@ -689,7 +689,7 @@ void deleteAllDataFlow(BuildContext context) {
                   Expanded(
                     child: BackupsCloudBackupButton(
                       onTap: () async {
-                        Navigator.pop(context);
+                        popRoute(context);
                         pushRoute(context, AccountsPage());
                       },
                     ),
@@ -702,7 +702,7 @@ void deleteAllDataFlow(BuildContext context) {
       );
     },
     onSubmit: () async {
-      Navigator.pop(context);
+      popRoute(context);
       openPopup(
         context,
         title: "erase-everything-warning".tr(),
@@ -711,20 +711,20 @@ void deleteAllDataFlow(BuildContext context) {
             ? Icons.warning_amber_outlined
             : Icons.warning_amber_rounded,
         onSubmit: () async {
-          Navigator.pop(context);
+          popRoute(context);
           clearDatabase(context);
         },
         onSubmitLabel: "erase".tr(),
         onCancelLabel: "cancel".tr(),
         onCancel: () {
-          Navigator.pop(context);
+          popRoute(context);
         },
       );
     },
     onSubmitLabel: "erase".tr(),
     onCancelLabel: "cancel".tr(),
     onCancel: () {
-      Navigator.pop(context);
+      popRoute(context);
     },
   );
 }
@@ -899,7 +899,7 @@ Future clearDatabase(BuildContext context) async {
   openLoadingPopup(context);
   await Future.wait([database.deleteEverything(), sharedPreferences.clear()]);
   await database.close();
-  Navigator.pop(context);
+  popRoute(context);
   restartAppPopup(context);
 }
 

@@ -1246,7 +1246,7 @@ class _TransactionFiltersSelectionState
                   label: "reset".tr(),
                   onTap: () {
                     widget.clearSearchFilters();
-                    Navigator.pop(context);
+                    popRoute(context);
                   },
                   color: Theme.of(context).colorScheme.tertiaryContainer,
                   textColor: Theme.of(context).colorScheme.onTertiaryContainer,
@@ -1258,7 +1258,7 @@ class _TransactionFiltersSelectionState
                   expandedLayout: true,
                   label: "apply".tr(),
                   onTap: () {
-                    Navigator.pop(context);
+                    popRoute(context);
                   },
                 ),
               ),

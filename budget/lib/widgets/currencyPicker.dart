@@ -162,12 +162,12 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                                   ? Icons.info_outlined
                                   : Icons.info_outline_rounded,
                               onCancel: () {
-                                Navigator.pop(context);
+                                popRoute(context);
                               },
                               onCancelLabel: "ok".tr(),
                               onSubmit: () async {
                                 checkIfExchangeRateChangeBefore();
-                                Navigator.pop(context);
+                                popRoute(context);
                                 await pushRoute(context, ExchangeRates());
                                 checkIfExchangeRateChangeAfter();
                               },

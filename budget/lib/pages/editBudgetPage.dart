@@ -480,11 +480,11 @@ Future<DeletePopupAction?> deleteBudgetPopup(
               ? Icons.warning_outlined
               : Icons.warning_rounded,
           onCancel: () {
-            Navigator.pop(context, false);
+            popRoute(context, false);
           },
           onCancelLabel: "cancel".tr(),
           onSubmit: () async {
-            Navigator.pop(context, true);
+            popRoute(context, true);
           },
           onSubmitLabel: "delete-budget".tr(),
         );
@@ -492,9 +492,9 @@ Future<DeletePopupAction?> deleteBudgetPopup(
     }
     if (result == true) {
       if (routesToPopAfterDelete == RoutesToPopAfterDelete.All) {
-        Navigator.of(context).popUntil((route) => route.isFirst);
+        popAllRoutes(context);
       } else if (routesToPopAfterDelete == RoutesToPopAfterDelete.One) {
-        Navigator.of(context).pop();
+        popRoute(context);
       }
       openLoadingPopupTryCatch(() async {
         await database.deleteBudget(context, budget);
@@ -522,11 +522,11 @@ Future<dynamic> deleteSharedBudgetPopup(context, Budget budget) {
           ? Icons.delete_outlined
           : Icons.delete_rounded,
       onCancel: () {
-        Navigator.pop(context, false);
+        popRoute(context, false);
       },
       onCancelLabel: "cancel".tr(),
       onSubmit: () async {
-        Navigator.pop(context, true);
+        popRoute(context, true);
       },
       onSubmitLabel: "delete".tr(),
     );
@@ -540,11 +540,11 @@ Future<dynamic> deleteSharedBudgetPopup(context, Budget budget) {
           ? Icons.delete_outlined
           : Icons.delete_rounded,
       onCancel: () {
-        Navigator.pop(context, false);
+        popRoute(context, false);
       },
       onCancelLabel: "cancel".tr(),
       onSubmit: () async {
-        Navigator.pop(context, true);
+        popRoute(context, true);
       },
       onSubmitLabel: "delete".tr(),
     );
@@ -587,9 +587,9 @@ Future<dynamic> selectAddableBudgetPopup(BuildContext context,
               initial: null,
               onChanged: (Budget? budget) async {
                 if (budget == null)
-                  Navigator.of(context).pop("none");
+                  popRoute(context, "none");
                 else
-                  Navigator.of(context).pop(budget);
+                  popRoute(context, budget);
               },
               onLongPress: (Budget? budget) {
                 pushRoute(
@@ -735,7 +735,7 @@ class _TotalSpentToggleState extends State<TotalSpentToggle> {
 
                 // Read the new settings value by setting state
                 setState(() {});
-                Navigator.pop(context);
+                popRoute(context);
               },
             ),
           ),

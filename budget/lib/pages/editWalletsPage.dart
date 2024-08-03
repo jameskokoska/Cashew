@@ -364,14 +364,14 @@ Future<DeletePopupAction?> deleteWalletPopup(
             ? Icons.warning_outlined
             : Icons.warning_rounded,
         onCancel: () {
-          Navigator.pop(context, false);
+          popRoute(context, false);
         },
         onCancelLabel: "cancel".tr(),
         onSubmit: () async {
-          Navigator.pop(context, true);
+          popRoute(context, true);
         },
         onExtra2: () {
-          Navigator.pop(context, false);
+          popRoute(context, false);
           mergeWalletPopup(
             context,
             walletOriginal: wallet,
@@ -384,9 +384,9 @@ Future<DeletePopupAction?> deleteWalletPopup(
     }
     if (result == true) {
       if (routesToPopAfterDelete == RoutesToPopAfterDelete.All) {
-        Navigator.of(context).popUntil((route) => route.isFirst);
+        popAllRoutes(context);
       } else if (routesToPopAfterDelete == RoutesToPopAfterDelete.One) {
-        Navigator.of(context).pop();
+        popRoute(context);
       }
       openLoadingPopupTryCatch(() async {
         await database.deleteWallet(wallet.walletPk, wallet.order);
@@ -423,19 +423,19 @@ void mergeWalletPopup(
           ? Icons.merge_outlined
           : Icons.merge_rounded,
       onSubmit: () async {
-        Navigator.pop(context, true);
+        popRoute(context, true);
       },
       onSubmitLabel: "merge".tr(),
       onCancelLabel: "cancel".tr(),
       onCancel: () {
-        Navigator.pop(context);
+        popRoute(context);
       },
     );
     if (result == true) {
       if (routesToPopAfterDelete == RoutesToPopAfterDelete.All) {
-        Navigator.of(context).popUntil((route) => route.isFirst);
+        popAllRoutes(context);
       } else if (routesToPopAfterDelete == RoutesToPopAfterDelete.One) {
-        Navigator.of(context).pop();
+        popRoute(context);
       }
       openLoadingPopupTryCatch(() async {
         await database.moveWalletTransactions(
@@ -564,7 +564,7 @@ Future<TransactionWallet?> selectWalletPopup(
               onChanged: (Object? object) {
                 TransactionWallet? wallet;
                 if (object is WalletWithDetails) wallet = object.wallet;
-                Navigator.of(context).pop(wallet);
+                popRoute(context, wallet);
               },
               onLongPress: (Object? object) {
                 TransactionWallet? wallet;
@@ -647,7 +647,7 @@ class PrimaryCurrencySetting extends StatelessWidget {
               : Icons.card_membership_rounded,
           description: "change-currency-description".tr(),
           onSubmit: () {
-            Navigator.pop(context);
+            popRoute(context);
           },
           onSubmitLabel: "ok".tr(),
         );

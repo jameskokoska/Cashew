@@ -432,7 +432,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                           updateSettings(
                               "canShowTransactionActionButtonTip", false,
                               updateGlobalState: false);
-                          Navigator.pop(context);
+                          popRoute(context);
                         },
                         expandedLayout: true,
                       ),
@@ -442,7 +442,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                       child: Button(
                         label: "ok".tr(),
                         onTap: () {
-                          Navigator.pop(context);
+                          popRoute(context);
                         },
                         expandedLayout: true,
                       ),
@@ -532,7 +532,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                 ),
               ),
               onCancel: () {
-                Navigator.pop(context);
+                popRoute(context);
               },
               onCancelLabel: "only-current".tr(),
               onSubmit: () async {
@@ -543,7 +543,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                   createdTransaction,
                   closelyRelatedTransferCorrectionTransaction,
                 );
-                Navigator.pop(context);
+                popRoute(context);
               },
               onSubmitLabel: "update-both".tr(),
             );
@@ -717,7 +717,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         widget.transaction == null) {
       discardChangesPopup(context, forceShow: true);
     } else {
-      Navigator.pop(context);
+      popRoute(context);
     }
   }
 
@@ -940,8 +940,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       selectAmountPopup(
         next: () async {
           await addTransaction();
-          Navigator.pop(context);
-          Navigator.pop(context);
+          popRoute(context);
+          popRoute(context);
         },
         nextLabel: textAddTransaction,
       );
@@ -971,7 +971,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
           setSelectedAmount: setSelectedAmount,
           next: next ??
               () async {
-                Navigator.pop(context);
+                popRoute(context);
               },
           nextLabel: nextLabel ?? "set-amount".tr(),
         ),
@@ -1021,7 +1021,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       ),
     );
     if (result == true) {
-      Navigator.pop(context);
+      popRoute(context);
     }
   }
 
@@ -1174,14 +1174,14 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                           description: "track-installments-description".tr(),
                           icon: navBarIconsData["goals"]!.iconData,
                           onSubmit: () async {
-                            Navigator.pop(context);
+                            popRoute(context);
                             dynamic result = await startCreatingInstallment(
                                 context: context);
-                            if (result == true) Navigator.pop(context);
+                            if (result == true) popRoute(context);
                           },
                           onSubmitLabel: "ok".tr(),
                           onCancel: () {
-                            Navigator.pop(context);
+                            popRoute(context);
                           },
                           onCancelLabel: "cancel".tr(),
                         );
@@ -1628,13 +1628,13 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                       label: "duplicate".tr(),
                                       onTap: () async {
                                         bool result = await addTransaction();
-                                        if (result) Navigator.of(context).pop();
+                                        if (result) popRoute(context);
                                         duplicateTransaction(context,
                                             widget.transaction!.transactionPk);
                                       },
                                       onLongPress: () async {
                                         bool result = await addTransaction();
-                                        if (result) Navigator.of(context).pop();
+                                        if (result) popRoute(context);
                                         duplicateTransaction(context,
                                             widget.transaction!.transactionPk,
                                             useCurrentDate: true);
@@ -2122,7 +2122,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                 : textAddTransaction ?? "",
                             onTap: () async {
                               bool result = await addTransaction();
-                              if (result) Navigator.of(context).pop();
+                              if (result) popRoute(context);
                             },
                           ),
               ),
@@ -2132,8 +2132,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                         // Change the key to re-render the widget when transaction type changed
                         key: ValueKey(widget.transaction != null
                             ? getTransactionActionNameFromType(
-                                    createTransaction())
-                                .tr()
+                                createTransaction())
                             : ""),
                         widgetBuilder: (Size? size) {
                           return Container(
@@ -2155,8 +2154,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                   : null,
                               label: widget.transaction != null
                                   ? getTransactionActionNameFromType(
-                                          createTransaction())
-                                      .tr()
+                                      createTransaction())
                                   : "",
                               onTap: () async {
                                 if (widget.transaction != null &&
@@ -2166,7 +2164,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                     createTransaction(),
                                     runBefore: () async {
                                       await addTransaction();
-                                      Navigator.of(context).pop();
+                                      popRoute(context);
                                     },
                                   );
                                 }
@@ -2520,7 +2518,7 @@ class _SelectTitleState extends State<SelectTitle> {
         widget.setSelectedTitle("");
     }
 
-    Navigator.pop(context);
+    popRoute(context);
     if (widget.next != null) {
       widget.next!();
     }
@@ -2760,7 +2758,7 @@ class _SelectTitleState extends State<SelectTitle> {
                       ? Button(
                           label: "select-category".tr(),
                           onTap: () {
-                            Navigator.pop(context);
+                            popRoute(context);
                             if (widget.next != null) {
                               widget.next!();
                             }
@@ -2877,7 +2875,7 @@ class _SelectTextState extends State<SelectText> {
   onEditingComplete() {
     widget.setSelectedText(input ?? "");
     if (widget.popContext) {
-      Navigator.pop(context, input);
+      popRoute(context, input);
     }
     if (widget.next != null) {
       widget.next!();
@@ -2913,7 +2911,7 @@ class _SelectTextState extends State<SelectText> {
                   input = text;
                   widget.setSelectedText(input!);
                   if (widget.popContextWhenSet) {
-                    Navigator.pop(context, input);
+                    popRoute(context, input);
                   }
                 },
                 labelText: widget.placeholder ?? widget.labelText,
@@ -3461,9 +3459,9 @@ void deleteTransactionPopup(
     await checkToDeleteCloselyRelatedBalanceCorrectionTransaction(context,
         transaction: transaction);
     if (routesToPopAfterDelete == RoutesToPopAfterDelete.All) {
-      Navigator.of(context).popUntil((route) => route.isFirst);
+      popAllRoutes(context);
     } else if (routesToPopAfterDelete == RoutesToPopAfterDelete.One) {
-      Navigator.of(context).pop();
+      popRoute(context);
     }
     openLoadingPopupTryCatch(() async {
       await database.deleteTransaction(transaction.transactionPk);
@@ -3517,7 +3515,7 @@ Future checkToDeleteCloselyRelatedBalanceCorrectionTransaction(
           ),
         ),
         onCancel: () {
-          Navigator.pop(context);
+          popRoute(context);
         },
         onCancelLabel: "only-current".tr(),
         onSubmit: () async {
@@ -3525,7 +3523,7 @@ Future checkToDeleteCloselyRelatedBalanceCorrectionTransaction(
             await database.deleteTransaction(
                 closelyRelatedTransferCorrectionTransaction.transactionPk);
           });
-          Navigator.pop(context);
+          popRoute(context);
         },
         onSubmitLabel: "delete-both".tr(),
       );
@@ -3549,9 +3547,9 @@ Future deleteTransactionsPopup(
   );
   if (action == DeletePopupAction.Delete) {
     if (routesToPopAfterDelete == RoutesToPopAfterDelete.All) {
-      Navigator.of(context).popUntil((route) => route.isFirst);
+      popAllRoutes(context);
     } else if (routesToPopAfterDelete == RoutesToPopAfterDelete.One) {
-      Navigator.of(context).pop();
+      popRoute(context);
     }
     openLoadingPopupTryCatch(() async {
       await database.deleteTransactions(transactionPks);
@@ -3597,7 +3595,7 @@ class SelectTransactionTypePopup extends StatelessWidget {
             title: "default".tr(),
             onTap: () {
               setTransactionType(null);
-              Navigator.pop(context);
+              popRoute(context);
             },
             icon: appStateSettings["outlinedIcons"]
                 ? Icons.check_circle_outlined
@@ -3831,7 +3829,7 @@ class TransactionTypeInfoEntry extends StatelessWidget {
                 onTap: onTap ??
                     () {
                       setTransactionType(transactionType);
-                      Navigator.pop(context);
+                      popRoute(context);
                     },
                 afterWidget: childrenDescription == null
                     ? null
@@ -3922,7 +3920,7 @@ Future<MainAndSubcategory> selectCategorySequence(
                       onTap: () {
                         if (setSelectedSubCategory != null)
                           setSelectedSubCategory(null);
-                        Navigator.pop(context, false);
+                        popRoute(context, false);
                       },
                       borderRadius: 18,
                       child: Container(
@@ -4070,7 +4068,7 @@ class _SelectCategoryWithIncomeExpenseSelectorState
                         ? Icons.flip_to_front_outlined
                         : Icons.flip_to_front_rounded,
                     action: () async {
-                      Navigator.pop(context);
+                      popRoute(context);
                       openBottomSheet(context, ReorderCategoriesPopup());
                     },
                   ),
@@ -4122,7 +4120,7 @@ class ReorderCategoriesPopup extends StatelessWidget {
           Button(
             label: "done".tr(),
             onTap: () {
-              Navigator.pop(context);
+              popRoute(context);
             },
           )
         ],
@@ -4442,7 +4440,7 @@ class _TransactionNotesTextInputState extends State<TransactionNotesTextInput> {
                                       ? Icons.camera_alt_outlined
                                       : Icons.camera_alt_rounded,
                                   onTap: () async {
-                                    Navigator.pop(context);
+                                    popRoute(context);
                                     if (await checkLockedFeatureIfInDemoMode(
                                             context) ==
                                         true) {
@@ -4474,7 +4472,7 @@ class _TransactionNotesTextInputState extends State<TransactionNotesTextInput> {
                                       ? Icons.photo_library_outlined
                                       : Icons.photo_library_rounded,
                                   onTap: () async {
-                                    Navigator.pop(context);
+                                    popRoute(context);
                                     if (await checkLockedFeatureIfInDemoMode(
                                             context) ==
                                         true) {
@@ -4504,7 +4502,7 @@ class _TransactionNotesTextInputState extends State<TransactionNotesTextInput> {
                                     ? Icons.file_open_outlined
                                     : Icons.file_open_rounded,
                                 onTap: () async {
-                                  Navigator.pop(context);
+                                  popRoute(context);
                                   if (await checkLockedFeatureIfInDemoMode(
                                           context) ==
                                       true) {
@@ -4606,12 +4604,12 @@ class _TransactionNotesTextInputState extends State<TransactionNotesTextInput> {
                                       description:
                                           "remove-link-description".tr(),
                                       onCancel: () {
-                                        Navigator.pop(context);
+                                        popRoute(context);
                                       },
                                       onCancelLabel: "cancel".tr(),
                                       onSubmit: () {
                                         removeLinkFromNote(link);
-                                        Navigator.pop(context);
+                                        popRoute(context);
                                       },
                                       onSubmitLabel: "remove".tr(),
                                     );
@@ -4646,7 +4644,7 @@ Future<void> selectPeriodLength({
           setSelectedPeriodLength(amount);
         },
         next: () async {
-          Navigator.pop(context);
+          popRoute(context);
         },
         nextLabel: "set-period-length".tr(),
       ),
@@ -4684,7 +4682,9 @@ Future<void> selectRecurrence(
           }
           onChanged(selectedRecurrence, selectedRecurrenceEnum,
               selectedRecurrenceDisplay);
-          Navigator.of(context).pop();
+          popRoute(
+            context,
+          );
         },
       ),
     ),

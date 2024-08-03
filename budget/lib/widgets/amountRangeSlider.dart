@@ -85,7 +85,7 @@ class _AmountSlideRangerState extends State<AmountRangeSlider> {
                     label: "reset".tr(),
                     onTap: () async {
                       resetRange();
-                      Navigator.pop(context, false);
+                      popRoute(context, false);
                     },
                     color: Theme.of(context).colorScheme.tertiaryContainer,
                     textColor:
@@ -98,7 +98,7 @@ class _AmountSlideRangerState extends State<AmountRangeSlider> {
                     expandedLayout: true,
                     label: "set-range".tr(),
                     onTap: () async {
-                      Navigator.pop(context);
+                      popRoute(context);
                     },
                   ),
                 ),
@@ -141,7 +141,7 @@ class _AmountSlideRangerState extends State<AmountRangeSlider> {
                     label: "reset".tr(),
                     onTap: () async {
                       resetRange();
-                      Navigator.pop(context, false);
+                      popRoute(context, false);
                     },
                     color: Theme.of(context).colorScheme.tertiaryContainer,
                     textColor:
@@ -154,7 +154,7 @@ class _AmountSlideRangerState extends State<AmountRangeSlider> {
                     expandedLayout: true,
                     label: "set-range".tr(),
                     onTap: () async {
-                      Navigator.pop(context);
+                      popRoute(context);
                     },
                   ),
                 ),

@@ -415,11 +415,11 @@ Future<DeletePopupAction?> deleteObjectivePopup(
             ? Icons.warning_outlined
             : Icons.warning_rounded,
         onCancel: () {
-          Navigator.pop(context, false);
+          popRoute(context, false);
         },
         onCancelLabel: "cancel".tr(),
         onSubmit: () async {
-          Navigator.pop(context, true);
+          popRoute(context, true);
         },
         onSubmitLabel: objective.type == ObjectiveType.loan
             ? "delete-loan".tr()
@@ -428,9 +428,9 @@ Future<DeletePopupAction?> deleteObjectivePopup(
     }
     if (result == true) {
       if (routesToPopAfterDelete == RoutesToPopAfterDelete.All) {
-        Navigator.of(context).popUntil((route) => route.isFirst);
+        popAllRoutes(context);
       } else if (routesToPopAfterDelete == RoutesToPopAfterDelete.One) {
-        Navigator.of(context).pop();
+        popRoute(context);
       }
       openLoadingPopupTryCatch(() async {
         await database.deleteObjective(context, objective);
@@ -521,9 +521,9 @@ Future<dynamic> selectObjectivePopup(
                   initial: selectedObjective,
                   onChanged: (Objective? objective) async {
                     if (objective == null)
-                      Navigator.of(context).pop("none");
+                      popRoute(context, "none");
                     else
-                      Navigator.of(context).pop(objective);
+                      popRoute(context, objective);
                   },
                 );
               } else {

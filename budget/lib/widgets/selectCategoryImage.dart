@@ -1,3 +1,4 @@
+import 'package:budget/functions.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
@@ -97,7 +98,7 @@ class _SelectCategoryImageState extends State<SelectCategoryImage> {
         children: [
           context.locale.toString() != "en"
               ? UseEmoji(onTap: () {
-                  Navigator.pop(context);
+                  popRoute(context);
                   openEmojiSelectorPopup();
                 })
               : SizedBox.shrink(),
@@ -142,7 +143,7 @@ class _SelectCategoryImageState extends State<SelectCategoryImage> {
                     SizedBox(width: 10),
                     ButtonIcon(
                       onTap: () {
-                        Navigator.pop(context);
+                        popRoute(context);
                         openEmojiSelectorPopup();
                       },
                       icon: appStateSettings["outlinedIcons"]
@@ -185,7 +186,7 @@ class _SelectCategoryImageState extends State<SelectCategoryImage> {
                         selectedImage = image.icon;
                       });
                       Future.delayed(Duration(milliseconds: 70), () {
-                        Navigator.pop(context);
+                        popRoute(context);
                         if (widget.next != null) {
                           widget.next!();
                         }
@@ -201,7 +202,7 @@ class _SelectCategoryImageState extends State<SelectCategoryImage> {
               ? Padding(
                   padding: const EdgeInsetsDirectional.only(top: 8.0),
                   child: UseEmoji(onTap: () {
-                    Navigator.pop(context);
+                    popRoute(context);
                     openEmojiSelectorPopup();
                   }),
                 )
@@ -362,7 +363,7 @@ class _SuggestIconPopupState extends State<SuggestIconPopup> {
             label: "submit".tr(),
             onTap: () async {
               shareFeedback(_feedbackController.text, "icon");
-              Navigator.pop(context);
+              popRoute(context);
             },
             disabled: _feedbackController.text == "",
           )

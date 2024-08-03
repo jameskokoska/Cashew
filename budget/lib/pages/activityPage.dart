@@ -84,7 +84,7 @@ void restoreTransaction(
       description: "the-original-category-has-been-deleted".tr(),
       onSubmitLabel: "ok".tr(),
       onSubmit: () async {
-        Navigator.pop(context);
+        popRoute(context);
       },
       icon: appStateSettings["outlinedIcons"]
           ? Icons.search_off_outlined
@@ -97,7 +97,7 @@ void restoreTransaction(
       title: "restore-transaction".tr(),
       subtitle: transactionLabel,
       onCancelLabel: "cancel".tr(),
-      onCancel: () => Navigator.pop(context),
+      onCancel: () => popRoute(context),
       onSubmitLabel: "restore".tr(),
       icon: appStateSettings["outlinedIcons"]
           ? Icons.restore_page_outlined
@@ -127,7 +127,7 @@ void restoreTransaction(
           );
         }
 
-        Navigator.pop(context);
+        popRoute(context);
       },
     );
   }

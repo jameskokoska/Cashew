@@ -589,7 +589,7 @@ class AddLoanPopup extends StatelessWidget {
                       ? Icons.av_timer_outlined
                       : Icons.av_timer_rounded,
                   onTap: () {
-                    Navigator.pop(context);
+                    popRoute(context);
                     pushRoute(
                       context,
                       AddObjectivePage(
@@ -627,7 +627,7 @@ class AddLoanPopup extends StatelessWidget {
                       ? Icons.event_available_outlined
                       : Icons.event_available_rounded,
                   onTap: () {
-                    Navigator.pop(context);
+                    popRoute(context);
                     pushRoute(
                       context,
                       AddTransactionPage(

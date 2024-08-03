@@ -852,7 +852,7 @@ class _BiometricsSettingToggleState extends State<BiometricsSettingToggle> {
                       onCancelLabel:
                           getPlatform() == PlatformOS.isIOS ? "ok".tr() : null,
                       onCancel: () {
-                        Navigator.pop(context);
+                        popRoute(context);
                       },
                       onSubmitLabel: getPlatform() == PlatformOS.isIOS
                           ? "open-settings".tr()
@@ -863,7 +863,7 @@ class _BiometricsSettingToggleState extends State<BiometricsSettingToggle> {
                         setState(() {
                           isLocked = false;
                         });
-                        Navigator.pop(context);
+                        popRoute(context);
                         // On iOS the notification app settings page also has
                         // the permission for biometrics
                         if (getPlatform() == PlatformOS.isIOS) {
@@ -1119,7 +1119,7 @@ void openFontPicker(BuildContext context) {
         onChanged: (value) async {
           updateSettings("font", value, updateGlobalState: true);
           await Future.delayed(Duration(milliseconds: 50));
-          Navigator.pop(context);
+          popRoute(context);
         },
       ),
     ),
@@ -1337,7 +1337,7 @@ class _SetNumberFormatPopupState extends State<SetNumberFormatPopup> {
             borderRadius: 10,
             color: Colors.transparent,
             onTap: () {
-              Navigator.pop(context);
+              popRoute(context);
               pushRoute(context, EditWalletsPage());
             },
             child: Padding(
@@ -1432,7 +1432,7 @@ class _CustomNumberFormatPopupState extends State<CustomNumberFormatPopup> {
                           });
                           updateSettings("numberFormatDelimiter", text,
                               updateGlobalState: false);
-                          Navigator.pop(context);
+                          popRoute(context);
                         },
                       ),
                     ),
@@ -1498,7 +1498,7 @@ class _CustomNumberFormatPopupState extends State<CustomNumberFormatPopup> {
                           });
                           updateSettings("numberFormatDecimal", text,
                               updateGlobalState: false);
-                          Navigator.pop(context);
+                          popRoute(context);
                         },
                       ),
                     ),

@@ -200,7 +200,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
             onTap: () {
               determineBottomButton();
               setState(() {});
-              Navigator.pop(context);
+              popRoute(context);
               next();
             },
           )
@@ -273,7 +273,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
             label: "done".tr(),
             onTap: () {
               determineBottomButton();
-              Navigator.pop(context);
+              popRoute(context);
               setState(() {});
               next();
             },
@@ -350,7 +350,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
               determineBottomButton();
               next();
               setState(() {});
-              Navigator.pop(context);
+              popRoute(context);
             },
           )
         ],
@@ -365,7 +365,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
       createTemplate(),
     );
     savingHapticFeedback();
-    Navigator.pop(context);
+    popRoute(context);
   }
 
   ScannerTemplate createTemplate() {
@@ -553,7 +553,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                         messagesList: widget.messagesList,
                         onTap: (messageString) {
                           setMessageString(messageString);
-                          Navigator.pop(context);
+                          popRoute(context);
                           openBottomSheet(
                             context,
                             selectSubjectText(

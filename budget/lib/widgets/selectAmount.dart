@@ -157,7 +157,7 @@ class _SelectAmountState extends State<SelectAmount> {
       }
       if (keyIsPressed && event.logicalKey.keyLabel == "Go Back" ||
           event.logicalKey == LogicalKeyboardKey.escape) {
-        Navigator.pop(context);
+        popRoute(context);
       } else if (isControlPressed &&
           keyIsPressed &&
           event.logicalKey == LogicalKeyboardKey.keyC) {
@@ -266,7 +266,7 @@ class _SelectAmountState extends State<SelectAmount> {
           widget.next!();
         }
         if (widget.popWithAmount) {
-          Navigator.pop(
+          popRoute(
               context,
               (amount == ""
                   ? 0
@@ -912,7 +912,7 @@ class _SelectAmountState extends State<SelectAmount> {
                                 widget.next!();
                               }
                               if (widget.popWithAmount) {
-                                Navigator.pop(
+                                popRoute(
                                     context,
                                     (amount == ""
                                         ? 0
@@ -1336,7 +1336,7 @@ class _SelectAmountValueState extends State<SelectAmountValue> {
           event.runtimeType == KeyRepeatEvent;
       if (keyIsPressed && event.logicalKey.keyLabel == "Go Back" ||
           event.logicalKey == LogicalKeyboardKey.escape) {
-        Navigator.pop(context);
+        popRoute(context);
       } else if (keyIsPressed &&
           event.logicalKey == LogicalKeyboardKey.digit0) {
         addToAmount("0");

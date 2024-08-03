@@ -12,6 +12,7 @@ Future<TimeOfDay?> showCustomTimePicker(
   minimizeKeyboard(context);
   TimeOfDay? newTime = await showTimePicker(
     context: context,
+    useRootNavigator: false,
     initialTime: initialTime,
     initialEntryMode: TimePickerEntryMode.dial,
     helpText: "",

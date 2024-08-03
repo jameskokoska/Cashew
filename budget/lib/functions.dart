@@ -953,7 +953,7 @@ void restartAppPopup(context,
   } else {
     // Pop all routes, select home tab
     RestartApp.restartApp(context);
-    Navigator.of(context).popUntil((route) => route.isFirst);
+    popAllRoutes(context);
     Future.delayed(Duration(milliseconds: 100), () {
       PageNavigationFramework.changePage(context, 0, switchNavbar: true);
     });
@@ -987,9 +987,46 @@ class CustomMaterialPageRoute extends MaterialPageRoute {
         );
 }
 
-Future<dynamic> pushRoute(BuildContext context, Widget page,
+popRoute<T extends Object?>(BuildContext? context, [T? result]) {
+  BuildContext? contextToPop = context;
+  if (context == null) contextToPop = navigatorKey.currentContext;
+  if (contextToPop == null) return;
+  Navigator.of(contextToPop, rootNavigator: false).pop(result);
+  // bool hasPopped = false;
+  // Navigator.of(contextToPop, rootNavigator: true).popUntil((route) {
+  //   if (route.isFirst) return true;
+  //   if (hasPopped == false) {
+  //     hasPopped = true;
+  //     return route.isFirst;
+  //   } else {
+  //     return true;
+  //   }
+  // });
+}
+
+Future<bool> maybePopRoute<T extends Object?>(BuildContext? context,
+    [T? result]) async {
+  BuildContext? contextToPop = context;
+  if (context == null) contextToPop = navigatorKey.currentContext;
+  if (contextToPop == null) return false;
+  return Navigator.of(contextToPop, rootNavigator: false).maybePop(result);
+}
+
+popAllRoutes(BuildContext? context) {
+  BuildContext? contextToPop = context;
+  if (context == null) contextToPop = navigatorKey.currentContext;
+  if (contextToPop == null) return;
+  Navigator.of(contextToPop, rootNavigator: false)
+      .popUntil((route) => route.isFirst);
+}
+
+Future<dynamic> pushRoute(BuildContext? context, Widget page,
     {String? routeName}) async {
-  minimizeKeyboard(context);
+  BuildContext? contextToPush = context;
+  if (context == null) contextToPush = navigatorKey.currentContext;
+  if (contextToPush == null) return;
+
+  minimizeKeyboard(contextToPush);
   // if (appStateSettings["iOSNavigation"]) {
   //   return await Navigator.push(
   //     context,
@@ -998,7 +1035,7 @@ Future<dynamic> pushRoute(BuildContext context, Widget page,
   // }
 
   return await Navigator.push(
-    context,
+    contextToPush,
     PageRouteBuilder(
       opaque: false,
       transitionDuration: Duration(milliseconds: 300),

@@ -546,14 +546,14 @@ Future<DeletePopupAction?> deleteCategoryPopup(
             ? Icons.warning_outlined
             : Icons.warning_rounded,
         onCancel: () {
-          Navigator.pop(context, false);
+          popRoute(context, false);
         },
         onCancelLabel: "cancel".tr(),
         onSubmit: () async {
-          Navigator.pop(context, true);
+          popRoute(context, true);
         },
         onExtra2: () async {
-          Navigator.pop(context, false);
+          popRoute(context, false);
           isSubCategory
               ? mergeSubcategoryPopup(
                   context,
@@ -572,9 +572,9 @@ Future<DeletePopupAction?> deleteCategoryPopup(
     }
     if (result == true) {
       if (routesToPopAfterDelete == RoutesToPopAfterDelete.All) {
-        Navigator.of(context).popUntil((route) => route.isFirst);
+        popAllRoutes(context);
       } else if (routesToPopAfterDelete == RoutesToPopAfterDelete.One) {
-        Navigator.of(context).pop();
+        popRoute(context);
       }
       openLoadingPopupTryCatch(() async {
         await database.deleteCategory(category.categoryPk, category.order);
@@ -615,19 +615,19 @@ void mergeCategoryPopup(
                   ? Icons.merge_outlined
                   : Icons.merge_rounded,
               onSubmit: () async {
-                Navigator.pop(context, true);
+                popRoute(context, true);
               },
               onSubmitLabel: "merge".tr(),
               onCancelLabel: "cancel".tr(),
               onCancel: () {
-                Navigator.pop(context);
+                popRoute(context);
               },
             );
             if (result == true) {
               if (routesToPopAfterDelete == RoutesToPopAfterDelete.All) {
-                Navigator.of(context).popUntil((route) => route.isFirst);
+                popAllRoutes(context);
               } else if (routesToPopAfterDelete == RoutesToPopAfterDelete.One) {
-                Navigator.of(context).pop();
+                popRoute(context);
               }
               openLoadingPopupTryCatch(() async {
                 await database.mergeAndDeleteCategory(
@@ -675,19 +675,19 @@ void mergeSubcategoryPopup(
                   ? Icons.merge_outlined
                   : Icons.merge_rounded,
               onSubmit: () async {
-                Navigator.pop(context, true);
+                popRoute(context, true);
               },
               onSubmitLabel: "merge".tr(),
               onCancelLabel: "cancel".tr(),
               onCancel: () {
-                Navigator.pop(context);
+                popRoute(context);
               },
             );
             if (result == true) {
               if (routesToPopAfterDelete == RoutesToPopAfterDelete.All) {
-                Navigator.of(context).popUntil((route) => route.isFirst);
+                popAllRoutes(context);
               } else if (routesToPopAfterDelete == RoutesToPopAfterDelete.One) {
-                Navigator.of(context).pop();
+                popRoute(context);
               }
               openLoadingPopupTryCatch(() async {
                 await database.mergeAndDeleteSubCategory(
@@ -724,19 +724,19 @@ void makeMainCategoryPopup(
         ? Icons.move_down_outlined
         : Icons.move_down_rounded,
     onSubmit: () async {
-      Navigator.pop(context, true);
+      popRoute(context, true);
     },
     onSubmitLabel: "make-main-category".tr(),
     onCancelLabel: "cancel".tr(),
     onCancel: () {
-      Navigator.pop(context);
+      popRoute(context);
     },
   );
   if (result == true) {
     if (routesToPopAfterDelete == RoutesToPopAfterDelete.All) {
-      Navigator.of(context).popUntil((route) => route.isFirst);
+      popAllRoutes(context);
     } else if (routesToPopAfterDelete == RoutesToPopAfterDelete.One) {
-      Navigator.of(context).pop();
+      popRoute(context);
     }
     openLoadingPopupTryCatch(() async {
       await database.makeSubcategoryIntoMainCategory(subcategoryOriginal);
@@ -777,19 +777,19 @@ void makeSubCategoryPopup(
                   ? Icons.move_up_outlined
                   : Icons.move_up_rounded,
               onSubmit: () async {
-                Navigator.pop(context, true);
+                popRoute(context, true);
               },
               onSubmitLabel: "make-subcategory".tr(),
               onCancelLabel: "cancel".tr(),
               onCancel: () {
-                Navigator.pop(context);
+                popRoute(context);
               },
             );
             if (result == true) {
               if (routesToPopAfterDelete == RoutesToPopAfterDelete.All) {
-                Navigator.of(context).popUntil((route) => route.isFirst);
+                popAllRoutes(context);
               } else if (routesToPopAfterDelete == RoutesToPopAfterDelete.One) {
-                Navigator.of(context).pop();
+                popRoute(context);
               }
               openLoadingPopupTryCatch(() async {
                 await database.makeMainCategoryIntoSubcategory(

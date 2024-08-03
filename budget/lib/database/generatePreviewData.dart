@@ -875,11 +875,11 @@ class PreviewDemoButton extends StatelessWidget {
             title: "preview-demo".tr(),
             description: "preview-demo-description".tr(),
             onCancel: () {
-              Navigator.pop(context);
+              popRoute(context);
             },
             onCancelLabel: "cancel".tr(),
             onSubmit: () {
-              Navigator.pop(context);
+              popRoute(context);
               nextNavigation(generatePreview: true);
             },
             onSubmitLabel: "activate".tr(),
@@ -912,11 +912,11 @@ Future<bool> checkLockedFeatureIfInDemoMode(BuildContext? context) async {
       title: "not-available-in-preview-demo".tr(),
       description: "not-available-in-preview-demo-description".tr(),
       onCancel: () {
-        Navigator.pop(context);
+        popRoute(context);
       },
       onCancelLabel: "cancel".tr(),
       onSubmit: () {
-        Navigator.of(context).popUntil((route) => route.isFirst);
+        popAllRoutes(context);
         deletePreviewData(resetOnboard: true);
       },
       onSubmitLabel: "exit-demo".tr(),

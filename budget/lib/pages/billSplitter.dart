@@ -232,7 +232,7 @@ class _BillSplitterState extends State<BillSplitter> {
                   ? Icons.info_outlined
                   : Icons.info_outline_rounded,
               onCancel: () {
-                Navigator.pop(context);
+                popRoute(context);
               },
               onCancelLabel: "ok".tr(),
             );
@@ -907,7 +907,7 @@ class _AddBillItemPageState extends State<AddBillItemPage> {
             });
           },
           next: () async {
-            Navigator.pop(context);
+            popRoute(context);
           },
           nextLabel: "set-amount".tr(),
           allowZero: true,
@@ -1018,7 +1018,7 @@ class _AddBillItemPageState extends State<AddBillItemPage> {
                           },
                           next: () {
                             print(multiplierAmount);
-                            Navigator.pop(context);
+                            popRoute(context);
                           },
                           nextLabel: "set-amount".tr(),
                           currencyKey: null,
@@ -1120,7 +1120,7 @@ class _AddBillItemPageState extends State<AddBillItemPage> {
                           }
                         },
                         next: () async {
-                          Navigator.pop(context);
+                          popRoute(context);
                         },
                         nextLabel: "set-amount".tr(),
                         allowZero: true,
@@ -1163,7 +1163,7 @@ class _AddBillItemPageState extends State<AddBillItemPage> {
                 widget.updateBillSplitterItem(
                     billSplitterItem, widget.billSplitterItemIndex);
               }
-              Navigator.pop(context);
+              popRoute(context);
             },
           ),
         ),
@@ -1203,7 +1203,7 @@ void openAddPersonPopup({
           bool result = addPerson(SplitPerson(text));
           if (result == true) {
             setState(() {});
-            Navigator.pop(context);
+            popRoute(context);
           }
         },
       ),
@@ -1412,7 +1412,7 @@ Future<bool> generateLoanTransactionsFromBillSummary(
         ],
         initial: null,
         onChanged: (value) async {
-          Navigator.pop(context, value);
+          popRoute(context, value);
         },
       ),
     ),
@@ -1457,7 +1457,7 @@ Future<bool> generateLoanTransactionsFromBillSummary(
                     showCategoryIconForRecommendedTitles: false,
                     unfocusWhenRecommendedTapped: false,
                     onSubmitted: (value) {
-                      Navigator.pop(context, true);
+                      popRoute(context, true);
                     },
                     autoFocus: true,
                   ),
@@ -1470,7 +1470,7 @@ Future<bool> generateLoanTransactionsFromBillSummary(
             Button(
               label: "set-title".tr(),
               onTap: () {
-                Navigator.pop(context, true);
+                popRoute(context, true);
               },
             ),
           ],

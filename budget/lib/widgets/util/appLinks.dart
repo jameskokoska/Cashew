@@ -265,13 +265,12 @@ Future processMessageToParse(
     dateTime: await getDateTimeFromParams(params, context),
   );
   if (result == false) {
-    if (navigatorKey.currentContext != null)
-      pushRoute(
-        navigatorKey.currentContext!,
-        AddEmailTemplate(
-          messagesList: recentCapturedNotifications,
-        ),
-      );
+    pushRoute(
+      null,
+      AddEmailTemplate(
+        messagesList: recentCapturedNotifications,
+      ),
+    );
   }
 }
 

@@ -174,17 +174,17 @@ class _RatingPopupState extends State<RatingPopup> {
                   description: "provide-email-question-description".tr(),
                   onCancelLabel: "submit-anyway".tr(),
                   onCancel: () {
-                    Navigator.maybePop(context, true);
+                    maybePopRoute(context, true);
                   },
                   onSubmitLabel: "go-back".tr(),
                   onSubmit: () {
-                    Navigator.maybePop(context, false);
+                    maybePopRoute(context, false);
                   },
                 );
                 if (result == false) return;
               }
 
-              Navigator.maybePop(context);
+              maybePopRoute(context);
 
               shareFeedback(
                 _feedbackController.text,

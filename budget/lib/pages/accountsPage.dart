@@ -100,7 +100,7 @@ class AccountsPageState extends State<AccountsPage> {
                           "https://pub.dev/packages/google_sign_in_web#differences-between-google-identity-services-sdk-and-google-sign-in-for-web-sdk");
                     },
                     onSubmit: () {
-                      Navigator.pop(context);
+                      popRoute(context);
                     },
                     onSubmitLabel: "ok".tr(),
                   );
@@ -198,7 +198,7 @@ class AccountsPageState extends State<AccountsPage> {
                             final result = await signOutGoogle();
                             if (result == true) {
                               if (getIsFullScreen(context) == false) {
-                                Navigator.maybePop(context);
+                                maybePopRoute(context);
                                 settingsPageStateKey.currentState
                                     ?.refreshState();
                               } else {

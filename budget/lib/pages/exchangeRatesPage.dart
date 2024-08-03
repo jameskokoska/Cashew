@@ -129,7 +129,7 @@ class _ExchangeRatesState extends State<ExchangeRates> {
                   ? Icons.info_outlined
                   : Icons.info_outline_rounded,
               onCancel: () {
-                Navigator.pop(context);
+                popRoute(context);
               },
               onCancelLabel: "ok".tr(),
             );
@@ -426,7 +426,7 @@ class _SetCustomCurrencyState extends State<SetCustomCurrency> {
         suffix: " " + widget.currencyKey.allCaps,
         nextLabel: "set-amount".tr(),
         next: () {
-          Navigator.pop(context);
+          popRoute(context);
         },
       ),
     );

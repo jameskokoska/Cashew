@@ -409,7 +409,7 @@ class DebugPage extends StatelessWidget {
                 updateGlobalState: false, pagesNeedingRefresh: [3]);
           },
           initialValue: appStateSettings["showBillSplitterShortcut"] == true,
-          icon: Icons.bookmark_add,
+          icon: Icons.summarize_rounded,
         ),
         SettingsContainerSwitch(
           title: "Method Added",

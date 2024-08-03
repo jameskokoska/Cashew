@@ -22,6 +22,7 @@ Future<DateTime?> showCustomDatePicker(
   minimizeKeyboard(context);
   return await showDatePicker(
     context: context,
+    useRootNavigator: false,
     initialDate: initialDate,
     initialEntryMode: initialEntryMode,
     firstDate: DateTime(DateTime.now().year - 1000),
@@ -92,6 +93,7 @@ Future<DateTimeRangeOrAllTime> showCustomDateRangePicker(
   bool allTime = initialDateRange?.allTime ?? false;
   DateTimeRange? result = await showDateRangePicker(
     context: context,
+    useRootNavigator: false,
     firstDate: DateTime(DateTime.now().year - 1000),
     lastDate: DateTime(DateTime.now().year + 1000),
     initialDateRange: initialDateRange?.dateTimeRange,
@@ -156,7 +158,7 @@ Future<DateTimeRangeOrAllTime> showCustomDateRangePicker(
                           labelSize: 16,
                           onTap: () {
                             allTime = !allTime;
-                            Navigator.pop(context, null);
+                            popRoute(context, null);
                           },
                           isOutlined: allTime == false,
                         ),

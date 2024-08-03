@@ -200,7 +200,7 @@ class PopupFramework extends StatelessWidget {
                         : Icons.close_rounded,
                   ),
                   onPressed: () {
-                    Navigator.pop(context);
+                    popRoute(context);
                   },
                 ),
             ],

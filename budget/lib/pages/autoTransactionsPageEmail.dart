@@ -133,30 +133,28 @@ Future queueTransactionFromMessage(String messageString,
       ? null
       : await database.getWalletInstanceOrNull(templateFound.walletFk);
 
-  if (navigatorKey.currentContext != null) {
-    if (willPushRoute) {
-      pushRoute(
-        navigatorKey.currentContext!,
-        AddTransactionPage(
-          useCategorySelectedIncome: true,
-          routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-          selectedAmount: amountDouble,
-          selectedTitle: title,
-          selectedCategory: category,
-          startInitialAddTransactionSequence: false,
-          selectedWallet: wallet,
-          selectedDate: dateTime,
-        ),
-      );
-    } else {
-      processAddTransactionFromParams(navigatorKey.currentContext!, {
-        "title": title,
-        "categoryPk": category?.categoryPk,
-        "walletPk": wallet?.walletPk,
-        "amount": amountDouble.toString(),
-        "date": dateTime.toString(),
-      });
-    }
+  if (willPushRoute) {
+    pushRoute(
+      null,
+      AddTransactionPage(
+        useCategorySelectedIncome: true,
+        routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+        selectedAmount: amountDouble,
+        selectedTitle: title,
+        selectedCategory: category,
+        startInitialAddTransactionSequence: false,
+        selectedWallet: wallet,
+        selectedDate: dateTime,
+      ),
+    );
+  } else {
+    processAddTransactionFromParams(navigatorKey.currentContext!, {
+      "title": title,
+      "categoryPk": category?.categoryPk,
+      "walletPk": wallet?.walletPk,
+      "amount": amountDouble.toString(),
+      "date": dateTime.toString(),
+    });
   }
 }
 
@@ -880,7 +878,7 @@ class ScannerTemplateEntry extends StatelessWidget {
                       if (action == DeletePopupAction.Delete) {
                         await database.deleteScannerTemplate(
                             scannerTemplate.scannerTemplatePk);
-                        Navigator.pop(context);
+                        popRoute(context);
                         openSnackbar(
                           SnackbarMessage(
                             title: "Deleted " + scannerTemplate.templateName,
