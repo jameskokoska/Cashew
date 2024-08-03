@@ -198,9 +198,7 @@ class UpcomingTransactionDateHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int daysDifference =
-        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
-            .difference(transaction.dateCreated)
-            .inDays;
+        DateTime.now().justDay().difference(transaction.dateCreated).inDays;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

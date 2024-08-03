@@ -978,13 +978,8 @@ String getObjectiveStatus(BuildContext context, Objective objective,
     {bool addSpendingSavingIndication = false}) {
   String content;
   if (objective.endDate == null) return "";
-  int remainingDays = objective.endDate!
-          .difference(
-            DateTime(DateTime.now().year, DateTime.now().month,
-                DateTime.now().day, 0, 0),
-          )
-          .inDays +
-      1;
+  int remainingDays =
+      objective.endDate!.difference(DateTime.now().justDay()).inDays + 1;
   double amount = ((totalAmount - objectiveAmount) / remainingDays) * -1;
   if (percentageTowardsGoal >= 1) {
     content = objective.type == ObjectiveType.loan

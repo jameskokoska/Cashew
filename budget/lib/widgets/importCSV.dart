@@ -1303,6 +1303,7 @@ DateTime tryToParseCustomDateFormat(
     dateCreated.day,
     dateCreated.hour,
     dateCreated.minute,
+    dateCreated.second,
   );
   return dateCreated;
 }

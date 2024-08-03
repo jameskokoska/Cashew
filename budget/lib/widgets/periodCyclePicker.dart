@@ -225,7 +225,7 @@ class _CyclePeriodSelectionState extends State<CyclePeriodSelection> {
             1;
     selectedStartDate = DateTime.tryParse(appStateSettings[
             "cycleStartDate" + widget.cycleSettingsExtension]) ??
-        DateTime(DateTime.now().year, DateTime.now().month, 1);
+        DateTime.now().firstDayOfMonth();
     selectedRecurrence = enumRecurrence[BudgetReoccurence.values[
             appStateSettings[
                 "cycleReoccurrence" + widget.cycleSettingsExtension]]] ??
@@ -544,8 +544,7 @@ DateTime? getStartDateOfSelectedCustomPeriod(
     return null;
   } else if (selectedPeriodType == CycleType.cycle) {
     DateTimeRange budgetRange = getCycleDateTimeRange(cycleSettingsExtension);
-    DateTime startDate = DateTime(
-        budgetRange.start.year, budgetRange.start.month, budgetRange.start.day);
+    DateTime startDate = budgetRange.start.justDay();
     return startDate;
   } else if (selectedPeriodType == CycleType.pastDays) {
     DateTime startDate = DateTime.now().subtract(Duration(
@@ -581,14 +580,12 @@ DateTime? getEndDateOfSelectedCustomPeriod(
   // Therefore, do not add this code in!
   if (selectedPeriodType == CycleType.cycle) {
     DateTimeRange budgetRange = getCycleDateTimeRange(cycleSettingsExtension);
-    DateTime endDate = DateTime(
-        budgetRange.end.year, budgetRange.end.month, budgetRange.end.day);
+    DateTime endDate = budgetRange.end.justDay();
     return endDate;
   }
 
   if (selectedPeriodType == CycleType.pastDays) {
-    DateTime endDate =
-        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    DateTime endDate = DateTime.now().justDay();
     return endDate;
   }
 

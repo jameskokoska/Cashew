@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:budget/colors.dart';
 import 'package:budget/database/initializeDefaultDatabase.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/navigationFramework.dart';
@@ -516,8 +517,8 @@ Future generatePreviewData() async {
       note: "",
       categoryFk: "11",
       walletFk: "0",
-      dateCreated: DateTime(DateTime.now().year, DateTime.now().month, 1)
-          .subtract(Duration(minutes: 35)),
+      dateCreated:
+          DateTime.now().firstDayOfMonth().subtract(Duration(minutes: 35)),
       dateTimeModified: null,
       income: true,
       periodLength: 1,
@@ -540,8 +541,8 @@ Future generatePreviewData() async {
       note: "",
       categoryFk: "11",
       walletFk: "11",
-      dateCreated: DateTime(DateTime.now().year, DateTime.now().month,
-              DateTime.now().day - 20)
+      dateCreated: DateTime.now()
+          .justDay(dayOffset: -20)
           .subtract(Duration(minutes: 40)),
       dateTimeModified: null,
       income: true,

@@ -65,8 +65,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
 
   double? selectedAmount;
   int selectedPeriodLength = 1;
-  DateTime selectedStartDate =
-      DateTime(DateTime.now().year, DateTime.now().month, 1);
+  DateTime selectedStartDate = DateTime.now().firstDayOfMonth();
   DateTime? selectedEndDate;
   String selectedRecurrence = "Monthly";
   bool selectedIncludeIncome = false;

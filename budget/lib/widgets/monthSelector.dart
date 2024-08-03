@@ -76,7 +76,7 @@ class MonthSelectorState extends State<MonthSelector> {
   }
 
   DateTime getDateFromIndex(int index) {
-    return DateTime(DateTime.now().year, DateTime.now().month + index);
+    return DateTime.now().firstDayOfMonth().justDay(monthOffset: index);
   }
 
   @override
@@ -127,9 +127,8 @@ class MonthSelectorState extends State<MonthSelector> {
                     bool isSelected =
                         selectedDateStart.month == currentDateTime.month &&
                             selectedDateStart.year == currentDateTime.year;
-                    bool isToday =
-                        currentDateTime.month == DateTime.now().month &&
-                            currentDateTime.year == DateTime.now().year;
+                    bool isToday = currentDateTime.firstDayOfMonth() ==
+                        DateTime.now().firstDayOfMonth();
                     double spacePadding = measureWidth() / 2 - monthWidth / 2;
                     return Container(
                       color: Theme.of(context).colorScheme.background,
@@ -317,9 +316,7 @@ class MonthSelectorState extends State<MonthSelector> {
                           MultiDirectionalInfiniteScrollKey.currentState!
                               .scrollTo(Duration(milliseconds: 700));
                           widget.setSelectedDateStart(
-                              DateTime(
-                                  DateTime.now().year, DateTime.now().month),
-                              0);
+                              DateTime.now().firstDayOfMonth(), 0);
                         },
                         child: Container(
                           width: 44,
@@ -356,9 +353,7 @@ class MonthSelectorState extends State<MonthSelector> {
                           MultiDirectionalInfiniteScrollKey.currentState!
                               .scrollTo(Duration(milliseconds: 700));
                           widget.setSelectedDateStart(
-                              DateTime(
-                                  DateTime.now().year, DateTime.now().month),
-                              0);
+                              DateTime.now().firstDayOfMonth(), 0);
                         },
                         child: Container(
                           width: 44,

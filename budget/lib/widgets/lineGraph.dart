@@ -172,22 +172,14 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
               // print(titleMeta.max);
 
               String text = getWordedDateShort(
-                DateTime(
-                  currentDate.year,
-                  currentDate.month,
-                  currentDate.day - widget.maxPair.x.toInt() + value.round(),
-                ),
+                currentDate.justDay(
+                    dayOffset: -widget.maxPair.x.toInt() + value.round()),
                 showTodayTomorrow: false,
               );
 
               // String textBefore = getWordedDateShort(
-              //   DateTime(
-              //     currentDate.year,
-              //     currentDate.month,
-              //     currentDate.day -
-              //         widget.maxPair.x.toInt() +
-              //         valueBefore.round(),
-              //   ),
+              //   currentDate.justDay(
+              //       dayOffset: -widget.maxPair.x.toInt() + valueBefore.round()),
               //   showTodayTomorrow: false,
               // );
 
@@ -380,13 +372,8 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
               }
               DateTime currentDate =
                   widget.endDate == null ? DateTime.now() : widget.endDate!;
-              DateTime tooltipDate = DateTime(
-                currentDate.year,
-                currentDate.month,
-                currentDate.day -
-                    widget.maxPair.x.toInt() +
-                    lineBarSpot.x.toInt(),
-              );
+              DateTime tooltipDate = currentDate.justDay(
+                  dayOffset: -widget.maxPair.x.toInt() + lineBarSpot.x.toInt());
               return LineTooltipItem(
                 getWordedDateShort(
                       tooltipDate,

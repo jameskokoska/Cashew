@@ -141,11 +141,7 @@ class PastSpendingGraph extends StatelessWidget {
       customStartDateCheckedNull = DateTime.now();
     }
     DateTime customStartDateChecked = customStartDateCheckedNull ??
-        DateTime(
-          DateTime.now().year,
-          DateTime.now().month - monthsToLoad,
-          DateTime.now().day,
-        );
+        DateTime.now().justDay(monthOffset: -monthsToLoad);
 
     DateTime customEndDateChecked =
         customEndDate ?? latestTransactionDate ?? DateTime.now();
@@ -309,8 +305,7 @@ List<Pair> calculatePoints(CalculatePointsParams p) {
       continue;
     }
 
-    DateTime day = DateTime(transaction.dateCreated.year,
-        transaction.dateCreated.month, transaction.dateCreated.day);
+    DateTime day = transaction.dateCreated.justDay();
     double amount = transaction.amount *
         amountRatioToPrimaryCurrencyGivenPk(
           p.allWallets,
@@ -339,11 +334,10 @@ List<Pair> calculatePoints(CalculatePointsParams p) {
     int index = -1;
     for (DateTime indexDay = p.customStartDate;
         indexDay.compareTo(p.customEndDate) <= 0;
-        indexDay = DateTime(indexDay.year, indexDay.month, indexDay.day + 1)) {
+        indexDay = indexDay.justDay(dayOffset: 1)) {
       index++;
       if (indexDay == p.customStartDate) {
-        indexDay = DateTime(p.customStartDate.year, p.customStartDate.month,
-            p.customStartDate.day);
+        indexDay = p.customStartDate.justDay();
       }
 
       double totalForDay = dailyTotals[indexDay] ?? 0;
@@ -364,17 +358,9 @@ List<Pair> calculatePoints(CalculatePointsParams p) {
         (dailyTotals.length / resolutionThreshold).round().toDouble();
     if (resolution <= 1) resolution = 1;
 
-    DateTime customStartDateStatic = DateTime(
-      p.customStartDate.year,
-      p.customStartDate.month,
-      p.customStartDate.day,
-    );
+    DateTime customStartDateStatic = p.customStartDate.justDay();
 
-    DateTime customEndDateStatic = DateTime(
-      p.customEndDate.year,
-      p.customEndDate.month,
-      p.customEndDate.day,
-    );
+    DateTime customEndDateStatic = p.customEndDate.justDay();
 
     final List<DateTime> filteredDates = dailyTotals.keys
         .where((date) =>

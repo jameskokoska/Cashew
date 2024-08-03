@@ -78,13 +78,9 @@ DateTimeRange? getDateTimeRangeForPassedSearchFilters(
     return null;
   return createSafeDateTimeRange(
     start: getStartDateOfSelectedCustomPeriod(cycleSettingsExtension) ??
-        DateTime.now(),
+        DateTime.now().justDay(),
     end: getEndDateOfSelectedCustomPeriod(cycleSettingsExtension) ??
-        DateTime(
-          DateTime.now().year,
-          DateTime.now().month + 1,
-          DateTime.now().day,
-        ),
+        DateTime.now().justDay(monthOffset: 1),
   );
 }
 

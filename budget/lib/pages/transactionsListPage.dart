@@ -233,8 +233,9 @@ class TransactionsListPageState extends State<TransactionsListPage>
                       onPageChanged: (int index) {
                         final int pageOffset =
                             index - _pageController.initialPage;
-                        DateTime startDate = DateTime(DateTime.now().year,
-                            DateTime.now().month + pageOffset);
+                        DateTime startDate = DateTime.now()
+                            .firstDayOfMonth()
+                            .justDay(monthOffset: pageOffset);
                         monthSelectorStateKey.currentState
                             ?.setSelectedDateStart(startDate, pageOffset);
                         double middle = -(MediaQuery.sizeOf(context).width -
@@ -247,8 +248,9 @@ class TransactionsListPageState extends State<TransactionsListPage>
                       itemBuilder: (BuildContext context, int index) {
                         final int pageOffset =
                             index - _pageController.initialPage;
-                        DateTime startDate = DateTime(DateTime.now().year,
-                            DateTime.now().month + pageOffset);
+                        DateTime startDate = DateTime.now()
+                            .firstDayOfMonth()
+                            .justDay(monthOffset: pageOffset);
 
                         return ScrollbarWrap(
                           child: CustomScrollView(

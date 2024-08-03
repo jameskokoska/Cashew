@@ -109,8 +109,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   String? selectedAmountCalculation;
   String? selectedTitle;
   int selectedPeriodLength = 1;
-  DateTime selectedStartDate =
-      DateTime(DateTime.now().year, DateTime.now().month, 1);
+  DateTime selectedStartDate = DateTime.now().firstDayOfMonth();
   DateTime? selectedEndDate;
   late Color? selectedColor =
       widget.budget?.colour == null ? null : HexColor(widget.budget?.colour);
@@ -1421,8 +1420,8 @@ class _BudgetDetailsState extends State<BudgetDetails> {
   void initState() {
     selectedAmount = widget.initialSelectedAmount;
     selectedPeriodLength = widget.initialSelectedPeriodLength ?? 1;
-    selectedStartDate = widget.initialSelectedStartDate ??
-        DateTime(DateTime.now().year, DateTime.now().month, 1);
+    selectedStartDate =
+        widget.initialSelectedStartDate ?? DateTime.now().firstDayOfMonth();
     selectedEndDate = widget.initialSelectedEndDate;
     selectedRecurrence = widget.initialSelectedRecurrence ?? "Monthly";
     selectedWalletPk =
@@ -1565,12 +1564,7 @@ class _BudgetDetailsState extends State<BudgetDetails> {
         allTime: false,
         dateTimeRange: DateTimeRange(
           start: selectedStartDate,
-          end: selectedEndDate ??
-              DateTime(
-                selectedStartDate.year,
-                selectedStartDate.month,
-                selectedStartDate.day + 7,
-              ),
+          end: selectedEndDate ?? selectedStartDate.justDay(dayOffset: 7),
         ),
       ),
       allTimeButton: false,

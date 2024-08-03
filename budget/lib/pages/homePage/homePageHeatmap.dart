@@ -51,16 +51,8 @@ class _HomePageHeatMapState extends State<HomePageHeatMap> {
     return KeepAliveClientMixin(
       child: StreamBuilder<List<Transaction>>(
         stream: database.getTransactionsInTimeRangeFromCategories(
-          DateTime(
-            DateTime.now().year,
-            DateTime.now().month - monthsToLoad,
-            DateTime.now().day,
-          ),
-          DateTime(
-            DateTime.now().year,
-            DateTime.now().month,
-            DateTime.now().day,
-          ),
+          DateTime.now().justDay(monthOffset: -1),
+          DateTime.now().justDay(),
           null,
           null,
           true,
@@ -73,11 +65,8 @@ class _HomePageHeatMapState extends State<HomePageHeatMap> {
             List<Pair> points = [];
             var p = CalculatePointsParams(
               transactions: snapshot.data ?? [],
-              customStartDate: DateTime(
-                DateTime.now().year,
-                DateTime.now().month - monthsToLoad,
-                DateTime.now().day,
-              ),
+              customStartDate:
+                  DateTime.now().justDay(monthOffset: -monthsToLoad),
               customEndDate: DateTime.now(),
               totalSpentBefore: 0,
               isIncome: null,

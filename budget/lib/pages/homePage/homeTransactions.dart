@@ -1,4 +1,5 @@
 import 'package:budget/database/tables.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/pages/transactionFilters.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/transactionEntries.dart';
@@ -36,16 +37,8 @@ class HomeTransactions extends StatelessWidget {
       showNumberOfDaysUntilForFutureDates: true,
       renderType: TransactionEntriesRenderType.implicitlyAnimatedNonSlivers,
       showNoResults: false,
-      DateTime(
-        DateTime.now().year,
-        DateTime.now().month - 1,
-        DateTime.now().day,
-      ),
-      DateTime(
-        DateTime.now().year,
-        DateTime.now().month,
-        DateTime.now().day + numberOfFutureDays,
-      ),
+      DateTime.now().justDay(monthOffset: -1),
+      DateTime.now().justDay(dayOffset: numberOfFutureDays),
       dateDividerColor: Colors.transparent,
       useHorizontalPaddingConstrained: false,
       pastDaysLimitToShow: 7,

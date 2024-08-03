@@ -1539,10 +1539,8 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   Expression<bool> isOnDay(
       GeneratedColumn<DateTime> dateColumn, DateTime date) {
-    return dateColumn.isBetweenValues(
-        DateTime(date.year, date.month, date.day),
-        DateTime(date.year, date.month, date.day + 1)
-            .subtract(Duration(milliseconds: 1)));
+    return dateColumn.isBetweenValues(date.justDay(),
+        date.justDay(dayOffset: 1).subtract(Duration(milliseconds: 1)));
   }
 
   Stream<RangeValues> getHighestLowestAmount(SearchFilters searchFilters) {
@@ -1581,10 +1579,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     int? limit,
     SearchFilters? searchFilters,
   }) {
-    DateTime? startDate =
-        start == null ? null : DateTime(start.year, start.month, start.day);
-    DateTime? endDate =
-        end == null ? null : DateTime(end.year, end.month, end.day);
+    DateTime? startDate = start == null ? null : start.justDay();
+    DateTime? endDate = end == null ? null : end.justDay();
     final $CategoriesTable subCategories = alias(categories, 'subCategories');
 
     final query = selectOnly(transactions, distinct: true)
@@ -1715,8 +1711,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   //       ..orderBy([(t) => OrderingTerm.asc(t.dateCreated)]));
   //     DateTime previousDate = DateTime.now();
   //     return query.map((tbl) {
-  //       DateTime currentDate = DateTime(
-  //           tbl.dateCreated.year, tbl.dateCreated.month, tbl.dateCreated.day);
+  //       DateTime currentDate = tbl.dateCreated.justDay();
   //       if (previousDate != currentDate) {
   //         previousDate = currentDate;
   //         return currentDate;
@@ -1738,8 +1733,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   //       ..orderBy([(t) => OrderingTerm.asc(t.dateCreated)]));
   //     DateTime previousDate = DateTime.now();
   //     return query.map((tbl) {
-  //       DateTime currentDate = DateTime(
-  //           tbl.dateCreated.year, tbl.dateCreated.month, tbl.dateCreated.day);
+  //       DateTime currentDate = tbl.dateCreated.justDay();
   //       if (previousDate != currentDate) {
   //         previousDate = currentDate;
   //         return currentDate;
@@ -1767,10 +1761,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   //           transactions.name.like("%" + search + "%"));
   //     DateTime previousDate = DateTime.now();
   //     return query.watch().map((rows) => rows.map((row) {
-  //           DateTime currentDate = DateTime(
-  //               row.readTable(transactions).dateCreated.year,
-  //               row.readTable(transactions).dateCreated.month,
-  //               row.readTable(transactions).dateCreated.day);
+  //           DateTime currentDate = row.readTable(transactions).dateCreated.justDay();
   //           if (previousDate != currentDate) {
   //             previousDate = currentDate;
   //             return currentDate;
@@ -1919,10 +1910,7 @@ class FinanceDatabase extends _$FinanceDatabase {
             dateCreated.month.equals(date.month);
       }));
 
-    return query
-        .map((tbl) => DateTime(
-            tbl.dateCreated.year, tbl.dateCreated.month, tbl.dateCreated.day))
-        .watch();
+    return query.map((tbl) => tbl.dateCreated.justDay()).watch();
   }
 
   // watch all labels in a category (if given)
@@ -4165,8 +4153,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     if (budget.periodLength <= 0) budget = budget.copyWith(periodLength: 1);
 
     budget = budget.copyWith(
-      startDate: DateTime(
-          budget.startDate.year, budget.startDate.month, budget.startDate.day),
+      startDate: budget.startDate.justDay(),
     );
     return budget;
   }
@@ -5594,8 +5581,8 @@ class FinanceDatabase extends _$FinanceDatabase {
       bool allCashFlow = false,
       String? onlyShowTransactionsBelongingToBudgetPk,
       Budget? budget}) {
-    DateTime startDate = DateTime(start.year, start.month, start.day);
-    DateTime endDate = DateTime(end.year, end.month, end.day);
+    DateTime startDate = start.justDay();
+    DateTime endDate = end.justDay();
     List<Stream<double?>> mergedStreams = [];
     for (TransactionWallet wallet in allWallets.list) {
       final totalAmt =
@@ -5962,8 +5949,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     DateTime end,
     String budgetPk,
   ) {
-    DateTime startDate = DateTime(start.year, start.month, start.day);
-    DateTime endDate = DateTime(end.year, end.month, end.day);
+    DateTime startDate = start.justDay();
+    DateTime endDate = end.justDay();
 
     List<Stream<double?>> mergedStreams = [];
     for (TransactionWallet wallet in allWallets.list) {
@@ -6005,8 +5992,8 @@ class FinanceDatabase extends _$FinanceDatabase {
       String userEmail,
       String onlyShowTransactionsBelongingToBudgetPk,
       {bool allTime = false}) {
-    DateTime startDate = DateTime(start.year, start.month, start.day);
-    DateTime endDate = DateTime(end.year, end.month, end.day);
+    DateTime startDate = start.justDay();
+    DateTime endDate = end.justDay();
     List<Stream<double?>> mergedStreams = [];
     for (TransactionWallet wallet in allWallets.list) {
       final totalAmt =
@@ -6041,8 +6028,8 @@ class FinanceDatabase extends _$FinanceDatabase {
       required List<String>? categoryFks,
       required List<String>? categoryFksExclude,
       required String userEmail}) {
-    DateTime startDate = DateTime(start.year, start.month, start.day);
-    DateTime endDate = DateTime(end.year, end.month, end.day);
+    DateTime startDate = start.justDay();
+    DateTime endDate = end.justDay();
     return (select(transactions)
           ..where((tbl) {
             return tbl.dateCreated.isBetweenValues(startDate, endDate) &
@@ -6128,10 +6115,8 @@ class FinanceDatabase extends _$FinanceDatabase {
       return Constant(true);
     } else if (selectedPeriodType == CycleType.cycle) {
       DateTimeRange budgetRange = getCycleDateTimeRange(cycleSettingsExtension);
-      DateTime startDate = DateTime(budgetRange.start.year,
-          budgetRange.start.month, budgetRange.start.day);
-      DateTime endDate = DateTime(
-          budgetRange.end.year, budgetRange.end.month, budgetRange.end.day);
+      DateTime startDate = budgetRange.start.justDay();
+      DateTime endDate = budgetRange.end.justDay();
       return onlyShowBasedOnTimeRange(tbl, startDate, endDate, null,
           allTime: false);
     } else if (selectedPeriodType == CycleType.pastDays) {
@@ -6317,8 +6302,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     DateTimeRange? forcedDateTimeRange,
     bool paidOnly = true,
   }) {
-    DateTime startDate = DateTime(start.year, start.month, start.day);
-    DateTime endDate = DateTime(end.year, end.month, end.day);
+    DateTime startDate = start.justDay();
+    DateTime endDate = end.justDay();
     // we have to convert currencies to account for all wallets
     List<Stream<double?>> mergedStreams = [];
     for (TransactionWallet wallet in allWallets.list) {
@@ -6404,8 +6389,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     DateTimeRange? forcedDateTimeRange,
     bool paidOnly = true,
   }) {
-    DateTime startDate = DateTime(start.year, start.month, start.day);
-    DateTime endDate = DateTime(end.year, end.month, end.day);
+    DateTime startDate = start.justDay();
+    DateTime endDate = end.justDay();
     List<Stream<List<CategoryWithTotal>>> mergedStreams = [];
 
     for (TransactionWallet wallet in allWallets.list) {
@@ -6936,8 +6921,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     SearchFilters? searchFilters,
     DateTimeRange? forcedDateTimeRange,
   }) {
-    DateTime startDate = DateTime(start.year, start.month, start.day);
-    DateTime endDate = DateTime(end.year, end.month, end.day);
+    DateTime startDate = start.justDay();
+    DateTime endDate = end.justDay();
     return (select(transactions)
           ..where((tbl) {
             return onlyShowIfFollowsSearchFilters(transactions, searchFilters,
@@ -7051,7 +7036,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }) {
     // the date, which acts as the end point and everything before this day is inclusive
     // for onlyShowBasedOnTimeRange, but we don't want to include this day
-    DateTime startDate = DateTime(start.year, start.month, start.day - 1);
+    DateTime startDate = start.justDay(dayOffset: -1);
     List<Stream<double?>> mergedStreams = [];
     for (TransactionWallet wallet in allWallets.list) {
       final totalAmt = transactions.amount.sum(

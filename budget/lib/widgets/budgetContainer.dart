@@ -437,13 +437,9 @@ class DaySpending extends StatelessWidget {
           ? SizedBox(height: 1)
           : Builder(builder: (context) {
               // Add one because if there are zero days left, we want to make it the last day
-              int remainingDays = budgetRange.end
-                      .difference(
-                        DateTime(DateTime.now().year, DateTime.now().month,
-                            DateTime.now().day, 0, 0),
-                      )
-                      .inDays +
-                  1;
+              int remainingDays =
+                  budgetRange.end.difference(DateTime.now().justDay()).inDays +
+                      1;
               return TextFont(
                 textColor: getColor(context, "black").withAlpha(80),
                 text: isOutOfRange

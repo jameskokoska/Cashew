@@ -2326,8 +2326,13 @@ class _DateButtonState extends State<DateButton> {
     return Tappable(
       color: Colors.transparent,
       onLongPress: () {
-        if (DateTime(selectedDate.year, selectedDate.month, selectedDate.day,
-                selectedTime.hour, selectedTime.minute) !=
+        if (DateTime(
+              selectedDate.year,
+              selectedDate.month,
+              selectedDate.day,
+              selectedTime.hour,
+              selectedTime.minute,
+            ) !=
             DateTime(
               DateTime.now().year,
               DateTime.now().month,

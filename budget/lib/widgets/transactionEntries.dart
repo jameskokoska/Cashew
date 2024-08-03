@@ -211,8 +211,10 @@ class _TransactionEntriesState extends State<TransactionEntries> {
           double totalExpense = 0;
           int totalNumberTransactions = data.length;
           Set<String> futureTransactionPks = (data
-              .where((transactionWithCategory) => isAfterCurrentDate(
-                  transactionWithCategory.transaction.dateCreated))
+              .where((transactionWithCategory) => transactionWithCategory
+                  .transaction.dateCreated
+                  .justDay()
+                  .isAfter(DateTime.now().justDay()))
               .map((transactionWithCategory) =>
                   transactionWithCategory.transaction.transactionPk)
               .toSet());
@@ -284,10 +286,8 @@ class _TransactionEntriesState extends State<TransactionEntries> {
             if (widget.pastDaysLimitToShow != null &&
                 totalPastUniqueDays > widget.pastDaysLimitToShow!) break;
 
-            DateTime currentTransactionDate = DateTime(
-                transactionWithCategory.transaction.dateCreated.year,
-                transactionWithCategory.transaction.dateCreated.month,
-                transactionWithCategory.transaction.dateCreated.day);
+            DateTime currentTransactionDate =
+                transactionWithCategory.transaction.dateCreated.justDay();
             if (currentDate == null) {
               currentDate = currentTransactionDate;
               if (currentDate.millisecondsSinceEpoch <
@@ -320,36 +320,26 @@ class _TransactionEntriesState extends State<TransactionEntries> {
               }
             }
 
-            DateTime? nextTransactionDate =
-                totalNumberTransactions == currentTotalIndex + 1
-                    ? null
-                    : DateTime(
-                        (data ?? [])[currentTotalIndex + 1]
-                            .transaction
-                            .dateCreated
-                            .year,
-                        (data ?? [])[currentTotalIndex + 1]
-                            .transaction
-                            .dateCreated
-                            .month,
-                        (data ?? [])[currentTotalIndex + 1]
-                            .transaction
-                            .dateCreated
-                            .day,
-                      );
+            DateTime? nextTransactionDate = totalNumberTransactions ==
+                    currentTotalIndex + 1
+                ? null
+                : data[currentTotalIndex + 1].transaction.dateCreated.justDay();
 
             if (nextTransactionDate == null ||
                 nextTransactionDate != currentTransactionDate) {
               if (transactionListForDay.length > 0) {
-                int daysDifference = DateTime(DateTime.now().year,
-                        DateTime.now().month, DateTime.now().day)
+                int daysDifference = DateTime.now()
+                    .justDay()
                     .difference(currentTransactionDate)
                     .inDays;
 
                 Widget? pastTransactionsDivider =
                     enableFutureTransactionsDivider &&
                             notYetAddedPastTransactionsDivider &&
-                            isAfterCurrentDate(currentTransactionDate) == false
+                            currentTransactionDate
+                                    .justDay()
+                                    .isAfter(DateTime.now().justDay()) ==
+                                false
                         ? PastTransactionsDivider(
                             listID: widget.listID,
                             useHorizontalPaddingConstrained:
@@ -714,20 +704,12 @@ class _TransactionEntriesState extends State<TransactionEntries> {
         end: widget.endDay == null &&
                 widget.searchFilters?.dateTimeRange?.end == null
             ? null
-            : DateTime(
-                widget.endDay?.year ??
-                    widget.searchFilters?.dateTimeRange?.end.year ??
-                    DateTime.now().year,
-                widget.endDay?.month ??
-                    widget.searchFilters?.dateTimeRange?.end.month ??
-                    DateTime.now().month,
-                (widget.endDay?.day ??
-                        widget.searchFilters?.dateTimeRange?.end.day ??
-                        DateTime.now().day) +
-                    (widget.budget == null ? 1 : 0),
+            : (widget.endDay ??
+                    widget.searchFilters?.dateTimeRange?.end ??
+                    DateTime.now())
                 //Add one because want the total from the start of the next day because we get everything BEFORE this date,
                 // Only add one if not a budget! because a different query is used if it is a budget
-              ),
+                .justDay(dayOffset: widget.budget == null ? 1 : 0),
         start: widget.startDay,
         allWallets: Provider.of<AllWallets>(context),
         search: widget.search,

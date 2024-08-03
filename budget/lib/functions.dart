@@ -60,6 +60,16 @@ extension DateUtils on DateTime {
       microsecond ?? this.microsecond,
     );
   }
+
+  DateTime justDay(
+      {int yearOffset = 0, int monthOffset = 0, int dayOffset = 0}) {
+    return DateTime(
+        this.year + yearOffset, this.month + monthOffset, this.day + dayOffset);
+  }
+
+  DateTime firstDayOfMonth() {
+    return DateTime(this.year, this.month, 1);
+  }
 }
 
 String convertToPercent(double amount,
@@ -370,19 +380,11 @@ String getMeridiemString(DateTime dateTime) {
 
 checkYesterdayTodayTomorrow(DateTime date) {
   DateTime now = DateTime.now();
-  if (date.day == now.day && date.month == now.month && date.year == now.year) {
+  if (date.justDay() == now.justDay()) {
     return "today".tr();
-  }
-  DateTime tomorrow = DateTime(now.year, now.month, now.day + 1);
-  if (date.day == tomorrow.day &&
-      date.month == tomorrow.month &&
-      date.year == tomorrow.year) {
+  } else if (date.justDay() == now.justDay(dayOffset: 1)) {
     return "tomorrow".tr();
-  }
-  DateTime yesterday = now.subtract(Duration(days: 1));
-  if (date.day == yesterday.day &&
-      date.month == yesterday.month &&
-      date.year == yesterday.year) {
+  } else if (date.justDay() == now.justDay(dayOffset: -1)) {
     return "yesterday".tr();
   }
 
@@ -581,25 +583,17 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
     DateTime currentDateLoopStart = budget.startDate;
     late DateTime currentDateLoopEnd;
     if (budget.reoccurrence == BudgetReoccurence.daily) {
-      currentDateLoopEnd = DateTime(
-          currentDateLoopStart.year,
-          currentDateLoopStart.month,
-          currentDateLoopStart.day + budget.periodLength);
+      currentDateLoopEnd =
+          currentDateLoopStart.justDay(dayOffset: budget.periodLength);
     } else if (budget.reoccurrence == BudgetReoccurence.monthly) {
-      currentDateLoopEnd = DateTime(
-          currentDateLoopStart.year,
-          currentDateLoopStart.month + budget.periodLength,
-          currentDateLoopStart.day);
+      currentDateLoopEnd =
+          currentDateLoopStart.justDay(monthOffset: budget.periodLength);
     } else if (budget.reoccurrence == BudgetReoccurence.yearly) {
-      currentDateLoopEnd = DateTime(
-          currentDateLoopStart.year + budget.periodLength,
-          currentDateLoopStart.month,
-          currentDateLoopStart.day);
+      currentDateLoopEnd =
+          currentDateLoopStart.justDay(yearOffset: budget.periodLength);
     } else if (budget.reoccurrence == BudgetReoccurence.weekly) {
-      currentDateLoopEnd = DateTime(
-          currentDateLoopStart.year,
-          currentDateLoopStart.month,
-          currentDateLoopStart.day + budget.periodLength * 7);
+      currentDateLoopEnd =
+          currentDateLoopStart.justDay(dayOffset: budget.periodLength * 7);
     }
     // print("START");
     // print(currentDate);
@@ -620,46 +614,29 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
                 currentDateLoopEnd.millisecondsSinceEpoch) {
           return DateTimeRange(
             start: currentDateLoopStart,
-            end: DateTime(currentDateLoopEnd.year, currentDateLoopEnd.month,
-                currentDateLoopEnd.day - 1),
+            end: currentDateLoopEnd.justDay(dayOffset: -1),
           );
         }
         if (budget.reoccurrence == BudgetReoccurence.daily) {
-          currentDateLoopStart = DateTime(
-              currentDateLoopStart.year,
-              currentDateLoopStart.month,
-              currentDateLoopStart.day - budget.periodLength);
-          currentDateLoopEnd = DateTime(
-              currentDateLoopEnd.year,
-              currentDateLoopEnd.month,
-              currentDateLoopEnd.day - budget.periodLength);
+          currentDateLoopStart =
+              currentDateLoopStart.justDay(dayOffset: -budget.periodLength);
+          currentDateLoopEnd =
+              currentDateLoopEnd.justDay(dayOffset: -budget.periodLength);
         } else if (budget.reoccurrence == BudgetReoccurence.monthly) {
-          currentDateLoopStart = DateTime(
-              currentDateLoopStart.year,
-              currentDateLoopStart.month - budget.periodLength,
-              currentDateLoopStart.day);
-          currentDateLoopEnd = DateTime(
-              currentDateLoopEnd.year,
-              currentDateLoopEnd.month - budget.periodLength,
-              currentDateLoopEnd.day);
+          currentDateLoopStart =
+              currentDateLoopStart.justDay(monthOffset: -budget.periodLength);
+          currentDateLoopEnd =
+              currentDateLoopEnd.justDay(monthOffset: -budget.periodLength);
         } else if (budget.reoccurrence == BudgetReoccurence.yearly) {
-          currentDateLoopStart = DateTime(
-              currentDateLoopStart.year - budget.periodLength,
-              currentDateLoopStart.month,
-              currentDateLoopStart.day);
-          currentDateLoopEnd = DateTime(
-              currentDateLoopEnd.year - budget.periodLength,
-              currentDateLoopEnd.month,
-              currentDateLoopEnd.day);
+          currentDateLoopStart =
+              currentDateLoopStart.justDay(yearOffset: -budget.periodLength);
+          currentDateLoopEnd =
+              currentDateLoopEnd.justDay(yearOffset: -budget.periodLength);
         } else if (budget.reoccurrence == BudgetReoccurence.weekly) {
-          currentDateLoopStart = DateTime(
-              currentDateLoopStart.year,
-              currentDateLoopStart.month,
-              currentDateLoopStart.day - budget.periodLength * 7);
-          currentDateLoopEnd = DateTime(
-              currentDateLoopEnd.year,
-              currentDateLoopEnd.month,
-              currentDateLoopEnd.day - budget.periodLength * 7);
+          currentDateLoopStart =
+              currentDateLoopStart.justDay(dayOffset: -budget.periodLength * 7);
+          currentDateLoopEnd =
+              currentDateLoopEnd.justDay(dayOffset: -budget.periodLength * 7);
         }
       }
     } else if (currentDate.millisecondsSinceEpoch >=
@@ -674,54 +651,37 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
                 currentDateLoopEnd.millisecondsSinceEpoch) {
           return DateTimeRange(
             start: currentDateLoopStart,
-            end: DateTime(currentDateLoopEnd.year, currentDateLoopEnd.month,
-                currentDateLoopEnd.day - 1),
+            end: currentDateLoopEnd.justDay(dayOffset: -1),
           );
         }
         if (budget.reoccurrence == BudgetReoccurence.daily) {
-          currentDateLoopStart = DateTime(
-              currentDateLoopStart.year,
-              currentDateLoopStart.month,
-              currentDateLoopStart.day + budget.periodLength);
-          currentDateLoopEnd = DateTime(
-              currentDateLoopEnd.year,
-              currentDateLoopEnd.month,
-              currentDateLoopEnd.day + budget.periodLength);
+          currentDateLoopStart =
+              currentDateLoopStart.justDay(dayOffset: budget.periodLength);
+          currentDateLoopEnd =
+              currentDateLoopEnd.justDay(dayOffset: budget.periodLength);
         } else if (budget.reoccurrence == BudgetReoccurence.monthly) {
-          currentDateLoopStart = DateTime(
-              currentDateLoopStart.year,
-              currentDateLoopStart.month + budget.periodLength,
-              currentDateLoopStart.day);
-          currentDateLoopEnd = DateTime(
-              currentDateLoopEnd.year,
-              currentDateLoopEnd.month + budget.periodLength,
-              currentDateLoopEnd.day);
+          currentDateLoopStart =
+              currentDateLoopStart.justDay(monthOffset: budget.periodLength);
+          currentDateLoopEnd =
+              currentDateLoopEnd.justDay(monthOffset: budget.periodLength);
         } else if (budget.reoccurrence == BudgetReoccurence.yearly) {
-          currentDateLoopStart = DateTime(
-              currentDateLoopStart.year + budget.periodLength,
-              currentDateLoopStart.month,
-              currentDateLoopStart.day);
-          currentDateLoopEnd = DateTime(
-              currentDateLoopEnd.year + budget.periodLength,
-              currentDateLoopEnd.month,
-              currentDateLoopEnd.day);
+          currentDateLoopStart =
+              currentDateLoopStart.justDay(yearOffset: budget.periodLength);
+          currentDateLoopEnd =
+              currentDateLoopEnd.justDay(yearOffset: budget.periodLength);
         } else if (budget.reoccurrence == BudgetReoccurence.weekly) {
-          currentDateLoopStart = DateTime(
-              currentDateLoopStart.year,
-              currentDateLoopStart.month,
-              currentDateLoopStart.day + budget.periodLength * 7);
-          currentDateLoopEnd = DateTime(
-              currentDateLoopEnd.year,
-              currentDateLoopEnd.month,
-              currentDateLoopEnd.day + budget.periodLength * 7);
+          currentDateLoopStart =
+              currentDateLoopStart.justDay(dayOffset: budget.periodLength * 7);
+          currentDateLoopEnd =
+              currentDateLoopEnd.justDay(dayOffset: budget.periodLength * 7);
         }
       }
     }
   }
   return DateTimeRange(
-      start: budget.startDate,
-      end: DateTime(budget.startDate.year + 1, budget.startDate.month,
-          budget.startDate.day));
+    start: budget.startDate,
+    end: budget.startDate.justDay(yearOffset: 1),
+  );
 }
 
 String getWordedNumber(

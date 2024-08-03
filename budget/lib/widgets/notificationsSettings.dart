@@ -409,10 +409,8 @@ Future<bool> scheduleUpcomingTransactionsNotification(context) async {
 
   List<Transaction> upcomingTransactions =
       await database.getAllUpcomingTransactions(
-    startDate: DateTime(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day - 1),
-    endDate: DateTime(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day + 365),
+    startDate: DateTime.now().justDay(dayOffset: -1),
+    endDate: DateTime.now().justDay(yearOffset: 1),
   );
   // print(upcomingTransactions);
   int idStart = 100;
@@ -420,9 +418,7 @@ Future<bool> scheduleUpcomingTransactionsNotification(context) async {
     idStart++;
     // Note: if upcomingTransactionNotification is NULL the loop will continue and schedule a notification
     if (upcomingTransaction.upcomingTransactionNotification == false) continue;
-    if (upcomingTransaction.dateCreated.year == DateTime.now().year &&
-        upcomingTransaction.dateCreated.month == DateTime.now().month &&
-        upcomingTransaction.dateCreated.day == DateTime.now().day &&
+    if (upcomingTransaction.dateCreated.justDay() == DateTime.now().justDay() &&
         (upcomingTransaction.dateCreated.hour < DateTime.now().hour ||
             (upcomingTransaction.dateCreated.hour == DateTime.now().hour &&
                 upcomingTransaction.dateCreated.minute <=
@@ -476,10 +472,8 @@ Future<bool> scheduleUpcomingTransactionsNotification(context) async {
 Future<bool> cancelUpcomingTransactionsNotification() async {
   List<Transaction> upcomingTransactions =
       await database.getAllUpcomingTransactions(
-    startDate: DateTime(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day - 1),
-    endDate: DateTime(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day + 30),
+    startDate: DateTime.now().justDay(dayOffset: -1),
+    endDate: DateTime.now().justDay(dayOffset: 30),
   );
   int idStart = 100;
   for (Transaction upcomingTransaction in upcomingTransactions) {
