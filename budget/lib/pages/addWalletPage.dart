@@ -1050,6 +1050,7 @@ class TransferBalancePopup extends StatefulWidget {
 }
 
 class _TransferBalancePopupState extends State<TransferBalancePopup> {
+  DateTime dateInitialized = DateTime.now();
   late double enteredAmount = widget.initialAmount ?? 0;
   late bool isNegative = widget.initialIsNegative ?? false;
   late TransactionWallet? walletFrom = widget.wallet;
@@ -1258,15 +1259,11 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
           onChanged: (text) async {
             selectedTitle = text;
           },
-          onEditingComplete: widget.showAllEditDetails == true
-              ? null
-              : () {
-                  if (widget.showAllEditDetails) maybePopRoute(context);
-                },
           initialValue: selectedTitle,
           labelText: "transfer-balance".tr(),
-          padding: EdgeInsetsDirectional.only(bottom: 13),
+          padding: EdgeInsetsDirectional.zero,
         ),
+        SizedBox(height: 13),
         DateButton(
           internalPadding: EdgeInsetsDirectional.only(end: 5),
           initialSelectedDate: selectedDateTime ?? DateTime.now(),
@@ -1281,6 +1278,13 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
                 .copyWith(hour: time.hour, minute: time.minute);
           },
         ),
+        SizedBox(height: 13),
+        Button(
+          label: "set-details",
+          onTap: () {
+            popRoute(context);
+          },
+        ),
       ],
     );
     return PopupFramework(
@@ -1291,11 +1295,13 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
           : IconButton(
               iconSize: 25,
               padding: EdgeInsetsDirectional.all(
-                  getPlatform() == PlatformOS.isIOS ? 15 : 20),
-              icon: Icon(
-                appStateSettings["outlinedIcons"]
+                  getPlatform() == PlatformOS.isIOS ? 15 - 8 : 20 - 8),
+              icon: SelectedIconForIconButton(
+                iconData: appStateSettings["outlinedIcons"]
                     ? Icons.edit_outlined
                     : Icons.edit_rounded,
+                isSelected:
+                    selectedDateTime != null || selectedTitle.trim() != "",
               ),
               onPressed: () async {
                 await openBottomSheet(

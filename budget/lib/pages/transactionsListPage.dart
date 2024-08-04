@@ -2,6 +2,7 @@ import 'package:budget/pages/transactionFilters.dart';
 import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
 import 'package:budget/struct/defaultPreferences.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -135,23 +136,11 @@ class TransactionsListPageState extends State<TransactionsListPage>
             selectFilters(context);
           },
           padding: EdgeInsetsDirectional.all(15 - 8),
-          icon: AnimatedContainer(
-            duration: Duration(milliseconds: 500),
-            decoration: BoxDecoration(
-              color: searchFilters.isClear()
-                  ? Colors.transparent
-                  : Theme.of(context).colorScheme.tertiary.withOpacity(0.1),
-              borderRadius: BorderRadiusDirectional.circular(100),
-            ),
-            padding: EdgeInsetsDirectional.all(8),
-            child: Icon(
-              appStateSettings["outlinedIcons"]
-                  ? Icons.filter_alt_outlined
-                  : Icons.filter_alt_rounded,
-              color: searchFilters.isClear()
-                  ? null
-                  : Theme.of(context).colorScheme.tertiary,
-            ),
+          icon: SelectedIconForIconButton(
+            iconData: appStateSettings["outlinedIcons"]
+                ? Icons.filter_alt_outlined
+                : Icons.filter_alt_rounded,
+            isSelected: searchFilters.isClear() == false,
           ),
         ),
         IconButton(

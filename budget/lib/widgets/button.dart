@@ -287,3 +287,29 @@ class ButtonIcon extends StatelessWidget {
     );
   }
 }
+
+// If using, subtract 8 from the padding of the parent IconButton
+class SelectedIconForIconButton extends StatelessWidget {
+  const SelectedIconForIconButton(
+      {required this.isSelected, required this.iconData, super.key});
+  final bool isSelected;
+  final IconData iconData;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 500),
+      decoration: BoxDecoration(
+        color: isSelected
+            ? Theme.of(context).colorScheme.tertiary.withOpacity(0.1)
+            : Colors.transparent,
+        borderRadius: BorderRadiusDirectional.circular(100),
+      ),
+      padding: EdgeInsetsDirectional.all(8),
+      child: Icon(
+        iconData,
+        color: isSelected ? Theme.of(context).colorScheme.tertiary : null,
+      ),
+    );
+  }
+}

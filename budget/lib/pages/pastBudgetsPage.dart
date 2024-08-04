@@ -296,23 +296,11 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
             openWatchCategoriesBottomSheet();
           },
           padding: EdgeInsetsDirectional.all(15 - 8),
-          icon: AnimatedContainer(
-            duration: Duration(milliseconds: 500),
-            decoration: BoxDecoration(
-              color: selectedCategoryFks.length > 0
-                  ? Theme.of(context).colorScheme.tertiary.withOpacity(0.1)
-                  : Colors.transparent,
-              borderRadius: BorderRadiusDirectional.circular(100),
-            ),
-            padding: EdgeInsetsDirectional.all(8),
-            child: Icon(
-              appStateSettings["outlinedIcons"]
-                  ? Icons.category_outlined
-                  : Icons.category_rounded,
-              color: selectedCategoryFks.length > 0
-                  ? Theme.of(context).colorScheme.tertiary
-                  : Theme.of(context).colorScheme.onSecondaryContainer,
-            ),
+          icon: SelectedIconForIconButton(
+            iconData: appStateSettings["outlinedIcons"]
+                ? Icons.category_outlined
+                : Icons.category_rounded,
+            isSelected: selectedCategoryFks.length > 0,
           ),
         ),
         IconButton(
