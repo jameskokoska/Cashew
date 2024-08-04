@@ -536,3 +536,84 @@ class AnimatedScaleOpacity extends StatelessWidget {
     );
   }
 }
+
+class BouncingWidget extends StatefulWidget {
+  final Widget child;
+  final bool animate;
+  final double amountEnd;
+  final Duration duration;
+
+  BouncingWidget(
+      {required this.child,
+      required this.animate,
+      this.amountEnd = -8,
+      this.duration = const Duration(milliseconds: 800)});
+
+  @override
+  _BouncingWidgetState createState() => _BouncingWidgetState();
+}
+
+class _BouncingWidgetState extends State<BouncingWidget>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+  bool _isAnimating = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: widget.duration,
+    );
+
+    _animation = Tween<double>(begin: 0.0, end: widget.amountEnd).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: ElasticOutCurve(0.6),
+        reverseCurve: Curves.bounceIn,
+      ),
+    )..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          _controller.reverse();
+        } else if (status == AnimationStatus.dismissed && widget.animate) {
+          if (widget.animate) {
+            _controller.forward();
+          }
+        }
+      });
+
+    if (widget.animate) {
+      _controller.forward();
+    }
+  }
+
+  @override
+  void didUpdateWidget(BouncingWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.animate && !_isAnimating) {
+      _controller.forward();
+    }
+    _isAnimating = widget.animate;
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animation,
+      child: widget.child,
+      builder: (context, child) {
+        return Transform.translate(
+          offset: Offset(0, _animation.value),
+          child: child,
+        );
+      },
+    );
+  }
+}

@@ -304,11 +304,6 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                               SizedBox(height: 40),
                               GoogleAccountLoginButton(
                                 navigationSidebarButton: true,
-                                onTap: () {
-                                  pageNavigationFrameworkKey.currentState!
-                                      .changePage(8, switchNavbar: true);
-                                  appStateKey.currentState?.refreshAppState();
-                                },
                                 isButtonSelected: selectedIndex == 8,
                               ),
                               NavigationSidebarButtonWithNavBarIconData(

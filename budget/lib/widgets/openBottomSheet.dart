@@ -15,10 +15,10 @@ bool getIsFullScreen(context) {
 }
 
 double getWidthBottomSheet(context) {
-  double maxWidth = 900;
+  double maxWidth = 650;
   return MediaQuery.sizeOf(context).width - getWidthNavigationSidebar(context) >
           maxWidth
-      ? maxWidth - getWidthNavigationSidebar(context)
+      ? maxWidth
       : MediaQuery.sizeOf(context).width - getWidthNavigationSidebar(context);
 }
 

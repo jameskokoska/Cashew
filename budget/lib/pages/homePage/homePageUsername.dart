@@ -1,5 +1,6 @@
 import 'package:budget/functions.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -121,7 +122,7 @@ class HomePageWelcomeBannerSmall extends StatelessWidget {
           text:
               showGreeting && showUsername ? getWelcomeMessage() : "home".tr(),
           fontWeight: FontWeight.bold,
-          fontSize: getWidthNavigationSidebar(context) <= 0 ? 26 : 30,
+          fontSize: getIsFullScreen(context) ? 26 : 30,
           textColor: Theme.of(context).colorScheme.onPrimaryContainer,
           //textColor: Theme.of(context).colorScheme.onSecondaryContainer,
         ),

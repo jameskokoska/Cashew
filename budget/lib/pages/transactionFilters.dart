@@ -343,7 +343,7 @@ class SearchFilters {
     for (String? element in objectivePks) {
       outString += "objectivePks:-:" + element.toString() + ":-:";
     }
-    for (String? element in objectivePks) {
+    for (String? element in objectiveLoanPks) {
       outString += "objectiveLoanPks:-:" + element.toString() + ":-:";
     }
     for (ExpenseIncome element in expenseIncome) {

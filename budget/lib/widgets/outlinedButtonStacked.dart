@@ -13,6 +13,7 @@ class OutlinedButtonStacked extends StatelessWidget {
     this.fontSize,
     required this.onTap,
     required this.iconData,
+    this.customIconBuilder,
     this.afterWidget,
     this.alignStart = false,
     this.padding,
@@ -29,6 +30,7 @@ class OutlinedButtonStacked extends StatelessWidget {
   final double? fontSize;
   final void Function()? onTap;
   final IconData? iconData;
+  final Widget Function(Widget icon)? customIconBuilder;
   final Widget? afterWidget;
   final bool alignStart;
   final EdgeInsetsDirectional? padding;
@@ -73,20 +75,26 @@ class OutlinedButtonStacked extends StatelessWidget {
                                     : CrossAxisAlignment.center,
                                 children: [
                                   if (iconData != null)
-                                    Padding(
-                                      padding: const EdgeInsetsDirectional.only(
-                                          bottom: 10),
-                                      child: Transform.scale(
-                                        scale: iconScale,
-                                        child: Icon(
-                                          iconData,
-                                          size: 35,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
+                                    Builder(builder: (context) {
+                                      Widget icon = Padding(
+                                        padding:
+                                            const EdgeInsetsDirectional.only(
+                                                bottom: 10),
+                                        child: Transform.scale(
+                                          scale: iconScale,
+                                          child: Icon(
+                                            iconData,
+                                            size: 35,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
+                                          ),
                                         ),
-                                      ),
-                                    ),
+                                      );
+                                      if (customIconBuilder != null)
+                                        return customIconBuilder!(icon);
+                                      return icon;
+                                    }),
                                   if (text != null)
                                     TextFont(
                                       text: text ?? "",

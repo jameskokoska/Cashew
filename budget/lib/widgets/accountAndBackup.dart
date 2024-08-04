@@ -616,13 +616,11 @@ class GoogleAccountLoginButton extends StatefulWidget {
   const GoogleAccountLoginButton({
     super.key,
     this.navigationSidebarButton = false,
-    this.onTap,
     this.isButtonSelected = false,
     this.isOutlinedButton = true,
     this.forceButtonName,
   });
   final bool navigationSidebarButton;
-  final Function? onTap;
   final bool isButtonSelected;
   final bool isOutlinedButton;
   final String? forceButtonName;
@@ -633,24 +631,24 @@ class GoogleAccountLoginButton extends StatefulWidget {
 }
 
 class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
-  loginWithSync() {
+  void openPage({VoidCallback? onNext}) {
+    if (widget.navigationSidebarButton) {
+      pageNavigationFrameworkKey.currentState!
+          .changePage(8, switchNavbar: true);
+      appStateKey.currentState?.refreshAppState();
+    } else {
+      if (onNext != null) onNext();
+    }
+  }
+
+  void loginWithSync({VoidCallback? onNext}) {
     signInAndSync(
       widget.navigationSidebarButton
           ? navigatorKey.currentContext ?? context
           : context,
       next: () {
         setState(() {});
-        if (widget.navigationSidebarButton) {
-          if (widget.onTap != null) widget.onTap!();
-        } else {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => AccountsPage(),
-          //   ),
-          // );
-          pushRoute(context, AccountsPage());
-        }
+        openPage(onNext: onNext);
       },
     );
   }
@@ -683,9 +681,7 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
                     label: "backup".tr(),
                     icon: MoreIcons.google_drive,
                     iconScale: 0.87,
-                    onTap: () async {
-                      if (widget.onTap != null) widget.onTap!();
-                    },
+                    onTap: openPage,
                     isSelected: widget.isButtonSelected,
                   )
                 : NavigationSidebarButton(
@@ -697,9 +693,7 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
                             : Icons.person_rounded
                         : MoreIcons.google_drive,
                     iconScale: widget.forceButtonName == null ? 1 : 0.87,
-                    onTap: () async {
-                      if (widget.onTap != null) widget.onTap!();
-                    },
+                    onTap: openPage,
                     isSelected: widget.isButtonSelected,
                   ),
       );
@@ -709,19 +703,21 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
             padding:
                 EdgeInsetsDirectional.symmetric(vertical: 5, horizontal: 4),
             child: getPlatform() == PlatformOS.isIOS
-                ? SettingsContainer(
+                ? SettingsContainerOpenPage(
+                    openPage: AccountsPage(),
                     isOutlined: widget.isOutlinedButton,
-                    onTap: () async {
-                      loginWithSync();
+                    onTap: (openContainer) {
+                      loginWithSync(onNext: openContainer);
                     },
                     title: widget.forceButtonName ?? "backup".tr(),
                     icon: MoreIcons.google_drive,
                     iconScale: 0.87,
                   )
-                : SettingsContainer(
+                : SettingsContainerOpenPage(
+                    openPage: AccountsPage(),
                     isOutlined: widget.isOutlinedButton,
-                    onTap: () async {
-                      loginWithSync();
+                    onTap: (openContainer) {
+                      loginWithSync(onNext: openContainer);
                     },
                     title: widget.forceButtonName ?? "login".tr(),
                     icon: widget.forceButtonName == null

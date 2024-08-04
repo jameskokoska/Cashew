@@ -2533,7 +2533,7 @@ class _SelectTitleState extends State<SelectTitle> {
     return PopupFramework(
       title: customDateTimeSelected == true &&
               getPlatform() == PlatformOS.isAndroid &&
-              getWidthNavigationSidebar(context) <= 0
+              getIsFullScreen(context)
           ? null
           : "enter-title".tr(),
       outsideExtraWidget: customDateTimeSelected

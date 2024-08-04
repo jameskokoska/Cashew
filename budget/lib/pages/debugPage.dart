@@ -305,6 +305,18 @@ class DebugPage extends StatelessWidget {
           ),
         ),
         SettingsContainerSwitch(
+          enableBorderRadius: true,
+          onSwitched: (value) {
+            updateSettings("enableGoogleLoginFlyIn", value,
+                pagesNeedingRefresh: [], updateGlobalState: false);
+          },
+          initialValue: appStateSettings["enableGoogleLoginFlyIn"] == true,
+          title: "Google Login Flyin".tr(),
+          description:
+              "Show login with Google dropdown if not logged in and full screen",
+          icon: Icons.g_mobiledata,
+        ),
+        SettingsContainerSwitch(
           onSwitched: (value) async {
             updateSettings("forceAutoLogin", value, updateGlobalState: false);
           },

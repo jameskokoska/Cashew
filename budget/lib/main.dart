@@ -123,11 +123,16 @@ class App extends StatelessWidget {
             Row(
               children: [
                 NavigationSidebar(key: sidebarStateKey),
-                Expanded(child: InitialPageRouteNavigator()),
+                Expanded(
+                    child: Stack(
+                  children: [
+                    InitialPageRouteNavigator(),
+                    GlobalSnackbar(key: snackbarKey),
+                  ],
+                )),
               ],
             ),
-            GlobalSnackbar(key: snackbarKey),
-            //SignInWithGoogleFlyIn(),
+            EnableSignInWithGoogleFlyIn(),
             GlobalLoadingIndeterminate(key: loadingIndeterminateKey),
             GlobalLoadingProgress(key: loadingProgressKey),
           ],

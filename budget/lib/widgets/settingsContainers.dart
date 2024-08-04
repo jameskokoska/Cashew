@@ -176,6 +176,7 @@ class SettingsContainerOpenPage extends StatelessWidget {
     this.isWideOutlined,
     this.descriptionColor,
     this.afterWidget,
+    this.onTap,
   }) : super(key: key);
 
   final Widget openPage;
@@ -191,6 +192,7 @@ class SettingsContainerOpenPage extends StatelessWidget {
   final bool? isWideOutlined;
   final Color? descriptionColor;
   final Widget? afterWidget;
+  final Function(VoidCallback openContainer)? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -215,27 +217,29 @@ class SettingsContainerOpenPage extends StatelessWidget {
             icon: icon,
             iconSize: iconSize,
             iconScale: iconScale,
-            onTap: () {
-              openContainer();
-              // Navigator.push(
-              //   context,
-              //   PageRouteBuilder(
-              //     transitionDuration: Duration(milliseconds: 500),
-              //     transitionsBuilder:
-              //         (context, animation, secondaryAnimation, child) {
-              //       return SharedAxisTransition(
-              //         animation: animation,
-              //         secondaryAnimation: secondaryAnimation,
-              //         transitionType: SharedAxisTransitionType.horizontal,
-              //         child: child,
-              //       );
-              //     },
-              //     pageBuilder: (context, animation, secondaryAnimation) {
-              //       return openPage;
-              //     },
-              //   ),
-              // );
-            },
+            onTap: onTap != null
+                ? () => onTap!(openContainer)
+                : () {
+                    openContainer();
+                    // Navigator.push(
+                    //   context,
+                    //   PageRouteBuilder(
+                    //     transitionDuration: Duration(milliseconds: 500),
+                    //     transitionsBuilder:
+                    //         (context, animation, secondaryAnimation, child) {
+                    //       return SharedAxisTransition(
+                    //         animation: animation,
+                    //         secondaryAnimation: secondaryAnimation,
+                    //         transitionType: SharedAxisTransitionType.horizontal,
+                    //         child: child,
+                    //       );
+                    //     },
+                    //     pageBuilder: (context, animation, secondaryAnimation) {
+                    //       return openPage;
+                    //     },
+                    //   ),
+                    // );
+                  },
             afterWidget: isOutlined ?? false
                 ? SizedBox.shrink()
                 : Row(

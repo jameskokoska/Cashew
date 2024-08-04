@@ -136,6 +136,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "lastBackup": DateTime.now().subtract(Duration(days: 1)).toString(),
     "lastLoginVersion": "",
     "numLogins": 0,
+    "enableGoogleLoginFlyIn": false,
     "openedStoreRating": false,
     "dismissedStoreRating": false,
     "submittedFeedback": false,

@@ -10,6 +10,7 @@ import 'package:budget/struct/randomConstants.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/categoryIcon.dart';
+import 'package:budget/widgets/editRowEntry.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
@@ -716,27 +717,6 @@ class ObjectiveContainer extends StatelessWidget {
         );
       },
     );
-    if (getPlatform() == PlatformOS.isIOS &&
-        forceAndroidBubbleDesign == false) {
-      child = Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          if (isGridView != true)
-            index == 0 || enableDoubleColumn(context)
-                ? Container(
-                    height: 1.5,
-                    color: getColor(context, "dividerColor"),
-                  )
-                : SizedBox.shrink(),
-          child,
-          if (isGridView != true)
-            Container(
-              height: 1.5,
-              color: getColor(context, "dividerColor"),
-            ),
-        ],
-      );
-    }
     if (demoObjective) {
       return IgnorePointer(
         child: Opacity(
@@ -754,7 +734,10 @@ class ObjectiveContainer extends StatelessWidget {
         ),
       );
     } else {
-      return child;
+      return AddTopAndBottomBorderIfIOS(
+        enabled: getPlatform() == PlatformOS.isIOS,
+        child: child,
+      );
     }
   }
 }
@@ -950,25 +933,6 @@ class ObjectiveContainerDifferenceLoan extends StatelessWidget {
         );
       },
     );
-    if (getPlatform() == PlatformOS.isIOS &&
-        forceAndroidBubbleDesign == false) {
-      child = Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          index == 0 || enableDoubleColumn(context)
-              ? Container(
-                  height: 1.5,
-                  color: getColor(context, "dividerColor"),
-                )
-              : SizedBox.shrink(),
-          child,
-          Container(
-            height: 1.5,
-            color: getColor(context, "dividerColor"),
-          ),
-        ],
-      );
-    }
     return child;
   }
 }

@@ -908,6 +908,7 @@ class _CorrectBalancePopupState extends State<CorrectBalancePopup> {
                     selectedDateTime,
                     selectedTitle,
                   );
+                  savingHapticFeedback();
                   popRoute(context);
                 },
                 nextLabel: "update-total-balance".tr(),
@@ -1130,6 +1131,119 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
         ),
       ),
     );
+  }
+
+  Future<void> transferBalance() async {
+    AllWallets allWallets = Provider.of<AllWallets>(context, listen: false);
+
+    // Convert the entered amount to the primary currency, then create transactions
+    if (walletForCurrency != null) {
+      enteredAmount = enteredAmount *
+          amountRatioToPrimaryCurrencyGivenPk(
+              allWallets, walletForCurrency!.walletPk);
+    }
+
+    TransactionWallet walletFrom = this.walletFrom ??
+        Provider.of<AllWallets>(context, listen: false)
+            .indexedByPk[appStateSettings["selectedWalletPk"]]!;
+    if (walletTo == null) {
+      dynamic result = await selectWalletPopup(
+        context,
+        selectedWallet: walletTo,
+        allowEditWallet: widget.allowEditWallet,
+      );
+      if (result is TransactionWallet) {
+        setState(() {
+          walletTo = result;
+        });
+      }
+      return;
+    }
+
+    if (walletFrom.walletPk == walletTo?.walletPk) {
+      openSnackbar(
+        SnackbarMessage(
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.warning_outlined
+              : Icons.warning_rounded,
+          title: "same-accounts".tr(),
+          description: "select-2-different-accounts".tr(),
+        ),
+      );
+      return;
+    }
+
+    String transferString =
+        walletFrom.name + (isNegative ? " ← " : " → ") + walletTo!.name;
+
+    String note = "transferred-balance".tr() + "\n" + transferString;
+
+    // Want these times to be the same so we know the pairing of balance corrections
+    DateTime selectedDateTimeSetToNow = selectedDateTime ?? DateTime.now();
+
+    String? transactionPk = await createCorrectionTransaction(
+      enteredAmount *
+          getAmountRatioWalletTransferTo(allWallets, walletTo!.walletPk),
+      walletTo!,
+      note: note,
+      dateTime: selectedDateTimeSetToNow.add(Duration(seconds: 1)),
+      title: selectedTitle == ""
+          ? (allWallets.indexedByPk[walletTo!.walletPk]!.name +
+              " " +
+              (isNegative ? "transfer-out".tr() : "transfer-in".tr()))
+          : selectedTitle,
+    );
+
+    await createCorrectionTransaction(
+      objectiveLoanPk: widget.initialObjectiveLoanPk,
+      pairedTransactionFk: transactionPk,
+      enteredAmount *
+          getAmountRatioWalletTransferFrom(allWallets, walletFrom.walletPk),
+      walletFrom,
+      note: note,
+      dateTime: selectedDateTimeSetToNow,
+      title: selectedTitle == ""
+          ? (allWallets.indexedByPk[walletFrom.walletPk]!.name +
+              " " +
+              (isNegative == false ? "transfer-out".tr() : "transfer-in".tr()))
+          : selectedTitle,
+    );
+    // Deal with transfer fee
+    // if (transferFee != 0) {
+    //   String transferFeeNote = "transfer-fee".tr() +
+    //       "\n" +
+    //       "from".tr().capitalizeFirst +
+    //       " " +
+    //       walletFrom.name;
+    //   await createCorrectionTransaction(
+    //     (transferFee *
+    //                 getAmountRatioWalletTransferFrom(
+    //                     allWallets, walletFrom.walletPk))
+    //             .abs() *
+    //         -1,
+    //     walletFrom,
+    //     note: transferFeeNote,
+    //     // Subtract 2 seconds so it's not in close proximity to the other paired balance correction
+    //     // This is because getCloselyRelatedBalanceCorrectionTransaction relies on the time...
+    //     dateTime: selectedDateTimeSetToNow
+    //         .subtract(Duration(seconds: 2)),
+    //     title: selectedTitle == ""
+    //         ? "transfer-fee".tr()
+    //         : selectedTitle,
+    //   );
+    // }
+
+    openSnackbar(
+      SnackbarMessage(
+        title: "transferred-balance".tr(),
+        description: transferString,
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.compare_arrows_outlined
+            : Icons.compare_arrows_rounded,
+      ),
+    );
+    savingHapticFeedback();
+    popRoute(context, true);
   }
 
   @override
@@ -1406,129 +1520,7 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
                   label: walletTo == null
                       ? "select-account".tr()
                       : "transfer-amount".tr(),
-                  onTap: () async {
-                    AllWallets allWallets =
-                        Provider.of<AllWallets>(context, listen: false);
-
-                    // Convert the entered amount to the primary currency, then create transactions
-                    if (walletForCurrency != null) {
-                      enteredAmount = enteredAmount *
-                          amountRatioToPrimaryCurrencyGivenPk(
-                              allWallets, walletForCurrency!.walletPk);
-                    }
-
-                    TransactionWallet walletFrom = this.walletFrom ??
-                        Provider.of<AllWallets>(context, listen: false)
-                            .indexedByPk[appStateSettings["selectedWalletPk"]]!;
-                    if (walletTo == null) {
-                      dynamic result = await selectWalletPopup(
-                        context,
-                        selectedWallet: walletTo,
-                        allowEditWallet: widget.allowEditWallet,
-                      );
-                      if (result is TransactionWallet) {
-                        setState(() {
-                          walletTo = result;
-                        });
-                      }
-                      return;
-                    }
-
-                    if (walletFrom.walletPk == walletTo?.walletPk) {
-                      openSnackbar(
-                        SnackbarMessage(
-                          icon: appStateSettings["outlinedIcons"]
-                              ? Icons.warning_outlined
-                              : Icons.warning_rounded,
-                          title: "same-accounts".tr(),
-                          description: "select-2-different-accounts".tr(),
-                        ),
-                      );
-                      return;
-                    }
-
-                    String transferString = walletFrom.name +
-                        (isNegative ? " ← " : " → ") +
-                        walletTo!.name;
-
-                    String note =
-                        "transferred-balance".tr() + "\n" + transferString;
-
-                    // Want these times to be the same so we know the pairing of balance corrections
-                    DateTime selectedDateTimeSetToNow =
-                        selectedDateTime ?? DateTime.now();
-
-                    String? transactionPk = await createCorrectionTransaction(
-                      enteredAmount *
-                          getAmountRatioWalletTransferTo(
-                              allWallets, walletTo!.walletPk),
-                      walletTo!,
-                      note: note,
-                      dateTime:
-                          selectedDateTimeSetToNow.add(Duration(seconds: 1)),
-                      title: selectedTitle == ""
-                          ? (allWallets.indexedByPk[walletTo!.walletPk]!.name +
-                              " " +
-                              (isNegative
-                                  ? "transfer-out".tr()
-                                  : "transfer-in".tr()))
-                          : selectedTitle,
-                    );
-
-                    await createCorrectionTransaction(
-                      objectiveLoanPk: widget.initialObjectiveLoanPk,
-                      pairedTransactionFk: transactionPk,
-                      enteredAmount *
-                          getAmountRatioWalletTransferFrom(
-                              allWallets, walletFrom.walletPk),
-                      walletFrom,
-                      note: note,
-                      dateTime: selectedDateTimeSetToNow,
-                      title: selectedTitle == ""
-                          ? (allWallets.indexedByPk[walletFrom.walletPk]!.name +
-                              " " +
-                              (isNegative == false
-                                  ? "transfer-out".tr()
-                                  : "transfer-in".tr()))
-                          : selectedTitle,
-                    );
-                    // Deal with transfer fee
-                    // if (transferFee != 0) {
-                    //   String transferFeeNote = "transfer-fee".tr() +
-                    //       "\n" +
-                    //       "from".tr().capitalizeFirst +
-                    //       " " +
-                    //       walletFrom.name;
-                    //   await createCorrectionTransaction(
-                    //     (transferFee *
-                    //                 getAmountRatioWalletTransferFrom(
-                    //                     allWallets, walletFrom.walletPk))
-                    //             .abs() *
-                    //         -1,
-                    //     walletFrom,
-                    //     note: transferFeeNote,
-                    //     // Subtract 2 seconds so it's not in close proximity to the other paired balance correction
-                    //     // This is because getCloselyRelatedBalanceCorrectionTransaction relies on the time...
-                    //     dateTime: selectedDateTimeSetToNow
-                    //         .subtract(Duration(seconds: 2)),
-                    //     title: selectedTitle == ""
-                    //         ? "transfer-fee".tr()
-                    //         : selectedTitle,
-                    //   );
-                    // }
-
-                    openSnackbar(
-                      SnackbarMessage(
-                        title: "transferred-balance".tr(),
-                        description: transferString,
-                        icon: appStateSettings["outlinedIcons"]
-                            ? Icons.compare_arrows_outlined
-                            : Icons.compare_arrows_rounded,
-                      ),
-                    );
-
-                    popRoute(context, true);
-                  },
+                  onTap: transferBalance,
                 ),
               ),
             ],

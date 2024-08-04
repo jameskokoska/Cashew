@@ -380,42 +380,50 @@ class EditRowEntry extends StatelessWidget {
           ? Duration.zero
           : Duration(milliseconds: 200),
       opacity: currentReorder ? 0.6 : (opacity ?? 1),
-      child: Stack(
-        children: [
-          if (getPlatform() == PlatformOS.isIOS)
-            PositionedDirectional(
-              start: 0,
-              end: 0,
-              top: 0,
-              child: Transform.translate(
-                offset: Offset(0, -1.5),
-                child: Container(
-                  height: 1.5,
-                  color: getColor(context, "dividerColor"),
-                ),
-              ),
-            ),
-          Column(
-            children: [
-              Padding(
-                padding: EdgeInsetsDirectional.symmetric(
-                    horizontal: getPlatform() == PlatformOS.isIOS ? 0 : 10,
-                    vertical: getPlatform() == PlatformOS.isIOS ? 0 : 5),
-                child: ReorderableDelayedDragStartListener(
-                  index: index,
-                  child: container,
-                  enabled: canReorder,
-                ),
-              ),
-              if (getPlatform() == PlatformOS.isIOS)
-                Container(
-                  height: 1.5,
-                  color: getColor(context, "dividerColor"),
-                )
-            ],
+      child: AddTopAndBottomBorderIfIOS(
+        enabled: getPlatform() == PlatformOS.isIOS,
+        child: Padding(
+          padding: EdgeInsetsDirectional.symmetric(
+              horizontal: getPlatform() == PlatformOS.isIOS ? 0 : 10,
+              vertical: getPlatform() == PlatformOS.isIOS ? 0 : 5),
+          child: ReorderableDelayedDragStartListener(
+            index: index,
+            child: container,
+            enabled: canReorder,
           ),
-        ],
+        ),
       ),
+    );
+  }
+}
+
+class AddTopAndBottomBorderIfIOS extends StatelessWidget {
+  const AddTopAndBottomBorderIfIOS(
+      {required this.child, required this.enabled, super.key});
+  final Widget child;
+  final bool enabled;
+
+  @override
+  Widget build(BuildContext context) {
+    if (enabled == false) return child;
+    return Stack(
+      children: [
+        Container(
+            decoration: BoxDecoration(
+                border: BorderDirectional(
+                    bottom: BorderSide(
+                        color: getColor(context, "dividerColor"), width: 1.5))),
+            child: child),
+        PositionedDirectional(
+            start: 0,
+            end: 0,
+            top: 0,
+            child: Transform.translate(
+              offset: Offset(0, -1.5),
+              child: Container(
+                  height: 1.5, color: getColor(context, "dividerColor")),
+            )),
+      ],
     );
   }
 }

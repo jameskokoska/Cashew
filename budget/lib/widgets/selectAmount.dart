@@ -1045,6 +1045,7 @@ class NumberPadAmount extends StatelessWidget {
               getPlatform() == PlatformOS.isIOS ? 10 : 20),
           child: GestureDetector(
             onLongPress: () async {
+              HapticFeedback.heavyImpact();
               await openBottomSheet(
                 context,
                 NumberPadFormatSettingPopup(),
