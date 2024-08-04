@@ -242,7 +242,10 @@ class MorePages extends StatelessWidget {
                         )
                       : SizedBox.shrink(),
               if (hasSideNavigation == false)
-                Expanded(child: GoogleAccountLoginButton()),
+                Expanded(
+                    child: GoogleAccountLoginButton(
+                  key: settingsGoogleAccountLoginButtonKey,
+                )),
             ],
           ),
           if (hasSideNavigation == false)

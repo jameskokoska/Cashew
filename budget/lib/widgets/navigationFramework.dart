@@ -290,6 +290,8 @@ GlobalKey<UpcomingOverdueTransactionsState>
 GlobalKey<CreditDebtTransactionsState> creditDebtTransactionsKey = GlobalKey();
 GlobalKey<ProductsState> purchasesStateKey = GlobalKey();
 GlobalKey<AccountsPageState> accountsPageStateKey = GlobalKey();
+GlobalKey<GoogleAccountLoginButtonState> settingsGoogleAccountLoginButtonKey =
+    GlobalKey();
 GlobalKey<NavigationSidebarState> sidebarStateKey = GlobalKey();
 GlobalKey<GlobalLoadingProgressState> loadingProgressKey = GlobalKey();
 GlobalKey<GlobalLoadingIndeterminateState> loadingIndeterminateKey =

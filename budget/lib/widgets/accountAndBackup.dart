@@ -152,15 +152,8 @@ Future<bool> signInGoogle(
         // print("ACCOUNT");
         // print(account);
         googleUser = account;
-        updateSettings(
-          "currentUserEmail",
-          googleUser?.email ?? "",
-          updateGlobalState: true,
-          forceGlobalStateUpdate:
-              context == null || getIsFullScreen(context) ? true : false,
-        );
-        accountsPageStateKey.currentState?.refreshState();
-        settingsPageStateKey.currentState?.refreshState();
+        await updateSettings("currentUserEmail", googleUser?.email ?? "",
+            updateGlobalState: false);
       } else {
         throw ("Login failed");
       }
@@ -169,9 +162,10 @@ Future<bool> signInGoogle(
     if (next != null) next();
 
     if (appStateSettings["hasSignedIn"] == false) {
-      updateSettings("hasSignedIn", true, updateGlobalState: false);
+      await updateSettings("hasSignedIn", true, updateGlobalState: false);
     }
 
+    refreshUIAfterLoginChange();
     return true;
   } catch (e) {
     print(e);
@@ -186,14 +180,21 @@ Future<bool> signInGoogle(
         timeout: Duration(milliseconds: 3400),
       ),
     );
-    updateSettings("currentUserEmail", "", updateGlobalState: true);
+    await updateSettings("currentUserEmail", "", updateGlobalState: false);
     if (runningCloudFunctions) {
       errorSigningInDuringCloud = true;
     } else {
-      updateSettings("hasSignedIn", false, updateGlobalState: false);
+      await updateSettings("hasSignedIn", false, updateGlobalState: false);
     }
+    refreshUIAfterLoginChange();
     throw ("Error signing in");
   }
+}
+
+void refreshUIAfterLoginChange() {
+  sidebarStateKey.currentState?.refreshState();
+  accountsPageStateKey.currentState?.refreshState();
+  settingsGoogleAccountLoginButtonKey.currentState?.refreshState();
 }
 
 Future<bool> testIfHasGmailAccess() async {
@@ -215,8 +216,9 @@ Future<bool> testIfHasGmailAccess() async {
 Future<bool> signOutGoogle() async {
   await googleSignIn?.signOut();
   googleUser = null;
-  updateSettings("currentUserEmail", "", updateGlobalState: true);
-  updateSettings("hasSignedIn", false, updateGlobalState: false);
+  await updateSettings("currentUserEmail", "", updateGlobalState: false);
+  await updateSettings("hasSignedIn", false, updateGlobalState: false);
+  refreshUIAfterLoginChange();
   print("Signedout");
   return true;
 }
@@ -260,7 +262,7 @@ Future<bool> signInAndSync(BuildContext context,
       next: next,
     );
     if (appStateSettings["username"] == "" && googleUser != null) {
-      updateSettings("username", googleUser?.displayName ?? "",
+      await updateSettings("username", googleUser?.displayName ?? "",
           pagesNeedingRefresh: [0], updateGlobalState: false);
     }
     if (googleUser != null) {
@@ -433,7 +435,7 @@ Future<void> createBackup(
         ),
       );
     if (clientIDForSync == null)
-      updateSettings("lastBackup", DateTime.now().toString(),
+      await updateSettings("lastBackup", DateTime.now().toString(),
           pagesNeedingRefresh: [], updateGlobalState: false);
 
     if (silentBackup == false || silentBackup == null) {
@@ -627,10 +629,14 @@ class GoogleAccountLoginButton extends StatefulWidget {
 
   @override
   State<GoogleAccountLoginButton> createState() =>
-      _GoogleAccountLoginButtonState();
+      GoogleAccountLoginButtonState();
 }
 
-class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
+class GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
+  void refreshState() {
+    setState(() {});
+  }
+
   void openPage({VoidCallback? onNext}) {
     if (widget.navigationSidebarButton) {
       pageNavigationFrameworkKey.currentState!
@@ -699,33 +705,29 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
       );
     }
     return googleUser == null
-        ? Padding(
-            padding:
-                EdgeInsetsDirectional.symmetric(vertical: 5, horizontal: 4),
-            child: getPlatform() == PlatformOS.isIOS
-                ? SettingsContainerOpenPage(
-                    openPage: AccountsPage(),
-                    isOutlined: widget.isOutlinedButton,
-                    onTap: (openContainer) {
-                      loginWithSync(onNext: openContainer);
-                    },
-                    title: widget.forceButtonName ?? "backup".tr(),
-                    icon: MoreIcons.google_drive,
-                    iconScale: 0.87,
-                  )
-                : SettingsContainerOpenPage(
-                    openPage: AccountsPage(),
-                    isOutlined: widget.isOutlinedButton,
-                    onTap: (openContainer) {
-                      loginWithSync(onNext: openContainer);
-                    },
-                    title: widget.forceButtonName ?? "login".tr(),
-                    icon: widget.forceButtonName == null
-                        ? MoreIcons.google
-                        : MoreIcons.google_drive,
-                    iconScale: widget.forceButtonName == null ? 1 : 0.87,
-                  ),
-          )
+        ? getPlatform() == PlatformOS.isIOS
+            ? SettingsContainerOpenPage(
+                openPage: AccountsPage(),
+                isOutlined: widget.isOutlinedButton,
+                onTap: (openContainer) {
+                  loginWithSync(onNext: openContainer);
+                },
+                title: widget.forceButtonName ?? "backup".tr(),
+                icon: MoreIcons.google_drive,
+                iconScale: 0.87,
+              )
+            : SettingsContainerOpenPage(
+                openPage: AccountsPage(),
+                isOutlined: widget.isOutlinedButton,
+                onTap: (openContainer) {
+                  loginWithSync(onNext: openContainer);
+                },
+                title: widget.forceButtonName ?? "login".tr(),
+                icon: widget.forceButtonName == null
+                    ? MoreIcons.google
+                    : MoreIcons.google_drive,
+                iconScale: widget.forceButtonName == null ? 1 : 0.87,
+              )
         : getPlatform() == PlatformOS.isIOS
             ? SettingsContainerOpenPage(
                 openPage: AccountsPage(),
@@ -884,8 +886,8 @@ class _BackupManagementState extends State<BackupManagement> {
           widget.isManaging && widget.isClientSync == false
               ? SettingsContainerSwitch(
                   enableBorderRadius: true,
-                  onSwitched: (value) {
-                    updateSettings("autoBackups", value,
+                  onSwitched: (value) async {
+                    await updateSettings("autoBackups", value,
                         pagesNeedingRefresh: [], updateGlobalState: false);
                     setState(() {
                       autoBackups = value;
@@ -902,11 +904,11 @@ class _BackupManagementState extends State<BackupManagement> {
           widget.isClientSync
               ? SettingsContainerSwitch(
                   enableBorderRadius: true,
-                  onSwitched: (value) {
+                  onSwitched: (value) async {
                     // Only update global is the sidebar is shown
-                    updateSettings("backupSync", value,
-                        pagesNeedingRefresh: [],
-                        updateGlobalState: getIsFullScreen(context));
+                    await updateSettings("backupSync", value,
+                        pagesNeedingRefresh: [], updateGlobalState: false);
+                    sidebarStateKey.currentState?.refreshState();
                     setState(() {
                       backupSync = value;
                     });
@@ -929,8 +931,8 @@ class _BackupManagementState extends State<BackupManagement> {
                   expand: backupSync,
                   child: SettingsContainerSwitch(
                     enableBorderRadius: true,
-                    onSwitched: (value) {
-                      updateSettings("syncEveryChange", value,
+                    onSwitched: (value) async {
+                      await updateSettings("syncEveryChange", value,
                           pagesNeedingRefresh: [], updateGlobalState: false);
                     },
                     initialValue: appStateSettings["syncEveryChange"],
@@ -952,8 +954,9 @@ class _BackupManagementState extends State<BackupManagement> {
                   child: SettingsContainerDropdown(
                     enableBorderRadius: true,
                     items: ["1", "2", "3", "7", "10", "14"],
-                    onChanged: (value) {
-                      updateSettings("autoBackupsFrequency", int.parse(value),
+                    onChanged: (value) async {
+                      await updateSettings(
+                          "autoBackupsFrequency", int.parse(value),
                           pagesNeedingRefresh: [], updateGlobalState: false);
                     },
                     initial:
@@ -977,7 +980,7 @@ class _BackupManagementState extends State<BackupManagement> {
                   icon: Icons.format_list_numbered_rtl_outlined,
                   initial: appStateSettings["backupLimit"].toString(),
                   items: ["10", "15", "20", "30"],
-                  onChanged: (value) {
+                  onChanged: (value) async {
                     if (int.parse(value) < appStateSettings["backupLimit"]) {
                       openPopup(
                         context,
@@ -987,7 +990,7 @@ class _BackupManagementState extends State<BackupManagement> {
                         title: "change-limit".tr(),
                         description: "change-limit-warning".tr(),
                         onSubmit: () async {
-                          updateSettings("backupLimit", int.parse(value),
+                          await updateSettings("backupLimit", int.parse(value),
                               updateGlobalState: false);
                           popRoute(context);
                         },
@@ -1001,7 +1004,7 @@ class _BackupManagementState extends State<BackupManagement> {
                         onCancelLabel: "cancel".tr(),
                       );
                     } else {
-                      updateSettings("backupLimit", int.parse(value),
+                      await updateSettings("backupLimit", int.parse(value),
                           updateGlobalState: false);
                     }
                   },
@@ -1322,7 +1325,7 @@ class _BackupManagementState extends State<BackupManagement> {
                                                       // bottomSheetControllerGlobal
                                                       //     .snapToExtent(0);
                                                       if (widget.isClientSync)
-                                                        updateSettings(
+                                                        await updateSettings(
                                                             "devicesHaveBeenSynced",
                                                             appStateSettings[
                                                                     "devicesHaveBeenSynced"] -
@@ -1330,7 +1333,7 @@ class _BackupManagementState extends State<BackupManagement> {
                                                             updateGlobalState:
                                                                 false);
                                                       if (widget.isManaging) {
-                                                        updateSettings(
+                                                        await updateSettings(
                                                             "numBackups",
                                                             appStateSettings[
                                                                     "numBackups"] -
@@ -1535,9 +1538,9 @@ bool openBackupReminderPopupCheck(BuildContext context) {
         await signInAndSync(context, next: () {});
       },
       onCancelLabel: "never".tr().capitalizeFirst,
-      onCancel: () {
+      onCancel: () async {
         popRoute(context);
-        updateSettings("canShowBackupReminderPopup", false,
+        await updateSettings("canShowBackupReminderPopup", false,
             updateGlobalState: false);
       },
       onExtraLabel: "later".tr().capitalizeFirst,

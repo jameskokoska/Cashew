@@ -76,6 +76,10 @@ class NavigationSidebarState extends State<NavigationSidebar> {
   int selectedIndex = 0;
   bool isCalendarOpened = false;
 
+  void refreshState() {
+    setState(() {});
+  }
+
   void setSelectedIndex(index) {
     setState(() {
       selectedIndex = index;
