@@ -1037,7 +1037,7 @@ Future<dynamic> pushRoute(BuildContext? context, Widget page,
   return await Navigator.push(
     contextToPush,
     PageRouteBuilder(
-      opaque: false,
+      opaque: true,
       transitionDuration: Duration(milliseconds: 300),
       reverseTransitionDuration: Duration(milliseconds: 125),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -1352,8 +1352,8 @@ PlatformOS? getPlatform({bool ignoreEmulation = false}) {
   return null;
 }
 
-dynamic nullIfIndexOutOfRange(List list, index) {
-  if (list.length - 1 < index || index < 0) {
+T? nullIfIndexOutOfRange<T>(List<T> list, int index) {
+  if (index < 0 || index >= list.length) {
     return null;
   } else {
     return list[index];

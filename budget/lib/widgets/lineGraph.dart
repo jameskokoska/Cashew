@@ -532,6 +532,12 @@ class Pair {
   String toString() {
     return 'x: $x, y: $y, dateTime: $dateTime';
   }
+
+  static Map<DateTime?, double> convertListToDateTimeMap(List<Pair> pairs) {
+    Map<DateTime?, double> resultMap = {};
+    for (Pair pair in pairs) resultMap[pair.dateTime] = pair.y;
+    return resultMap;
+  }
 }
 
 class LineChartWrapper extends StatelessWidget {

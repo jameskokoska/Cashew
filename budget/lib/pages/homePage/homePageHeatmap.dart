@@ -62,8 +62,7 @@ class _HomePageHeatMapState extends State<HomePageHeatMap> {
         ),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            List<Pair> points = [];
-            var p = CalculatePointsParams(
+            CalculatePointsParams p = CalculatePointsParams(
               transactions: snapshot.data ?? [],
               customStartDate:
                   DateTime.now().justDay(monthOffset: -monthsToLoad),
@@ -75,11 +74,7 @@ class _HomePageHeatMapState extends State<HomePageHeatMap> {
               appStateSettingsPassed: appStateSettings,
               cycleThroughAllDays: true, // needed for heatmap
             );
-            points = calculatePoints(p);
-
-            // for (Pair point in points) {
-            //   print((point.x.toString() + "," + point.y.toString()));
-            // }
+            List<Pair> points = calculatePoints(p);
             return HeatMap(
               points: points,
               loadMoreMonths: loadMoreMonths,
@@ -232,48 +227,22 @@ class HeatMap extends StatelessWidget {
                                       ? null
                                       : nullIfIndexOutOfRange(
                                               pointsOffsetFixed, index)
-                                          .y;
+                                          ?.y;
                                   DateTime? day = nullIfIndexOutOfRange(
                                               pointsOffsetFixed, index) ==
                                           null
                                       ? null
                                       : nullIfIndexOutOfRange(
                                               pointsOffsetFixed, index)
-                                          .dateTime;
-                                  Color color = amount == null
-                                      ? Colors.transparent
-                                      : amount == 0
-                                          ? appStateSettings["materialYou"]
-                                              ? Theme.of(context)
-                                                  .colorScheme
-                                                  .onSecondary
-                                                  .withOpacity(0.6)
-                                              : getColor(context,
-                                                      "lightDarkAccent")
-                                                  .withOpacity(0.6)
-                                          : amount < 0
-                                              ? getColor(
-                                                      context, "expenseAmount")
-                                                  .withOpacity(
-                                                  0.5 +
-                                                      (((1 - 0.5) / 4) *
-                                                          (getRangeIndex(
-                                                                  maxExpense,
-                                                                  minExpense,
-                                                                  amount) +
-                                                              1)),
-                                                )
-                                              : getColor(
-                                                      context, "incomeAmount")
-                                                  .withOpacity(
-                                                  0.5 +
-                                                      (((1 - 0.5) / 4) *
-                                                          (getRangeIndex(
-                                                                  minIncome,
-                                                                  maxIncome,
-                                                                  amount) +
-                                                              1)),
-                                                );
+                                          ?.dateTime;
+                                  Color color = getHeatMapColor(
+                                    context: context,
+                                    amount: amount,
+                                    maxExpense: maxExpense,
+                                    minExpense: minExpense,
+                                    minIncome: minIncome,
+                                    maxIncome: maxIncome,
+                                  );
                                   return Tooltip(
                                     waitDuration: Duration(milliseconds: 200),
                                     message: day == null
@@ -341,12 +310,47 @@ class HeatMap extends StatelessWidget {
                     ],
                   ),
                 );
-                return Container(child: Text(itemIndex.toString()));
+                //return Container(child: Text(itemIndex.toString()));
               },
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+Color getHeatMapColor({
+  required BuildContext context,
+  required double? amount,
+  required double maxExpense,
+  required double minExpense,
+  required double minIncome,
+  required double maxIncome,
+  Color? defaultColor,
+  double minimumOpacityThreshold = 0.5,
+  double subtractedOpacityThreshold = 0.5,
+}) {
+  if (amount == null) {
+    return Colors.transparent;
+  } else if (amount == 0) {
+    return defaultColor ??
+        (appStateSettings["materialYou"]
+            ? Theme.of(context).colorScheme.onSecondary.withOpacity(0.6)
+            : getColor(context, "lightDarkAccent").withOpacity(0.6));
+  } else if (amount < 0) {
+    return getColor(context, "expenseAmount").withOpacity(
+      (minimumOpacityThreshold +
+          (((1 - subtractedOpacityThreshold) / 4) *
+                  (getRangeIndex(maxExpense, minExpense, amount) + 1))
+              .clamp(0, 1)),
+    );
+  } else {
+    return getColor(context, "incomeAmount").withOpacity(
+      (minimumOpacityThreshold +
+          (((1 - subtractedOpacityThreshold) / 4) *
+                  (getRangeIndex(minIncome, maxIncome, amount) + 1))
+              .clamp(0, 1)),
     );
   }
 }

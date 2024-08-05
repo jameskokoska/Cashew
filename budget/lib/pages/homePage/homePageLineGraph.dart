@@ -277,6 +277,7 @@ class CalculatePointsParams {
   final Map<String, dynamic> appStateSettingsPassed;
   final bool invertPolarity;
   final bool cycleThroughAllDays;
+  final bool isPaidOnly;
 
   CalculatePointsParams({
     required this.transactions,
@@ -289,6 +290,7 @@ class CalculatePointsParams {
     required this.appStateSettingsPassed,
     this.invertPolarity = false,
     this.cycleThroughAllDays = false,
+    this.isPaidOnly = false,
   });
 }
 
@@ -301,9 +303,9 @@ List<Pair> calculatePoints(CalculatePointsParams p) {
 
   for (Transaction transaction in p.transactions) {
     // Remove balance correction transactions if not showing all transactions
-    if (p.isIncome != null && transaction.categoryFk == "0") {
-      continue;
-    }
+    if (p.isIncome != null && transaction.categoryFk == "0") continue;
+
+    if (p.isPaidOnly && transaction.paid == false) continue;
 
     DateTime day = transaction.dateCreated.justDay();
     double amount = transaction.amount *

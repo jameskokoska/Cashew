@@ -136,7 +136,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       "homePageTransactionsListIncomeAndExpenseOnly"] ==
                   true
               ? null
-              : ["all".tr(), "outgoing".tr(), "incoming".tr()],
+              : ["all", "outgoing", "incoming"],
           useHorizontalPaddingConstrained: false,
           onSelected: (index) {
             setState(() {

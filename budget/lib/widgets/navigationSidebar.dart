@@ -366,28 +366,41 @@ class SidebarClock extends StatelessWidget {
                               text: (getWordedTime(null, now) + "      ")
                                   .substring(0, 5)
                                   .trim(),
+                              maxLines: 1,
+                              overflow: TextOverflow.fade,
+                              softWrap: false,
                             )
                           : Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                TextFont(
-                                  textColor: getColor(context, "black"),
-                                  fontSize: 45,
-                                  fontWeight: FontWeight.bold,
-                                  // Remove any am/pm indication by substring
-                                  text: getWordedTime(null, now)
-                                      .substring(0, 5)
-                                      .trim(),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsetsDirectional.only(
-                                      bottom: 4.4, start: 7),
+                                Flexible(
                                   child: TextFont(
                                     textColor: getColor(context, "black"),
-                                    fontSize: 25,
+                                    fontSize: 45,
                                     fontWeight: FontWeight.bold,
-                                    text: getMeridiemString(now),
+                                    // Remove any am/pm indication by substring
+                                    text: getWordedTime(null, now)
+                                        .substring(0, 5)
+                                        .trim(),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.fade,
+                                    softWrap: false,
+                                  ),
+                                ),
+                                Flexible(
+                                  child: Padding(
+                                    padding: const EdgeInsetsDirectional.only(
+                                        bottom: 4.4, start: 7),
+                                    child: TextFont(
+                                      textColor: getColor(context, "black"),
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      text: getMeridiemString(now),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.fade,
+                                      softWrap: false,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -398,6 +411,9 @@ class SidebarClock extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         text: DateFormat('EEEE', context.locale.toString())
                             .format(now),
+                        maxLines: 1,
+                        overflow: TextOverflow.fade,
+                        softWrap: false,
                       ),
                       SizedBox(height: 5),
                       TextFont(
@@ -405,6 +421,9 @@ class SidebarClock extends StatelessWidget {
                         fontSize: 18,
                         text: DateFormat.yMMMMd(context.locale.toString())
                             .format(now),
+                        maxLines: 1,
+                        overflow: TextOverflow.fade,
+                        softWrap: false,
                       ),
                     ],
                   );

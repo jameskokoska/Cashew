@@ -2,7 +2,6 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/notificationsSettings.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
-import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/statusBox.dart';
 import 'package:budget/widgets/util/onAppResume.dart';
 import 'package:easy_localization/easy_localization.dart';

@@ -133,12 +133,23 @@ void restoreTransaction(
   }
 }
 
-class ActivityPage extends StatelessWidget {
+class ActivityPage extends StatefulWidget {
   const ActivityPage({super.key});
 
   @override
+  State<ActivityPage> createState() => ActivityPageState();
+}
+
+class ActivityPageState extends State<ActivityPage> {
+  GlobalKey<PageFrameworkState> pageState = GlobalKey();
+  String pageId = "ActivityLog";
+
+  void scrollToTop() {
+    pageState.currentState?.scrollToTop();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    String pageId = "ActivityLog";
     return WillPopScope(
       onWillPop: () async {
         if ((globalSelectedID.value[pageId] ?? []).length > 0) {
@@ -150,6 +161,7 @@ class ActivityPage extends StatelessWidget {
         }
       },
       child: PageFramework(
+        key: pageState,
         dragDownToDismiss: true,
         title: "activity-log".tr(),
         listID: pageId,
