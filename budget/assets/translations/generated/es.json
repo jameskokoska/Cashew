@@ -373,7 +373,7 @@
   "privacy-policy": "Política de privacidad y condiciones de uso",
   "budget-like-a-pro": "Presupueste como un profesional con",
   "support-the-developer": "Apoye al desarrollador",
-  "support-the-developer-description": "Más de 2 años de desarrollo",
+  "support-the-developer-description": "Más de 3 años de desarrollo",
   "unlimited-budgets-and-goals": "Presupuestos ilimitados",
   "unlimited-budgets-and-goals-description": "Crear más de 1 presupuesto, objetivo o préstamo",
   "past-budget-periods": "Períodos presupuestarios pasados",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "Ver una lista de transacciones eliminadas/modificadas recientemente",
   "greeting-message": "Mensaje de saludo",
   "edit-heatmap": "Editar mapa de calor",
-  "first-weekday": "Primer día laborable"
+  "first-weekday": "Primer día laborable",
+  "calendar": "Calendario",
+  "major-change-19": "Página de calendario",
+  "major-change-19-1": "Vea sus transacciones en un calendario",
+  "indefinite-loans": "Préstamos Indefinidos",
+  "indefinite": "Indefinido",
+  "indefinite-loans-description": "Realice un seguimiento de la diferencia de las transacciones de préstamos en curso con amigos",
+  "edit-calendar": "Editar calendario",
+  "no-value": "No se encontró ningún valor en el portapapeles",
+  "clipboard-error": "Error del portapapeles",
+  "restore-purchases-help": "Si tiene problemas para restaurar sus compras, comuníquese con el desarrollador para obtener ayuda o lea las preguntas frecuentes.",
+  "contact": "Contacto",
+  "loans-details": "Detalles de préstamos",
+  "set-details": "Establecer detalles"
 }

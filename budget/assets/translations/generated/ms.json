@@ -373,7 +373,7 @@
   "privacy-policy": "Dasar Privasi dan Syarat Penggunaan",
   "budget-like-a-pro": "Belanjawan seperti pro dengan",
   "support-the-developer": "Menyokong pemaju",
-  "support-the-developer-description": "Lebih dari 2 tahun pembangunan",
+  "support-the-developer-description": "Lebih dari 3 tahun pembangunan",
   "unlimited-budgets-and-goals": "Belanjawan tanpa had",
   "unlimited-budgets-and-goals-description": "Buat lebih daripada 1 anggaran, matlamat, atau pinjaman",
   "past-budget-periods": "Tempoh belanjawan yang lalu",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "Lihat senarai transaksi yang dipadam/diubah suai baru-baru ini",
   "greeting-message": "Mesej Salam",
   "edit-heatmap": "Edit Peta Haba",
-  "first-weekday": "Hari Minggu Pertama"
+  "first-weekday": "Hari Minggu Pertama",
+  "calendar": "Kalendar",
+  "major-change-19": "Halaman Kalendar",
+  "major-change-19-1": "Lihat transaksi anda pada kalendar",
+  "indefinite-loans": "Pinjaman Tidak Tertentu",
+  "indefinite": "tak tentu",
+  "indefinite-loans-description": "Jejaki perbezaan transaksi pinjaman yang berterusan dengan rakan",
+  "edit-calendar": "Edit Kalendar",
+  "no-value": "Tiada nilai ditemui dalam papan keratan",
+  "clipboard-error": "Ralat Papan Klip",
+  "restore-purchases-help": "Jika anda menghadapi masalah memulihkan pembelian anda, sila hubungi pembangun untuk mendapatkan bantuan atau baca Soalan Lazim.",
+  "contact": "Kenalan",
+  "loans-details": "Butiran Pinjaman",
+  "set-details": "Tetapkan Butiran"
 }

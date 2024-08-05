@@ -373,7 +373,7 @@
   "privacy-policy": "Sera ya faragha na Masharti ya Matumizi",
   "budget-like-a-pro": "Bajeti kama pro na",
   "support-the-developer": "Kusaidia msanidi programu",
-  "support-the-developer-description": "Zaidi ya miaka 2 ya maendeleo",
+  "support-the-developer-description": "Zaidi ya miaka 3 ya maendeleo",
   "unlimited-budgets-and-goals": "Bajeti zisizo na kikomo",
   "unlimited-budgets-and-goals-description": "Unda zaidi ya bajeti 1, lengo, au mkopo",
   "past-budget-periods": "Vipindi vya bajeti vya zamani",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "Tazama orodha ya miamala iliyofutwa/iliyorekebishwa hivi majuzi",
   "greeting-message": "Ujumbe wa salamu",
   "edit-heatmap": "Hariri Heatmap",
-  "first-weekday": "Siku ya Kwanza ya Wiki"
+  "first-weekday": "Siku ya Kwanza ya Wiki",
+  "calendar": "Kalenda",
+  "major-change-19": "Ukurasa wa Kalenda",
+  "major-change-19-1": "Tazama shughuli zako kwenye kalenda",
+  "indefinite-loans": "Mikopo Isiyo na Kikomo",
+  "indefinite": "Isiyo na kikomo",
+  "indefinite-loans-description": "Fuatilia tofauti ya miamala inayoendelea ya mkopo na marafiki",
+  "edit-calendar": "Hariri Kalenda",
+  "no-value": "Hakuna thamani iliyopatikana kwenye ubao wa kunakili",
+  "clipboard-error": "Hitilafu ya Ubao wa kunakili",
+  "restore-purchases-help": "Ikiwa unatatizika kurejesha ununuzi wako, tafadhali wasiliana na msanidi programu kwa usaidizi au usome Maswali Yanayoulizwa Mara kwa Mara.",
+  "contact": "Wasiliana",
+  "loans-details": "Maelezo ya Mikopo",
+  "set-details": "Weka Maelezo"
 }

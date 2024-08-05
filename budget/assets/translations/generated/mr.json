@@ -373,7 +373,7 @@
   "privacy-policy": "गोपनीयता धोरण आणि वापर अटी",
   "budget-like-a-pro": "सह एक प्रो सारखे बजेट",
   "support-the-developer": "विकसकास समर्थन द्या",
-  "support-the-developer-description": "2 वर्षांहून अधिक विकास",
+  "support-the-developer-description": "3 वर्षांहून अधिक विकास",
   "unlimited-budgets-and-goals": "अमर्यादित बजेट",
   "unlimited-budgets-and-goals-description": "1 हून अधिक अर्थसंकल्प, ध्येय किंवा कर्ज तयार करा",
   "past-budget-periods": "मागील बजेट कालावधी",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "अलीकडे हटवलेल्या/सुधारित व्यवहारांची सूची पहा",
   "greeting-message": "शुभेच्छा संदेश",
   "edit-heatmap": "हीटमॅप संपादित करा",
-  "first-weekday": "पहिला आठवड्याचा दिवस"
+  "first-weekday": "पहिला आठवड्याचा दिवस",
+  "calendar": "कॅलेंडर",
+  "major-change-19": "कॅलेंडर पृष्ठ",
+  "major-change-19-1": "कॅलेंडरवर तुमचे व्यवहार पहा",
+  "indefinite-loans": "अनिश्चित कर्ज",
+  "indefinite": "अनिश्चित",
+  "indefinite-loans-description": "मित्रांसह चालू असलेल्या कर्जाच्या व्यवहारातील फरकाचा मागोवा घ्या",
+  "edit-calendar": "कॅलेंडर संपादित करा",
+  "no-value": "क्लिपबोर्डमध्ये कोणतेही मूल्य आढळले नाही",
+  "clipboard-error": "क्लिपबोर्ड त्रुटी",
+  "restore-purchases-help": "तुम्हाला तुमच्या खरेदी पुनर्संचयित करण्यात समस्या येत असल्यास, कृपया मदतीसाठी विकासकाशी संपर्क साधा किंवा FAQ वाचा.",
+  "contact": "संपर्क करा",
+  "loans-details": "कर्ज तपशील",
+  "set-details": "तपशील सेट करा"
 }

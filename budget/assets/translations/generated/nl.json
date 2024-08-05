@@ -373,7 +373,7 @@
   "privacy-policy": "Privacybeleid en gebruiksvoorwaarden",
   "budget-like-a-pro": "Budget als een professional met",
   "support-the-developer": "Steun de ontwikkelaar",
-  "support-the-developer-description": "Meer dan 2 jaar ontwikkeling",
+  "support-the-developer-description": "Meer dan 3 jaar ontwikkeling",
   "unlimited-budgets-and-goals": "Onbeperkte budgetten",
   "unlimited-budgets-and-goals-description": "Maak meer dan 1 budget, doel of lening",
   "past-budget-periods": "Verleden budgetperioden",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "Bekijk een lijst met onlangs verwijderde/gewijzigde transacties",
   "greeting-message": "Groet bericht",
   "edit-heatmap": "Hittekaart bewerken",
-  "first-weekday": "Eerste weekdag"
+  "first-weekday": "Eerste weekdag",
+  "calendar": "Kalender",
+  "major-change-19": "Kalenderpagina",
+  "major-change-19-1": "Bekijk uw transacties op een kalender",
+  "indefinite-loans": "Leningen voor onbepaalde tijd",
+  "indefinite": "Onbepaald",
+  "indefinite-loans-description": "Volg het verschil tussen lopende leningtransacties met vrienden",
+  "edit-calendar": "Agenda bewerken",
+  "no-value": "Geen waarde gevonden op het klembord",
+  "clipboard-error": "Klembordfout",
+  "restore-purchases-help": "Als u problemen ondervindt bij het herstellen van uw aankopen, neem dan contact op met de ontwikkelaar voor hulp of lees de veelgestelde vragen.",
+  "contact": "Contact",
+  "loans-details": "Leningendetails",
+  "set-details": "Details instellen"
 }

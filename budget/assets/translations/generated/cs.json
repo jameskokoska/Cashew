@@ -373,7 +373,7 @@
   "privacy-policy": "Zásady ochrany osobních údajů a podmínky použití",
   "budget-like-a-pro": "Rozpočet jako profesionál s",
   "support-the-developer": "Podpořte vývojáře",
-  "support-the-developer-description": "Více než 2 roky vývoje",
+  "support-the-developer-description": "Více než 3 roky vývoje",
   "unlimited-budgets-and-goals": "Neomezené rozpočty",
   "unlimited-budgets-and-goals-description": "Vytvořte více než 1 rozpočet, cíl nebo půjčku",
   "past-budget-periods": "Minulá rozpočtová období",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "Zobrazit seznam nedávno smazaných/upravených transakcí",
   "greeting-message": "Pozdrav",
   "edit-heatmap": "Upravit teplotní mapu",
-  "first-weekday": "První všední den"
+  "first-weekday": "První všední den",
+  "calendar": "Kalendář",
+  "major-change-19": "Stránka kalendáře",
+  "major-change-19-1": "Prohlédněte si své transakce v kalendáři",
+  "indefinite-loans": "Půjčky na dobu neurčitou",
+  "indefinite": "Neurčitý",
+  "indefinite-loans-description": "Sledujte rozdíl probíhajících úvěrových transakcí s přáteli",
+  "edit-calendar": "Upravit kalendář",
+  "no-value": "Ve schránce nebyla nalezena žádná hodnota",
+  "clipboard-error": "Chyba schránky",
+  "restore-purchases-help": "Máte-li potíže s obnovením nákupů, požádejte o pomoc vývojáře nebo si přečtěte FAQ.",
+  "contact": "Kontakt",
+  "loans-details": "Podrobnosti o půjčkách",
+  "set-details": "Nastavit Podrobnosti"
 }

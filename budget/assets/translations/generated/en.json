@@ -373,7 +373,7 @@
   "privacy-policy": "Privacy Policy and Terms of Use",
   "budget-like-a-pro": "Budget like a pro with",
   "support-the-developer": "Support the developer",
-  "support-the-developer-description": "More than 2 years of development",
+  "support-the-developer-description": "More than 3 years of development",
   "unlimited-budgets-and-goals": "Unlimited budgets",
   "unlimited-budgets-and-goals-description": "Create more than 1 budget, goal, or loan",
   "past-budget-periods": "Past budget periods",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "View a list of recently deleted/modified transactions",
   "greeting-message": "Greeting Message",
   "edit-heatmap": "Edit Heatmap",
-  "first-weekday": "First Weekday"
+  "first-weekday": "First Weekday",
+  "calendar": "Calendar",
+  "major-change-19": "Calendar Page",
+  "major-change-19-1": "View your transactions on a calendar",
+  "indefinite-loans": "Indefinite Loans",
+  "indefinite": "Indefinite",
+  "indefinite-loans-description": "Track the difference of ongoing loan transactions with friends",
+  "edit-calendar": "Edit Calendar",
+  "no-value": "No value found in clipboard",
+  "clipboard-error": "Clipboard Error",
+  "restore-purchases-help": "If you have trouble restoring your purchases, please contact the developer for help or read the FAQ.",
+  "contact": "Contact",
+  "loans-details": "Loans Details",
+  "set-details": "Set Details"
 }

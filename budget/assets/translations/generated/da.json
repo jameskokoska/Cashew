@@ -373,7 +373,7 @@
   "privacy-policy": "Privatlivspolitik og Brugsbetingelser",
   "budget-like-a-pro": "Budgettér som en pro med",
   "support-the-developer": "Støt udvikleren",
-  "support-the-developer-description": "Mere end 2 års udvikling",
+  "support-the-developer-description": "Mere end 3 års udvikling",
   "unlimited-budgets-and-goals": "Ubegrænsede budgetter",
   "unlimited-budgets-and-goals-description": "Opret mere end 1 budget, mål eller lån",
   "past-budget-periods": "Tidligere budgetperioder",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "Se en liste over nyligt slettede/ændrede transaktioner",
   "greeting-message": "Hilsen Besked",
   "edit-heatmap": "Rediger varmekort",
-  "first-weekday": "Første ugedag"
+  "first-weekday": "Første ugedag",
+  "calendar": "Kalender",
+  "major-change-19": "Kalenderside",
+  "major-change-19-1": "Se dine transaktioner i en kalender",
+  "indefinite-loans": "Ubestemt lån",
+  "indefinite": "Ubestemt",
+  "indefinite-loans-description": "Spor forskellen på igangværende lånetransaktioner med venner",
+  "edit-calendar": "Rediger kalender",
+  "no-value": "Ingen værdi fundet i udklipsholderen",
+  "clipboard-error": "Udklipsholder fejl",
+  "restore-purchases-help": "Hvis du har problemer med at gendanne dine køb, bedes du kontakte udvikleren for at få hjælp eller læse FAQ.",
+  "contact": "Kontakt",
+  "loans-details": "Lån detaljer",
+  "set-details": "Indstil detaljer"
 }

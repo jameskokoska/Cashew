@@ -373,7 +373,7 @@
   "privacy-policy": "Gizlilik Politikası ve Kullanım Koşulları",
   "budget-like-a-pro": "Bir profesyonel gibi bütçeleyin",
   "support-the-developer": "Geliştiriciyi destekleyin",
-  "support-the-developer-description": "2 yıldan fazla süren geliştirmeler",
+  "support-the-developer-description": "3 yıldan fazla süren geliştirmeler",
   "unlimited-budgets-and-goals": "Sınırsız adet bütçe",
   "unlimited-budgets-and-goals-description": "1'den fazla bütçe, hedef veya kredi oluşturun",
   "past-budget-periods": "Geçmiş bütçe dönemleri",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "Yakın zamanda silinen/değiştirilen işlemlerin listesini görüntüleyin",
   "greeting-message": "Tebrik Mesajı",
   "edit-heatmap": "Isı Haritasını Düzenle",
-  "first-weekday": "Haftanın İlk Günü"
+  "first-weekday": "Haftanın İlk Günü",
+  "calendar": "Takvim",
+  "major-change-19": "Takvim Sayfası",
+  "major-change-19-1": "İşlemlerinizi takvimde görüntüleyin",
+  "indefinite-loans": "Süresiz Krediler",
+  "indefinite": "Belirsiz",
+  "indefinite-loans-description": "Arkadaşlarınızla devam eden kredi işlemlerinin farkını takip edin",
+  "edit-calendar": "Takvimi Düzenle",
+  "no-value": "Panoda değer bulunamadı",
+  "clipboard-error": "Pano Hatası",
+  "restore-purchases-help": "Satın aldığınız öğeleri geri yükleme konusunda sorun yaşıyorsanız lütfen yardım için geliştiriciyle iletişime geçin veya SSS'yi okuyun.",
+  "contact": "Temas etmek",
+  "loans-details": "Kredi Detayları",
+  "set-details": "Ayrıntıları Ayarla"
 }

@@ -373,7 +373,7 @@
   "privacy-policy": "গোপনীয়তা নীতি এবং ব্যবহারের শর্তাদি",
   "budget-like-a-pro": "সাথে একটি প্রো মত বাজেট",
   "support-the-developer": "বিকাশকারীকে সমর্থন করুন",
-  "support-the-developer-description": "উন্নয়নের 2 বছরেরও বেশি সময়",
+  "support-the-developer-description": "উন্নয়নের 3 বছরেরও বেশি সময়",
   "unlimited-budgets-and-goals": "সীমাহীন বাজেট",
   "unlimited-budgets-and-goals-description": "1 টিরও বেশি বাজেট, লক্ষ্য বা loan ণ তৈরি করুন",
   "past-budget-periods": "অতীত বাজেটের সময়কাল",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "সম্প্রতি মুছে ফেলা/পরিবর্তিত লেনদেনের একটি তালিকা দেখুন",
   "greeting-message": "শুভেচ্ছা বার্তা",
   "edit-heatmap": "হিটম্যাপ সম্পাদনা করুন",
-  "first-weekday": "প্রথম সপ্তাহের দিন"
+  "first-weekday": "প্রথম সপ্তাহের দিন",
+  "calendar": "ক্যালেন্ডার",
+  "major-change-19": "ক্যালেন্ডার পৃষ্ঠা",
+  "major-change-19-1": "একটি ক্যালেন্ডারে আপনার লেনদেন দেখুন",
+  "indefinite-loans": "অনির্দিষ্ট ঋণ",
+  "indefinite": "অনির্দিষ্ট",
+  "indefinite-loans-description": "বন্ধুদের সাথে চলমান ঋণ লেনদেনের পার্থক্য ট্র্যাক করুন",
+  "edit-calendar": "ক্যালেন্ডার সম্পাদনা করুন",
+  "no-value": "ক্লিপবোর্ডে কোনো মান পাওয়া যায়নি",
+  "clipboard-error": "ক্লিপবোর্ড ত্রুটি",
+  "restore-purchases-help": "আপনার কেনাকাটা পুনরুদ্ধার করতে আপনার সমস্যা হলে, সাহায্যের জন্য বিকাশকারীর সাথে যোগাযোগ করুন বা FAQ পড়ুন।",
+  "contact": "যোগাযোগ",
+  "loans-details": "ঋণ বিবরণ",
+  "set-details": "বিস্তারিত সেট করুন"
 }

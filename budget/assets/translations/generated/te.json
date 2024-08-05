@@ -373,7 +373,7 @@
   "privacy-policy": "గోప్యతా విధానం మరియు ఉపయోగ నిబంధనలు",
   "budget-like-a-pro": "ప్రో వంటి బడ్జెట్",
   "support-the-developer": "డెవలపర్‌కు మద్దతు ఇవ్వండి",
-  "support-the-developer-description": "2 సంవత్సరాల అభివృద్ధికి పైగా",
+  "support-the-developer-description": "3 సంవత్సరాల అభివృద్ధికి పైగా",
   "unlimited-budgets-and-goals": "అపరిమిత బడ్జెట్లు",
   "unlimited-budgets-and-goals-description": "1 కంటే ఎక్కువ బడ్జెట్, లక్ష్యం లేదా రుణాన్ని సృష్టించండి",
   "past-budget-periods": "గత బడ్జెట్ కాలాలు",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "ఇటీవల తొలగించబడిన/సవరించిన లావాదేవీల జాబితాను వీక్షించండి",
   "greeting-message": "శుభాకాంక్షల సందేశం",
   "edit-heatmap": "హీట్‌మ్యాప్‌ని సవరించండి",
-  "first-weekday": "మొదటి వారంరోజు"
+  "first-weekday": "మొదటి వారంరోజు",
+  "calendar": "క్యాలెండర్",
+  "major-change-19": "క్యాలెండర్ పేజీ",
+  "major-change-19-1": "క్యాలెండర్‌లో మీ లావాదేవీలను వీక్షించండి",
+  "indefinite-loans": "నిరవధిక రుణాలు",
+  "indefinite": "నిరవధికంగా",
+  "indefinite-loans-description": "స్నేహితులతో కొనసాగుతున్న రుణ లావాదేవీల వ్యత్యాసాన్ని ట్రాక్ చేయండి",
+  "edit-calendar": "క్యాలెండర్‌ని సవరించండి",
+  "no-value": "క్లిప్‌బోర్డ్‌లో విలువ కనుగొనబడలేదు",
+  "clipboard-error": "క్లిప్‌బోర్డ్ లోపం",
+  "restore-purchases-help": "మీ కొనుగోళ్లను పునరుద్ధరించడంలో మీకు సమస్య ఉంటే, దయచేసి సహాయం కోసం డెవలపర్‌ని సంప్రదించండి లేదా తరచుగా అడిగే ప్రశ్నలను చదవండి.",
+  "contact": "సంప్రదించండి",
+  "loans-details": "రుణాల వివరాలు",
+  "set-details": "వివరాలను సెట్ చేయండి"
 }

@@ -373,7 +373,7 @@
   "privacy-policy": "Політика конфіденційності та умови використання",
   "budget-like-a-pro": "Ведіть бюджет як професіонал із",
   "support-the-developer": "Підтримайте розробника",
-  "support-the-developer-description": "Більше 2 років розвитку",
+  "support-the-developer-description": "Більше 3 років розвитку",
   "unlimited-budgets-and-goals": "Необмежені бюджети",
   "unlimited-budgets-and-goals-description": "Створіть більше 1-го бюджету, цілі чи позики",
   "past-budget-periods": "Минулі бюджетні періоди",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "Переглянути список нещодавно видалених/змінених транзакцій",
   "greeting-message": "Вітальне повідомлення",
   "edit-heatmap": "Редагувати теплову карту",
-  "first-weekday": "Перший будній день"
+  "first-weekday": "Перший будній день",
+  "calendar": "Календар",
+  "major-change-19": "Сторінка календаря",
+  "major-change-19-1": "Переглядайте свої транзакції в календарі",
+  "indefinite-loans": "Безстрокові позики",
+  "indefinite": "Безстроковий",
+  "indefinite-loans-description": "Відстежуйте різницю поточних кредитних операцій з друзями",
+  "edit-calendar": "Редагувати календар",
+  "no-value": "У буфері обміну не знайдено значення",
+  "clipboard-error": "Помилка буфера обміну",
+  "restore-purchases-help": "Якщо у вас виникли проблеми з відновленням покупок, зверніться по допомогу до розробника або прочитайте поширені запитання.",
+  "contact": "контакт",
+  "loans-details": "Деталі кредитів",
+  "set-details": "Деталі набору"
 }

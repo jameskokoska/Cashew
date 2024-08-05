@@ -373,7 +373,7 @@
   "privacy-policy": "Tietosuojakäytäntö ja käyttöehdot",
   "budget-like-a-pro": "Budjetoi kuin ammattilainen",
   "support-the-developer": "Tue kehittäjää",
-  "support-the-developer-description": "Yli 2 vuoden kehitys",
+  "support-the-developer-description": "Yli 3 vuoden kehitys",
   "unlimited-budgets-and-goals": "Rajoittamattomasti budjetteja",
   "unlimited-budgets-and-goals-description": "Luo enemmän kuin yksi budjetti, tavoite tai laina",
   "past-budget-periods": "Aikaisemmat budjettijaksot",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "Näytä luettelo äskettäin poistetuista/muokatuista maksutapahtumista",
   "greeting-message": "Tervehdysviesti",
   "edit-heatmap": "Muokkaa lämpökarttaa",
-  "first-weekday": "Ensimmäinen arkipäivä"
+  "first-weekday": "Ensimmäinen arkipäivä",
+  "calendar": "Kalenteri",
+  "major-change-19": "Kalenteri sivu",
+  "major-change-19-1": "Tarkastele tapahtumiasi kalenterissa",
+  "indefinite-loans": "Toistaiseksi voimassa olevat lainat",
+  "indefinite": "Epämääräinen",
+  "indefinite-loans-description": "Seuraa ystävien kanssa käynnissä olevien lainatapahtumien eroa",
+  "edit-calendar": "Muokkaa kalenteria",
+  "no-value": "Leikepöydältä ei löytynyt arvoa",
+  "clipboard-error": "Leikepöydän virhe",
+  "restore-purchases-help": "Jos sinulla on ongelmia ostosten palauttamisessa, ota yhteyttä kehittäjään saadaksesi apua tai lue UKK.",
+  "contact": "Ottaa yhteyttä",
+  "loans-details": "Lainojen tiedot",
+  "set-details": "Aseta tiedot"
 }

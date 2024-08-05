@@ -373,7 +373,7 @@
   "privacy-policy": "Norme di privacy e condizioni d'uso",
   "budget-like-a-pro": "Risparmia come un professionista con",
   "support-the-developer": "Supportare lo sviluppatore",
-  "support-the-developer-description": "Più di 2 anni di sviluppo",
+  "support-the-developer-description": "Più di 3 anni di sviluppo",
   "unlimited-budgets-and-goals": "Budget illimitati",
   "unlimited-budgets-and-goals-description": "Creare più di 1 budget, obiettivo o prestito",
   "past-budget-periods": "Periodi di bilancio passati",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "Visualizza un elenco delle transazioni cancellate/modificate di recente",
   "greeting-message": "Messaggio di saluto",
   "edit-heatmap": "Modifica mappa termica",
-  "first-weekday": "Primo giorno feriale"
+  "first-weekday": "Primo giorno feriale",
+  "calendar": "Calendario",
+  "major-change-19": "Pagina del calendario",
+  "major-change-19-1": "Visualizza le tue transazioni su un calendario",
+  "indefinite-loans": "Prestiti a tempo indeterminato",
+  "indefinite": "Indefinito",
+  "indefinite-loans-description": "Tieni traccia della differenza delle transazioni di prestito in corso con gli amici",
+  "edit-calendar": "Modifica calendario",
+  "no-value": "Nessun valore trovato negli appunti",
+  "clipboard-error": "Errore negli appunti",
+  "restore-purchases-help": "Se riscontri problemi nel ripristinare i tuoi acquisti, contatta lo sviluppatore per assistenza o leggi le domande frequenti.",
+  "contact": "Contatto",
+  "loans-details": "Dettagli prestiti",
+  "set-details": "Imposta i dettagli"
 }

@@ -373,7 +373,7 @@
   "privacy-policy": "Polityka prywatności i warunki użytkowania",
   "budget-like-a-pro": "Prowadź budżet jak profesjonalista",
   "support-the-developer": "Wspieraj programistę",
-  "support-the-developer-description": "Ponad 2 lata rozwoju",
+  "support-the-developer-description": "Ponad 3 lata rozwoju",
   "unlimited-budgets-and-goals": "Nieograniczone budżety",
   "unlimited-budgets-and-goals-description": "Utwórz więcej niż 1 budżet, cel lub pożyczkę",
   "past-budget-periods": "Okresy budżetowe",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "Wyświetl listę ostatnio usuniętych/zmodyfikowanych transakcji",
   "greeting-message": "Pozdrowienia",
   "edit-heatmap": "Edytuj mapę cieplną",
-  "first-weekday": "Pierwszy dzień powszedni"
+  "first-weekday": "Pierwszy dzień powszedni",
+  "calendar": "Kalendarz",
+  "major-change-19": "Strona kalendarza",
+  "major-change-19-1": "Przeglądaj swoje transakcje w kalendarzu",
+  "indefinite-loans": "Pożyczki na czas nieokreślony",
+  "indefinite": "Nieokreślony",
+  "indefinite-loans-description": "Śledź różnicę w bieżących transakcjach pożyczkowych ze znajomymi",
+  "edit-calendar": "Edytuj kalendarz",
+  "no-value": "Nie znaleziono wartości w schowku",
+  "clipboard-error": "Błąd schowka",
+  "restore-purchases-help": "Jeśli masz problemy z przywróceniem zakupów, skontaktuj się z programistą w celu uzyskania pomocy lub przeczytaj FAQ.",
+  "contact": "Kontakt",
+  "loans-details": "Szczegóły pożyczki",
+  "set-details": "Ustaw szczegóły"
 }

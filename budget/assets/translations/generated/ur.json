@@ -373,7 +373,7 @@
   "privacy-policy": "رازداری کی پالیسی اور استعمال کی شرائط",
   "budget-like-a-pro": "بجٹ کی طرح ایک پرو کے ساتھ",
   "support-the-developer": "ڈویلپر کی حمایت کریں",
-  "support-the-developer-description": "ترقی کے 2 سال سے زیادہ",
+  "support-the-developer-description": "ترقی کے 3 سال سے زیادہ",
   "unlimited-budgets-and-goals": "لامحدود بجٹ",
   "unlimited-budgets-and-goals-description": "1 سے زیادہ بجٹ ، گول ، یا قرض بنائیں",
   "past-budget-periods": "گذشتہ بجٹ کے ادوار",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "حال ہی میں حذف شدہ/ترمیم شدہ لین دین کی فہرست دیکھیں",
   "greeting-message": "مبارکباد کا پیغام",
   "edit-heatmap": "ہیٹ میپ میں ترمیم کریں۔",
-  "first-weekday": "پہلا ہفتہ کا دن"
+  "first-weekday": "پہلا ہفتہ کا دن",
+  "calendar": "کیلنڈر",
+  "major-change-19": "کیلنڈر کا صفحہ",
+  "major-change-19-1": "اپنے لین دین کو کیلنڈر پر دیکھیں",
+  "indefinite-loans": "غیر معینہ قرض",
+  "indefinite": "غیر معینہ",
+  "indefinite-loans-description": "دوستوں کے ساتھ جاری قرض کے لین دین کے فرق کو ٹریک کریں۔",
+  "edit-calendar": "کیلنڈر میں ترمیم کریں۔",
+  "no-value": "کلپ بورڈ میں کوئی قدر نہیں ملی",
+  "clipboard-error": "کلپ بورڈ کی خرابی۔",
+  "restore-purchases-help": "اگر آپ کو اپنی خریداریوں کو بحال کرنے میں دشواری ہو رہی ہے، تو براہ کرم مدد کے لیے ڈویلپر سے رابطہ کریں یا اکثر پوچھے گئے سوالات کو پڑھیں۔",
+  "contact": "رابطہ کریں۔",
+  "loans-details": "قرض کی تفصیلات",
+  "set-details": "تفصیلات مرتب کریں۔"
 }

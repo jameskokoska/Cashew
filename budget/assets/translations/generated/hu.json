@@ -373,7 +373,7 @@
   "privacy-policy": "Adatvédelmi irányelvek és felhasználási feltételek",
   "budget-like-a-pro": "Költségvetés, mint egy profi",
   "support-the-developer": "A fejlesztő támogatása",
-  "support-the-developer-description": "Több mint 2 évnyi fejlesztés",
+  "support-the-developer-description": "Több mint 3 évnyi fejlesztés",
   "unlimited-budgets-and-goals": "Korlátlan költségvetések",
   "unlimited-budgets-and-goals-description": "1-nél több költségvetés, cél vagy hitel létrehozása",
   "past-budget-periods": "Korábbi költségvetési időszakok",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "Tekintse meg a legutóbb törölt/módosított tranzakciók listáját",
   "greeting-message": "Üdvözlő üzenet",
   "edit-heatmap": "Hőtérkép szerkesztése",
-  "first-weekday": "Első hétköznap"
+  "first-weekday": "Első hétköznap",
+  "calendar": "Naptár",
+  "major-change-19": "Naptár oldal",
+  "major-change-19-1": "Tekintse meg tranzakcióit a naptárban",
+  "indefinite-loans": "Határozatlan idejű kölcsönök",
+  "indefinite": "Határozatlan",
+  "indefinite-loans-description": "Kövesse nyomon a különbséget a barátaival folyamatban lévő hiteltranzakciók között",
+  "edit-calendar": "Naptár szerkesztése",
+  "no-value": "Nem található érték a vágólapon",
+  "clipboard-error": "Vágólap hiba",
+  "restore-purchases-help": "Ha problémái vannak a vásárlások visszaállításával, forduljon a fejlesztőhöz segítségért, vagy olvassa el a GYIK-et.",
+  "contact": "Kapcsolatba lépni",
+  "loans-details": "Hitelek Részletek",
+  "set-details": "Részletek beállítása"
 }

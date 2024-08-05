@@ -373,7 +373,7 @@
   "privacy-policy": "개인 정보 보호 정책 및 이용 약관",
   "budget-like-a-pro": "프로처럼 예산",
   "support-the-developer": "개발자를 지원하십시오",
-  "support-the-developer-description": "2 년 이상의 개발",
+  "support-the-developer-description": "3 년 이상의 개발",
   "unlimited-budgets-and-goals": "무제한 예산",
   "unlimited-budgets-and-goals-description": "예산, 목표 또는 대출 이상 생성",
   "past-budget-periods": "과거 예산 기간",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "최근 삭제/수정된 거래 목록 보기",
   "greeting-message": "인사말 메시지",
   "edit-heatmap": "히트맵 편집",
-  "first-weekday": "첫 번째 평일"
+  "first-weekday": "첫 번째 평일",
+  "calendar": "달력",
+  "major-change-19": "달력 페이지",
+  "major-change-19-1": "달력에서 거래 보기",
+  "indefinite-loans": "무기한대출",
+  "indefinite": "무기한",
+  "indefinite-loans-description": "친구와 진행 중인 대출 거래의 차이를 추적하세요.",
+  "edit-calendar": "달력 편집",
+  "no-value": "클립보드에 값이 없습니다.",
+  "clipboard-error": "클립보드 오류",
+  "restore-purchases-help": "구매를 복원하는 데 문제가 있는 경우 개발자에게 도움을 요청하거나 FAQ를 읽어보세요.",
+  "contact": "연락하다",
+  "loans-details": "대출내역",
+  "set-details": "세부정보 설정"
 }

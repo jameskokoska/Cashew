@@ -373,7 +373,7 @@
   "privacy-policy": "Politica de confidențialitate și termenii de utilizare",
   "budget-like-a-pro": "Organizeazăți bugetul ca un profesionist cu",
   "support-the-developer": "Sprijină dezvoltatorul",
-  "support-the-developer-description": "Mai mult de 2 ani de dezvoltare",
+  "support-the-developer-description": "Mai mult de 3 ani de dezvoltare",
   "unlimited-budgets-and-goals": "Bugete nelimitate",
   "unlimited-budgets-and-goals-description": "Creați mai mult de 1 buget, obiectiv sau împrumut",
   "past-budget-periods": "Perioade bugetare trecute",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "Vizualizați o listă a tranzacțiilor recent șterse/modificate",
   "greeting-message": "Mesaj de salut",
   "edit-heatmap": "Editați harta termică",
-  "first-weekday": "Prima zi a săptămânii"
+  "first-weekday": "Prima zi a săptămânii",
+  "calendar": "Calendar",
+  "major-change-19": "Pagina de calendar",
+  "major-change-19-1": "Vizualizați tranzacțiile pe un calendar",
+  "indefinite-loans": "Împrumuturi pe termen nedeterminat",
+  "indefinite": "nedefinit",
+  "indefinite-loans-description": "Urmăriți diferența dintre tranzacțiile de împrumut în curs cu prietenii",
+  "edit-calendar": "Editați calendarul",
+  "no-value": "Nu s-a găsit nicio valoare în clipboard",
+  "clipboard-error": "Eroare clipboard",
+  "restore-purchases-help": "Dacă întâmpinați probleme la restabilirea achizițiilor, contactați dezvoltatorul pentru ajutor sau citiți întrebările frecvente.",
+  "contact": "a lua legatura",
+  "loans-details": "Detalii împrumuturi",
+  "set-details": "Setați detalii"
 }

@@ -332,7 +332,7 @@
   "restore": "Herstel",
   "privacy-policy": "Privaatheidsbeleid en Gebruiksvoorwaardes",
   "support-the-developer": "Ondersteun die ontwikkelaar",
-  "support-the-developer-description": "Met meer as 2 jaar se ondervinding",
+  "support-the-developer-description": "Met meer as 3 jaar se ondervinding",
   "unlimited-budgets-and-goals": "Onbeberkte begrotings",
   "unlimited-budgets-and-goals-description": "Skep meer as 1 begroting, doelwit of lening",
   "past-budget-periods": "Vorige begrotings periodes",
@@ -586,5 +586,18 @@
   "major-change-18-1": "Bekyk 'n lys van onlangs geskrap/gewysigde transaksies",
   "greeting-message": "Groete Boodskap",
   "edit-heatmap": "Wysig hittekaart",
-  "first-weekday": "Eerste weeksdag"
+  "first-weekday": "Eerste weeksdag",
+  "calendar": "Kalender",
+  "major-change-19": "Kalender Bladsy",
+  "major-change-19-1": "Bekyk jou transaksies op 'n kalender",
+  "indefinite-loans": "Onbepaalde Lenings",
+  "indefinite": "Onbepaald",
+  "indefinite-loans-description": "Volg die verskil van deurlopende leningstransaksies met vriende",
+  "edit-calendar": "Wysig kalender",
+  "no-value": "Geen waarde in knipbord gevind nie",
+  "clipboard-error": "Knipbordfout",
+  "restore-purchases-help": "As jy probleme ondervind om jou aankope te herstel, kontak asseblief die ontwikkelaar vir hulp of lees die Gereelde Vrae.",
+  "contact": "Kontak",
+  "loans-details": "Lenings besonderhede",
+  "set-details": "Stel besonderhede in"
 }

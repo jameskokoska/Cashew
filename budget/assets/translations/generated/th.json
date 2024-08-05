@@ -373,7 +373,7 @@
   "privacy-policy": "นโยบายความเป็นส่วนตัวและข้อกำหนดการใช้งาน",
   "budget-like-a-pro": "งบประมาณเช่นมืออาชีพกับ",
   "support-the-developer": "สนับสนุนนักพัฒนา",
-  "support-the-developer-description": "การพัฒนามากกว่า 2 ปี",
+  "support-the-developer-description": "การพัฒนามากกว่า 3 ปี",
   "unlimited-budgets-and-goals": "งบประมาณไม่ จำกัด",
   "unlimited-budgets-and-goals-description": "สร้างมากกว่า 1 งบประมาณเป้าหมายหรือเงินกู้",
   "past-budget-periods": "ระยะเวลางบประมาณที่ผ่านมา",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "ดูรายการธุรกรรมที่ถูกลบ/แก้ไขล่าสุด",
   "greeting-message": "ข้อความทักทาย",
   "edit-heatmap": "แก้ไขแผนที่ความร้อน",
-  "first-weekday": "วันธรรมดาแรก"
+  "first-weekday": "วันธรรมดาแรก",
+  "calendar": "ปฏิทิน",
+  "major-change-19": "หน้าปฏิทิน",
+  "major-change-19-1": "ดูธุรกรรมของคุณในปฏิทิน",
+  "indefinite-loans": "เงินกู้ไม่มีกำหนด",
+  "indefinite": "ไม่มีกำหนด",
+  "indefinite-loans-description": "ติดตามความแตกต่างของธุรกรรมสินเชื่อที่กำลังดำเนินอยู่กับเพื่อน ๆ",
+  "edit-calendar": "แก้ไขปฏิทิน",
+  "no-value": "ไม่พบค่าในคลิปบอร์ด",
+  "clipboard-error": "ข้อผิดพลาดของคลิปบอร์ด",
+  "restore-purchases-help": "หากคุณมีปัญหาในการกู้คืนการซื้อของคุณ โปรดติดต่อนักพัฒนาเพื่อขอความช่วยเหลือหรืออ่านคำถามที่พบบ่อย",
+  "contact": "ติดต่อ",
+  "loans-details": "รายละเอียดสินเชื่อ",
+  "set-details": "ตั้งค่ารายละเอียด"
 }

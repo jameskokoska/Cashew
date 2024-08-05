@@ -373,7 +373,7 @@
   "privacy-policy": "Sekretesspolicy och användarvillkor",
   "budget-like-a-pro": "Budget som en proffs med",
   "support-the-developer": "Stödja utvecklaren",
-  "support-the-developer-description": "Mer än 2 års utveckling",
+  "support-the-developer-description": "Mer än 3 års utveckling",
   "unlimited-budgets-and-goals": "Obegränsade budgetar",
   "unlimited-budgets-and-goals-description": "Skapa mer än 1 budget, mål eller lån",
   "past-budget-periods": "Tidigare budgetperioder",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "Visa en lista över nyligen raderade/ändrade transaktioner",
   "greeting-message": "Hälsningsmeddelande",
   "edit-heatmap": "Redigera värmekarta",
-  "first-weekday": "Första veckodagen"
+  "first-weekday": "Första veckodagen",
+  "calendar": "Kalender",
+  "major-change-19": "Kalendersida",
+  "major-change-19-1": "Visa dina transaktioner i en kalender",
+  "indefinite-loans": "Lån på obestämd tid",
+  "indefinite": "Obestämd",
+  "indefinite-loans-description": "Spåra skillnaden mellan pågående lånetransaktioner med vänner",
+  "edit-calendar": "Redigera kalender",
+  "no-value": "Inget värde hittades i urklipp",
+  "clipboard-error": "Urklippsfel",
+  "restore-purchases-help": "Om du har problem med att återställa dina köp, kontakta utvecklaren för hjälp eller läs FAQ.",
+  "contact": "Kontakt",
+  "loans-details": "Lånedetaljer",
+  "set-details": "Ställ in detaljer"
 }

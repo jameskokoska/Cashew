@@ -373,7 +373,7 @@
   "privacy-policy": "Política de Privacidade e Termos de Uso",
   "budget-like-a-pro": "Crie orçamentos como um profissional com",
   "support-the-developer": "Apoie o desenvolvedor",
-  "support-the-developer-description": "Mais de 2 anos de desenvolvimento",
+  "support-the-developer-description": "Mais de 3 anos de desenvolvimento",
   "unlimited-budgets-and-goals": "Orçamentos ilimitados",
   "unlimited-budgets-and-goals-description": "Crie mais de 1 orçamento, objetivo ou empréstimo",
   "past-budget-periods": "Períodos orçamentários anteriores",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "Veja uma lista de transações excluídas/modificadas recentemente",
   "greeting-message": "Mensagem de saudação",
   "edit-heatmap": "Editar mapa de calor",
-  "first-weekday": "Primeiro dia da semana"
+  "first-weekday": "Primeiro dia da semana",
+  "calendar": "Calendário",
+  "major-change-19": "Página do calendário",
+  "major-change-19-1": "Veja suas transações em um calendário",
+  "indefinite-loans": "Empréstimos indefinidos",
+  "indefinite": "Indeterminado",
+  "indefinite-loans-description": "Acompanhe a diferença nas transações de empréstimo em andamento com amigos",
+  "edit-calendar": "Editar calendário",
+  "no-value": "Nenhum valor encontrado na área de transferência",
+  "clipboard-error": "Erro na área de transferência",
+  "restore-purchases-help": "Se você tiver problemas para restaurar suas compras, entre em contato com o desenvolvedor para obter ajuda ou leia as Perguntas frequentes.",
+  "contact": "Contato",
+  "loans-details": "Detalhes dos empréstimos",
+  "set-details": "Definir detalhes"
 }

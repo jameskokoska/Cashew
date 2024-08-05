@@ -373,7 +373,7 @@
   "privacy-policy": "गोपनीयता नीति और उपयोग की शर्तें",
   "budget-like-a-pro": "के साथ एक समर्थक की तरह बजट",
   "support-the-developer": "डेवलपर का समर्थन करें",
-  "support-the-developer-description": "2 साल से अधिक विकास",
+  "support-the-developer-description": "3 साल से अधिक विकास",
   "unlimited-budgets-and-goals": "असीमित बजट",
   "unlimited-budgets-and-goals-description": "1 से अधिक बजट, लक्ष्य या ऋण बनाएं",
   "past-budget-periods": "पिछले बजट अवधि",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "हाल ही में हटाए गए/संशोधित लेनदेन की सूची देखें",
   "greeting-message": "अभिनंदन संदेश",
   "edit-heatmap": "हीटमैप संपादित करें",
-  "first-weekday": "पहला सप्ताहांत"
+  "first-weekday": "पहला सप्ताहांत",
+  "calendar": "पंचांग",
+  "major-change-19": "कैलेंडर पृष्ठ",
+  "major-change-19-1": "एक कैलेंडर पर अपने लेन-देन देखें",
+  "indefinite-loans": "अनिश्चितकालीन ऋण",
+  "indefinite": "अनिश्चितकालीन",
+  "indefinite-loans-description": "दोस्तों के साथ चल रहे ऋण लेनदेन के अंतर को ट्रैक करें",
+  "edit-calendar": "कैलेंडर संपादित करें",
+  "no-value": "क्लिपबोर्ड में कोई मान नहीं मिला",
+  "clipboard-error": "क्लिपबोर्ड त्रुटि",
+  "restore-purchases-help": "यदि आपको अपनी खरीदारी बहाल करने में परेशानी हो रही है, तो कृपया सहायता के लिए डेवलपर से संपर्क करें या FAQ पढ़ें।",
+  "contact": "संपर्क",
+  "loans-details": "ऋण विवरण",
+  "set-details": "विवरण सेट करें"
 }

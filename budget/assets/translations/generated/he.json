@@ -1163,5 +1163,18 @@
   "major-change-18-1": "הצג רשימה של עסקאות שנמחקו/שונו לאחרונה",
   "greeting-message": "הודעת ברכת שלום",
   "edit-heatmap": "ערוך מפת חום",
-  "first-weekday": "יום חול ראשון"
+  "first-weekday": "יום חול ראשון",
+  "calendar": "לוּחַ שָׁנָה",
+  "major-change-19": "דף לוח שנה",
+  "major-change-19-1": "הצג את העסקאות שלך בלוח שנה",
+  "indefinite-loans": "הלוואות ללא הגבלת זמן",
+  "indefinite": "סְתָמִי",
+  "indefinite-loans-description": "עקוב אחר ההבדל בין עסקאות הלוואות שוטפות עם חברים",
+  "edit-calendar": "ערוך לוח שנה",
+  "no-value": "לא נמצא ערך בלוח",
+  "clipboard-error": "שגיאת לוח",
+  "restore-purchases-help": "אם אתה מתקשה לשחזר את הרכישות שלך, אנא צור קשר עם המפתח לקבלת עזרה או קרא את השאלות הנפוצות.",
+  "contact": "איש קשר",
+  "loans-details": "פרטי הלוואות",
+  "set-details": "הגדר פרטים"
 }

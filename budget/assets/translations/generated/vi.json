@@ -373,7 +373,7 @@
   "privacy-policy": "Chính sách bảo mật và Điều khoản sử dụng",
   "budget-like-a-pro": "Lập ngân sách như một chuyên gia với",
   "support-the-developer": "Hỗ trợ nhà phát triển",
-  "support-the-developer-description": "Hơn 2 năm phát triển",
+  "support-the-developer-description": "Hơn 3 năm phát triển",
   "unlimited-budgets-and-goals": "Ngân sách không giới hạn",
   "unlimited-budgets-and-goals-description": "Tạo nhiều hơn 1 ngân sách, mục tiêu hoặc khoản vay",
   "past-budget-periods": "Các giai đoạn ngân sách trước đây",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "Xem danh sách các giao dịch đã xóa/sửa đổi gần đây",
   "greeting-message": "Tin nhắn chào hỏi",
   "edit-heatmap": "Chỉnh sửa bản đồ nhiệt",
-  "first-weekday": "Ngày đầu tiên trong tuần"
+  "first-weekday": "Ngày đầu tiên trong tuần",
+  "calendar": "Lịch",
+  "major-change-19": "Trang lịch",
+  "major-change-19-1": "Xem các giao dịch của bạn trên lịch",
+  "indefinite-loans": "Khoản vay không thời hạn",
+  "indefinite": "Không thời hạn",
+  "indefinite-loans-description": "Theo dõi sự khác biệt của các giao dịch vay đang diễn ra với bạn bè",
+  "edit-calendar": "Chỉnh sửa lịch",
+  "no-value": "Không tìm thấy giá trị nào trong clipboard",
+  "clipboard-error": "Lỗi clipboard",
+  "restore-purchases-help": "Nếu bạn gặp khó khăn khi khôi phục giao dịch mua của mình, vui lòng liên hệ với nhà phát triển để được trợ giúp hoặc đọc Câu hỏi thường gặp.",
+  "contact": "Liên hệ",
+  "loans-details": "Chi tiết khoản vay",
+  "set-details": "Đặt chi tiết"
 }

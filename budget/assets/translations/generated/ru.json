@@ -373,7 +373,7 @@
   "privacy-policy": "Политика конфиденциальности и условия использования",
   "budget-like-a-pro": "Веди бюджет как профессионал с",
   "support-the-developer": "Поддержите разработчика",
-  "support-the-developer-description": "Более 2 лет развития",
+  "support-the-developer-description": "Более 3 лет развития",
   "unlimited-budgets-and-goals": "Неограниченные бюджеты",
   "unlimited-budgets-and-goals-description": "Создать более 1 бюджета, цели или займа",
   "past-budget-periods": "Прошлые бюджетные периоды",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "Просмотр списка недавно удаленных/измененных транзакций",
   "greeting-message": "Приветственное сообщение",
   "edit-heatmap": "Изменить тепловую карту",
-  "first-weekday": "Первый будний день"
+  "first-weekday": "Первый будний день",
+  "calendar": "Календарь",
+  "major-change-19": "Страница календаря",
+  "major-change-19-1": "Просматривайте свои транзакции в календаре",
+  "indefinite-loans": "Бессрочные кредиты",
+  "indefinite": "Бессрочный",
+  "indefinite-loans-description": "Отслеживайте разницу текущих кредитных операций с друзьями",
+  "edit-calendar": "Редактировать календарь",
+  "no-value": "В буфере обмена не найдено значение",
+  "clipboard-error": "Ошибка буфера обмена",
+  "restore-purchases-help": "Если у вас возникли проблемы с восстановлением покупок, обратитесь за помощью к разработчику или прочитайте FAQ.",
+  "contact": "Контакт",
+  "loans-details": "Детали кредитов",
+  "set-details": "Установить детали"
 }

@@ -373,7 +373,7 @@
   "privacy-policy": "隐私政策和使用条款",
   "budget-like-a-pro": "像专业人士一样做预算",
   "support-the-developer": "支持开发人员",
-  "support-the-developer-description": "开发历时 2 年多",
+  "support-the-developer-description": "开发历时 3 年多",
   "unlimited-budgets-and-goals": "无限制的预算数量",
   "unlimited-budgets-and-goals-description": "创建超过1个预算，目标或贷款",
   "past-budget-periods": "过往预算周期",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "查看最近删除/修改的交易列表",
   "greeting-message": "问候语",
   "edit-heatmap": "编辑热图",
-  "first-weekday": "第一个工作日"
+  "first-weekday": "第一个工作日",
+  "calendar": "日历",
+  "major-change-19": "日历页",
+  "major-change-19-1": "在日历上查看您的交易",
+  "indefinite-loans": "无限期贷款",
+  "indefinite": "不定",
+  "indefinite-loans-description": "跟踪与朋友正在进行的贷款交易的差异",
+  "edit-calendar": "编辑日历",
+  "no-value": "在剪贴板中找不到值",
+  "clipboard-error": "剪贴板错误",
+  "restore-purchases-help": "如果您在恢复购买时遇到问题，请联系开发者寻求帮助或阅读常见问题解答。",
+  "contact": "接触",
+  "loans-details": "贷款详情",
+  "set-details": "设置详情"
 }

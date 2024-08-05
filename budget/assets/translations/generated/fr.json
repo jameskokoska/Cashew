@@ -373,7 +373,7 @@
   "privacy-policy": "Politique de confidentialité et conditions d'utilisation",
   "budget-like-a-pro": "Budget comme un pro avec",
   "support-the-developer": "Soutenir le développeur",
-  "support-the-developer-description": "Plus de 2 ans de développement",
+  "support-the-developer-description": "Plus de 3 ans de développement",
   "unlimited-budgets-and-goals": "Budgets illimités",
   "unlimited-budgets-and-goals-description": "Créer plus d'un budget, un objectif ou un prêt",
   "past-budget-periods": "Périodes budgétaires passées",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "Afficher une liste des transactions récemment supprimées/modifiées",
   "greeting-message": "Message d'accueil",
   "edit-heatmap": "Modifier la carte thermique",
-  "first-weekday": "Premier jour de la semaine"
+  "first-weekday": "Premier jour de la semaine",
+  "calendar": "Calendrier",
+  "major-change-19": "Page de calendrier",
+  "major-change-19-1": "Visualisez vos transactions sur un calendrier",
+  "indefinite-loans": "Prêts à durée indéterminée",
+  "indefinite": "Indéfini",
+  "indefinite-loans-description": "Suivez la différence entre les transactions de prêt en cours avec des amis",
+  "edit-calendar": "Modifier le calendrier",
+  "no-value": "Aucune valeur trouvée dans le presse-papiers",
+  "clipboard-error": "Erreur du Presse-papiers",
+  "restore-purchases-help": "Si vous rencontrez des difficultés pour restaurer vos achats, veuillez contacter le développeur pour obtenir de l'aide ou lire la FAQ.",
+  "contact": "Contact",
+  "loans-details": "Détails des prêts",
+  "set-details": "Définir les détails"
 }

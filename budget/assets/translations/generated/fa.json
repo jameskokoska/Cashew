@@ -373,7 +373,7 @@
   "privacy-policy": "سیاست حفظ حریم خصوصی و شرایط استفاده",
   "budget-like-a-pro": "بودجه مانند یک حرفه ای با",
   "support-the-developer": "از توسعه دهنده پشتیبانی کنید",
-  "support-the-developer-description": "بیش از 2 سال توسعه",
+  "support-the-developer-description": "بیش از 3 سال توسعه",
   "unlimited-budgets-and-goals": "بودجه نامحدود",
   "unlimited-budgets-and-goals-description": "بیش از 1 بودجه ، هدف یا وام ایجاد کنید",
   "past-budget-periods": "دوره بودجه گذشته",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "فهرستی از تراکنش‌های اخیراً حذف شده/تغییر شده را مشاهده کنید",
   "greeting-message": "پیام تبریک",
   "edit-heatmap": "ویرایش نقشه حرارتی",
-  "first-weekday": "روز اول هفته"
+  "first-weekday": "اولین روز هفته",
+  "calendar": "تقویم",
+  "major-change-19": "صفحه تقویم",
+  "major-change-19-1": "معاملات خود را در یک تقویم مشاهده کنید",
+  "indefinite-loans": "وام های نامحدود",
+  "indefinite": "نامعین",
+  "indefinite-loans-description": "تفاوت تراکنش‌های وام در حال انجام را با دوستان دنبال کنید",
+  "edit-calendar": "ویرایش تقویم",
+  "no-value": "هیچ مقداری در کلیپ بورد یافت نشد",
+  "clipboard-error": "خطای کلیپ بورد",
+  "restore-purchases-help": "اگر در بازیابی خریدهای خود مشکل دارید، لطفاً برای راهنمایی با توسعه دهنده تماس بگیرید یا سؤالات متداول را بخوانید.",
+  "contact": "مخاطب",
+  "loans-details": "جزئیات وام",
+  "set-details": "تنظیم جزئیات"
 }

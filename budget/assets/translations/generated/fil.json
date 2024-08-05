@@ -373,7 +373,7 @@
   "privacy-policy": "Patakaran sa Pagkapribado at Mga Tuntunin ng Paggamit",
   "budget-like-a-pro": "Badyet tulad ng isang pro sa",
   "support-the-developer": "Suportahan ang developer",
-  "support-the-developer-description": "Higit sa 2 taon ng pag -unlad",
+  "support-the-developer-description": "Higit sa 3 taon ng pag -unlad",
   "unlimited-budgets-and-goals": "Walang limitasyong mga badyet",
   "unlimited-budgets-and-goals-description": "Lumikha ng higit sa 1 badyet, layunin, o pautang",
   "past-budget-periods": "Mga nakaraang panahon ng badyet",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "Tingnan ang isang listahan ng kamakailang tinanggal/binagong mga transaksyon",
   "greeting-message": "Mensahe ng Pagbati",
   "edit-heatmap": "I-edit ang Heatmap",
-  "first-weekday": "Unang Linggo"
+  "first-weekday": "Unang Linggo",
+  "calendar": "Kalendaryo",
+  "major-change-19": "Pahina ng Kalendaryo",
+  "major-change-19-1": "Tingnan ang iyong mga transaksyon sa isang kalendaryo",
+  "indefinite-loans": "Walang Katiyakan na mga Pautang",
+  "indefinite": "Walang katiyakan",
+  "indefinite-loans-description": "Subaybayan ang pagkakaiba ng patuloy na mga transaksyon sa pautang sa mga kaibigan",
+  "edit-calendar": "I-edit ang Kalendaryo",
+  "no-value": "Walang nakitang halaga sa clipboard",
+  "clipboard-error": "Error sa Clipboard",
+  "restore-purchases-help": "Kung nahihirapan kang i-restore ang iyong mga binili, mangyaring makipag-ugnayan sa developer para sa tulong o basahin ang FAQ.",
+  "contact": "Makipag-ugnayan",
+  "loans-details": "Mga Detalye ng Pautang",
+  "set-details": "Itakda ang Mga Detalye"
 }

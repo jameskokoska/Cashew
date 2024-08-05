@@ -373,7 +373,7 @@
   "privacy-policy": "Kebijakan Privasi dan Ketentuan Penggunaan",
   "budget-like-a-pro": "Anggaran seperti pro dengan",
   "support-the-developer": "Mendukung pengembang",
-  "support-the-developer-description": "Lebih dari 2 tahun pembangunan",
+  "support-the-developer-description": "Lebih dari 3 tahun pembangunan",
   "unlimited-budgets-and-goals": "Anggaran yang tidak terbatas",
   "unlimited-budgets-and-goals-description": "Ciptakan lebih dari 1 anggaran, tujuan, atau pinjaman",
   "past-budget-periods": "Periode anggaran sebelumnya",
@@ -1163,5 +1163,18 @@
   "major-change-18-1": "Melihat daftar transaksi yang baru saja dihapus/dimodifikasi",
   "greeting-message": "Pesan Ucapan",
   "edit-heatmap": "Edit Peta Panas",
-  "first-weekday": "Hari Minggu Pertama"
+  "first-weekday": "Hari Minggu Pertama",
+  "calendar": "Kalender",
+  "major-change-19": "Halaman Kalender",
+  "major-change-19-1": "Lihat transaksi Anda di kalender",
+  "indefinite-loans": "Pinjaman Tidak Terbatas",
+  "indefinite": "Tak terbatas",
+  "indefinite-loans-description": "Lacak perbedaan transaksi pinjaman yang sedang berlangsung dengan teman",
+  "edit-calendar": "Sunting Kalender",
+  "no-value": "Tidak ada nilai yang ditemukan di papan klip",
+  "clipboard-error": "Kesalahan Papan Klip",
+  "restore-purchases-help": "Jika Anda kesulitan memulihkan pembelian Anda, silakan hubungi pengembang untuk mendapatkan bantuan atau baca FAQ.",
+  "contact": "Kontak",
+  "loans-details": "Detail Pinjaman",
+  "set-details": "Tetapkan Detail"
 }
