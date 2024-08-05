@@ -6202,7 +6202,9 @@ class FinanceDatabase extends _$FinanceDatabase {
       DateTime startDate =
           getStartDateOfSelectedCustomPeriod(cycleSettingsExtension) ??
               DateTime.now();
-      return tbl.dateCreated.isBiggerOrEqualValue(startDate);
+      DateTime? endDate =
+          getEndDateOfSelectedCustomPeriod(cycleSettingsExtension);
+      return onlyShowBasedOnTimeRange(tbl, startDate, endDate, null);
     } else if (selectedPeriodType == CycleType.dateRange) {
       DateTime startDate =
           getStartDateOfSelectedCustomPeriod(cycleSettingsExtension) ??

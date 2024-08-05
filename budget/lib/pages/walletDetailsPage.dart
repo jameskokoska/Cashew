@@ -82,7 +82,7 @@ DateTimeRange? getDateTimeRangeForPassedSearchFilters(
     start: getStartDateOfSelectedCustomPeriod(cycleSettingsExtension) ??
         DateTime.now().justDay(),
     end: getEndDateOfSelectedCustomPeriod(cycleSettingsExtension) ??
-        DateTime.now().justDay(monthOffset: 1),
+        DateTime.now().justDay(yearOffset: 100),
   );
 }
 
