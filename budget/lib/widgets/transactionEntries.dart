@@ -156,6 +156,7 @@ class _TransactionEntriesState extends State<TransactionEntries> {
       subCategory: item.subCategory,
       budget: item.budget,
       objective: item.objective,
+      objectiveLoan: item.objectiveLoan,
       openPage: AddTransactionPage(
         transaction: item.transaction,
         routesToPopAfterDelete: RoutesToPopAfterDelete.One,

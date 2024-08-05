@@ -202,6 +202,8 @@ class ActivityPage extends StatelessWidget {
                           Budget? budget = item.transactionWithCategory?.budget;
                           Objective? objective =
                               item.transactionWithCategory?.objective;
+                          Objective? objectiveLoan =
+                              item.transactionWithCategory?.objectiveLoan;
                           Widget noTransactionFound = Padding(
                             padding: EdgeInsetsDirectional.symmetric(
                                 horizontal:
@@ -271,6 +273,7 @@ class ActivityPage extends StatelessWidget {
                                         subCategory: subCategory,
                                         budget: budget,
                                         objective: objective,
+                                        objectiveLoan: objectiveLoan,
                                         listID: pageId,
                                       ),
                                     ),

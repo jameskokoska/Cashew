@@ -535,7 +535,7 @@ DateTime? getStartDateOfSelectedCustomPeriod(
   DateTimeRange? forcedDateTimeRange,
 }) {
   if (forcedDateTimeRange != null) {
-    return forcedDateTimeRange.start;
+    return forcedDateTimeRange.start.justDay();
   }
   CycleType selectedPeriodType = CycleType.values[
       appStateSettings["selectedPeriodCycleType" + cycleSettingsExtension] ??
@@ -544,8 +544,8 @@ DateTime? getStartDateOfSelectedCustomPeriod(
     return null;
   } else if (selectedPeriodType == CycleType.cycle) {
     DateTimeRange budgetRange = getCycleDateTimeRange(cycleSettingsExtension);
-    DateTime startDate = budgetRange.start.justDay();
-    return startDate;
+    DateTime startDate = budgetRange.start;
+    return startDate.justDay();
   } else if (selectedPeriodType == CycleType.pastDays) {
     DateTime startDate = DateTime.now().subtract(Duration(
         days: (appStateSettings[
@@ -553,13 +553,13 @@ DateTime? getStartDateOfSelectedCustomPeriod(
             0)));
     if (startDate.year <= 1900) return DateTime(1900);
     if (startDate.isAfter(DateTime.now())) return DateTime(1900);
-    return startDate;
+    return startDate.justDay();
   } else if (selectedPeriodType == CycleType.dateRange) {
     DateTime startDate = DateTime.tryParse(appStateSettings[
                 "customPeriodStartDate" + cycleSettingsExtension] ??
             "") ??
         DateTime.now();
-    return startDate;
+    return startDate.justDay();
   }
   return null;
 }
@@ -569,7 +569,7 @@ DateTime? getEndDateOfSelectedCustomPeriod(
   DateTimeRange? forcedDateTimeRange,
 }) {
   if (forcedDateTimeRange != null) {
-    return forcedDateTimeRange.end;
+    return forcedDateTimeRange.end.justDay();
   }
 
   CycleType selectedPeriodType = CycleType.values[
@@ -581,12 +581,12 @@ DateTime? getEndDateOfSelectedCustomPeriod(
   if (selectedPeriodType == CycleType.cycle) {
     DateTimeRange budgetRange = getCycleDateTimeRange(cycleSettingsExtension);
     DateTime endDate = budgetRange.end.justDay();
-    return endDate;
+    return endDate.justDay();
   }
 
   if (selectedPeriodType == CycleType.pastDays) {
     DateTime endDate = DateTime.now().justDay();
-    return endDate;
+    return endDate.justDay();
   }
 
   if (selectedPeriodType == CycleType.dateRange) {

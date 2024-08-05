@@ -18,6 +18,7 @@ class TransactionEntryTag extends StatelessWidget {
     this.subCategory,
     this.budget,
     this.objective,
+    this.objectiveLoan,
     this.showExcludedBudgetTag,
     super.key,
   });
@@ -26,6 +27,7 @@ class TransactionEntryTag extends StatelessWidget {
   final TransactionCategory? subCategory;
   final Budget? budget;
   final Objective? objective;
+  final Objective? objectiveLoan;
   final bool Function(Transaction transaction)? showExcludedBudgetTag;
 
   @override
@@ -49,15 +51,17 @@ class TransactionEntryTag extends StatelessWidget {
         child: LayoutBuilder(builder: (context, constraints) {
           double maxWidth = constraints.maxWidth;
           List<bool> tagsToShow = [
-            appStateSettings["showAccountLabelTagInTransactionEntry"] == true,
-            transaction.subCategoryFk != null,
-            transaction.sharedReferenceBudgetPk != null,
-            transaction.objectiveLoanFk != null,
-            transaction.objectiveFk != null,
-            showExcludedBudgetTagCheck,
+            appStateSettings["showAccountLabelTagInTransactionEntry"] ==
+                true, //0
+            transaction.subCategoryFk != null, //1
+            transaction.sharedReferenceBudgetPk != null, //2
+            transaction.objectiveLoanFk != null, //3
+            transaction.objectiveFk != null, //4
+            showExcludedBudgetTagCheck, //5
           ];
           int tagCount = tagsToShow.where((element) => element == true).length;
           List<Widget> tags = [
+            // 0
             TransactionTag(
               color: HexColor(
                   Provider.of<AllWallets>(context)
@@ -69,6 +73,7 @@ class TransactionEntryTag extends StatelessWidget {
                       ?.name ??
                   "",
             ),
+            // 1
             Builder(builder: (context) {
               if (subCategory != null) {
                 return SubCategoryTag(category: subCategory!);
@@ -85,6 +90,7 @@ class TransactionEntryTag extends StatelessWidget {
                 );
               }
             }),
+            // 2
             Builder(builder: (context) {
               if (budget != null) {
                 return TransactionTag(
@@ -111,17 +117,19 @@ class TransactionEntryTag extends StatelessWidget {
                 );
               }
             }),
+            // 3
             Builder(builder: (context) {
-              if (objective != null) {
+              if (objectiveLoan != null) {
                 return ObjectivePercentTag(
                   transaction: transaction,
-                  objective: objective!,
+                  objective: objectiveLoan!,
                   showObjectivePercentageCheck: showObjectivePercentageCheck,
                 );
               }
               return StreamBuilder<Objective>(
                 stream: database.getObjective(transaction.objectiveLoanFk!),
                 builder: (context, snapshot) {
+                  print("LOOKED UP");
                   if (snapshot.hasData) {
                     if (snapshot.data == null) return Container();
                     Objective objective = snapshot.data!;
@@ -136,6 +144,7 @@ class TransactionEntryTag extends StatelessWidget {
                 },
               );
             }),
+            // 4
             Builder(builder: (context) {
               if (objective != null) {
                 return ObjectivePercentTag(
@@ -147,6 +156,7 @@ class TransactionEntryTag extends StatelessWidget {
               return StreamBuilder<Objective>(
                 stream: database.getObjective(transaction.objectiveFk!),
                 builder: (context, snapshot) {
+                  print("LOOKED UP");
                   if (snapshot.hasData) {
                     Objective objective = snapshot.data!;
                     return ObjectivePercentTag(
@@ -160,6 +170,7 @@ class TransactionEntryTag extends StatelessWidget {
                 },
               );
             }),
+            // 5
             TransactionTag(
               color: Colors.grey,
               name: "excluded".tr(),

@@ -96,6 +96,7 @@ class TransactionEntry extends StatelessWidget {
     this.subCategory,
     this.budget,
     this.objective,
+    this.objectiveLoan,
     this.onSelected,
     this.containerColor,
     this.useHorizontalPaddingConstrained = true,
@@ -119,6 +120,7 @@ class TransactionEntry extends StatelessWidget {
   final TransactionCategory? subCategory;
   final Budget? budget;
   final Objective? objective;
+  final Objective? objectiveLoan;
   final Function(Transaction transaction, bool selected)? onSelected;
   final Color? containerColor;
   final bool useHorizontalPaddingConstrained;
@@ -359,6 +361,7 @@ class TransactionEntry extends StatelessWidget {
         subCategory: subCategory,
         budget: budget,
         objective: objective,
+        objectiveLoan: objectiveLoan,
         showExcludedBudgetTag: showExcludedBudgetTag,
       );
       Widget noteIcon = TransactionEntryNote(

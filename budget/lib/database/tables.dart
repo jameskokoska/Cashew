@@ -546,6 +546,7 @@ class TransactionWithCategory {
   final Budget? budget;
   final Objective? objective;
   final TransactionCategory? subCategory;
+  final Objective? objectiveLoan;
   TransactionWithCategory({
     required this.category,
     required this.transaction,
@@ -553,6 +554,7 @@ class TransactionWithCategory {
     this.budget,
     this.objective,
     this.subCategory,
+    required this.objectiveLoan,
   });
 }
 
@@ -1370,6 +1372,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     Budget? budget,
   }) {
     final $CategoriesTable subCategories = alias(categories, 'subCategories');
+    final $ObjectivesTable objectiveLoans = alias(objectives, 'objectiveLoans');
+
     // the date, which acts as the end point and everything before this day is inclusive
     // for onlyShowBasedOnTimeRange, but we don't want to include this day
     List<Stream<double?>> mergedStreams = [];
@@ -1388,6 +1392,10 @@ class FinanceDatabase extends _$FinanceDatabase {
             objectives,
             objectives.objectivePk.equalsExp(transactions.objectiveFk),
           ),
+          leftOuterJoin(
+            objectiveLoans,
+            objectiveLoans.objectivePk.equalsExp(transactions.objectiveLoanFk),
+          ),
           leftOuterJoin(subCategories,
               subCategories.categoryPk.equalsExp(transactions.subCategoryFk)),
         ])
@@ -1403,14 +1411,21 @@ class FinanceDatabase extends _$FinanceDatabase {
                     : onlyShowBasedOnTimeRange(
                         transactions, start, end, budget)) &
             // Should match that of getTransactionCategoryWithDay
-            onlyShowTransactionBasedOnSearchQuery(transactions, search,
-                withCategories: true,
-                joinedWithSubcategoriesTable: subCategories) &
+            onlyShowTransactionBasedOnSearchQuery(
+              transactions,
+              search,
+              withCategories: true,
+              joinedWithSubcategoriesTable: subCategories,
+              withBudgets: true,
+              withObjectives: true,
+              joinedWithObjectiveLoans: objectiveLoans,
+            ) &
             // Pass in the subcategories table so we can search name based on subcategory
             onlyShowIfFollowsSearchFilters(
               transactions,
               searchFilters,
               joinedWithSubcategoriesTable: subCategories,
+              joinedWithObjectiveLoans: objectiveLoans,
               joinedWithBudgets: true,
               joinedWithCategories: true,
               joinedWithObjectives: true,
@@ -1456,6 +1471,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     Budget? budget,
   }) {
     final $CategoriesTable subCategories = alias(categories, 'subCategories');
+    final $ObjectivesTable objectiveLoans = alias(objectives, 'objectiveLoans');
     JoinedSelectStatement<HasResultSet, dynamic> query;
 
     query = select(transactions).join([
@@ -1468,6 +1484,10 @@ class FinanceDatabase extends _$FinanceDatabase {
       leftOuterJoin(
         objectives,
         objectives.objectivePk.equalsExp(transactions.objectiveFk),
+      ),
+      leftOuterJoin(
+        objectiveLoans,
+        objectiveLoans.objectivePk.equalsExp(transactions.objectiveLoanFk),
       ),
       leftOuterJoin(subCategories,
           subCategories.categoryPk.equalsExp(transactions.subCategoryFk)),
@@ -1493,7 +1513,10 @@ class FinanceDatabase extends _$FinanceDatabase {
         // Should match that of getTransactionCategoryWithDay
         onlyShowTransactionBasedOnSearchQuery(transactions, search,
                 withCategories: true,
-                joinedWithSubcategoriesTable: subCategories) &
+                joinedWithSubcategoriesTable: subCategories,
+                withBudgets: true,
+                withObjectives: true,
+                joinedWithObjectiveLoans: objectiveLoans) &
             // Pass in the subcategories table so we can search name based on subcategory
             onlyShowIfFollowsSearchFilters(
               transactions,
@@ -1502,6 +1525,7 @@ class FinanceDatabase extends _$FinanceDatabase {
               joinedWithBudgets: true,
               joinedWithCategories: true,
               joinedWithObjectives: true,
+              joinedWithObjectiveLoans: objectiveLoans,
             ) &
             onlyShowIfFollowsFilters(transactions,
                 budget: budget,
@@ -1529,11 +1553,13 @@ class FinanceDatabase extends _$FinanceDatabase {
             transaction = transaction.copyWith(paid: false);
           }
           return TransactionWithCategory(
-              category: row.readTable(categories),
-              transaction: transaction,
-              budget: row.readTableOrNull(budgets),
-              objective: row.readTableOrNull(objectives),
-              subCategory: row.readTableOrNull(subCategories));
+            category: row.readTable(categories),
+            transaction: transaction,
+            budget: row.readTableOrNull(budgets),
+            objective: row.readTableOrNull(objectives),
+            subCategory: row.readTableOrNull(subCategories),
+            objectiveLoan: row.readTableOrNull(objectiveLoans),
+          );
         }).toList());
   }
 
@@ -1554,6 +1580,7 @@ class FinanceDatabase extends _$FinanceDatabase {
         joinedWithCategories: false,
         joinedWithObjectives: false,
         joinedWithSubcategoriesTable: null,
+        joinedWithObjectiveLoans: null,
       ))
       ..addColumns([max, min]);
     return query
@@ -1594,7 +1621,8 @@ class FinanceDatabase extends _$FinanceDatabase {
       ..where(
         onlyShowTransactionBasedOnSearchQuery(transactions, search,
                 withCategories: true,
-                joinedWithSubcategoriesTable: subCategories) &
+                joinedWithSubcategoriesTable: subCategories,
+                joinedWithObjectiveLoans: null) &
             onlyShowIfFollowsSearchFilters(
               transactions,
               searchFilters,
@@ -1602,6 +1630,7 @@ class FinanceDatabase extends _$FinanceDatabase {
               joinedWithSubcategoriesTable: subCategories,
               joinedWithBudgets: false,
               joinedWithObjectives: false,
+              joinedWithObjectiveLoans: null,
             ) &
             onlyShowIfFollowsFilters(transactions,
                 budget: budget,
@@ -1882,9 +1911,13 @@ class FinanceDatabase extends _$FinanceDatabase {
           subCategories.categoryPk.equalsExp(transactions.subCategoryFk)),
     ])
       ..orderBy([OrderingTerm.asc(transactions.dateCreated)])
-      ..where(onlyShowTransactionBasedOnSearchQuery(transactions, searchString,
-              withCategories: true,
-              joinedWithSubcategoriesTable: subCategories) &
+      ..where(onlyShowTransactionBasedOnSearchQuery(
+            transactions,
+            searchString,
+            withCategories: true,
+            joinedWithSubcategoriesTable: subCategories,
+            joinedWithObjectiveLoans: null,
+          ) &
           transactions.skipPaid.equals(false) &
           transactions.paid.equals(false) &
           (isOverdueTransactions == null
@@ -2457,6 +2490,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       getAllTransactionsWithCategoryWalletBudgetObjectiveSubCategory(
           Expression<bool> Function($TransactionsTable) filter) async {
     final subCategories = alias(categories, 'subCategories');
+    final $ObjectivesTable objectiveLoans = alias(objectives, 'objectiveLoans');
     final query = (select(transactions)
           ..where(filter)
           ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)]))
@@ -2477,6 +2511,10 @@ class FinanceDatabase extends _$FinanceDatabase {
         objectives,
         objectives.objectivePk.equalsExp(transactions.objectiveFk),
       ),
+      leftOuterJoin(
+        objectiveLoans,
+        objectiveLoans.objectivePk.equalsExp(transactions.objectiveLoanFk),
+      ),
       leftOuterJoin(subCategories,
           subCategories.categoryPk.equalsExp(transactions.subCategoryFk)),
     ]);
@@ -2491,6 +2529,7 @@ class FinanceDatabase extends _$FinanceDatabase {
         budget: row.readTableOrNull(budgets),
         objective: row.readTableOrNull(objectives),
         subCategory: row.readTableOrNull(subCategories),
+        objectiveLoan: row.readTableOrNull(objectiveLoans),
       );
     }).toList();
   }
@@ -2695,6 +2734,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   //create or update a new wallet
   Future<int> createOrUpdateWallet(TransactionWallet wallet,
       {DateTime? customDateTimeModified, bool insert = false}) {
+    wallet = wallet.copyWith(name: wallet.name.trim());
     wallet = wallet.copyWith(
         dateTimeModified: Value(customDateTimeModified ?? DateTime.now()));
     WalletsCompanion companionToInsert = wallet.toCompanion(true);
@@ -2714,6 +2754,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   //create or update a new objective
   Future<int> createOrUpdateObjective(Objective objective,
       {DateTime? customDateTimeModified, bool insert = false}) async {
+    objective = objective.copyWith(name: objective.name.trim());
     objective = objective.copyWith(
         dateTimeModified: Value(customDateTimeModified ?? DateTime.now()));
     ObjectivesCompanion companionToInsert = objective.toCompanion(true);
@@ -2909,11 +2950,15 @@ class FinanceDatabase extends _$FinanceDatabase {
       {SearchFilters? searchFilters}) {
     final query = selectOnly(transactions, distinct: true)
       ..addColumns([transactions.methodAdded])
-      ..where(onlyShowIfFollowsSearchFilters(transactions, searchFilters,
-          joinedWithSubcategoriesTable: null,
-          joinedWithCategories: false,
-          joinedWithBudgets: false,
-          joinedWithObjectives: false));
+      ..where(onlyShowIfFollowsSearchFilters(
+        transactions,
+        searchFilters,
+        joinedWithSubcategoriesTable: null,
+        joinedWithCategories: false,
+        joinedWithBudgets: false,
+        joinedWithObjectives: false,
+        joinedWithObjectiveLoans: null,
+      ));
     return query
         .map((row) => row.read(transactions.methodAdded) == null
             ? null
@@ -3050,6 +3095,11 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watchSingle();
   }
 
+  Stream<TransactionCategory?> watchBalanceCorrectionCategory() {
+    return (select(categories)..where((t) => t.categoryPk.equals("0")))
+        .watchSingleOrNull();
+  }
+
   (Stream<TransactionCategory>, Future<TransactionCategory>) getCategory(
       String categoryPk) {
     final SimpleSelectStatement<$CategoriesTable, TransactionCategory> query =
@@ -3077,6 +3127,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     TransactionAssociatedTitle associatedTitle, {
     insert = false,
   }) {
+    associatedTitle =
+        associatedTitle.copyWith(title: associatedTitle.title.trim());
     associatedTitle =
         associatedTitle.copyWith(dateTimeModified: Value(DateTime.now()));
     AssociatedTitlesCompanion companionToInsert =
@@ -3388,6 +3440,9 @@ class FinanceDatabase extends _$FinanceDatabase {
         transaction.amount.isNaN) {
       return null;
     }
+
+    transaction = transaction.copyWith(
+        name: transaction.name.trim(), note: transaction.note.trim());
 
     if (transaction.type == TransactionSpecialType.credit) {
       transaction = transaction.copyWith(
@@ -3954,6 +4009,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     if (updateSharedEntry == true && appStateSettings["sharedBudgets"] == false)
       updateSharedEntry = false;
 
+    category = category.copyWith(name: category.name.trim());
     category = category.copyWith(
         dateTimeModified: Value(customDateTimeModified ?? DateTime.now()));
     CategoriesCompanion companionToInsert = category.toCompanion(true);
@@ -4168,7 +4224,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     if (updateSharedEntry == true && appStateSettings["sharedBudgets"] == false)
       updateSharedEntry = false;
 
-    print(budget);
+    budget = budget.copyWith(name: budget.name.trim());
+    // print(budget);
 
     if (budget.sharedKey != null && updateSharedEntry == true) {
       FirebaseFirestore? db = await firebaseGetDBInstance();
@@ -4301,6 +4358,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   Stream<List<TransactionActivityLog>> watchAllTransactionActivityLog(
       {int? limit}) {
     final $CategoriesTable subCategories = alias(categories, 'subCategories');
+    final $ObjectivesTable objectiveLoans = alias(objectives, 'objectiveLoans');
 
     final query = select(transactions).join([
       innerJoin(
@@ -4312,6 +4370,10 @@ class FinanceDatabase extends _$FinanceDatabase {
       leftOuterJoin(
         objectives,
         objectives.objectivePk.equalsExp(transactions.objectiveFk),
+      ),
+      leftOuterJoin(
+        objectiveLoans,
+        objectiveLoans.objectivePk.equalsExp(transactions.objectiveLoanFk),
       ),
       leftOuterJoin(subCategories,
           subCategories.categoryPk.equalsExp(transactions.subCategoryFk)),
@@ -4330,6 +4392,7 @@ class FinanceDatabase extends _$FinanceDatabase {
               budget: row.readTableOrNull(budgets),
               objective: row.readTableOrNull(objectives),
               subCategory: row.readTableOrNull(subCategories),
+              objectiveLoan: row.readTableOrNull(objectiveLoans),
             ),
           );
         }).toList());
@@ -5623,6 +5686,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     $TransactionsTable tbl,
     SearchFilters? searchFilters, {
     required $CategoriesTable? joinedWithSubcategoriesTable,
+    required $ObjectivesTable? joinedWithObjectiveLoans,
     required bool joinedWithCategories,
     required bool joinedWithBudgets,
     required bool joinedWithObjectives,
@@ -5695,10 +5759,21 @@ class FinanceDatabase extends _$FinanceDatabase {
 
     Expression<bool> isLongTermLoanBorrowed = Constant(false);
     Expression<bool> isLongTermLoanLent = Constant(false);
-    if (searchFilters.transactionTypes.contains(TransactionSpecialType.credit))
-      isLongTermLoanLent = tbl.objectiveLoanFk.isNotNull() & tbl.income.not();
-    if (searchFilters.transactionTypes.contains(TransactionSpecialType.debt))
-      isLongTermLoanBorrowed = tbl.objectiveLoanFk.isNotNull() & tbl.income;
+    if (searchFilters.transactionTypes
+        .contains(TransactionSpecialType.credit)) {
+      if (joinedWithObjectiveLoans != null)
+        isLongTermLoanLent =
+            tbl.objectiveLoanFk.isNotNull() & joinedWithObjectiveLoans.income;
+      else
+        isLongTermLoanLent = tbl.objectiveLoanFk.isNotNull() & tbl.income.not();
+    }
+    if (searchFilters.transactionTypes.contains(TransactionSpecialType.debt)) {
+      if (joinedWithObjectiveLoans != null)
+        isLongTermLoanBorrowed = tbl.objectiveLoanFk.isNotNull() &
+            joinedWithObjectiveLoans.income.not();
+      else
+        isLongTermLoanBorrowed = tbl.objectiveLoanFk.isNotNull() & tbl.income;
+    }
     Expression<bool> isTransactionType =
         searchFilters.transactionTypes.length > 0
             ? tbl.type.isInValues(searchFilters.transactionTypes) |
@@ -5747,6 +5822,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       searchQuery,
       withCategories: joinedWithCategories,
       joinedWithSubcategoriesTable: joinedWithSubcategoriesTable,
+      joinedWithObjectiveLoans: joinedWithObjectiveLoans,
       withBudgets: joinedWithBudgets,
       withObjectives: joinedWithObjectives,
     );
@@ -5797,6 +5873,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     String? searchQuery, {
     required bool withCategories,
     required $CategoriesTable? joinedWithSubcategoriesTable,
+    required $ObjectivesTable? joinedWithObjectiveLoans,
     bool? withBudgets,
     bool? withObjectives,
   }) {
@@ -5820,6 +5897,11 @@ class FinanceDatabase extends _$FinanceDatabase {
                 : Constant(false)) |
             (withObjectives == true
                 ? objectives.name
+                    .collate(Collate.noCase)
+                    .like("%" + searchQuery + "%")
+                : Constant(false)) |
+            (joinedWithObjectiveLoans != null
+                ? joinedWithObjectiveLoans.name
                     .collate(Collate.noCase)
                     .like("%" + searchQuery + "%")
                 : Constant(false)) |
@@ -6325,6 +6407,7 @@ class FinanceDatabase extends _$FinanceDatabase {
               joinedWithCategories: false,
               joinedWithBudgets: false,
               joinedWithObjectives: false,
+              joinedWithObjectiveLoans: null,
             ) &
             onlyShowBasedOnTimeRange(transactions, startDate, endDate, budget,
                 allTime: allTime) &
@@ -6414,6 +6497,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                 joinedWithCategories: false,
                 joinedWithBudgets: false,
                 joinedWithObjectives: false,
+                joinedWithObjectiveLoans: null,
               ) &
               onlyShowBasedOnTimeRange(transactions, startDate, endDate, budget,
                   allTime: allTime) &
@@ -6548,11 +6632,15 @@ class FinanceDatabase extends _$FinanceDatabase {
       final totalCount = transactions.transactionPk.count();
       final query = selectOnly(transactions)
         ..addColumns([totalAmt, totalCount])
-        ..where(onlyShowIfFollowsSearchFilters(transactions, searchFilters,
-                joinedWithSubcategoriesTable: null,
-                joinedWithCategories: false,
-                joinedWithBudgets: false,
-                joinedWithObjectives: false) &
+        ..where(onlyShowIfFollowsSearchFilters(
+              transactions,
+              searchFilters,
+              joinedWithSubcategoriesTable: null,
+              joinedWithCategories: false,
+              joinedWithBudgets: false,
+              joinedWithObjectives: false,
+              joinedWithObjectiveLoans: null,
+            ) &
             transactions.walletFk.equals(wallet.walletPk) &
             (onlyShowIfNotBalanceCorrection(transactions, isIncome) |
                 Constant(includeBalanceCorrection)) &
@@ -6621,20 +6709,28 @@ class FinanceDatabase extends _$FinanceDatabase {
           leftOuterJoin(subCategories,
               subCategories.categoryPk.equalsExp(transactions.subCategoryFk)),
         ])
-        ..where(onlyShowIfFollowsSearchFilters(transactions, searchFilters,
-                joinedWithSubcategoriesTable: null,
-                joinedWithCategories: false,
-                joinedWithBudgets: false,
-                joinedWithObjectives: false) &
+        ..where(onlyShowIfFollowsSearchFilters(
+              transactions,
+              searchFilters,
+              joinedWithSubcategoriesTable: null,
+              joinedWithCategories: false,
+              joinedWithBudgets: false,
+              joinedWithObjectives: false,
+              joinedWithObjectiveLoans: null,
+            ) &
             onlyShowIfFollowCustomPeriodCycle(
               transactions,
               followCustomPeriodCycle,
               cycleSettingsExtension: cycleSettingsExtension,
               forcedDateTimeRange: forcedDateTimeRange,
             ) &
-            onlyShowTransactionBasedOnSearchQuery(transactions, searchString,
-                withCategories: true,
-                joinedWithSubcategoriesTable: subCategories) &
+            onlyShowTransactionBasedOnSearchQuery(
+              transactions,
+              searchString,
+              withCategories: true,
+              joinedWithSubcategoriesTable: subCategories,
+              joinedWithObjectiveLoans: null,
+            ) &
             // transactions.income.equals(false) &
             transactions.paid.equals(false) &
             transactions.skipPaid.equals(false) &
@@ -6701,11 +6797,15 @@ class FinanceDatabase extends _$FinanceDatabase {
               objectives.objectivePk.equalsExp(transactions.objectiveLoanFk)),
         ])
         ..where(
-          onlyShowIfFollowsSearchFilters(transactions, searchFilters,
-                  joinedWithSubcategoriesTable: null,
-                  joinedWithCategories: false,
-                  joinedWithBudgets: false,
-                  joinedWithObjectives: false) &
+          onlyShowIfFollowsSearchFilters(
+                transactions,
+                searchFilters,
+                joinedWithSubcategoriesTable: null,
+                joinedWithCategories: false,
+                joinedWithBudgets: false,
+                joinedWithObjectives: false,
+                joinedWithObjectiveLoans: null,
+              ) &
               (cycleSettingsExtension == null
                   ? Constant(true)
                   : onlyShowIfFollowCustomPeriodCycle(
@@ -6726,9 +6826,12 @@ class FinanceDatabase extends _$FinanceDatabase {
                       searchString == null ||
                       searchString == ""
                   ? (onlyShowTransactionBasedOnSearchQuery(
-                      transactions, searchString,
+                      transactions,
+                      searchString,
                       withCategories: true,
-                      joinedWithSubcategoriesTable: subCategories))
+                      joinedWithSubcategoriesTable: subCategories,
+                      joinedWithObjectiveLoans: null,
+                    ))
                   // Only apply this tab specific total when searching
                   : ((objectives.name
                       .collate(Collate.noCase)
@@ -6829,9 +6932,13 @@ class FinanceDatabase extends _$FinanceDatabase {
         OrderingTerm.desc(transactions.paid),
         OrderingTerm.desc(transactions.dateCreated),
       ])
-      ..where(onlyShowTransactionBasedOnSearchQuery(transactions, searchString,
-              withCategories: true,
-              joinedWithSubcategoriesTable: subCategories) &
+      ..where(onlyShowTransactionBasedOnSearchQuery(
+            transactions,
+            searchString,
+            withCategories: true,
+            joinedWithSubcategoriesTable: subCategories,
+            joinedWithObjectiveLoans: null,
+          ) &
           (isCredit == null
               ? transactions.type.equals(TransactionSpecialType.credit.index) |
                   transactions.type.equals(TransactionSpecialType.debt.index)
@@ -6841,6 +6948,58 @@ class FinanceDatabase extends _$FinanceDatabase {
                   : transactions.type
                       .equals(TransactionSpecialType.debt.index)));
     return query.map((row) => row.readTable(transactions)).watch();
+  }
+
+  Stream<TotalWithCount?> watchTotalCountOfTransactionsWithSearchFilters({
+    required AllWallets allWallets,
+    SearchFilters? searchFilters,
+    DateTimeRange? forcedDateTimeRange,
+    bool followCustomPeriodCycle = false,
+    String? cycleSettingsExtension = "",
+  }) {
+    List<Stream<TotalWithCount?>> mergedStreams = [];
+    for (TransactionWallet wallet in allWallets.list) {
+      final totalAmt = transactions.amount.sum();
+      final totalCount = transactions.transactionPk.count();
+      final $CategoriesTable subCategories = alias(categories, 'subCategories');
+      final query = selectOnly(transactions)
+        ..addColumns([totalAmt, totalCount])
+        ..join([
+          innerJoin(categories,
+              categories.categoryPk.equalsExp(transactions.categoryFk)),
+          leftOuterJoin(subCategories,
+              subCategories.categoryPk.equalsExp(transactions.subCategoryFk)),
+          leftOuterJoin(objectives,
+              objectives.objectivePk.equalsExp(transactions.objectiveLoanFk)),
+        ])
+        ..where(onlyShowIfFollowsSearchFilters(
+              transactions,
+              searchFilters,
+              joinedWithSubcategoriesTable: null,
+              joinedWithCategories: false,
+              joinedWithBudgets: false,
+              joinedWithObjectives: false,
+              joinedWithObjectiveLoans: null,
+            ) &
+            (cycleSettingsExtension == null
+                ? Constant(true)
+                : onlyShowIfFollowCustomPeriodCycle(
+                    transactions,
+                    followCustomPeriodCycle,
+                    cycleSettingsExtension: cycleSettingsExtension,
+                    forcedDateTimeRange: forcedDateTimeRange,
+                  )) &
+            transactions.paid.equals(true) &
+            transactions.walletFk.equals(wallet.walletPk));
+      mergedStreams.add(query.map((row) {
+        // print(row.rawData.data);
+        return TotalWithCount(
+            total: (row.read(totalAmt) ?? 0) *
+                (amountRatioToPrimaryCurrency(allWallets, wallet.currency)),
+            count: row.read(totalCount) ?? 0);
+      }).watchSingle());
+    }
+    return totalTotalWithCountStream(mergedStreams);
   }
 
   Stream<List<int?>> watchTotalCountOfTransactionsInCategory(
@@ -6925,11 +7084,15 @@ class FinanceDatabase extends _$FinanceDatabase {
     DateTime endDate = end.justDay();
     return (select(transactions)
           ..where((tbl) {
-            return onlyShowIfFollowsSearchFilters(transactions, searchFilters,
-                    joinedWithSubcategoriesTable: null,
-                    joinedWithCategories: false,
-                    joinedWithBudgets: false,
-                    joinedWithObjectives: false) &
+            return onlyShowIfFollowsSearchFilters(
+                  transactions,
+                  searchFilters,
+                  joinedWithSubcategoriesTable: null,
+                  joinedWithCategories: false,
+                  joinedWithBudgets: false,
+                  joinedWithObjectives: false,
+                  joinedWithObjectiveLoans: null,
+                ) &
                 isInCategory(tbl, categoryFks, categoryFksExclude) &
                 evaluateIfNull(tbl.paid.equals(true), isPaidOnly, true) &
                 onlyShowIfFollowCustomPeriodCycle(
@@ -6976,11 +7139,15 @@ class FinanceDatabase extends _$FinanceDatabase {
               // otherwise midnight transactions on start of month
               // will be counted twice in all spending page cumulative total!
               transactions.dateCreated.isSmallerThanValue(startDate) &
-              onlyShowIfFollowsSearchFilters(transactions, searchFilters,
-                  joinedWithSubcategoriesTable: null,
-                  joinedWithCategories: false,
-                  joinedWithBudgets: false,
-                  joinedWithObjectives: false) &
+              onlyShowIfFollowsSearchFilters(
+                transactions,
+                searchFilters,
+                joinedWithSubcategoriesTable: null,
+                joinedWithCategories: false,
+                joinedWithBudgets: false,
+                joinedWithObjectives: false,
+                joinedWithObjectiveLoans: null,
+              ) &
               onlyShowBasedOnIncome(transactions, isIncome),
         );
       mergedStreams.add(query
@@ -6999,11 +7166,15 @@ class FinanceDatabase extends _$FinanceDatabase {
     final query = select(transactions)
       ..where((t) =>
           (paid == null ? Constant(true) : t.paid.equals(paid)) &
-          onlyShowIfFollowsSearchFilters(t, searchFilters,
-              joinedWithSubcategoriesTable: null,
-              joinedWithCategories: false,
-              joinedWithBudgets: false,
-              joinedWithObjectives: false))
+          onlyShowIfFollowsSearchFilters(
+            t,
+            searchFilters,
+            joinedWithSubcategoriesTable: null,
+            joinedWithCategories: false,
+            joinedWithBudgets: false,
+            joinedWithObjectives: false,
+            joinedWithObjectiveLoans: null,
+          ))
       ..orderBy([(t) => OrderingTerm.asc(t.dateCreated)]);
 
     return query.watch().map((rows) {
@@ -7044,11 +7215,15 @@ class FinanceDatabase extends _$FinanceDatabase {
               evaluateIfNull(transactions.paid.equals(true), isPaidOnly, true));
       final query = selectOnly(transactions)
         ..addColumns([totalAmt])
-        ..where(onlyShowIfFollowsSearchFilters(transactions, searchFilters,
-                joinedWithSubcategoriesTable: null,
-                joinedWithCategories: false,
-                joinedWithBudgets: false,
-                joinedWithObjectives: false) &
+        ..where(onlyShowIfFollowsSearchFilters(
+              transactions,
+              searchFilters,
+              joinedWithSubcategoriesTable: null,
+              joinedWithCategories: false,
+              joinedWithBudgets: false,
+              joinedWithObjectives: false,
+              joinedWithObjectiveLoans: null,
+            ) &
             transactions.walletFk.equals(wallet.walletPk) &
             onlyShowIfFollowCustomPeriodCycle(
               transactions,
