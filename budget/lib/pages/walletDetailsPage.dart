@@ -1237,8 +1237,10 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                 ? Theme.of(context).colorScheme.secondaryContainer
                 : null,
         dragDownToDismiss: true,
-        dragDownToDismissEnabled: enableDoubleColumn(context) ? false : true,
-        expandedHeight: enableDoubleColumn(context) ? 56 : null,
+        dragDownToDismissEnabled:
+            enableDoubleColumn(context) && widget.wallet == null ? false : true,
+        expandedHeight:
+            enableDoubleColumn(context) && widget.wallet == null ? 56 : null,
         backgroundColor: Theme.of(context).colorScheme.background,
         scrollController: _scrollController,
         key: pageState,
@@ -1254,7 +1256,7 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
         title:
             widget.wallet == null ? "all-spending".tr() : widget.wallet!.name,
         capitalizeTitle: widget.wallet == null,
-        actions: enableDoubleColumn(context)
+        actions: enableDoubleColumn(context) && widget.wallet == null
             ? [
                 historySettingsButtonAlwaysShow,
                 selectFiltersButton,
