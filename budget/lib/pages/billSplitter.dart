@@ -1144,6 +1144,7 @@ class _AddBillItemPageState extends State<AddBillItemPage> {
               );
             },
           ),
+          SizedBox(height: 50),
         ],
         staticOverlay: Align(
           alignment: AlignmentDirectional.bottomCenter,

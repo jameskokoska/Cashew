@@ -1,6 +1,5 @@
 import 'package:budget/colors.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/main.dart';
 import 'package:budget/pages/exchangeRatesPage.dart';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/settings.dart';

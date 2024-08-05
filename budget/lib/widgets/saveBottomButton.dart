@@ -3,7 +3,6 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
-import 'package:budget/widgets/tappable.dart';
 import 'package:flutter/material.dart';
 
 class SaveBottomButton extends StatelessWidget {

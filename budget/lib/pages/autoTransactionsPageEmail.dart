@@ -23,7 +23,6 @@ import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/util/appLinks.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:budget/main.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/functions.dart';
 import 'package:googleapis/gmail/v1.dart' as gMail;

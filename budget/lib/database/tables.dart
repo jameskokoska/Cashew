@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
@@ -12,7 +10,6 @@ import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/struct/syncClient.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/periodCyclePicker.dart';
-import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/walletEntry.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
