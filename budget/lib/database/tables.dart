@@ -3439,7 +3439,11 @@ class FinanceDatabase extends _$FinanceDatabase {
     }
 
     transaction = transaction.copyWith(
-        name: transaction.name.trim(), note: transaction.note.trim());
+      name: transaction.name.trim(),
+      // Don't trim the note since the note can contain links
+      // To make a parsed link, user needs to add space afterwards and we want to save this
+      //note: transaction.note.trim(),
+    );
 
     if (transaction.type == TransactionSpecialType.credit) {
       transaction = transaction.copyWith(
@@ -5040,16 +5044,45 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   //delete wallet given key
   Future deleteWallet(String walletPk, int order) async {
+    TransactionWallet? newPrimaryCandidate;
+
     if (walletPk == "0") {
-      throw "Can't delete default wallet";
+      newPrimaryCandidate = (await (select(wallets)
+                ..where((w) => w.walletPk.isNotValue("0"))
+                ..orderBy([(w) => OrderingTerm.asc(w.order)]))
+              .get())
+          .firstOrNull;
+      if (newPrimaryCandidate == null)
+        throw "Can't find another wallet to make default";
     }
+
     if (appStateSettings["selectedWalletPk"] == walletPk) {
       setPrimaryWallet("0");
     }
     await database.deleteWalletsTransactions(walletPk);
     await database.shiftWallets(-1, order);
     await createDeleteLog(DeleteLogType.TransactionWallet, walletPk);
-    return (delete(wallets)..where((w) => w.walletPk.equals(walletPk))).go();
+    await (delete(wallets)..where((w) => w.walletPk.equals(walletPk))).go();
+
+    if (newPrimaryCandidate != null && walletPk == "0") {
+      await convertToPrimaryWallet(newPrimaryCandidate);
+    }
+
+    return;
+  }
+
+  Future convertToPrimaryWallet(TransactionWallet sourceWallet) async {
+    // If the source if the main wallet (we cannot delete it)
+    // Move transactions the other way and update parameters if moving to main wallet
+
+    // Update the primary wallet to match old, create an entirely new wallet copy under "0"
+    await database
+        .createOrUpdateWallet(sourceWallet.copyWith(walletPk: "0")); // "0"
+    // Force move transactions over from old to new "0"
+    await database.transferTransactionsOnly(sourceWallet.walletPk, "0");
+    // Delete the duplicate, the old
+    await database.deleteWallet(sourceWallet.walletPk, sourceWallet.order);
+    await database.fixOrderWallets();
   }
 
   Future<bool> moveWalletTransactions(

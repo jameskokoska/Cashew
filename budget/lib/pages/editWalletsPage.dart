@@ -227,7 +227,12 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                               Provider.of<AllWallets>(context, listen: false),
                         );
                       },
-                      canDelete: (wallet.walletPk != "0"),
+                      canDelete: (wallet.walletPk != "0" ||
+                          Provider.of<AllWallets>(context, listen: true)
+                                  .indexedByPk
+                                  .entries
+                                  .length >
+                              1),
                       canReorder: searchValue == "" &&
                           (snapshot.data ?? []).length != 1,
                       currentReorder:
@@ -444,24 +449,8 @@ void mergeWalletPopup(
           selectedWalletResult.walletPk,
         );
         if (walletOriginal.walletPk == "0") {
-          // If the source if the main wallet (we cannot delete it)
-          // Move transactions the other way and update parameters if moving to main wallet
-
-          // Update the primary wallet to match source
-          await database.createOrUpdateWallet(
-              selectedWalletResult.copyWith(walletPk: walletOriginal.walletPk));
-          // Force move transactions over
-          await database.transferTransactionsOnly(
-              selectedWalletResult.walletPk, walletOriginal.walletPk);
-          // Delete the duplicate
-          await database.deleteWallet(
-              selectedWalletResult.walletPk, selectedWalletResult.order);
+          await database.convertToPrimaryWallet(selectedWalletResult);
         } else {
-          await database.moveWalletTransactions(
-            Provider.of<AllWallets>(context, listen: false),
-            walletOriginal.walletPk,
-            selectedWalletResult.walletPk,
-          );
           await database.deleteWallet(
               walletOriginal.walletPk, walletOriginal.order);
         }
