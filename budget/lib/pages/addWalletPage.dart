@@ -1277,13 +1277,6 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
                 .copyWith(hour: time.hour, minute: time.minute);
           },
         ),
-        SizedBox(height: 13),
-        Button(
-          label: "set-details",
-          onTap: () {
-            popRoute(context);
-          },
-        ),
       ],
     );
     return PopupFramework(
@@ -1307,7 +1300,18 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
                   context,
                   popupWithKeyboard: true,
                   PopupFramework(
-                    child: editTransferDetails,
+                    child: Column(
+                      children: [
+                        editTransferDetails,
+                        SizedBox(height: 13),
+                        Button(
+                          label: "set-details".tr(),
+                          onTap: () {
+                            popRoute(context);
+                          },
+                        ),
+                      ],
+                    ),
                     title: "transaction-details".tr(),
                   ),
                 );
