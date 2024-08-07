@@ -2,7 +2,6 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/activityPage.dart';
 import 'package:budget/pages/addCategoryPage.dart';
-import 'package:budget/pages/calendarPage.dart';
 import 'package:budget/pages/creditDebtTransactionsPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/pages/editHomePage.dart';
@@ -2515,14 +2514,17 @@ List<Widget>? getChangelogPointsWidgets(BuildContext context,
     int versionBookmark = versionInt;
     for (String string in changelog.split("\n")) {
       string = string.replaceFirst("    ", ""); // remove the indent
-      if (getPlatform() != PlatformOS.isIOS) {
-        string = string.replaceAll("(A)", "Android");
-        string = string.replaceAll("(i)", "iOS");
-      }
-      // Skip android changes on iOS
+
+      // Skip android changes on iOS, skip iOS changes on Android
       if (getPlatform() == PlatformOS.isIOS && string.contains(("(A)"))) {
         continue;
+      } else if (getPlatform() == PlatformOS.isAndroid &&
+          string.contains(("(i)"))) {
+        continue;
       }
+      string = string.replaceAll("(A)", "Android");
+      string = string.replaceAll("(i)", "iOS");
+
       if (string.startsWith("< ")) {
         if (forceShow) {
           changelogPoints.addAll(getAllMajorChangeWidgetsForVersion(
