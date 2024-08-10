@@ -26,9 +26,14 @@ import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
-class AboutPage extends StatelessWidget {
+class AboutPage extends StatefulWidget {
   const AboutPage({Key? key}) : super(key: key);
 
+  @override
+  State<AboutPage> createState() => AboutPageState();
+}
+
+class AboutPageState extends State<AboutPage> {
   @override
   Widget build(BuildContext context) {
     bool fullScreenLayout = enableDoubleColumn(context);
@@ -254,7 +259,7 @@ class AboutPage extends StatelessWidget {
       ),
       TranslationInfoBox(
         title: "Polish",
-        list: ["Michał S.", "Michał P."],
+        list: ["Michał S.", "Michał P.", "Kaczusia"],
       ),
       TranslationInfoBox(
         title: "Serbian",
@@ -270,7 +275,7 @@ class AboutPage extends StatelessWidget {
       ),
       TranslationInfoBox(
         title: "Arabic",
-        list: ["Dorra Y."],
+        list: ["Dorra Y.", "Ammar N.", "Hussain A.", "Mahmoud E."],
       ),
       TranslationInfoBox(
         title: "Portuguese",
@@ -348,10 +353,6 @@ class AboutPage extends StatelessWidget {
         list: ["Andrej A."],
       ),
       TranslationInfoBox(
-        title: "Arabic",
-        list: ["Ammar N.", "Hussain A."],
-      ),
-      TranslationInfoBox(
         title: "Czech",
         list: ["Kamil T."],
       ),
@@ -390,6 +391,10 @@ class AboutPage extends StatelessWidget {
       TranslationInfoBox(
         title: "Finnish",
         list: ["Mirko J."],
+      ),
+      TranslationInfoBox(
+        title: "Dutch",
+        list: ["Niels S."],
       ),
     ];
 

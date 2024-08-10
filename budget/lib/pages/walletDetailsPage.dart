@@ -2876,7 +2876,8 @@ class AmountSpentEntryRow extends StatelessWidget {
           ],
           tappableBuilder: (onLongPress) => AnimatedExpanded(
             axis: Axis.vertical,
-            expand: forceShow || (totalSpent != 0 && hide == false),
+            expand: forceShow ||
+                ((totalCount > 0 || totalSpent != 0) && hide == false),
             child: OpenContainerNavigation(
               borderRadius: 0,
               openPage: openPage,

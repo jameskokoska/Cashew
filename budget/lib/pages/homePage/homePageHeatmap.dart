@@ -51,7 +51,7 @@ class _HomePageHeatMapState extends State<HomePageHeatMap> {
     return KeepAliveClientMixin(
       child: StreamBuilder<List<Transaction>>(
         stream: database.getTransactionsInTimeRangeFromCategories(
-          DateTime.now().justDay(monthOffset: -1),
+          DateTime.now().justDay(monthOffset: -monthsToLoad),
           DateTime.now().justDay(),
           null,
           null,

@@ -1163,85 +1163,16 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                             widget.budget!.addedTransactionsOnly == false) ||
                         widget.budget == null),
             sliver: SliverToBoxAdapter(
-              child: StreamBuilder<List<TransactionWallet>>(
-                stream: database.watchAllWallets(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return AnimatedExpanded(
-                      expand: !(selectedShared == true ||
-                          selectedAddedTransactionsOnly),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 5),
-                          SelectChips(
-                            items: [null, ...snapshot.data!],
-                            onLongPress: (TransactionWallet? item) {
-                              pushRoute(
-                                context,
-                                AddWalletPage(
-                                  wallet: item,
-                                  routesToPopAfterDelete:
-                                      RoutesToPopAfterDelete.PreventDelete,
-                                ),
-                              );
-                            },
-                            getLabel: (TransactionWallet? item) {
-                              return item?.name ?? "all-accounts".tr();
-                            },
-                            onSelected: (TransactionWallet? item) {
-                              // print(item);
-                              // print(selectedWalletFks);
-                              if (selectedWalletFks == null && item != null) {
-                                selectedWalletFks = [];
-                              }
-                              if (item != null) {
-                                if (selectedWalletFks!
-                                    .contains(item.walletPk)) {
-                                  selectedWalletFks!.remove(item.walletPk);
-                                } else {
-                                  selectedWalletFks!.add(item.walletPk);
-                                }
-                              }
-                              if (item == null ||
-                                  (selectedWalletFks ?? []).length <= 0) {
-                                selectedWalletFks = null;
-                              }
-                              setState(() {});
-                              determineBottomButton();
-                            },
-                            getSelected: (TransactionWallet? item) {
-                              return selectedWalletFks == null && item == null
-                                  ? true
-                                  : (selectedWalletFks ?? [])
-                                      .contains(item?.walletPk);
-                            },
-                            getCustomBorderColor: (TransactionWallet? item) {
-                              if (item == null) return null;
-                              return dynamicPastel(
-                                context,
-                                lightenPastel(
-                                  HexColor(
-                                    item.colour,
-                                    defaultColor:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-                                  amount: 0.3,
-                                ),
-                                amount: 0.4,
-                              );
-                            },
-                          ),
-                          SizedBox(height: 10),
-                        ],
-                      ),
-                    );
-                  } else {
-                    return SizedBox.shrink();
-                  }
-                },
-              ),
-            ),
+                child: WalletChipSelector(
+              expand:
+                  !(selectedShared == true || selectedAddedTransactionsOnly),
+              onSelected: (selected) {
+                selectedWalletFks = selected;
+                setState(() {});
+                determineBottomButton();
+              },
+              initiallySelectedWalletFks: selectedWalletFks,
+            )),
           ),
           SliverStickyLabelDivider(
             info: "select-categories".tr(),
@@ -1328,6 +1259,119 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           Container(height: 70),
         ],
       ),
+    );
+  }
+}
+
+class WalletChipSelector extends StatefulWidget {
+  const WalletChipSelector(
+      {required this.expand,
+      required this.initiallySelectedWalletFks,
+      required this.onSelected,
+      super.key});
+  final bool expand;
+  final List<String>? initiallySelectedWalletFks;
+  final Function(List<String>?) onSelected;
+
+  @override
+  State<WalletChipSelector> createState() => _WalletChipSelectorState();
+}
+
+class _WalletChipSelectorState extends State<WalletChipSelector> {
+  late List<String>? selectedWalletFks;
+
+  @override
+  void initState() {
+    selectedWalletFks = widget.initiallySelectedWalletFks;
+    final Set<String> keysSet = Provider.of<AllWallets>(context, listen: false)
+        .indexedByPk
+        .keys
+        .toSet();
+    if (keysSet.any((value) => (selectedWalletFks ?? []).contains(value)) ==
+        false) {
+      selectedWalletFks = null;
+      Future.delayed(Duration.zero, () => onSelected(null));
+    }
+
+    super.initState();
+  }
+
+  onSelected(TransactionWallet? item) {
+    if (selectedWalletFks == null && item != null) {
+      selectedWalletFks = [];
+    }
+    if (item != null) {
+      if (selectedWalletFks!.contains(item.walletPk)) {
+        selectedWalletFks!.remove(item.walletPk);
+      } else {
+        selectedWalletFks!.add(item.walletPk);
+      }
+    }
+    if (item == null || (selectedWalletFks ?? []).length <= 0) {
+      selectedWalletFks = null;
+    }
+    setState(() {});
+    widget.onSelected(selectedWalletFks);
+  }
+
+  bool getSelected(TransactionWallet? item) {
+    return selectedWalletFks == null && item == null
+        ? true
+        : (selectedWalletFks ?? []).contains(item?.walletPk);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<List<TransactionWallet>>(
+      stream: database.watchAllWallets(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return AnimatedExpanded(
+            expand: widget.expand,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 5),
+                SelectChips(
+                  items: [null, ...snapshot.data!],
+                  onLongPress: (TransactionWallet? item) {
+                    pushRoute(
+                      context,
+                      AddWalletPage(
+                        wallet: item,
+                        routesToPopAfterDelete:
+                            RoutesToPopAfterDelete.PreventDelete,
+                      ),
+                    );
+                  },
+                  getLabel: (TransactionWallet? item) {
+                    return item?.name ?? "all-accounts".tr();
+                  },
+                  onSelected: onSelected,
+                  getSelected: getSelected,
+                  getCustomBorderColor: (TransactionWallet? item) {
+                    if (item == null) return null;
+                    return dynamicPastel(
+                      context,
+                      lightenPastel(
+                        HexColor(
+                          item.colour,
+                          defaultColor: Theme.of(context).colorScheme.primary,
+                        ),
+                        amount: 0.3,
+                      ),
+                      amount: 0.4,
+                    );
+                  },
+                ),
+                SizedBox(height: 10),
+              ],
+            ),
+          );
+        } else {
+          return SizedBox.shrink();
+        }
+      },
     );
   }
 }

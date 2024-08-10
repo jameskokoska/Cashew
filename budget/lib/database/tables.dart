@@ -2819,7 +2819,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Future<int> createOrUpdateCategoryLimit(CategoryBudgetLimit categoryLimit,
-      {bool insert = false}) {
+      {bool insert = false}) async {
     double maxAmount = 999999999999;
     if (categoryLimit.amount >= maxAmount)
       categoryLimit = categoryLimit.copyWith(amount: maxAmount);
@@ -5440,9 +5440,10 @@ class FinanceDatabase extends _$FinanceDatabase {
   // This is because the total banner category limits would be incorrect
   // (Would not default to a factor of one since we loop through the wallets,
   // not the wallets that the limits exist in)
+  //
+  // Also delete any spending category limit that is not tied to any category
   Future<bool> fixWanderingCategoryLimitsInBudget({
     required AllWallets allWallets,
-    required String budgetPk,
   }) async {
     List<CategoryBudgetLimit> wanderingLimits =
         await (select(categoryBudgetLimits)
@@ -5452,6 +5453,50 @@ class FinanceDatabase extends _$FinanceDatabase {
       await createOrUpdateCategoryLimit(
           limit.copyWith(walletFk: appStateSettings["selectedWalletPk"]));
     }
+
+    //Remove limits not belonging to a category
+    List<TransactionCategory> allCategories = await select(categories).get();
+    List<String> categoryKeys = allCategories.map((e) => e.categoryPk).toList();
+    List<CategoryBudgetLimit> wanderingCategoryLimits =
+        await (select(categoryBudgetLimits)
+              ..where((t) => t.categoryFk.isNotIn(categoryKeys)))
+            .get();
+    for (CategoryBudgetLimit limit in wanderingCategoryLimits) {
+      await deleteCategoryBudgetLimit(limit.categoryLimitPk);
+    }
+    if (wanderingCategoryLimits.isNotEmpty)
+      print("Deleted wandering spending limits with no category");
+
+    //Remove limits not belonging to a budget
+    List<Budget> allBudgets = await select(budgets).get();
+    List<String> budgetKeys = allBudgets.map((e) => e.budgetPk).toList();
+    List<CategoryBudgetLimit> wanderingBudgetLimits =
+        await (select(categoryBudgetLimits)
+              ..where((t) => t.budgetFk.isNotIn(budgetKeys)))
+            .get();
+    for (CategoryBudgetLimit limit in wanderingBudgetLimits) {
+      await deleteCategoryBudgetLimit(limit.categoryLimitPk);
+    }
+    if (wanderingBudgetLimits.isNotEmpty)
+      print("Deleted wandering spending limits with no budget");
+
+    List<String> duplicatedCategoryLimits = await customSelect(
+      '''
+        SELECT * FROM category_budget_limits
+        WHERE category_limit_pk NOT IN (
+          SELECT MAX(category_limit_pk) FROM category_budget_limits
+          GROUP BY budget_fk, category_fk
+        )
+      ''',
+      readsFrom: {categoryBudgetLimits},
+    ).map((row) => row.read<String>('category_limit_pk')).get();
+    for (String limitPkDuplicate in duplicatedCategoryLimits) {
+      await deleteCategoryBudgetLimit(limitPkDuplicate);
+    }
+    if (duplicatedCategoryLimits.isNotEmpty)
+      print(
+          "Deleted wandering spending limits that duplicate a budget AND category id");
+
     return true;
   }
 

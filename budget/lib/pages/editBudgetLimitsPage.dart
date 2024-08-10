@@ -33,7 +33,6 @@ class _EditBudgetLimitsPageState extends State<EditBudgetLimitsPage> {
     Future.delayed(Duration(milliseconds: 0), () async {
       await database.fixWanderingCategoryLimitsInBudget(
         allWallets: Provider.of<AllWallets>(context, listen: false),
-        budgetPk: widget.budget.budgetPk,
       );
     });
     super.initState();

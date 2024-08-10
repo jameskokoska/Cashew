@@ -178,8 +178,18 @@ Future<bool> signInGoogle(
             ? Icons.error_outlined
             : Icons.error_rounded,
         timeout: Duration(milliseconds: 3400),
+        onTap: () => signInGoogle(
+          context: context,
+          drivePermissions: drivePermissions,
+          drivePermissionsAttachments: drivePermissionsAttachments,
+          gMailPermissions: gMailPermissions,
+          next: next,
+          silentSignIn: false,
+          waitForCompletion: waitForCompletion,
+        ),
       ),
     );
+    googleUser = null;
     await updateSettings("currentUserEmail", "", updateGlobalState: false);
     if (runningCloudFunctions) {
       errorSigningInDuringCloud = true;
@@ -471,9 +481,6 @@ Future<void> deleteRecentBackups(context, amountToKeep,
     final authHeaders = await googleUser!.authHeaders;
     final authenticateClient = GoogleAuthClient(authHeaders);
     final driveApi = drive.DriveApi(authenticateClient);
-    if (driveApi == null) {
-      throw "Failed to login to Google Drive";
-    }
 
     drive.FileList fileList = await driveApi.files.list(
       spaces: 'appDataFolder',
