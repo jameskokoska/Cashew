@@ -387,57 +387,7 @@ ColorScheme getColorScheme(Brightness brightness) {
     getSettingConstants(appStateSettings)["accentColor"],
     threshold: 15,
   )) {
-    if (brightness == Brightness.light) {
-      return ColorScheme(
-        brightness: Brightness.light,
-        primary: Colors.blueGrey[800]!,
-        onPrimary: Colors.white,
-        primaryContainer: Colors.blueGrey[300]!,
-        onPrimaryContainer: Colors.black,
-        secondary: Colors.blueGrey[800]!,
-        onSecondary: Colors.white,
-        secondaryContainer: Colors.blueGrey[100]!,
-        onSecondaryContainer: Colors.black,
-        surface: Colors.grey[200]!,
-        onSurface: Colors.black,
-        background: appStateSettings["materialYou"]
-            ? Colors.blueGrey[50]!
-            : Colors.white,
-        onBackground: Colors.black,
-        error: Colors.red[700]!,
-        onError: Colors.white,
-        surfaceVariant: Colors.grey[100]!,
-        onSurfaceVariant: Colors.black,
-        outline: Colors.grey[500]!,
-        shadow: Colors.black,
-      );
-    } else {
-      return ColorScheme(
-        brightness: Brightness.dark,
-        primary: Colors.grey[300]!,
-        onPrimary: Colors.black,
-        primaryContainer: Colors.grey[700]!,
-        onPrimaryContainer: Colors.white,
-        secondary: Colors.grey[500]!,
-        onSecondary: Colors.black,
-        secondaryContainer: Colors.grey[800]!,
-        onSecondaryContainer: Colors.white,
-        surface: Colors.grey[900]!,
-        onSurface: Colors.white,
-        background: appStateSettings["forceFullDarkBackground"] == true
-            ? Colors.black
-            : appStateSettings["materialYou"]
-                ? Color(0xFF0F0F0F)
-                : Colors.black,
-        onBackground: Colors.white,
-        error: Colors.red[300]!,
-        onError: Colors.black,
-        surfaceVariant: Colors.grey[800]!,
-        onSurfaceVariant: Colors.white,
-        outline: Colors.grey[600]!,
-        shadow: Colors.black,
-      );
-    }
+    return getGrayScaleColorScheme(brightness);
   }
   if (brightness == Brightness.light) {
     return ColorScheme.fromSeed(
@@ -459,6 +409,83 @@ ColorScheme getColorScheme(Brightness brightness) {
                   getSettingConstants(appStateSettings)["accentColor"],
                   amount: 0.92)
               : Colors.black,
+    );
+  }
+}
+
+ColorScheme getGrayScaleColorScheme(Brightness brightness) {
+  if (brightness == Brightness.light) {
+    return ColorScheme(
+      brightness: Brightness.light,
+      primary: Colors.blueGrey[700]!,
+      onPrimary: Colors.white,
+      primaryContainer: Colors.blueGrey[300]!,
+      onPrimaryContainer: Colors.black,
+      secondary: Colors.blueGrey[800]!,
+      onSecondary: Colors.white,
+      secondaryContainer: Colors.blueGrey[100]!,
+      onSecondaryContainer: Colors.black,
+      tertiary: Colors.blueGrey[500]!,
+      onTertiary: Colors.white,
+      tertiaryContainer: Colors.teal[100],
+      onTertiaryContainer: Colors.blueGrey[900]!,
+      error: Colors.red[700]!,
+      onError: Colors.white,
+      errorContainer: Colors.red[100],
+      onErrorContainer: Colors.black,
+      surface: Colors.grey[200]!,
+      onSurface: Colors.black,
+      background:
+          appStateSettings["materialYou"] ? Colors.blueGrey[50]! : Colors.white,
+      onBackground: Colors.black,
+      surfaceVariant: Colors.grey[100]!,
+      onSurfaceVariant: Colors.black,
+      outline: Colors.grey[500]!,
+      outlineVariant: Colors.grey[400],
+      shadow: Colors.black,
+      scrim: Colors.black.withOpacity(0.5),
+      inverseSurface: Colors.grey[800],
+      onInverseSurface: Colors.white,
+      inversePrimary: Colors.blueGrey[300],
+      surfaceTint: Colors.blueGrey[700],
+    );
+  } else {
+    return ColorScheme(
+      brightness: Brightness.dark,
+      primary: Colors.blueGrey[200]!,
+      onPrimary: Colors.black,
+      primaryContainer: Colors.grey[700]!,
+      onPrimaryContainer: Colors.white,
+      secondary: Colors.grey[500]!,
+      onSecondary: Colors.black,
+      secondaryContainer: Colors.grey[800]!,
+      onSecondaryContainer: Colors.white,
+      tertiary: Colors.blueGrey[300],
+      onTertiary: Colors.black,
+      tertiaryContainer: Colors.blueGrey[700],
+      onTertiaryContainer: Colors.blueGrey[200]!,
+      error: Colors.red[300]!,
+      onError: Colors.black,
+      errorContainer: Colors.red[900],
+      onErrorContainer: Colors.white,
+      surface: Colors.grey[900]!,
+      onSurface: Colors.white,
+      background: appStateSettings["forceFullDarkBackground"] == true
+          ? Colors.black
+          : appStateSettings["materialYou"]
+              ? Color(0xFF0F0F0F)
+              : Colors.black,
+      onBackground: Colors.white,
+      surfaceVariant: Colors.grey[800]!,
+      onSurfaceVariant: Colors.white,
+      outline: Colors.grey[600]!,
+      outlineVariant: Colors.grey[500],
+      shadow: Colors.black,
+      scrim: Colors.black.withOpacity(0.7),
+      inverseSurface: Colors.grey[100],
+      onInverseSurface: Colors.black,
+      inversePrimary: Colors.blueGrey[800],
+      surfaceTint: Colors.blueGrey[200],
     );
   }
 }
