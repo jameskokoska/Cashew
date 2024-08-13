@@ -372,7 +372,67 @@ bool supportsSystemColor() {
       getPlatform() != PlatformOS.isIOS;
 }
 
+bool isGrayScale(Color color, {int threshold = 10}) {
+  int red = color.red;
+  int green = color.green;
+  int blue = color.blue;
+
+  return (red - green).abs() <= threshold &&
+      (red - blue).abs() <= threshold &&
+      (green - blue).abs() <= threshold;
+}
+
 ColorScheme getColorScheme(Brightness brightness) {
+  if (isGrayScale(
+    getSettingConstants(appStateSettings)["accentColor"],
+    threshold: 15,
+  )) {
+    if (brightness == Brightness.light) {
+      return ColorScheme(
+        brightness: Brightness.light,
+        primary: Colors.blueGrey[800]!,
+        onPrimary: Colors.white,
+        primaryContainer: Colors.blueGrey[300]!,
+        onPrimaryContainer: Colors.black,
+        secondary: Colors.blueGrey[800]!,
+        onSecondary: Colors.white,
+        secondaryContainer: Colors.blueGrey[100]!,
+        onSecondaryContainer: Colors.black,
+        surface: Colors.grey[200]!,
+        onSurface: Colors.black,
+        background: Colors.white,
+        onBackground: Colors.black,
+        error: Colors.red[700]!,
+        onError: Colors.white,
+        surfaceVariant: Colors.grey[100]!,
+        onSurfaceVariant: Colors.black,
+        outline: Colors.grey[500]!,
+        shadow: Colors.black,
+      );
+    } else {
+      return ColorScheme(
+        brightness: Brightness.dark,
+        primary: Colors.grey[300]!,
+        onPrimary: Colors.black,
+        primaryContainer: Colors.grey[700]!,
+        onPrimaryContainer: Colors.white,
+        secondary: Colors.grey[500]!,
+        onSecondary: Colors.black,
+        secondaryContainer: Colors.grey[800]!,
+        onSecondaryContainer: Colors.white,
+        surface: Colors.grey[900]!,
+        onSurface: Colors.white,
+        background: Colors.black,
+        onBackground: Colors.white,
+        error: Colors.red[300]!,
+        onError: Colors.black,
+        surfaceVariant: Colors.grey[800]!,
+        onSurfaceVariant: Colors.white,
+        outline: Colors.grey[600]!,
+        shadow: Colors.black,
+      );
+    }
+  }
   if (brightness == Brightness.light) {
     return ColorScheme.fromSeed(
       seedColor: getSettingConstants(appStateSettings)["accentColor"],
