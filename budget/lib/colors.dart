@@ -400,7 +400,9 @@ ColorScheme getColorScheme(Brightness brightness) {
         onSecondaryContainer: Colors.black,
         surface: Colors.grey[200]!,
         onSurface: Colors.black,
-        background: Colors.white,
+        background: appStateSettings["materialYou"]
+            ? Colors.blueGrey[50]!
+            : Colors.white,
         onBackground: Colors.black,
         error: Colors.red[700]!,
         onError: Colors.white,
@@ -422,7 +424,11 @@ ColorScheme getColorScheme(Brightness brightness) {
         onSecondaryContainer: Colors.white,
         surface: Colors.grey[900]!,
         onSurface: Colors.white,
-        background: Colors.black,
+        background: appStateSettings["forceFullDarkBackground"] == true
+            ? Colors.black
+            : appStateSettings["materialYou"]
+                ? Color(0xFF0F0F0F)
+                : Colors.black,
         onBackground: Colors.white,
         error: Colors.red[300]!,
         onError: Colors.black,
