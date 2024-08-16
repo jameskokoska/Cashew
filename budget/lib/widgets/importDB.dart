@@ -13,13 +13,8 @@ import 'package:file_picker/file_picker.dart';
 import 'dart:io';
 
 Future<String?> importDBFileFromDevice(BuildContext context) async {
-  // For some reason, iOS does not let us select SQL files if we limit
-  FilePickerResult? result = getPlatform() == PlatformOS.isIOS
-      ? await FilePicker.platform.pickFiles()
-      : await FilePicker.platform.pickFiles(
-          allowedExtensions: ['sql', 'sqlite'],
-          type: FileType.custom,
-        );
+  // Avoid using a file filter: PlatformException(FilePicker, Unsupported filter....
+  FilePickerResult? result = await FilePicker.platform.pickFiles();
   if (result == null) {
     openSnackbar(SnackbarMessage(
       title: "error-importing".tr(),
@@ -29,6 +24,18 @@ Future<String?> importDBFileFromDevice(BuildContext context) async {
           : Icons.warning_rounded,
     ));
     return null;
+  }
+
+  String fileName = result.files.single.name;
+  if (fileName.endsWith('.sql') == false &&
+      fileName.endsWith('.sqlite') == false) {
+    openSnackbar(SnackbarMessage(
+      title: "import-warning".tr(),
+      description: "import-warning-description".tr(),
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.warning_outlined
+          : Icons.warning_rounded,
+    ));
   }
 
   await cancelAndPreventSyncOperation();

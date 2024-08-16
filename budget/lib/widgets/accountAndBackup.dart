@@ -360,6 +360,9 @@ bool openDatabaseCorruptedPopup(BuildContext context) {
           : Icons.heart_broken_rounded,
       title: "database-corrupted".tr(),
       description: "database-corrupted-description".tr(),
+      descriptionWidget: CodeBlock(
+        text: databaseCorruptedError,
+      ),
       barrierDismissible: false,
       onSubmit: () async {
         popRoute(context);
@@ -1310,8 +1313,8 @@ class _BackupManagementState extends State<BackupManagement> {
                                                     onSubmit: () async {
                                                       popRoute(context);
                                                       loadingIndeterminateKey
-                                                          .currentState!
-                                                          .setVisibility(true);
+                                                          .currentState
+                                                          ?.setVisibility(true);
                                                       await deleteBackup(
                                                           driveApiState,
                                                           file.value.id ?? "");
@@ -1351,8 +1354,9 @@ class _BackupManagementState extends State<BackupManagement> {
                                                                 false);
                                                       }
                                                       loadingIndeterminateKey
-                                                          .currentState!
-                                                          .setVisibility(false);
+                                                          .currentState
+                                                          ?.setVisibility(
+                                                              false);
                                                     },
                                                     onSubmitLabel:
                                                         "delete".tr(),

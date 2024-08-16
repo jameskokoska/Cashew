@@ -25,6 +25,7 @@ import 'package:budget/pages/activityPage.dart';
 
 Map<String, dynamic> appStateSettings = {};
 bool isDatabaseCorrupted = false;
+String databaseCorruptedError = "";
 bool isDatabaseImportedOnThisSession = false;
 PackageInfo? packageInfoGlobal;
 
@@ -62,12 +63,14 @@ Future<bool> initializeSettings() async {
             .toLowerCase()
             .contains("file is not a database")) {
           isDatabaseCorrupted = true;
+          databaseCorruptedError = e.toString();
         }
       } else if (e
           .toString()
           .toLowerCase()
           .contains("file is not a database")) {
         isDatabaseCorrupted = true;
+        databaseCorruptedError = e.toString();
       }
     }
   }
