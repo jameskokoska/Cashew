@@ -250,9 +250,8 @@ Widget contextMenuBuilder(
           anchors: editableTextState.contextMenuAnchors,
           children: buttons,
         )
-      : AdaptiveTextSelectionToolbar(
-          anchors: editableTextState.contextMenuAnchors,
-          children: buttons,
+      : AdaptiveTextSelectionToolbar.editableText(
+          editableTextState: editableTextState,
         );
 }
 
