@@ -1176,5 +1176,7 @@
   "restore-purchases-help": "Jos sinulla on ongelmia ostosten palauttamisessa, ota yhteyttä kehittäjään tai lue UKK.",
   "contact": "Ota yhteyttä",
   "loans-details": "Lainojen tiedot",
-  "set-details": "Aseta tiedot"
+  "set-details": "Aseta tiedot",
+  "import-warning": "Tuo varoitus",
+  "import-warning-description": "Tuonti voi epäonnistua! Varmista, että olet valinnut kelvollisen Cashew-[.sqlite]- tai [.sql]-varmuuskopiotiedoston"
 }

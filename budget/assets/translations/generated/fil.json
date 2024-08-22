@@ -1176,5 +1176,7 @@
   "restore-purchases-help": "Kung nahihirapan kang i-restore ang iyong mga binili, mangyaring makipag-ugnayan sa developer para sa tulong o basahin ang FAQ.",
   "contact": "Makipag-ugnayan",
   "loans-details": "Mga Detalye ng Pautang",
-  "set-details": "Itakda ang Mga Detalye"
+  "set-details": "Itakda ang Mga Detalye",
+  "import-warning": "Babala sa Pag-import",
+  "import-warning-description": "Maaaring mabigo ang pag-import! Pakitiyak na nakapili ka ng wastong Cashew [.sqlite] o [.sql] backup file"
 }

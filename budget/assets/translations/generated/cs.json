@@ -1176,5 +1176,7 @@
   "restore-purchases-help": "Máte-li potíže s obnovením nákupů, požádejte o pomoc vývojáře nebo si přečtěte FAQ.",
   "contact": "Kontakt",
   "loans-details": "Podrobnosti o půjčkách",
-  "set-details": "Nastavit Podrobnosti"
+  "set-details": "Nastavit Podrobnosti",
+  "import-warning": "Upozornění na import",
+  "import-warning-description": "Import může selhat! Ujistěte se, že jste vybrali platný záložní soubor kešu [.sqlite] nebo [.sql]"
 }

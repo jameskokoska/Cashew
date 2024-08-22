@@ -1176,5 +1176,7 @@
   "restore-purchases-help": "Se riscontri problemi nel ripristinare i tuoi acquisti, contatta lo sviluppatore per assistenza o leggi le domande frequenti.",
   "contact": "Contatto",
   "loans-details": "Dettagli prestiti",
-  "set-details": "Imposta i dettagli"
+  "set-details": "Imposta i dettagli",
+  "import-warning": "Avviso di importazione",
+  "import-warning-description": "L'importazione potrebbe non riuscire! Assicurati di aver selezionato un file di backup Cashew [.sqlite] o [.sql] valido"
 }

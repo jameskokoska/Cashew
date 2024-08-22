@@ -1176,5 +1176,7 @@
   "restore-purchases-help": "Jika anda menghadapi masalah memulihkan pembelian anda, sila hubungi pembangun untuk mendapatkan bantuan atau baca Soalan Lazim.",
   "contact": "Kenalan",
   "loans-details": "Butiran Pinjaman",
-  "set-details": "Tetapkan Butiran"
+  "set-details": "Tetapkan Butiran",
+  "import-warning": "Amaran Import",
+  "import-warning-description": "Import mungkin gagal! Sila pastikan anda telah memilih fail sandaran Cashew [.sqlite] atau [.sql] yang sah"
 }

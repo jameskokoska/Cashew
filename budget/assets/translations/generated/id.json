@@ -1176,5 +1176,7 @@
   "restore-purchases-help": "Jika Anda kesulitan memulihkan pembelian Anda, silakan hubungi pengembang untuk mendapatkan bantuan atau baca FAQ.",
   "contact": "Kontak",
   "loans-details": "Detail Pinjaman",
-  "set-details": "Tetapkan Detail"
+  "set-details": "Tetapkan Detail",
+  "import-warning": "Peringatan Impor",
+  "import-warning-description": "Impor mungkin gagal! Pastikan Anda telah memilih file cadangan Mete [.sqlite] atau [.sql] yang valid"
 }

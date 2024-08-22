@@ -1176,5 +1176,7 @@
   "restore-purchases-help": "Nếu bạn gặp khó khăn khi khôi phục giao dịch mua của mình, vui lòng liên hệ với nhà phát triển để được trợ giúp hoặc đọc Câu hỏi thường gặp.",
   "contact": "Liên hệ",
   "loans-details": "Chi tiết khoản vay",
-  "set-details": "Đặt chi tiết"
+  "set-details": "Đặt chi tiết",
+  "import-warning": "Cảnh báo nhập khẩu",
+  "import-warning-description": "Quá trình nhập có thể thất bại! Vui lòng đảm bảo rằng bạn đã chọn tệp sao lưu Cashew [.sqlite] hoặc [.sql] hợp lệ"
 }

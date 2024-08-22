@@ -1176,5 +1176,7 @@
   "restore-purchases-help": "Ikiwa unatatizika kurejesha ununuzi wako, tafadhali wasiliana na msanidi programu kwa usaidizi au usome Maswali Yanayoulizwa Mara kwa Mara.",
   "contact": "Wasiliana",
   "loans-details": "Maelezo ya Mikopo",
-  "set-details": "Weka Maelezo"
+  "set-details": "Weka Maelezo",
+  "import-warning": "Ingiza Onyo",
+  "import-warning-description": "Uingizaji unaweza kushindwa! Tafadhali hakikisha kuwa umechagua faili halali ya Korosho [.sqlite] au [.sql] faili mbadala"
 }

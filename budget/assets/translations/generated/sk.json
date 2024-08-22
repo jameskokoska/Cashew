@@ -1176,5 +1176,7 @@
   "restore-purchases-help": "Ak máte problémy s obnovením svojich nákupov, kontaktujte vývojára so žiadosťou o pomoc alebo si prečítajte často kladené otázky.",
   "contact": "Kontakt",
   "loans-details": "Podrobnosti o pôžičkách",
-  "set-details": "Nastaviť Podrobnosti"
+  "set-details": "Nastaviť Podrobnosti",
+  "import-warning": "Upozornenie na import",
+  "import-warning-description": "Import môže zlyhať! Uistite sa, že ste vybrali platný záložný súbor Cashew [.sqlite] alebo [.sql]"
 }

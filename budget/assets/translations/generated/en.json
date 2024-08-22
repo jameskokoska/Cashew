@@ -195,7 +195,7 @@
   "remove-payment-description": "Remove the payment on this transaction?",
   "skipped": "Skipped",
   "paid": "Paid",
-  "not-paid": "Not Paid",
+  "not-paid": "Not paid",
   "discard-changes": "Discard Changes?",
   "discard-changes-description": "Are you sure you want to discard your changes.",
   "discard": "Discard",
@@ -719,7 +719,7 @@
   "select-backup-file": "Select Backup",
   "select-backup-file-description": "Please select your backup [.sqlite] or [.sql] file.",
   "database-corrupted": "Database Corrupted",
-  "database-corrupted-description": "с",
+  "database-corrupted-description": "Your database is corrupted. You may have imported the wrong file.",
   "import-backup": "Import Backup",
   "view-previous-budget-periods": "View previous budget periods",
   "current-period": "Current Period",
@@ -1176,5 +1176,7 @@
   "restore-purchases-help": "If you have trouble restoring your purchases, please contact the developer for help or read the FAQ.",
   "contact": "Contact",
   "loans-details": "Loans Details",
-  "set-details": "Set Details"
+  "set-details": "Set Details",
+  "import-warning": "Import Warning",
+  "import-warning-description": "Import may fail! Please make sure you have selected a valid Cashew [.sqlite] or [.sql] backup file"
 }

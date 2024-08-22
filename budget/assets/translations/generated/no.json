@@ -1176,5 +1176,7 @@
   "restore-purchases-help": "Hvis du har problemer med å gjenopprette kjøpene dine, vennligst kontakt utvikleren for hjelp eller les FAQ.",
   "contact": "Kontakt",
   "loans-details": "Lånedetaljer",
-  "set-details": "Angi detaljer"
+  "set-details": "Angi detaljer",
+  "import-warning": "Import Advarsel",
+  "import-warning-description": "Importen kan mislykkes! Sørg for at du har valgt en gyldig Cashew [.sqlite] eller [.sql] sikkerhetskopifil"
 }

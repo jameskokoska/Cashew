@@ -1176,5 +1176,7 @@
   "restore-purchases-help": "Satın aldığınız öğeleri geri yükleme konusunda sorun yaşıyorsanız lütfen yardım için geliştiriciyle iletişime geçin veya SSS'yi okuyun.",
   "contact": "Temas etmek",
   "loans-details": "Kredi Detayları",
-  "set-details": "Ayrıntıları Ayarla"
+  "set-details": "Ayrıntıları Ayarla",
+  "import-warning": "İthalat Uyarısı",
+  "import-warning-description": "İçe aktarma başarısız olabilir! Lütfen geçerli bir Kaju [.sqlite] veya [.sql] yedekleme dosyası seçtiğinizden emin olun."
 }

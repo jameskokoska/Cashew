@@ -1176,5 +1176,7 @@
   "restore-purchases-help": "Ha problémái vannak a vásárlások visszaállításával, forduljon a fejlesztőhöz segítségért, vagy olvassa el a GYIK-et.",
   "contact": "Kapcsolatba lépni",
   "loans-details": "Hitelek Részletek",
-  "set-details": "Részletek beállítása"
+  "set-details": "Részletek beállítása",
+  "import-warning": "Figyelmeztetés importálásra",
+  "import-warning-description": "Az importálás sikertelen lehet! Kérjük, győződjön meg arról, hogy érvényes kesudió [.sqlite] vagy [.sql] biztonsági mentési fájlt választott"
 }

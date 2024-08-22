@@ -894,13 +894,7 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                                 ),
                               );
                             }),
-                        // Only show borrowed and lent totals when all time
-                        // There is no point in showing it for time periods, because when marked as collected/paid
-                        // It doesn't count towards total, and partial loans may not include all transactions and calculate properly
-                        // I guess we could track amount paid back/amount lent out for period instead
-                        // But that's not what this does...
                         AmountSpentEntryRow(
-                          hide: selectedDateTimeRange != null,
                           openPage: widget.wallet == null &&
                                   searchFilters?.isClear() == true &&
                                   selectedDateTimeRange == null
@@ -949,7 +943,6 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                           ),
                         ),
                         AmountSpentEntryRow(
-                          hide: selectedDateTimeRange != null,
                           openPage: widget.wallet == null &&
                                   searchFilters?.isClear() == true &&
                                   selectedDateTimeRange == null

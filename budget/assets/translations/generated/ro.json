@@ -1176,5 +1176,7 @@
   "restore-purchases-help": "Dacă întâmpinați probleme la restabilirea achizițiilor, contactați dezvoltatorul pentru ajutor sau citiți întrebările frecvente.",
   "contact": "a lua legatura",
   "loans-details": "Detalii împrumuturi",
-  "set-details": "Setați detalii"
+  "set-details": "Setați detalii",
+  "import-warning": "Avertisment de import",
+  "import-warning-description": "Importul poate eșua! Vă rugăm să vă asigurați că ați selectat un fișier de rezervă pentru caju [.sqlite] sau [.sql] valid"
 }

@@ -1176,5 +1176,7 @@
   "restore-purchases-help": "如果您在恢復購買時遇到問題，請聯絡開發者尋求協助或閱讀常見問題。",
   "contact": "接觸",
   "loans-details": "貸款詳情",
-  "set-details": "設定詳情"
+  "set-details": "設定詳情",
+  "import-warning": "進口警告",
+  "import-warning-description": "導入可能會失敗！請確保您選擇了有效的 Cashew [.sqlite] 或 [.sql] 備份文件"
 }

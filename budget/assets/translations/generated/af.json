@@ -599,5 +599,7 @@
   "restore-purchases-help": "As jy probleme ondervind om jou aankope te herstel, kontak asseblief die ontwikkelaar vir hulp of lees die Gereelde Vrae.",
   "contact": "Kontak",
   "loans-details": "Lenings besonderhede",
-  "set-details": "Stel besonderhede in"
+  "set-details": "Stel besonderhede in",
+  "import-warning": "Invoer waarskuwing",
+  "import-warning-description": "Invoer kan misluk! Maak asseblief seker dat jy 'n geldige Cashew [.sqlite] of [.sql] rugsteunlêer gekies het"
 }

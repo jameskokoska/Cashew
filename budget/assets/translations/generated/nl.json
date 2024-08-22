@@ -1176,5 +1176,7 @@
   "restore-purchases-help": "Als u problemen ondervindt bij het herstellen van uw aankopen, neem dan contact op met de ontwikkelaar voor hulp of lees de veelgestelde vragen.",
   "contact": "Contact",
   "loans-details": "Leningendetails",
-  "set-details": "Details instellen"
+  "set-details": "Details instellen",
+  "import-warning": "Importwaarschuwing",
+  "import-warning-description": "Het importeren mislukt mogelijk! Zorg ervoor dat u een geldig Cashew-back-upbestand [.sqlite] of [.sql] hebt geselecteerd"
 }

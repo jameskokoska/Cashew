@@ -1176,5 +1176,7 @@
   "restore-purchases-help": "구매를 복원하는 데 문제가 있는 경우 개발자에게 도움을 요청하거나 FAQ를 읽어보세요.",
   "contact": "연락하다",
   "loans-details": "대출내역",
-  "set-details": "세부정보 설정"
+  "set-details": "세부정보 설정",
+  "import-warning": "수입 경고",
+  "import-warning-description": "가져오기가 실패할 수 있습니다! 유효한 캐슈 [.sqlite] 또는 [.sql] 백업 파일을 선택했는지 확인하십시오."
 }

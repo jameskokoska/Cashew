@@ -318,7 +318,7 @@ class AboutPageState extends State<AboutPage> {
       ),
       TranslationInfoBox(
         title: "Ukrainian",
-        list: ["Chris M.", "Yurii S."],
+        list: ["Chris M.", "Yurii S.", "Mariia"],
       ),
       TranslationInfoBox(
         title: "Russian",
