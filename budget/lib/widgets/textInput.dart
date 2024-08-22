@@ -99,6 +99,7 @@ class TextInput extends StatelessWidget {
   final TextAlign textAlign;
   final bool autocorrect;
   final int? maxLength;
+  final bool handleOnTapOutside;
 
   const TextInput({
     Key? key,
@@ -136,6 +137,7 @@ class TextInput extends StatelessWidget {
     this.textAlign = TextAlign.start,
     this.autocorrect = true,
     this.maxLength,
+    this.handleOnTapOutside = true,
   }) : super(key: key);
 
   @override
@@ -159,11 +161,11 @@ class TextInput extends StatelessWidget {
             child: TextFormField(
               contextMenuBuilder: contextMenuBuilder,
               // magnifierConfiguration: TextMagnifierConfiguration.disabled,
-              onTapOutside: (event) {
-                Widget? popupFramework =
-                    context.findAncestorWidgetOfExactType<PopupFramework>();
-                if (popupFramework == null) minimizeKeyboard(context);
-              },
+              onTapOutside: handleOnTapOutside == false
+                  ? null
+                  : (event) {
+                      handleOnTapOutsideTextInput(context);
+                    },
               scrollController: scrollController,
               maxLength: maxLength,
               inputFormatters: inputFormatters,
@@ -308,4 +310,10 @@ class TextInput extends StatelessWidget {
       ),
     );
   }
+}
+
+void handleOnTapOutsideTextInput(BuildContext context) {
+  Widget? popupFramework =
+      context.findAncestorWidgetOfExactType<PopupFramework>();
+  if (popupFramework == null) minimizeKeyboard(context);
 }
