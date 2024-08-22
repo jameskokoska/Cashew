@@ -76,6 +76,8 @@ Future<bool> initializeSettings() async {
   }
 
   appStateSettings = userSettings;
+  print(
+      "App settings loaded: if logging is enabled, logs will now be captured");
 
   // Do some actions based on loaded settings
   if (appStateSettings["accentSystemColor"] == true) {

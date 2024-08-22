@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
@@ -5,8 +7,10 @@ import 'package:budget/main.dart';
 import 'package:budget/pages/aboutPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/logging.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/globalSnackbar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/notificationsSettings.dart';
@@ -36,6 +40,22 @@ class DebugPage extends StatelessWidget {
       dragDownToDismiss: true,
       horizontalPaddingConstrained: true,
       title: "Debug Flags",
+      actions: [
+        CustomPopupMenuButton(
+          showButtons: true,
+          keepOutFirst: true,
+          items: [
+            DropdownItemMenu(
+              id: "share-logs",
+              label: "logs",
+              icon: Icons.list,
+              action: () {
+                pushRoute(context, LogPage());
+              },
+            ),
+          ],
+        ),
+      ],
       subtitle: TextFont(
         text: "Use at your own risk",
         textColor: getColor(context, "expenseAmount"),
@@ -63,7 +83,6 @@ class DebugPage extends StatelessWidget {
               : Icons.show_chart_rounded,
         ),
         SettingsContainerSwitch(
-          key: ValueKey(1),
           title: "Hide Zero Transactions",
           description: "On spending line graphs",
           onSwitched: (value) {

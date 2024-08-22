@@ -4,6 +4,7 @@ import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/iconObjects.dart';
 import 'package:budget/struct/keyboardIntents.dart';
+import 'package:budget/struct/logging.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/struct/languageMap.dart';
 import 'package:budget/struct/initializeBiometrics.dart';
@@ -41,34 +42,36 @@ bool allowDebugFlags = true || kIsWeb;
 bool allowDangerousDebugFlags = kDebugMode;
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  await EasyLocalization.ensureInitialized();
-  sharedPreferences = await SharedPreferences.getInstance();
-  database = await constructDb('db');
-  notificationPayload = await initializeNotifications();
-  entireAppLoaded = false;
-  await loadCurrencyJSON();
-  await loadLanguageNamesJSON();
-  await initializeSettings();
-  tz.initializeTimeZones();
-  final String? locationName = await FlutterTimezone.getLocalTimezone();
-  tz.setLocalLocation(tz.getLocation(locationName ?? "America/New_York"));
-  iconObjects.sort((a, b) => (a.mostLikelyCategoryName ?? a.icon)
-      .compareTo((b.mostLikelyCategoryName ?? b.icon)));
-  setHighRefreshRate();
-  runApp(
-    DevicePreview(
-      enabled: enableDevicePreview,
-      builder: (context) => InitializeLocalizations(
-        child: RestartApp(
-          child: InitializeApp(key: appStateKey),
+  captureLogs(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    await EasyLocalization.ensureInitialized();
+    sharedPreferences = await SharedPreferences.getInstance();
+    database = await constructDb('db');
+    notificationPayload = await initializeNotifications();
+    entireAppLoaded = false;
+    await loadCurrencyJSON();
+    await loadLanguageNamesJSON();
+    await initializeSettings();
+    tz.initializeTimeZones();
+    final String? locationName = await FlutterTimezone.getLocalTimezone();
+    tz.setLocalLocation(tz.getLocation(locationName ?? "America/New_York"));
+    iconObjects.sort((a, b) => (a.mostLikelyCategoryName ?? a.icon)
+        .compareTo((b.mostLikelyCategoryName ?? b.icon)));
+    setHighRefreshRate();
+    runApp(
+      DevicePreview(
+        enabled: enableDevicePreview,
+        builder: (context) => InitializeLocalizations(
+          child: RestartApp(
+            child: InitializeApp(key: appStateKey),
+          ),
         ),
       ),
-    ),
-  );
+    );
+  });
 }
 
 GlobalKey<_InitializeAppState> appStateKey = GlobalKey();

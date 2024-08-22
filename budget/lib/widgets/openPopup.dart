@@ -567,26 +567,40 @@ void discardChangesPopup(context,
 }
 
 class CodeBlock extends StatelessWidget {
-  const CodeBlock({required this.text, super.key});
+  const CodeBlock({
+    required this.text,
+    this.textAlign,
+    this.fontSize,
+    this.highlight = false,
+    super.key,
+  });
   final String text;
+  final TextAlign? textAlign;
+  final double? fontSize;
+  final bool highlight;
   @override
   Widget build(BuildContext context) {
     return Tappable(
       borderRadius: 5,
-      color: Theme.of(context).colorScheme.secondaryContainer,
+      color: highlight
+          ? Theme.of(context).colorScheme.errorContainer
+          : Theme.of(context).colorScheme.secondaryContainer,
       onLongPress: () => copyToClipboard(text),
       child: Padding(
         padding: EdgeInsetsDirectional.all(10),
         child: TextFont(
           text: "",
-          textAlign: TextAlign.center,
-          fontSize: 15,
+          textAlign: textAlign ?? TextAlign.center,
+          fontSize: fontSize ?? 15,
           softWrap: true,
+          textColor: highlight
+              ? Theme.of(context).colorScheme.onErrorContainer
+              : Theme.of(context).colorScheme.onSecondaryContainer,
           richTextSpan: [
             TextSpan(
               text: text,
               style: TextStyle(
-                fontSize: 15,
+                fontSize: fontSize ?? 15,
                 fontFamily: "monospace",
                 fontFamilyFallback: <String>["Courier"],
                 color: getColor(context, "black"),
