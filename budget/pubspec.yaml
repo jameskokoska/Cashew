@@ -36,7 +36,7 @@ dependencies:
   path_provider: ^2.1.3
   path: ^1.9.0
   math_expressions: ^2.5.0
-  share_plus: ^9.0.0
+  share_plus: ^10.0.0
   google_sign_in: ^6.2.1
   googleapis: ^13.1.0
   universal_html: ^2.2.4

@@ -96,6 +96,7 @@ Future<bool> saveFile({
           files,
           subject: fileName,
           sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size,
+          fileNameOverrides: [fileName],
         );
         if (result.status != ShareResultStatus.success) {
           throw ("No application selected");
