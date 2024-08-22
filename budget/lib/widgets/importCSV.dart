@@ -236,6 +236,15 @@ class _ImportCSVState extends State<ImportCSV> {
         context,
         PopupFramework(
           hasPadding: false,
+          outsideExtraWidget: appStateSettings["showFAQAndHelpLink"] == true
+              ? OutsideExtraWidgetIconButton(
+                  iconData: appStateSettings["outlinedIcons"]
+                      ? Icons.live_help_outlined
+                      : Icons.live_help_rounded,
+                  onPressed: () => openUrl(
+                      "https://cashewapp.web.app/faq.html#import-csv-data"),
+                )
+              : null,
           title: "assign-columns".tr(),
           subtitle: (fileContents.length - 1).toString() +
               " " +

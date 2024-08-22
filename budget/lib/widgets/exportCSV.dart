@@ -184,12 +184,13 @@ class ExportCSV extends StatelessWidget {
           await openBottomSheet(
             context,
             PopupFramework(
-                title: "export-csv".tr(),
-                hasPadding: false,
-                child: ExportCSVPopup(
-                  exportCSV: exportCSV,
-                  boxContext: boxContext,
-                )),
+              title: "export-csv".tr(),
+              hasPadding: false,
+              child: ExportCSVPopup(
+                exportCSV: exportCSV,
+                boxContext: boxContext,
+              ),
+            ),
           );
         },
         title: "export-csv".tr(),
