@@ -220,6 +220,7 @@ enum DeleteLogType {
   TransactionAssociatedTitle,
   ScannerTemplate,
   Objective,
+  Unused, // Was for the scanner template, but is now unused
 }
 
 enum UpdateLogType {
@@ -231,6 +232,7 @@ enum UpdateLogType {
   TransactionAssociatedTitle,
   ScannerTemplate,
   Objective,
+  Unused, // Was for the scanner template, but is now unused
 }
 
 @DataClassName('DeleteLog')
