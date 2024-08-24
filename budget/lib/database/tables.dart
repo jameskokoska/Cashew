@@ -6374,8 +6374,13 @@ class FinanceDatabase extends _$FinanceDatabase {
   Expression<bool> onlyShowBasedOnObjectiveLoanFks(
       $TransactionsTable tbl, List<String?>? objectiveLoanFks) {
     final isNotLoanTransaction = tbl.objectiveLoanFk.isNull() &
-        tbl.type.equals(TransactionSpecialType.credit.index).not() &
-        tbl.type.equals(TransactionSpecialType.debt.index).not();
+        (tbl.type.isNull() |
+            (tbl.type
+                    .equalsNullable(TransactionSpecialType.credit.index)
+                    .not() &
+                tbl.type
+                    .equalsNullable(TransactionSpecialType.debt.index)
+                    .not()));
 
     return objectiveLoanFks != null &&
             objectiveLoanFks.contains(null) &&

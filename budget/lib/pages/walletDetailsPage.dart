@@ -2192,6 +2192,7 @@ class _AllSpendingPastSpendingGraphState
     extends State<AllSpendingPastSpendingGraph> {
   Stream<List<TotalWithCount?>>? mergedStreamsIncome;
   Stream<List<TotalWithCount?>>? mergedStreamsExpense;
+  Stream<List<TotalWithCount?>>? mergedStreamsNet;
   List<DateTimeRange> dateTimeRanges = [];
   int amountLoaded = 8;
   bool amountLoadedPressedOnce = false;
@@ -2212,6 +2213,8 @@ class _AllSpendingPastSpendingGraphState
     dateTimeRanges = [];
     List<Stream<TotalWithCount?>> watchedStreamsIncome = [];
     List<Stream<TotalWithCount?>> watchedStreamsExpense = [];
+    List<Stream<TotalWithCount?>> watchedStreamsNet = [];
+
     for (int index = 0; index < amountLoaded; index++) {
       DateTime datePast = getCycleDatePastToDetermineBudgetDate("", index);
       DateTimeRange budgetRange =
@@ -2220,8 +2223,7 @@ class _AllSpendingPastSpendingGraphState
       watchedStreamsIncome.add(
         database.watchTotalWithCountOfWallet(
           isIncome: true,
-          includeBalanceCorrection: true,
-          // includeBalanceCorrection: widget.appStateSettingsNetAllSpendingTotal,
+          includeBalanceCorrection: false,
           allWallets: Provider.of<AllWallets>(context, listen: false),
           followCustomPeriodCycle: false,
           cycleSettingsExtension: "",
@@ -2232,8 +2234,18 @@ class _AllSpendingPastSpendingGraphState
       watchedStreamsExpense.add(
         database.watchTotalWithCountOfWallet(
           isIncome: false,
+          includeBalanceCorrection: false,
+          allWallets: Provider.of<AllWallets>(context, listen: false),
+          followCustomPeriodCycle: false,
+          cycleSettingsExtension: "",
+          searchFilters:
+              widget.searchFilters?.copyWith(dateTimeRange: budgetRange),
+        ),
+      );
+      watchedStreamsNet.add(
+        database.watchTotalWithCountOfWallet(
+          isIncome: null,
           includeBalanceCorrection: true,
-          // includeBalanceCorrection: widget.appStateSettingsNetAllSpendingTotal,
           allWallets: Provider.of<AllWallets>(context, listen: false),
           followCustomPeriodCycle: false,
           cycleSettingsExtension: "",
@@ -2246,6 +2258,7 @@ class _AllSpendingPastSpendingGraphState
     setState(() {
       mergedStreamsIncome = StreamZip(watchedStreamsIncome);
       mergedStreamsExpense = StreamZip(watchedStreamsExpense);
+      mergedStreamsNet = StreamZip(watchedStreamsNet);
     });
   }
 
@@ -2373,12 +2386,12 @@ class _AllSpendingPastSpendingGraphState
                             AmountWithColorAndArrow(
                               showIncomeArrow: true,
                               alwaysShowArrow: true,
-                              totalSpent: incomeSpending.abs(),
-                              isIncome: true,
+                              totalSpent: expenseSpending.abs(),
+                              isIncome: false,
                               fontSize: 16,
                               iconSize: 20,
                               iconWidth: 17,
-                              textColor: getColor(context, "incomeAmount"),
+                              textColor: getColor(context, "expenseAmount"),
                               bold: false,
                               countNumber: false,
                             ),
@@ -2386,12 +2399,12 @@ class _AllSpendingPastSpendingGraphState
                             AmountWithColorAndArrow(
                               showIncomeArrow: true,
                               alwaysShowArrow: true,
-                              totalSpent: expenseSpending.abs(),
-                              isIncome: false,
+                              totalSpent: incomeSpending.abs(),
+                              isIncome: true,
                               fontSize: 16,
                               iconSize: 20,
                               iconWidth: 17,
-                              textColor: getColor(context, "expenseAmount"),
+                              textColor: getColor(context, "incomeAmount"),
                               bold: false,
                               countNumber: false,
                             ),
@@ -2422,8 +2435,16 @@ class _AllSpendingPastSpendingGraphState
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget setupStreamBuilders(
+    Widget builder({
+      required double totalNetBefore,
+      required double totalIncomeBefore,
+      required double totalExpenseBefore,
+      required List<TotalWithCount?> netData,
+      required List<TotalWithCount?> incomeData,
+      required List<TotalWithCount?> expenseData,
+    }),
+  ) {
     if (mergedStreamsIncome == null && mergedStreamsExpense == null)
       return SliverToBoxAdapter(child: SizedBox.shrink());
     return StreamBuilder<double?>(
@@ -2455,304 +2476,32 @@ class _AllSpendingPastSpendingGraphState
             double totalIncomeBefore = snapshotTotalIncomeBefore.data ?? 0;
             double totalExpenseBefore = snapshotTotalExpenseBefore.data ?? 0;
             return StreamBuilder<List<TotalWithCount?>>(
-              stream: mergedStreamsIncome,
-              builder: (context, snapshotIncome) {
-                List<TotalWithCount?> incomeData = snapshotIncome.data ?? [];
+              stream: mergedStreamsNet,
+              builder: (context, snapshotNet) {
+                List<TotalWithCount?> netData = snapshotNet.data ?? [];
                 return StreamBuilder<List<TotalWithCount?>>(
-                  stream: mergedStreamsExpense,
-                  builder: (context, snapshotExpense) {
-                    List<TotalWithCount?> expenseData =
-                        snapshotExpense.data ?? [];
-                    if (expenseData.length <= 0 && incomeData.length <= 0)
-                      return SliverToBoxAdapter(
-                        child: SizedBox.shrink(),
-                      );
-                    double minimumYValue = 0.00000000001;
-                    List<List<FlSpot>> allSpots = [];
-                    if (widget.appStateSettingsNetAllSpendingTotal) {
-                      List<FlSpot> spots = [];
-                      double total = totalNetBefore;
-                      for (int i = expenseData.length - 1; i >= 0; i--) {
-                        double expenseSpending =
-                            (nullIfIndexOutOfRange(expenseData, i) ??
-                                    TotalWithCount(total: 0, count: 0))
-                                .total;
-                        double incomeSpending =
-                            (nullIfIndexOutOfRange(incomeData, i) ??
-                                    TotalWithCount(total: 0, count: 0))
-                                .total;
-
-                        total = total +
-                            expenseSpending.abs() * -1 +
-                            incomeSpending.abs();
-                        spots.add(FlSpot(
-                          expenseData.length - 1 - i.toDouble(),
-                          (total).abs() == 0 ? minimumYValue : total,
-                        ));
-                      }
-                      allSpots.add(spots);
-                    } else {
-                      List<FlSpot> spots = [];
-                      if (expenseData.toSet().length > 1) {
-                        for (int i = expenseData.length - 1; i >= 0; i--) {
-                          double expenseSpending =
-                              (nullIfIndexOutOfRange(expenseData, i) ??
-                                      TotalWithCount(total: 0, count: 0))
-                                  .total;
-
-                          spots.add(FlSpot(
-                            expenseData.length - 1 - i.toDouble(),
-                            expenseSpending.abs() == 0
-                                ? minimumYValue
-                                : expenseSpending.abs(),
-                          ));
-                        }
-                        allSpots.add(spots);
-                      }
-
-                      // Only add income points if there is an income data point!
-                      if (incomeData.toSet().length > 1) {
-                        spots = [];
-                        for (int i = incomeData.length - 1; i >= 0; i--) {
-                          if (incomeData[i] == null) continue;
-                          double incomeSpending =
-                              (nullIfIndexOutOfRange(incomeData, i) ??
-                                      TotalWithCount(total: 0, count: 0))
-                                  .total;
-                          spots.add(FlSpot(
-                            incomeData.length - 1 - i.toDouble(),
-                            incomeSpending.abs() == 0
-                                ? minimumYValue
-                                : incomeSpending.abs(),
-                          ));
-                        }
-                        allSpots.add(spots);
-                      }
-                    }
-
-                    return SliverStickyHeader(
-                      header: Transform.translate(
-                        offset: Offset(0, -1),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              color: Theme.of(context).colorScheme.background,
-                              child: FadeOutAndLockFeature(
-                                hasInitiallyDismissed:
-                                    allSpendingHistoryDismissedPremium,
-                                actionAfter: () {
-                                  allSpendingHistoryDismissedPremium = true;
-                                },
-                                child: Stack(
-                                  children: [
-                                    Padding(
-                                      padding:
-                                          const EdgeInsetsDirectional.symmetric(
-                                              vertical: 7, horizontal: 0),
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsetsDirectional.only(
-                                                end: 5),
-                                        child: ClipRRect(
-                                          child: BudgetHistoryLineGraph(
-                                            forceMinYIfPositive: widget
-                                                    .appStateSettingsNetAllSpendingTotal
-                                                ? null
-                                                : 0,
-                                            showDateOnHover: true,
-                                            onTouchedIndex: (index) {},
-                                            color: dynamicPastel(
-                                              context,
-                                              Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
-                                              amountLight: 0.4,
-                                              amountDark: 0.2,
-                                            ),
-                                            dateRanges: dateTimeRanges,
-                                            lineColors: allSpots.length > 1
-                                                ? [
-                                                    getColor(context,
-                                                        "expenseAmount"),
-                                                    getColor(context,
-                                                        "incomeAmount"),
-                                                  ]
-                                                : null,
-                                            spots: allSpots,
-                                            horizontalLineAt: null,
-                                            budget:
-                                                getCustomCycleTempBudget(""),
-                                            extraCategorySpots: {},
-                                            categoriesMapped: {},
-                                            loadAllEvenIfZero:
-                                                amountLoadedPressedOnce,
-                                            setNoPastRegionsAreZero:
-                                                (bool value) {
-                                              amountLoadedPressedOnce = true;
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    LoadMorePeriodsButton(
-                                      onPressed: () {
-                                        if (amountLoadedPressedOnce == false) {
-                                          setState(() {
-                                            amountLoadedPressedOnce = true;
-                                          });
-                                        } else {
-                                          int amountMoreToLoad =
-                                              getIsFullScreen(context) == false
-                                                  ? 3
-                                                  : 5;
-                                          loadLines(
-                                              amountLoaded + amountMoreToLoad);
-                                          setState(() {
-                                            amountLoaded =
-                                                amountLoaded + amountMoreToLoad;
-                                          });
-                                        }
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Transform.translate(
-                              offset: Offset(0, -1),
-                              child: Container(
-                                height: 12,
-                                foregroundDecoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      Theme.of(context).colorScheme.background,
-                                      Theme.of(context)
-                                          .colorScheme
-                                          .background
-                                          .withOpacity(0.0),
-                                    ],
-                                    begin: AlignmentDirectional.topCenter,
-                                    end: AlignmentDirectional.bottomCenter,
-                                    stops: [0.1, 1],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      sliver: MultiSliver(
-                        children: [
-                          Builder(builder: (context) {
-                            double currentTotalNetSpending =
-                                totalExpenseBefore + totalIncomeBefore;
-                            double currentTotalNetIncome = totalIncomeBefore;
-                            double currentTotalNetExpense = totalExpenseBefore;
-                            List<double> totalNetPoints = [];
-                            List<double> totalIncomePoints = [];
-                            List<double> totalExpensePoints = [];
-                            for (int i = amountLoaded - 1; i >= 0; i--) {
-                              double expenseSpending =
-                                  (nullIfIndexOutOfRange(expenseData, i) ??
-                                          TotalWithCount(total: 0, count: 0))
-                                      .total;
-                              double incomeSpending =
-                                  (nullIfIndexOutOfRange(incomeData, i) ??
-                                          TotalWithCount(total: 0, count: 0))
-                                      .total;
-
-                              double netSpending =
-                                  expenseSpending.toDouble().abs() * -1 +
-                                      incomeSpending.toDouble().abs();
-
-                              if (widget.appStateSettingsNetAllSpendingTotal) {
-                                currentTotalNetSpending += netSpending;
-                                currentTotalNetIncome += incomeSpending;
-                                currentTotalNetExpense += expenseSpending;
-                              } else {
-                                currentTotalNetSpending = netSpending;
-                                currentTotalNetIncome = incomeSpending;
-                                currentTotalNetExpense = expenseSpending;
-                              }
-
-                              totalNetPoints.add(currentTotalNetSpending);
-                              totalIncomePoints.add(currentTotalNetIncome);
-                              totalExpensePoints.add(currentTotalNetExpense);
-                            }
-
-                            return SliverList(
-                              delegate: SliverChildBuilderDelegate(
-                                (BuildContext context, int index) {
-                                  DateTime datePast =
-                                      getDatePastToDetermineBudgetDate(
-                                          index, getCustomCycleTempBudget(""));
-                                  DateTimeRange budgetRange =
-                                      getCycleDateTimeRange("",
-                                          currentDate: datePast);
-                                  Color containerColor = getPlatform() ==
-                                          PlatformOS.isIOS
-                                      ? widget.selectedDateTimeRange ==
-                                              budgetRange
-                                          ? Theme.of(context)
-                                              .colorScheme
-                                              .secondaryContainer
-                                              .withOpacity(0.3)
-                                          : Colors.transparent
-                                      : getColor(
-                                          context, "standardContainerColor");
-
-                                  return buildSpendingHistorySummaryContainer(
-                                    index: index,
-                                    containerColor: containerColor,
-                                    budgetRange: budgetRange,
-                                    netSpending: totalNetPoints[
-                                        totalNetPoints.length - 1 - index],
-                                    incomeSpending: totalIncomePoints[
-                                        totalIncomePoints.length - 1 - index],
-                                    expenseSpending: totalExpensePoints[
-                                        totalExpensePoints.length - 1 - index],
-                                  );
-                                },
-                                childCount: amountLoaded,
-                              ),
-                            );
-                          }),
-                          SliverToBoxAdapter(
-                            child: Center(
-                              child: Padding(
-                                padding: EdgeInsetsDirectional.only(
-                                  bottom: 45,
-                                  top: getPlatform() == PlatformOS.isIOS
-                                      ? 10
-                                      : 0,
-                                ),
-                                child: LowKeyButton(
-                                  onTap: () {
-                                    if (amountLoadedPressedOnce == false) {
-                                      setState(() {
-                                        amountLoadedPressedOnce = true;
-                                      });
-                                    } else {
-                                      int amountMoreToLoad =
-                                          getIsFullScreen(context) == false
-                                              ? 3
-                                              : 5;
-                                      loadLines(
-                                          amountLoaded + amountMoreToLoad);
-                                      setState(() {
-                                        amountLoaded =
-                                            amountLoaded + amountMoreToLoad;
-                                      });
-                                    }
-                                  },
-                                  text: "view-more".tr(),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                  stream: mergedStreamsIncome,
+                  builder: (context, snapshotIncome) {
+                    List<TotalWithCount?> incomeData =
+                        snapshotIncome.data ?? [];
+                    return StreamBuilder<List<TotalWithCount?>>(
+                      stream: mergedStreamsExpense,
+                      builder: (context, snapshotExpense) {
+                        List<TotalWithCount?> expenseData =
+                            snapshotExpense.data ?? [];
+                        if (expenseData.length <= 0 && incomeData.length <= 0)
+                          return SliverToBoxAdapter(
+                            child: SizedBox.shrink(),
+                          );
+                        return builder(
+                          totalNetBefore: totalNetBefore,
+                          totalIncomeBefore: totalIncomeBefore,
+                          totalExpenseBefore: totalExpenseBefore,
+                          netData: netData,
+                          incomeData: incomeData,
+                          expenseData: expenseData,
+                        );
+                      },
                     );
                   },
                 );
@@ -2762,6 +2511,272 @@ class _AllSpendingPastSpendingGraphState
         );
       },
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return setupStreamBuilders((
+        {required expenseData,
+        required incomeData,
+        required netData,
+        required totalExpenseBefore,
+        required totalIncomeBefore,
+        required totalNetBefore}) {
+      double minimumYValue = 0.00000000001;
+      List<List<FlSpot>> allSpots = [];
+      if (widget.appStateSettingsNetAllSpendingTotal) {
+        List<FlSpot> spots = [];
+        double total = totalNetBefore;
+        for (int i = expenseData.length - 1; i >= 0; i--) {
+          double expenseSpending = (nullIfIndexOutOfRange(expenseData, i) ??
+                  TotalWithCount(total: 0, count: 0))
+              .total;
+          double incomeSpending = (nullIfIndexOutOfRange(incomeData, i) ??
+                  TotalWithCount(total: 0, count: 0))
+              .total;
+
+          total = total + expenseSpending.abs() * -1 + incomeSpending.abs();
+          spots.add(FlSpot(
+            expenseData.length - 1 - i.toDouble(),
+            (total).abs() == 0 ? minimumYValue : total,
+          ));
+        }
+        allSpots.add(spots);
+      } else {
+        List<FlSpot> spots = [];
+
+        if ((expenseData.every((item) => item?.total == 0.0)) == false) {
+          if (expenseData.toSet().length > 1) {
+            for (int i = expenseData.length - 1; i >= 0; i--) {
+              double expenseSpending = (nullIfIndexOutOfRange(expenseData, i) ??
+                      TotalWithCount(total: 0, count: 0))
+                  .total;
+
+              spots.add(FlSpot(
+                expenseData.length - 1 - i.toDouble(),
+                expenseSpending.abs() == 0
+                    ? minimumYValue
+                    : expenseSpending.abs(),
+              ));
+            }
+            allSpots.add(spots);
+          }
+        }
+
+        if ((incomeData.every((item) => item?.total == 0.0)) == false) {
+          spots = [];
+          for (int i = incomeData.length - 1; i >= 0; i--) {
+            if (incomeData[i] == null) continue;
+            double incomeSpending = (nullIfIndexOutOfRange(incomeData, i) ??
+                    TotalWithCount(total: 0, count: 0))
+                .total;
+            spots.add(FlSpot(
+              incomeData.length - 1 - i.toDouble(),
+              incomeSpending.abs() == 0 ? minimumYValue : incomeSpending.abs(),
+            ));
+          }
+          allSpots.add(spots);
+        }
+      }
+
+      return SliverStickyHeader(
+        header: Transform.translate(
+          offset: Offset(0, -1),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                color: Theme.of(context).colorScheme.background,
+                child: FadeOutAndLockFeature(
+                  hasInitiallyDismissed: allSpendingHistoryDismissedPremium,
+                  actionAfter: () {
+                    allSpendingHistoryDismissedPremium = true;
+                  },
+                  child: Stack(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsetsDirectional.symmetric(
+                            vertical: 7, horizontal: 0),
+                        child: Padding(
+                          padding: const EdgeInsetsDirectional.only(end: 5),
+                          child: ClipRRect(
+                            child: BudgetHistoryLineGraph(
+                              forceMinYIfPositive:
+                                  widget.appStateSettingsNetAllSpendingTotal
+                                      ? null
+                                      : 0,
+                              showDateOnHover: true,
+                              onTouchedIndex: (index) {},
+                              color: dynamicPastel(
+                                context,
+                                Theme.of(context).colorScheme.primary,
+                                amountLight: 0.4,
+                                amountDark: 0.2,
+                              ),
+                              dateRanges: dateTimeRanges,
+                              lineColors: allSpots.length > 1
+                                  ? [
+                                      getColor(context, "expenseAmount"),
+                                      getColor(context, "incomeAmount"),
+                                    ]
+                                  : null,
+                              spots: allSpots,
+                              horizontalLineAt: null,
+                              budget: getCustomCycleTempBudget(""),
+                              extraCategorySpots: {},
+                              categoriesMapped: {},
+                              loadAllEvenIfZero: amountLoadedPressedOnce,
+                              setNoPastRegionsAreZero: (bool value) {
+                                amountLoadedPressedOnce = true;
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                      LoadMorePeriodsButton(
+                        onPressed: () {
+                          if (amountLoadedPressedOnce == false) {
+                            setState(() {
+                              amountLoadedPressedOnce = true;
+                            });
+                          } else {
+                            int amountMoreToLoad =
+                                getIsFullScreen(context) == false ? 3 : 5;
+                            loadLines(amountLoaded + amountMoreToLoad);
+                            setState(() {
+                              amountLoaded = amountLoaded + amountMoreToLoad;
+                            });
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Transform.translate(
+                offset: Offset(0, -1),
+                child: Container(
+                  height: 12,
+                  foregroundDecoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Theme.of(context).colorScheme.background,
+                        Theme.of(context)
+                            .colorScheme
+                            .background
+                            .withOpacity(0.0),
+                      ],
+                      begin: AlignmentDirectional.topCenter,
+                      end: AlignmentDirectional.bottomCenter,
+                      stops: [0.1, 1],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        sliver: MultiSliver(
+          children: [
+            Builder(builder: (context) {
+              double currentTotalNetSpending =
+                  totalExpenseBefore + totalIncomeBefore;
+              double currentTotalNetIncome = totalIncomeBefore;
+              double currentTotalNetExpense = totalExpenseBefore;
+              List<double> totalNetPoints = [];
+              List<double> totalIncomePoints = [];
+              List<double> totalExpensePoints = [];
+              for (int i = amountLoaded - 1; i >= 0; i--) {
+                double expenseSpending =
+                    (nullIfIndexOutOfRange(expenseData, i) ??
+                            TotalWithCount(total: 0, count: 0))
+                        .total;
+                double incomeSpending = (nullIfIndexOutOfRange(incomeData, i) ??
+                        TotalWithCount(total: 0, count: 0))
+                    .total;
+
+                double netSpending = (nullIfIndexOutOfRange(netData, i) ??
+                        TotalWithCount(total: 0, count: 0))
+                    .total;
+
+                if (widget.appStateSettingsNetAllSpendingTotal) {
+                  currentTotalNetSpending += netSpending;
+                  currentTotalNetIncome += incomeSpending;
+                  currentTotalNetExpense += expenseSpending;
+                } else {
+                  currentTotalNetSpending = netSpending;
+                  currentTotalNetIncome = incomeSpending;
+                  currentTotalNetExpense = expenseSpending;
+                }
+
+                totalNetPoints.add(currentTotalNetSpending);
+                totalIncomePoints.add(currentTotalNetIncome);
+                totalExpensePoints.add(currentTotalNetExpense);
+              }
+
+              return SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    DateTime datePast = getDatePastToDetermineBudgetDate(
+                        index, getCustomCycleTempBudget(""));
+                    DateTimeRange budgetRange =
+                        getCycleDateTimeRange("", currentDate: datePast);
+                    Color containerColor = getPlatform() == PlatformOS.isIOS
+                        ? widget.selectedDateTimeRange == budgetRange
+                            ? Theme.of(context)
+                                .colorScheme
+                                .secondaryContainer
+                                .withOpacity(0.3)
+                            : Colors.transparent
+                        : getColor(context, "standardContainerColor");
+
+                    return buildSpendingHistorySummaryContainer(
+                      index: index,
+                      containerColor: containerColor,
+                      budgetRange: budgetRange,
+                      netSpending:
+                          totalNetPoints[totalNetPoints.length - 1 - index],
+                      incomeSpending: totalIncomePoints[
+                          totalIncomePoints.length - 1 - index],
+                      expenseSpending: totalExpensePoints[
+                          totalExpensePoints.length - 1 - index],
+                    );
+                  },
+                  childCount: amountLoaded,
+                ),
+              );
+            }),
+            SliverToBoxAdapter(
+              child: Center(
+                child: Padding(
+                  padding: EdgeInsetsDirectional.only(
+                    bottom: 45,
+                    top: getPlatform() == PlatformOS.isIOS ? 10 : 0,
+                  ),
+                  child: LowKeyButton(
+                    onTap: () {
+                      if (amountLoadedPressedOnce == false) {
+                        setState(() {
+                          amountLoadedPressedOnce = true;
+                        });
+                      } else {
+                        int amountMoreToLoad =
+                            getIsFullScreen(context) == false ? 3 : 5;
+                        loadLines(amountLoaded + amountMoreToLoad);
+                        setState(() {
+                          amountLoaded = amountLoaded + amountMoreToLoad;
+                        });
+                      }
+                    },
+                    text: "view-more".tr(),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    });
   }
 }
 
@@ -2906,7 +2921,7 @@ class AmountSpentEntryRow extends StatelessWidget {
                                     // Can see this issue: https://stackoverflow.com/a/74310309
                                     ConstrainedBox(
                                       constraints: BoxConstraints(
-                                          maxWidth: constraints.maxWidth),
+                                          maxWidth: constraints.maxWidth - 10),
                                       child: TextFont(
                                         text: "",
                                         maxLines: 1,
@@ -2942,7 +2957,7 @@ class AmountSpentEntryRow extends StatelessWidget {
                                     Expanded(
                                       child: Container(
                                         margin: EdgeInsetsDirectional.only(
-                                            start: 15, end: 10, top: 1),
+                                            start: 10, end: 10, top: 1),
                                         height: 2,
                                         color: Theme.of(context)
                                             .colorScheme
