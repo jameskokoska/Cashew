@@ -639,9 +639,9 @@
 		"name_plural": "Myanma kyats"
 	},
 	"MOP": {
-		"symbol": "MOP$",
+		"symbol": "$",
 		"name": "Macanese Pataca",
-		"symbol_native": "MOP$",
+		"symbol_native": "$",
 		"decimal_digits": 2,
 		"rounding": 0,
 		"code": "MOP",
