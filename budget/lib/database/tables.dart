@@ -7646,4 +7646,9 @@ class TransactionAssociatedTitleWithCategory {
     required this.category,
     this.partialTitleString,
   });
+
+  @override
+  String toString() {
+    return 'TransactionAssociatedTitleWithCategory(type: $type, title: $title, category: $category, partialTitleString: $partialTitleString)';
+  }
 }

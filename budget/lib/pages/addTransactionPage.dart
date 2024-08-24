@@ -3015,44 +3015,45 @@ Future<bool> addAssociatedTitles(
         return false;
       }
 
-      TransactionAssociatedTitle? checkIfAlreadyExists =
-          foundTitle?.title.copyWith(
-        categoryFk: selectedCategory.categoryPk,
-      );
+      print("Found associated title: " + foundTitle.toString());
 
-      if (checkIfAlreadyExists != null &&
-          foundTitle?.title.categoryFk == selectedCategory.categoryPk &&
-          (foundTitle?.partialTitleString?.trim() == selectedTitle.trim() ||
-              (foundTitle?.partialTitleString == null &&
-                  foundTitle?.title.title.trim() == selectedTitle.trim()))) {
-        print("already has this title, moved to top");
+      if (foundTitle != null &&
+          (foundTitle.category.categoryPk == selectedCategory.categoryPk ||
+              foundTitle.category.mainCategoryPk ==
+                  selectedCategory.categoryPk) &&
+          (foundTitle.partialTitleString?.trim() == selectedTitle.trim() ||
+              (foundTitle.partialTitleString == null &&
+                  foundTitle.title.title.trim() == selectedTitle.trim()))) {
+        // If there is an existing title, move to top
+        print("Already has this title, moving to top");
 
         // This is more efficient than shifting the associated title since this uses batching
         await database.deleteAssociatedTitle(
-            checkIfAlreadyExists.associatedTitlePk, checkIfAlreadyExists.order);
+            foundTitle.title.associatedTitlePk, foundTitle.title.order);
         int length = await database.getAmountOfAssociatedTitles();
         await database.createOrUpdateAssociatedTitle(
-            checkIfAlreadyExists.copyWith(order: length));
+            foundTitle.title.copyWith(order: length));
         return true;
+      } else {
+        // If there is no existing title, create one
+        print("Creating new associated title");
+        int length = await database.getAmountOfAssociatedTitles();
+        await database.createOrUpdateAssociatedTitle(
+          insert: true,
+          TransactionAssociatedTitle(
+            associatedTitlePk: "-1",
+            categoryFk: selectedCategory.categoryPk,
+            isExactMatch: false,
+            title: selectedTitle.trim(),
+            dateCreated: DateTime.now(),
+            dateTimeModified: null,
+            order: length,
+          ),
+        );
       }
     } catch (e) {
-      print(e.toString());
+      print("Error adding associated title: " + e.toString());
     }
-
-    int length = await database.getAmountOfAssociatedTitles();
-
-    await database.createOrUpdateAssociatedTitle(
-      insert: true,
-      TransactionAssociatedTitle(
-        associatedTitlePk: "-1",
-        categoryFk: selectedCategory.categoryPk,
-        isExactMatch: false,
-        title: selectedTitle.trim(),
-        dateCreated: DateTime.now(),
-        dateTimeModified: null,
-        order: length,
-      ),
-    );
   }
   return true;
 }
