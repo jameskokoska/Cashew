@@ -839,6 +839,7 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                                 isPastBudget: index == 0 ? false : true,
                                 isPastBudgetButCurrentPeriod: index == 0,
                                 backgroundColor: widget.backgroundColor,
+                                dateForRangeIndex: index,
                               ),
                             ),
                           ),
@@ -899,6 +900,7 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                                   isPastBudget: index == 0 ? false : true,
                                   isPastBudgetButCurrentPeriod: index == 0,
                                   backgroundColor: widget.backgroundColor,
+                                  dateForRangeIndex: index,
                                 ),
                               ),
                             ),
@@ -948,6 +950,7 @@ class PastBudgetContainer extends StatelessWidget {
     this.isPastBudget = false,
     this.isPastBudgetButCurrentPeriod = false,
     required this.backgroundColor,
+    required this.dateForRangeIndex,
   }) : super(key: key);
 
   final Budget budget;
@@ -957,6 +960,7 @@ class PastBudgetContainer extends StatelessWidget {
   final bool? isPastBudget;
   final bool? isPastBudgetButCurrentPeriod;
   final Color backgroundColor;
+  final int dateForRangeIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -1237,6 +1241,7 @@ class PastBudgetContainer extends StatelessWidget {
           dateForRange: dateForRangeLocal,
           isPastBudget: isPastBudget,
           isPastBudgetButCurrentPeriod: isPastBudgetButCurrentPeriod,
+          dateForRangeIndex: dateForRangeIndex,
         ),
       ),
     );
