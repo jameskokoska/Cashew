@@ -11,8 +11,8 @@ import 'package:flutter/material.dart';
 LogService logService = LogService();
 
 class LogService {
-  static const int maxLogSize = 1250;
-  static const int minLogSize = 1000;
+  static const int maxLogSize = 12500;
+  static const int minLogSize = 10000;
 
   final List<String> _logs = [];
 

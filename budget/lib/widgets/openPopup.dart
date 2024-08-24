@@ -141,144 +141,130 @@ Future<T?> openPopup<T extends Object?>(
                                   ),
                                 ),
                               ),
-                            if (title != null)
-                              Padding(
-                                padding: const EdgeInsetsDirectional.symmetric(
-                                    vertical: 8.0, horizontal: 10),
-                                child: TextFont(
-                                  textAlign: TextAlign.center,
-                                  text: title,
-                                  fontSize: 23,
-                                  fontWeight: FontWeight.bold,
-                                  maxLines: 5,
-                                  textColor: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimaryContainer,
-                                ),
+                            ),
+                          if (title != null)
+                            Padding(
+                              padding: const EdgeInsetsDirectional.symmetric(
+                                  vertical: 8.0, horizontal: 10),
+                              child: TextFont(
+                                textAlign: TextAlign.center,
+                                text: title,
+                                fontSize: 23,
+                                fontWeight: FontWeight.bold,
+                                maxLines: 5,
+                                textColor: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimaryContainer,
                               ),
-                            if (subtitle != null)
-                              Padding(
-                                padding: const EdgeInsetsDirectional.symmetric(
-                                    vertical: 8.0, horizontal: 10),
-                                child: TextFont(
-                                  textAlign: TextAlign.center,
-                                  text: subtitle,
-                                  fontSize: 21,
-                                  fontWeight: FontWeight.bold,
-                                  maxLines: 5,
-                                  textColor: Theme.of(context)
-                                      .colorScheme
-                                      .onTertiaryContainer,
-                                ),
+                            ),
+                          if (subtitle != null)
+                            Padding(
+                              padding: const EdgeInsetsDirectional.symmetric(
+                                  vertical: 8.0, horizontal: 10),
+                              child: TextFont(
+                                textAlign: TextAlign.center,
+                                text: subtitle,
+                                fontSize: 21,
+                                fontWeight: FontWeight.bold,
+                                maxLines: 5,
+                                textColor: Theme.of(context)
+                                    .colorScheme
+                                    .onTertiaryContainer,
                               ),
-                            if (beforeDescriptionWidget != null)
-                              beforeDescriptionWidget,
-                            if (description != null)
-                              Padding(
-                                padding: const EdgeInsetsDirectional.symmetric(
-                                    vertical: 8.0, horizontal: 10),
-                                child: TextFont(
-                                  textAlign: TextAlign.center,
-                                  text: description,
-                                  fontSize: 16.5,
-                                  maxLines: 100,
-                                ),
+                            ),
+                          if (beforeDescriptionWidget != null)
+                            beforeDescriptionWidget,
+                          if (description != null)
+                            Padding(
+                              padding: const EdgeInsetsDirectional.symmetric(
+                                  vertical: 8.0, horizontal: 10),
+                              child: TextFont(
+                                textAlign: TextAlign.center,
+                                text: description,
+                                fontSize: 16.5,
+                                maxLines: 100,
                               ),
-                            if (descriptionWidget != null) descriptionWidget,
-                            if (onSubmitLabel != null || onCancelLabel != null)
-                              Padding(
-                                padding: const EdgeInsetsDirectional.symmetric(
-                                    vertical: 16.0),
-                                child: Wrap(
-                                  alignment: WrapAlignment.center,
-                                  runSpacing: 10,
-                                  children: [
-                                    onCancelLabel != null
-                                        ? IntrinsicWidth(
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsetsDirectional
-                                                      .symmetric(
-                                                      horizontal: 8.0),
-                                              child: Builder(
-                                                  builder: (boxContext) {
-                                                return Button(
-                                                  color: tertiaryButtonColor,
-                                                  textColor:
-                                                      onTertiaryButtonColor,
-                                                  label: onCancelLabel,
-                                                  onTap: () {
-                                                    if (onCancel != null) {
-                                                      onCancel();
-                                                    }
-                                                    if (onCancelWithBoxContext !=
-                                                        null) {
-                                                      onCancelWithBoxContext(
-                                                          boxContext);
-                                                    }
-                                                  },
-                                                );
-                                              }),
+                            ),
+                          if (descriptionWidget != null) descriptionWidget,
+                          if (onSubmitLabel != null || onCancelLabel != null)
+                            Padding(
+                              padding: const EdgeInsetsDirectional.symmetric(
+                                  vertical: 16.0),
+                              child: Wrap(
+                                alignment: WrapAlignment.center,
+                                runSpacing: 10,
+                                children: [
+                                  onCancelLabel != null
+                                      ? IntrinsicWidth(
+                                          child: Padding(
+                                            padding: const EdgeInsetsDirectional
+                                                .symmetric(horizontal: 8.0),
+                                            child:
+                                                Builder(builder: (boxContext) {
+                                              return Button(
+                                                color: tertiaryButtonColor,
+                                                textColor:
+                                                    onTertiaryButtonColor,
+                                                label: onCancelLabel,
+                                                onTap: () {
+                                                  if (onCancel != null) {
+                                                    onCancel();
+                                                  }
+                                                  if (onCancelWithBoxContext !=
+                                                      null) {
+                                                    onCancelWithBoxContext(
+                                                        boxContext);
+                                                  }
+                                                },
+                                              );
+                                            }),
+                                          ),
+                                        )
+                                      : SizedBox.shrink(),
+                                  onExtraLabel != null
+                                      ? IntrinsicWidth(
+                                          child: Padding(
+                                            padding: const EdgeInsetsDirectional
+                                                .symmetric(horizontal: 8.0),
+                                            child: Button(
+                                              expandedLayout: true,
+                                              color: primaryButtonColor,
+                                              textColor: onPrimaryButtonColor,
+                                              label: onExtraLabel,
+                                              onTap: onExtra ?? () {},
                                             ),
-                                          )
-                                        : SizedBox.shrink(),
-                                    onExtraLabel != null
-                                        ? IntrinsicWidth(
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsetsDirectional
-                                                      .symmetric(
-                                                      horizontal: 8.0),
-                                              child: Button(
-                                                expandedLayout: true,
-                                                color: primaryButtonColor,
-                                                textColor: onPrimaryButtonColor,
-                                                label: onExtraLabel,
-                                                onTap: onExtra ?? () {},
-                                              ),
+                                          ),
+                                        )
+                                      : SizedBox.shrink(),
+                                  onSubmitLabel != null
+                                      ? IntrinsicWidth(
+                                          child: Padding(
+                                            padding: const EdgeInsetsDirectional
+                                                .symmetric(horizontal: 8.0),
+                                            child: Button(
+                                              color: primaryButtonColor,
+                                              textColor: onPrimaryButtonColor,
+                                              label: onSubmitLabel,
+                                              onTap: onSubmit ?? () {},
                                             ),
-                                          )
-                                        : SizedBox.shrink(),
-                                    onSubmitLabel != null
-                                        ? IntrinsicWidth(
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsetsDirectional
-                                                      .symmetric(
-                                                      horizontal: 8.0),
-                                              child: Button(
-                                                color: primaryButtonColor,
-                                                textColor: onPrimaryButtonColor,
-                                                label: onSubmitLabel,
-                                                onTap: onSubmit ?? () {},
-                                              ),
-                                            ),
-                                          )
-                                        : SizedBox.shrink(),
-                                  ],
-                                ),
+                                          ),
+                                        )
+                                      : SizedBox.shrink(),
+                                ],
                               ),
-                            onExtraLabel2 == null
-                                ? SizedBox(height: 17)
-                                : SizedBox(height: 5),
-                          ],
-                        ),
+                            ),
+                          onExtraLabel2 == null
+                              ? SizedBox(height: 17)
+                              : SizedBox(height: 5),
+                        ],
                       ),
-                      if (onExtraLabel2 != null)
-                        Padding(
-                          padding: const EdgeInsetsDirectional.only(
-                            start: 10,
-                            end: 10,
-                            bottom: 12,
-                          ),
-                          child: Button(
-                            borderRadius: borderRadius,
-                            expandedLayout: true,
-                            color: tertiaryButtonColor,
-                            textColor: onTertiaryButtonColor,
-                            label: onExtraLabel2,
-                            onTap: onExtra2 ?? () {},
-                          ),
+                    ),
+                    if (onExtraLabel2 != null)
+                      Padding(
+                        padding: const EdgeInsetsDirectional.only(
+                          start: 10,
+                          end: 10,
+                          bottom: 12,
                         ),
                       // SizedBox(height: 16),
                     ],
@@ -601,8 +587,8 @@ class CodeBlock extends StatelessWidget {
               text: text,
               style: TextStyle(
                 fontSize: fontSize ?? 15,
-                fontFamily: "monospace",
-                fontFamilyFallback: <String>["Courier"],
+                fontFamily: "Inconsolata",
+                // fontFamilyFallback: <String>["monospace", "Courier"],
                 color: getColor(context, "black"),
               ),
             ),

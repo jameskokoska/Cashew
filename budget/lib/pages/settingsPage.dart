@@ -1113,6 +1113,7 @@ void openFontPicker(BuildContext context) {
           // SF Pro removed - users on iOS can just select Platform font
           // Inter is the font family fallback
           "RobotoCondensed",
+          "Inconsolata",
           "(Platform)",
         ],
         initial: appStateSettings["font"].toString(),
@@ -1136,6 +1137,8 @@ String fontNameDisplayFilter(String value) {
     return "DM Sans";
   } else if (value == "RobotoCondensed") {
     return "Roboto Condensed";
+  } else if (value == "Inconsolata") {
+    return "Inconsolata Monospace";
   }
   return value.toString();
 }
