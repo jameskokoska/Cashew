@@ -48,15 +48,13 @@ class BudgetPage extends StatelessWidget {
     super.key,
     required this.budgetPk,
     this.dateForRange,
-    this.isPastBudget = false,
-    this.isPastBudgetButCurrentPeriod = false,
     this.dateForRangeIndex = 0,
+    this.openedFromHistory = false,
   });
   final String budgetPk;
   final DateTime? dateForRange;
-  final bool? isPastBudget;
-  final bool? isPastBudgetButCurrentPeriod;
   final int dateForRangeIndex;
+  final bool openedFromHistory;
 
   @override
   Widget build(BuildContext context) {
@@ -70,9 +68,8 @@ class BudgetPage extends StatelessWidget {
               child: _BudgetPageContent(
                 budget: snapshot.data!,
                 dateForRange: dateForRange,
-                isPastBudget: isPastBudget,
-                isPastBudgetButCurrentPeriod: isPastBudgetButCurrentPeriod,
                 dateForRangeIndex: dateForRangeIndex,
+                openedFromHistory: openedFromHistory,
               ),
             );
           }
@@ -86,16 +83,14 @@ class _BudgetPageContent extends StatefulWidget {
     Key? key,
     required Budget this.budget,
     this.dateForRange,
-    this.isPastBudget = false,
-    this.isPastBudgetButCurrentPeriod = false,
     this.dateForRangeIndex = 0,
+    this.openedFromHistory = false,
   }) : super(key: key);
 
   final Budget budget;
   final DateTime? dateForRange;
-  final bool? isPastBudget;
-  final bool? isPastBudgetButCurrentPeriod;
   final int dateForRangeIndex;
+  final bool openedFromHistory;
 
   @override
   State<_BudgetPageContent> createState() => _BudgetPageContentState();
@@ -114,11 +109,13 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
   late DateTime dateForRange =
       widget.dateForRange == null ? DateTime.now() : widget.dateForRange!;
   bool budgetHistoryDismissedPremium = false;
+  bool get isPastBudget => dateForRangeIndex != 0;
+  bool get isPastBudgetButCurrentPeriod => dateForRangeIndex == 0;
 
   @override
   void initState() {
     Future.delayed(Duration.zero, () {
-      if (widget.isPastBudget == true) premiumPopupPastBudgets(context);
+      if (isPastBudget == true) premiumPopupPastBudgets(context);
     });
     super.initState();
   }
@@ -126,7 +123,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
   void changeSelectedDateRange(int delta) async {
     int index = (dateForRangeIndex) - delta;
     if (index >= 0) {
-      budgetHistoryDismissedPremium = await premiumPopupPastBudgets(context);
+      if (budgetHistoryDismissedPremium == false)
+        budgetHistoryDismissedPremium = await premiumPopupPastBudgets(context);
       if (budgetHistoryDismissedPremium) {
         setState(() {
           dateForRangeIndex = index;
@@ -182,6 +180,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
             pieChartDisplayStateKey: _pieChartDisplayStateKey,
             data: dataFilterUnassignedTransactions,
             totalSpent: totalSpent,
+            middleColor: pageBackgroundColor,
             setSelectedCategory: (categoryPk, category) async {
               setState(() {
                 selectedCategory = category;
@@ -199,8 +198,6 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
               //   });
               // }
             },
-            isPastBudget: widget.isPastBudget ?? false,
-            middleColor: pageBackgroundColor,
           ),
         ),
         PieChartOptions(
@@ -262,8 +259,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
     String timeRangeString = startDateString == endDateString
         ? startDateString
         : startDateString + " – " + endDateString;
-    bool showingSelectedPeriodAppBar = widget.isPastBudget == true ||
-        widget.isPastBudgetButCurrentPeriod == true;
+    bool showingSelectedPeriodAppBar = widget.openedFromHistory == true;
     return WillPopScope(
       onWillPop: () async {
         if ((globalSelectedID.value[pageId] ?? []).length > 0) {
@@ -353,8 +349,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                 },
               ),
               if (widget.budget.reoccurrence != BudgetReoccurence.custom &&
-                  widget.isPastBudget == false &&
-                  widget.isPastBudgetButCurrentPeriod == false)
+                  isPastBudget == false &&
+                  isPastBudgetButCurrentPeriod == false)
                 DropdownItemMenu(
                   id: "budget-history",
                   label: "budget-history".tr(),
@@ -568,7 +564,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                           child: Container(
                             padding: EdgeInsetsDirectional.only(
                               bottom: showingSelectedPeriodAppBar
-                                  ? widget.isPastBudgetButCurrentPeriod == true
+                                  ? isPastBudgetButCurrentPeriod == true
                                       ? 14
                                       : 5
                                   : 20,
@@ -580,10 +576,9 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                   .colorScheme
                                   .secondaryContainer,
                             ),
-                            child: AnimatedSize(
-                              duration: Duration(milliseconds: 500),
-                              curve: Curves.easeInOut,
+                            child: AnimatedSizeSwitcher(
                               child: Column(
+                                key: ValueKey(isPastBudgetButCurrentPeriod),
                                 children: [
                                   Transform.scale(
                                     alignment:
@@ -640,10 +635,9 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                                   budgetAmount *
                                                   100,
                                           yourPercent: 0,
-                                          todayPercent:
-                                              widget.isPastBudget == true
-                                                  ? -1
-                                                  : todayPercent,
+                                          todayPercent: isPastBudget == true
+                                              ? -1
+                                              : todayPercent,
                                           ghostPercent: budgetAmount == 0
                                               ? 0
                                               : (((snapshot.data ?? 0) *
@@ -655,7 +649,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                       },
                                     ),
                                   ),
-                                  widget.isPastBudget == true
+                                  isPastBudget == true
                                       ? SizedBox.shrink()
                                       : DaySpending(
                                           budget: widget.budget,
@@ -867,7 +861,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                 child: BudgetLineGraph(
                   budget: widget.budget,
                   dateForRange: dateForRange,
-                  isPastBudget: widget.isPastBudget,
+                  isPastBudget: isPastBudget,
                   selectedCategory: selectedCategory,
                   budgetRange: budgetRange,
                   showIfNone: false,
@@ -900,8 +894,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
             categoryTintColor: Theme.of(context).colorScheme.primary,
             noResultsExtraWidget:
                 widget.budget.reoccurrence != BudgetReoccurence.custom &&
-                        widget.isPastBudget == false &&
-                        widget.isPastBudgetButCurrentPeriod == false
+                        isPastBudget == false &&
+                        isPastBudgetButCurrentPeriod == false
                     ? Padding(
                         padding: const EdgeInsetsDirectional.only(top: 20),
                         child: ExtraInfoButton(

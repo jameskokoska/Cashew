@@ -2096,6 +2096,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                 Expanded(
                   child: selectedCategory == null
                       ? Button(
+                          hasBottomExtraSafeArea: true,
                           label: "select-category".tr(),
                           onTap: () {
                             selectCategorySequence(
@@ -2111,12 +2112,14 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                         )
                       : selectedAmount == null
                           ? Button(
+                              hasBottomExtraSafeArea: true,
                               label: "enter-amount".tr(),
                               onTap: () {
                                 selectAmountPopup();
                               },
                             )
                           : Button(
+                              hasBottomExtraSafeArea: true,
                               label: widget.transaction != null
                                   ? "save-changes".tr()
                                   : textAddTransaction ?? "",
@@ -2133,6 +2136,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                           key: ValueKey(1),
                           padding: EdgeInsetsDirectional.only(start: 5),
                           child: Button(
+                            hasBottomExtraSafeArea: true,
                             color: isTransactionActionDealtWith(
                                     createTransaction())
                                 ? Theme.of(context)

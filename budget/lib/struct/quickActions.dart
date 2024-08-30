@@ -55,8 +55,6 @@ void runQuickActionsPayLoads(context) async {
             BudgetPage(
               budgetPk: budgetPk,
               dateForRange: DateTime.now(),
-              isPastBudget: false,
-              isPastBudgetButCurrentPeriod: false,
             ),
           );
         } catch (e) {

@@ -58,7 +58,6 @@ class PieChartWrapper extends StatelessWidget {
     required this.data,
     required this.totalSpent,
     required this.setSelectedCategory,
-    required this.isPastBudget,
     required this.pieChartDisplayStateKey,
     this.middleColor,
     this.disableLarge = false,
@@ -67,7 +66,6 @@ class PieChartWrapper extends StatelessWidget {
   final double totalSpent;
   final Function(String categoryPk, TransactionCategory? category)
       setSelectedCategory;
-  final bool isPastBudget;
   final GlobalKey<PieChartDisplayState>? pieChartDisplayStateKey;
   final Color? middleColor;
   final bool disableLarge;

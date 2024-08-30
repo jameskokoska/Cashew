@@ -438,7 +438,6 @@ class _PieChartHomeAndCategorySummaryState
                                             disableLarge: true,
                                             pieChartDisplayStateKey:
                                                 pieChartDisplayStateKey,
-                                            isPastBudget: true,
                                             data: s
                                                 .dataFilterUnassignedTransactions,
                                             totalSpent: s.totalSpent,

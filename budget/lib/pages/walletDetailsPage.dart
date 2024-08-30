@@ -2070,7 +2070,6 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                 children: [
                   SizedBox(height: 30),
                   PieChartWrapper(
-                    isPastBudget: true,
                     pieChartDisplayStateKey: _pieChartDisplayStateKey,
                     data: s.dataFilterUnassignedTransactions,
                     totalSpent: s.totalSpent,

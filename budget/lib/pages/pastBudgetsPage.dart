@@ -836,8 +836,6 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                                 showTodayForSmallBudget:
                                     (index == 0 ? true : false),
                                 dateForRange: datePast,
-                                isPastBudget: index == 0 ? false : true,
-                                isPastBudgetButCurrentPeriod: index == 0,
                                 backgroundColor: widget.backgroundColor,
                                 dateForRangeIndex: index,
                               ),
@@ -897,8 +895,6 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                                   showTodayForSmallBudget:
                                       (index == 0 ? true : false),
                                   dateForRange: datePast,
-                                  isPastBudget: index == 0 ? false : true,
-                                  isPastBudgetButCurrentPeriod: index == 0,
                                   backgroundColor: widget.backgroundColor,
                                   dateForRangeIndex: index,
                                 ),
@@ -947,8 +943,6 @@ class PastBudgetContainer extends StatelessWidget {
     this.smallBudgetContainer = false,
     this.showTodayForSmallBudget = true,
     this.dateForRange,
-    this.isPastBudget = false,
-    this.isPastBudgetButCurrentPeriod = false,
     required this.backgroundColor,
     required this.dateForRangeIndex,
   }) : super(key: key);
@@ -957,8 +951,6 @@ class PastBudgetContainer extends StatelessWidget {
   final bool smallBudgetContainer;
   final bool showTodayForSmallBudget;
   final DateTime? dateForRange;
-  final bool? isPastBudget;
-  final bool? isPastBudgetButCurrentPeriod;
   final Color backgroundColor;
   final int dateForRangeIndex;
 
@@ -1239,9 +1231,8 @@ class PastBudgetContainer extends StatelessWidget {
         openPage: BudgetPage(
           budgetPk: budget.budgetPk,
           dateForRange: dateForRangeLocal,
-          isPastBudget: isPastBudget,
-          isPastBudgetButCurrentPeriod: isPastBudgetButCurrentPeriod,
           dateForRangeIndex: dateForRangeIndex,
+          openedFromHistory: true,
         ),
       ),
     );

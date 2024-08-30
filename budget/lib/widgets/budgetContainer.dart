@@ -33,8 +33,6 @@ class BudgetContainer extends StatelessWidget {
     required this.budget,
     this.height = 183,
     this.dateForRange,
-    this.isPastBudget = false,
-    this.isPastBudgetButCurrentPeriod = false,
     this.longPressToEdit = true,
     this.intermediatePadding = true,
     this.squishInactiveBudgetContainerHeight = false,
@@ -43,8 +41,6 @@ class BudgetContainer extends StatelessWidget {
   final Budget budget;
   final double height;
   final DateTime? dateForRange;
-  final bool? isPastBudget;
-  final bool? isPastBudgetButCurrentPeriod;
   final bool longPressToEdit;
   final bool intermediatePadding;
   final bool squishInactiveBudgetContainerHeight;
@@ -401,8 +397,6 @@ class BudgetContainer extends StatelessWidget {
         openPage: BudgetPage(
           budgetPk: budget.budgetPk,
           dateForRange: dateForRangeLocal,
-          isPastBudget: isPastBudget,
-          isPastBudgetButCurrentPeriod: isPastBudgetButCurrentPeriod,
         ),
       ),
     );
