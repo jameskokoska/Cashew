@@ -107,7 +107,7 @@ AppColors getAppColors(
             "starYellow": Colors.yellow,
             "dividerColor": appStateSettings["materialYou"]
                 ? Color(0x13FFFFFF)
-                : Color(0xFF161616),
+                : Color(0x6F363636),
             "standardContainerColor": getPlatform() == PlatformOS.isIOS
                 ? themeData.colorScheme.background
                 : appStateSettings["materialYou"]
