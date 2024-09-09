@@ -255,27 +255,48 @@ class AboutPageState extends State<AboutPage> {
     List<Widget> translators = [
       TranslationInfoBox(
         title: "Italian",
-        list: ["Thomas B.", "Mattia A."],
+        list: [
+          "Thomas B.",
+          "Mattia A.",
+        ],
       ),
       TranslationInfoBox(
         title: "Polish",
-        list: ["Michał S.", "Michał P.", "Kaczusia"],
+        list: [
+          "Michał S.",
+          "Michał P.",
+          "Kaczusia",
+        ],
       ),
       TranslationInfoBox(
         title: "Serbian",
-        list: ["Jovan P."],
+        list: [
+          "Jovan P.",
+        ],
       ),
       TranslationInfoBox(
         title: "Swahili",
-        list: ["Anthony K."],
+        list: [
+          "Anthony K.",
+        ],
       ),
       TranslationInfoBox(
         title: "German",
-        list: ["Fabian S.", "Christian R.", "Samuel R."],
+        list: [
+          "Fabian S.",
+          "Christian R.",
+          "Samuel R.",
+          "Bettina S.",
+        ],
       ),
       TranslationInfoBox(
         title: "Arabic",
-        list: ["Dorra Y.", "Ammar N.", "Hussain A.", "Mahmoud E."],
+        list: [
+          "Dorra Y.",
+          "Ammar N.",
+          "Hussain A.",
+          "Mahmoud E.",
+        ],
       ),
       TranslationInfoBox(
         title: "Portuguese",
@@ -285,116 +306,197 @@ class AboutPageState extends State<AboutPage> {
           "João P.",
           "Junior M.",
           "Leandro",
-          "Xavier B."
+          "Xavier B.",
         ],
       ),
       TranslationInfoBox(
         title: "Bulgarian",
-        list: ["Денислав C."],
+        list: [
+          "Денислав C.",
+        ],
       ),
       TranslationInfoBox(
         title: "Chinese (Simplified)",
-        list: ["Clyde"],
+        list: [
+          "Clyde",
+        ],
       ),
       TranslationInfoBox(
         title: "Chinese (Traditional)",
-        list: ["qazlll456"],
+        list: [
+          "qazlll456",
+        ],
       ),
       TranslationInfoBox(
         title: "Hindi",
-        list: ["Dikshant S.", "Nikunj K.", "Darshan L."],
+        list: [
+          "Dikshant S.",
+          "Nikunj K.",
+          "Darshan L.",
+        ],
       ),
       TranslationInfoBox(
         title: "Vietnamese",
-        list: ["Ng. Anh"],
+        list: [
+          "Ng. Anh",
+        ],
       ),
       TranslationInfoBox(
         title: "French",
-        list: ["Antoine C.", "Fabien H."],
+        list: [
+          "Antoine C.",
+          "Fabien H.",
+          "Samuel S.",
+        ],
       ),
       TranslationInfoBox(
         title: "Indonesian",
-        list: ["Gusairi P."],
+        list: [
+          "Gusairi P.",
+        ],
       ),
       TranslationInfoBox(
         title: "Ukrainian",
-        list: ["Chris M.", "Yurii S.", "Mariia"],
+        list: [
+          "Chris M.",
+          "Yurii S.",
+          "Mariia",
+        ],
       ),
       TranslationInfoBox(
         title: "Russian",
-        list: ["Ilya A.", "Konstantin B.", "Dennis Q"],
+        list: [
+          "Ilya A.",
+          "Konstantin B.",
+          "Dennis Q",
+          "Innokentii B.",
+        ],
       ),
       TranslationInfoBox(
         title: "Romanian",
-        list: ["Valentin G.", "Tarciziu"],
+        list: [
+          "Valentin G.",
+          "Tarciziu",
+        ],
       ),
       TranslationInfoBox(
         title: "Spanish",
-        list: ["Pablo S.", "Gonzalo R.", "Ramon M."],
+        list: [
+          "Pablo S.",
+          "Gonzalo R.",
+          "Ramon M.",
+        ],
       ),
       TranslationInfoBox(
         title: "Swedish",
-        list: ["Anna M."],
+        list: [
+          "Anna M.",
+        ],
       ),
       TranslationInfoBox(
         title: "Danish",
-        list: ["Mittheo"],
+        list: [
+          "Mittheo",
+        ],
       ),
       TranslationInfoBox(
         title: "Turkish",
-        list: ["Serdar A."],
+        list: [
+          "Serdar A.",
+        ],
       ),
       TranslationInfoBox(
         title: "Slovak",
-        list: ["Igor V."],
+        list: [
+          "Igor V.",
+        ],
       ),
       TranslationInfoBox(
         title: "Macedonian",
-        list: ["Andrej A."],
+        list: [
+          "Andrej A.",
+        ],
       ),
       TranslationInfoBox(
         title: "Czech",
-        list: ["Kamil T."],
+        list: [
+          "Kamil T.",
+          "Hana B.",
+        ],
       ),
       TranslationInfoBox(
         title: "Hebrew",
-        list: ["Happy Bear"],
+        list: [
+          "Happy Bear",
+        ],
       ),
       TranslationInfoBox(
         title: "Afrikaans",
-        list: ["Andrè B."],
+        list: [
+          "Andrè B.",
+        ],
       ),
       TranslationInfoBox(
         title: "Filipino",
-        list: ["Waren G."],
+        list: [
+          "Waren G.",
+        ],
       ),
       TranslationInfoBox(
         title: "Tamil",
-        list: ["Mohamed A."],
+        list: [
+          "Mohamed A.",
+        ],
       ),
       TranslationInfoBox(
         title: "Japanese",
-        list: ["Tetta N."],
+        list: [
+          "Tetta N.",
+        ],
       ),
       TranslationInfoBox(
         title: "Hungarian",
-        list: ["Döbröntei S."],
+        list: [
+          "Döbröntei S.",
+          "Myra S.",
+        ],
       ),
       TranslationInfoBox(
         title: "Thai",
-        list: ["Jateniphat U."],
+        list: [
+          "Jateniphat U.",
+        ],
       ),
       TranslationInfoBox(
         title: "Gujarati",
-        list: ["Darshan L.", "Harsh S."],
+        list: [
+          "Darshan L.",
+          "Harsh S.",
+        ],
       ),
       TranslationInfoBox(
         title: "Finnish",
-        list: ["Mirko J."],
+        list: [
+          "Mirko J.",
+        ],
       ),
       TranslationInfoBox(
         title: "Dutch",
-        list: ["Niels S."],
+        list: [
+          "Niels S.",
+        ],
+      ),
+      TranslationInfoBox(
+        title: "Malay",
+        list: [
+          "アリフ",
+        ],
+      ),
+      TranslationInfoBox(
+        title: "Sinhala",
+        list: [
+          "Bhagya S.",
+        ],
       ),
     ];
 
