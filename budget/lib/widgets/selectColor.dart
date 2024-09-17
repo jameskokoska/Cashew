@@ -424,27 +424,20 @@ class _ColorIconCustomState extends State<ColorIconCustom> {
   Widget build(BuildContext context) {
     Widget colorPickerPopup = PopupFramework(
       title: "custom-color".tr(),
-      outsideExtraWidget: IconButton(
-        tooltip: "enter-color-code".tr(),
-        iconSize: 25,
-        padding: EdgeInsetsDirectional.all(
-            getPlatform() == PlatformOS.isIOS ? 15 : 20),
-        icon: Icon(
-          appStateSettings["outlinedIcons"]
+      outsideExtraWidget: OutsideExtraWidgetIconButton(
+          iconData: appStateSettings["outlinedIcons"]
               ? Icons.numbers_outlined
               : Icons.numbers_rounded,
-        ),
-        onPressed: () async {
-          enterColorCodeBottomSheet(
-            context,
-            initialSelectedColor: selectedColor,
-            setSelectedColor: (Color color) {
-              widget.onTap(color);
-              selectedColor = color;
-            },
-          );
-        },
-      ),
+          onPressed: () async {
+            enterColorCodeBottomSheet(
+              context,
+              initialSelectedColor: selectedColor,
+              setSelectedColor: (Color color) {
+                widget.onTap(color);
+                selectedColor = color;
+              },
+            );
+          }),
       child: Column(
         children: [
           // Center(

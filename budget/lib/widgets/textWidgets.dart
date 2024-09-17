@@ -28,6 +28,7 @@ class TextFont extends StatelessWidget {
   final bool? softWrap;
   final List<TextSpan>? richTextSpan;
   final bool selectableText;
+  final double? letterSpacing;
 
   const TextFont({
     Key? key,
@@ -47,6 +48,7 @@ class TextFont extends StatelessWidget {
     this.overflow,
     this.softWrap,
     this.overflowReplacement,
+    this.letterSpacing,
   }) : super(key: key);
 
   @override
@@ -61,6 +63,7 @@ class TextFont extends StatelessWidget {
     }
 
     final TextStyle textStyle = TextStyle(
+      letterSpacing: letterSpacing,
       fontWeight: this.fontWeight,
       fontSize: this.fontSize,
       fontFamily: fallbackFontLocales.contains(appStateSettings["locale"]) &&

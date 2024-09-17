@@ -278,8 +278,8 @@ class _ExportCSVPopupState extends State<ExportCSVPopup> {
                         await showCustomDateRangePicker(
                       context,
                       null,
-                      vibrantButtonColors: true,
                       initialEntryMode: DatePickerEntryMode.calendarOnly,
+                      allTimeButton: false,
                     );
                     if (dateRange.dateTimeRange == null) {
                       openSnackbar(

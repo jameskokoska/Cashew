@@ -768,15 +768,10 @@ class _CorrectBalancePopupState extends State<CorrectBalancePopup> {
       underTitleSpace: false,
       outsideExtraWidget: widget.showAllEditDetails
           ? null
-          : IconButton(
-              iconSize: 25,
-              padding: EdgeInsetsDirectional.all(
-                  getPlatform() == PlatformOS.isIOS ? 15 : 20),
-              icon: Icon(
-                appStateSettings["outlinedIcons"]
-                    ? Icons.edit_outlined
-                    : Icons.edit_rounded,
-              ),
+          : OutsideExtraWidgetIconButton(
+              iconData: appStateSettings["outlinedIcons"]
+                  ? Icons.edit_outlined
+                  : Icons.edit_rounded,
               onPressed: () async {
                 await openBottomSheet(
                   context,
@@ -1284,11 +1279,9 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
       underTitleSpace: false,
       outsideExtraWidget: widget.showAllEditDetails
           ? null
-          : IconButton(
-              iconSize: 25,
-              padding: EdgeInsetsDirectional.all(
-                  getPlatform() == PlatformOS.isIOS ? 15 - 8 : 20 - 8),
-              icon: SelectedIconForIconButton(
+          : OutsideExtraWidgetIconButton(
+              iconData: null,
+              customIconWidget: SelectedIconForIconButton(
                 iconData: appStateSettings["outlinedIcons"]
                     ? Icons.edit_outlined
                     : Icons.edit_rounded,
@@ -1316,8 +1309,7 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
                   ),
                 );
                 setState(() {});
-              },
-            ),
+              }),
       child: Column(
         children: [
           if (widget.showAllEditDetails)

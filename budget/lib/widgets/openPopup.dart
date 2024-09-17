@@ -342,6 +342,9 @@ Future<T?> openPopupCustom<T extends Object?>(
   BuildContext context, {
   String? title,
   bool barrierDismissible = true,
+  EdgeInsetsDirectional padding =
+      const EdgeInsetsDirectional.symmetric(horizontal: 25, vertical: 20),
+  BorderRadius? borderRadius,
   required Widget child,
 }) {
   return showGeneralDialog(
@@ -385,13 +388,13 @@ Future<T?> openPopupCustom<T extends Object?>(
                       context, Theme.of(context).colorScheme.secondaryContainer,
                       amount: 0.5)
                   : getColor(context, "lightDarkAccent"),
-              borderRadius: BorderRadiusDirectional.circular(
-                  getPlatform() == PlatformOS.isIOS ? 10 : 25),
+              borderRadius: borderRadius ??
+                  BorderRadiusDirectional.circular(
+                      getPlatform() == PlatformOS.isIOS ? 10 : 25),
               boxShadow: boxShadowGeneral(context),
             ),
             child: SingleChildScrollView(
-              padding:
-                  EdgeInsetsDirectional.symmetric(horizontal: 25, vertical: 20),
+              padding: padding,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,

@@ -210,3 +210,26 @@ class PopupFramework extends StatelessWidget {
     );
   }
 }
+
+class OutsideExtraWidgetIconButton extends StatelessWidget {
+  const OutsideExtraWidgetIconButton({
+    required this.iconData,
+    this.customIconWidget,
+    required this.onPressed,
+    super.key,
+  });
+  final IconData? iconData;
+  final Widget? customIconWidget;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      iconSize: 25,
+      padding: EdgeInsetsDirectional.all(
+          getPlatform() == PlatformOS.isIOS ? 15 : 20),
+      icon: customIconWidget ?? Icon(iconData),
+      onPressed: onPressed,
+    );
+  }
+}
