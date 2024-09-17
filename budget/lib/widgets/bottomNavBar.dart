@@ -1,4 +1,4 @@
-import 'package:budget/database/tables.dart';
+import 'dart:math';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/editHomePage.dart';
@@ -10,11 +10,8 @@ import 'package:budget/struct/navBarIconsData.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
-import 'package:budget/widgets/iconButtonScaled.dart';
-import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
-import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/outlinedButtonStacked.dart';
 import 'package:budget/widgets/framework/navigation_bar/navigation_bar.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -116,86 +113,99 @@ class BottomNavBarState extends State<BottomNavBar> {
 
     if (getIsFullScreen(context)) return SizedBox.shrink();
     if (getPlatform() == PlatformOS.isIOS) {
-      return Container(
-        decoration: BoxDecoration(
-          color: getBottomNavbarBackgroundColor(
-            colorScheme: Theme.of(context).colorScheme,
-            brightness: Theme.of(context).brightness,
-            lightDarkAccent: getColor(context, "lightDarkAccent"),
+      return IntrinsicHeight(
+        child: Container(
+          decoration: BoxDecoration(
+            color: getBottomNavbarBackgroundColor(
+              colorScheme: Theme.of(context).colorScheme,
+              brightness: Theme.of(context).brightness,
+              lightDarkAccent: getColor(context, "lightDarkAccent"),
+            ),
+            boxShadow: boxShadowSharp(context),
           ),
-          boxShadow: boxShadowSharp(context),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisAlignment: MainAxisAlignment.end,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding:
-                  EdgeInsetsDirectional.symmetric(horizontal: 25, vertical: 2),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      CustomizableNavigationBarIcon(
-                        shortcutAppSettingKey: "customNavBarShortcut0",
-                        afterSet: () {
-                          onItemTapped(0, allowReApply: true);
-                        },
-                        navigationBarIconBuilder: (NavBarIconData iconData) {
-                          return NavBarIcon(
-                            icon: iconData.iconData,
-                            customIconScale: iconData.iconScale,
-                            onItemTapped: onItemTapped,
-                            navigationBarIndex: 0,
-                            currentNavigationBarIndex: navigationBarIndex,
-                          );
-                        },
-                      ),
-                      CustomizableNavigationBarIcon(
-                        shortcutAppSettingKey: "customNavBarShortcut1",
-                        afterSet: () {
-                          onItemTapped(1, allowReApply: true);
-                        },
-                        navigationBarIconBuilder: (NavBarIconData iconData) {
-                          return NavBarIcon(
-                            icon: iconData.iconData,
-                            customIconScale: iconData.iconScale,
-                            onItemTapped: onItemTapped,
-                            navigationBarIndex: 1,
-                            currentNavigationBarIndex: navigationBarIndex,
-                          );
-                        },
-                      ),
-                      CustomizableNavigationBarIcon(
-                        shortcutAppSettingKey: "customNavBarShortcut2",
-                        afterSet: () {
-                          onItemTapped(2, allowReApply: true);
-                        },
-                        navigationBarIconBuilder: (NavBarIconData iconData) {
-                          return NavBarIcon(
-                            icon: iconData.iconData,
-                            customIconScale: iconData.iconScale,
-                            onItemTapped: onItemTapped,
-                            navigationBarIndex: 2,
-                            currentNavigationBarIndex: navigationBarIndex,
-                          );
-                        },
-                      ),
-                      NavBarIcon(
-                        onItemTapped: onItemTapped,
-                        icon: navBarIconsData["more"]!.iconData,
-                        navigationBarIndex: 3,
-                        currentNavigationBarIndex: navigationBarIndex,
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: MediaQuery.paddingOf(context).bottom)
-                ],
+          padding: EdgeInsetsDirectional.only(
+              bottom: max(0, MediaQuery.paddingOf(context).bottom - 5.5)),
+          child: Row(
+            children: [
+              NavBarSpaceButton(
+                onPress: () => onItemTapped(0),
+                flex: 9,
+                child: Container(),
               ),
-            )
-          ],
+              NavBarSpaceButton(
+                onPress: () => onItemTapped(0),
+                flex: 20,
+                child: CustomizableNavigationBarIcon(
+                  shortcutAppSettingKey: "customNavBarShortcut0",
+                  afterSet: () {
+                    onItemTapped(0, allowReApply: true);
+                  },
+                  navigationBarIconBuilder: (NavBarIconData iconData) {
+                    return NavBarIcon(
+                      icon: iconData.iconData,
+                      customIconScale: iconData.iconScale,
+                      onItemTapped: onItemTapped,
+                      navigationBarIndex: 0,
+                      currentNavigationBarIndex: navigationBarIndex,
+                    );
+                  },
+                ),
+              ),
+              NavBarSpaceButton(
+                onPress: () => onItemTapped(1),
+                flex: 20,
+                child: CustomizableNavigationBarIcon(
+                  shortcutAppSettingKey: "customNavBarShortcut1",
+                  afterSet: () {
+                    onItemTapped(1, allowReApply: true);
+                  },
+                  navigationBarIconBuilder: (NavBarIconData iconData) {
+                    return NavBarIcon(
+                      icon: iconData.iconData,
+                      customIconScale: iconData.iconScale,
+                      onItemTapped: onItemTapped,
+                      navigationBarIndex: 1,
+                      currentNavigationBarIndex: navigationBarIndex,
+                    );
+                  },
+                ),
+              ),
+              NavBarSpaceButton(
+                onPress: () => onItemTapped(2),
+                flex: 20,
+                child: CustomizableNavigationBarIcon(
+                  shortcutAppSettingKey: "customNavBarShortcut2",
+                  afterSet: () {
+                    onItemTapped(2, allowReApply: true);
+                  },
+                  navigationBarIconBuilder: (NavBarIconData iconData) {
+                    return NavBarIcon(
+                      icon: iconData.iconData,
+                      customIconScale: iconData.iconScale,
+                      onItemTapped: onItemTapped,
+                      navigationBarIndex: 2,
+                      currentNavigationBarIndex: navigationBarIndex,
+                    );
+                  },
+                ),
+              ),
+              NavBarSpaceButton(
+                onPress: () => onItemTapped(3),
+                flex: 20,
+                child: NavBarIcon(
+                  onItemTapped: onItemTapped,
+                  icon: navBarIconsData["more"]!.iconData,
+                  navigationBarIndex: 3,
+                  currentNavigationBarIndex: navigationBarIndex,
+                ),
+              ),
+              NavBarSpaceButton(
+                onPress: () => onItemTapped(3),
+                flex: 9,
+                child: Container(),
+              ),
+            ],
+          ),
         ),
       );
     }
@@ -298,6 +308,32 @@ class BottomNavBarState extends State<BottomNavBar> {
             onItemTapped(value);
           },
         ),
+      ),
+    );
+  }
+}
+
+class NavBarSpaceButton extends StatelessWidget {
+  const NavBarSpaceButton(
+      {required this.onPress,
+      required this.flex,
+      required this.child,
+      super.key});
+  final VoidCallback onPress;
+  final int flex;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      flex: flex,
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          Feedback.forTap(context);
+          onPress();
+        },
+        child: child,
       ),
     );
   }
