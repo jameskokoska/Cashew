@@ -1379,73 +1379,83 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
               }),
             ],
           ),
-          SizedBox(height: 3),
-          Tappable(
-            color: Colors.transparent,
-            borderRadius: 15,
-            onTap: Provider.of<AllWallets>(context).allContainSameCurrency()
-                ? null
-                : () async {
-                    // Always ensure that the current widget.wallet appears in the list!
-
-                    Set<String> uniqueCurrencies = {
-                      widget.wallet?.currency ?? ""
-                    };
-                    List<TransactionWallet> duplicateCurrencyWallets = [];
-
-                    for (TransactionWallet wallet
-                        in Provider.of<AllWallets>(context, listen: false)
-                            .list) {
-                      if (!uniqueCurrencies.add(wallet.currency ?? "")) {
-                        duplicateCurrencyWallets.add(wallet);
-                      }
-                    }
-
-                    duplicateCurrencyWallets.removeWhere(
-                        (w) => w.walletPk == widget.wallet?.walletPk);
-
-                    dynamic result = await selectWalletPopup(
-                      context,
-                      removeWalletPks: duplicateCurrencyWallets
-                          .map((wallet) => wallet.walletPk)
-                          .toList(),
-                      title: "select-currency".tr(),
-                      selectedWallet: walletForCurrency,
-                      allowEditWallet: false,
-                      currencyOnly: true,
-                    );
-                    if (result is TransactionWallet)
-                      setState(() {
-                        walletForCurrency = result;
-                      });
-                  },
-            child: Padding(
-              padding: const EdgeInsetsDirectional.symmetric(
-                  vertical: 7, horizontal: 11),
-              child: AnimatedSizeSwitcher(
-                clipBehavior: Clip.none,
-                child: TextFont(
-                  key: ValueKey(enteredAmount.toString() +
-                      (walletForCurrency?.currency ?? "")),
-                  autoSizeText: true,
-                  maxLines: 1,
-                  minFontSize: 16,
-                  text: convertToMoney(
-                    Provider.of<AllWallets>(context),
-                    enteredAmount
-                        .abs(), //We flip the arrow instead of showing negative
-                    addCurrencyName: true,
-                    currencyKey: walletForCurrency?.currency ?? null,
-                  ),
-                  textAlign: TextAlign.center,
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-          SizedBox(height: 3),
           SelectAmount(
+            amountTappableBuilder: (onLongPress, amountConverted) {
+              return Padding(
+                padding: const EdgeInsetsDirectional.only(bottom: 3, top: 6),
+                child: Center(
+                  child: Tappable(
+                    onLongPress: onLongPress,
+                    color: Colors.transparent,
+                    borderRadius: 15,
+                    onTap: Provider.of<AllWallets>(context)
+                            .allContainSameCurrency()
+                        ? null
+                        : () async {
+                            // Always ensure that the current widget.wallet appears in the list!
+
+                            Set<String> uniqueCurrencies = {
+                              widget.wallet?.currency ?? ""
+                            };
+                            List<TransactionWallet> duplicateCurrencyWallets =
+                                [];
+
+                            for (TransactionWallet wallet
+                                in Provider.of<AllWallets>(context,
+                                        listen: false)
+                                    .list) {
+                              if (!uniqueCurrencies
+                                  .add(wallet.currency ?? "")) {
+                                duplicateCurrencyWallets.add(wallet);
+                              }
+                            }
+
+                            duplicateCurrencyWallets.removeWhere(
+                                (w) => w.walletPk == widget.wallet?.walletPk);
+
+                            dynamic result = await selectWalletPopup(
+                              context,
+                              removeWalletPks: duplicateCurrencyWallets
+                                  .map((wallet) => wallet.walletPk)
+                                  .toList(),
+                              title: "select-currency".tr(),
+                              selectedWallet: walletForCurrency,
+                              allowEditWallet: false,
+                              currencyOnly: true,
+                            );
+                            if (result is TransactionWallet)
+                              setState(() {
+                                walletForCurrency = result;
+                              });
+                          },
+                    child: Padding(
+                      padding: const EdgeInsetsDirectional.symmetric(
+                          vertical: 7, horizontal: 11),
+                      child: AnimatedSizeSwitcher(
+                        clipBehavior: Clip.none,
+                        child: TextFont(
+                          key: ValueKey(enteredAmount.toString() +
+                              (walletForCurrency?.currency ?? "")),
+                          autoSizeText: true,
+                          maxLines: 1,
+                          minFontSize: 16,
+                          text: convertToMoney(
+                            Provider.of<AllWallets>(context),
+                            enteredAmount
+                                .abs(), //We flip the arrow instead of showing negative
+                            addCurrencyName: true,
+                            currencyKey: walletForCurrency?.currency ?? null,
+                          ),
+                          textAlign: TextAlign.center,
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
             // extraWidgetAboveNumbers: SettingsContainerSwitch(
             //   title: "withdraw-amount".tr(),
             //   onSwitched: (value) {
@@ -1463,7 +1473,7 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
             //   runOnSwitchedInitially: true,
             // ),
             hideNextButton: true,
-            showEnteredNumber: false,
+            showCalculation: false,
             amountPassed: enteredAmount.toString(),
             setSelectedAmount: (amount, calculation) {
               setState(() {

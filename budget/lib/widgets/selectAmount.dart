@@ -75,6 +75,8 @@ class SelectAmount extends StatefulWidget {
     this.hideWalletPickerIfOneCurrency = false,
     this.hideNextButton = false,
     this.decimals,
+    this.amountTappableBuilder,
+    this.showCalculation = true,
   }) : super(key: key);
   final Function(double, String) setSelectedAmount;
   final String amountPassed;
@@ -96,6 +98,9 @@ class SelectAmount extends StatefulWidget {
   final bool hideWalletPickerIfOneCurrency;
   final bool hideNextButton;
   final int? decimals;
+  final Widget Function(void Function() onLongPress, String amountConverted)?
+      amountTappableBuilder;
+  final bool showCalculation;
 
   @override
   _SelectAmountState createState() => _SelectAmountState();
@@ -554,6 +559,122 @@ class _SelectAmountState extends State<SelectAmount> {
     });
   }
 
+  Widget amountWidgetBuilder(String amountConverted) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Flexible(
+          child: CustomContextMenu(
+            buttonItems: [
+              ContextMenuButtonItem(
+                type: ContextMenuButtonType.copy,
+                onPressed: () {
+                  ContextMenuController.removeAny();
+                  copyToClipboard(amountConverted);
+                },
+              ),
+              ContextMenuButtonItem(
+                type: ContextMenuButtonType.paste,
+                onPressed: () {
+                  ContextMenuController.removeAny();
+                  pasteFromClipboard();
+                },
+              ),
+            ],
+            tappableBuilder: (onLongPress) =>
+                widget.amountTappableBuilder
+                    ?.call(onLongPress, amountConverted) ??
+                Tappable(
+                  color: Colors.transparent,
+                  borderRadius: 10,
+                  onTap: () {
+                    return;
+                  },
+                  onLongPress: onLongPress,
+                  child: Padding(
+                    padding: const EdgeInsetsDirectional.only(
+                      end: 8.0,
+                      bottom: 5,
+                      start: 5,
+                      top: 5,
+                    ),
+                    child: TextFont(
+                      autoSizeText: true,
+                      maxLines: 1,
+                      minFontSize: 16,
+                      text: amountConverted,
+                      // text: amount,
+                      textAlign: TextAlign.end,
+                      fontSize: 35,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+          ),
+        ),
+        widget.enableWalletPicker == false ||
+                Provider.of<AllWallets>(context).list.length <= 1 ||
+                (widget.hideWalletPickerIfOneCurrency &&
+                    Provider.of<AllWallets>(context).allContainSameCurrency())
+            ? SizedBox.shrink()
+            : MediaQuery(
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.symmetric(vertical: 3.0),
+                  child: AnimatedExpanded(
+                    axis: Axis.horizontal,
+                    expand: (getSelectedWallet(listen: true)?.walletPk ==
+                                appStateSettings["selectedWalletPk"] ||
+                            ((Provider.of<AllWallets>(context)
+                                    .indexedByPk[getSelectedWallet(listen: true)
+                                        ?.walletPk]
+                                    ?.currency) ==
+                                Provider.of<AllWallets>(context)
+                                    .indexedByPk[
+                                        appStateSettings["selectedWalletPk"]]
+                                    ?.currency)) ==
+                        false,
+                    child: Tappable(
+                      key: ValueKey(getSelectedWallet(listen: true)?.walletPk),
+                      color: Theme.of(context).colorScheme.secondaryContainer,
+                      borderRadius: 13,
+                      onTap: () => convertAmountToSelectedCurrency(),
+                      child: Padding(
+                        padding: const EdgeInsetsDirectional.symmetric(
+                            horizontal: 8, vertical: 7),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.currency_exchange_rounded,
+                              size: 16,
+                            ),
+                            SizedBox(height: 2),
+                            TextFont(
+                              text: Provider.of<AllWallets>(context)
+                                      .indexedByPk[
+                                          appStateSettings["selectedWalletPk"]]
+                                      ?.currency
+                                      .toString()
+                                      .toUpperCase() ??
+                                  "",
+                              fontSize: 11,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                data: MediaQuery.of(context)
+                    .copyWith(textScaler: TextScaler.linear(1.0)),
+              ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     _focusAttachment.reparent();
@@ -600,7 +721,8 @@ class _SelectAmountState extends State<SelectAmount> {
                             onlyOneOperationAndIsNegativeSign(amount) == false
                         ? operationsWithSpaces(amount)
                         : "");
-                    Widget calculationWidget = calculationString == ""
+                    Widget calculationWidget = calculationString == "" ||
+                            widget.showCalculation == false
                         ? SizedBox.shrink()
                         : CustomContextMenu(
                             buttonItems: [
@@ -635,135 +757,7 @@ class _SelectAmountState extends State<SelectAmount> {
                               ),
                             ),
                           );
-                    Widget amountWidget = Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Flexible(
-                          child: CustomContextMenu(
-                            buttonItems: [
-                              ContextMenuButtonItem(
-                                type: ContextMenuButtonType.copy,
-                                onPressed: () {
-                                  ContextMenuController.removeAny();
-                                  copyToClipboard(amountConverted);
-                                },
-                              ),
-                              ContextMenuButtonItem(
-                                type: ContextMenuButtonType.paste,
-                                onPressed: () {
-                                  ContextMenuController.removeAny();
-                                  pasteFromClipboard();
-                                },
-                              ),
-                            ],
-                            tappableBuilder: (onLongPress) => Tappable(
-                              color: Colors.transparent,
-                              borderRadius: 10,
-                              onTap: () {
-                                return;
-                              },
-                              onLongPress: onLongPress,
-                              child: Padding(
-                                padding: const EdgeInsetsDirectional.only(
-                                  end: 8.0,
-                                  bottom: 5,
-                                  start: 5,
-                                  top: 5,
-                                ),
-                                child: TextFont(
-                                  autoSizeText: true,
-                                  maxLines: 1,
-                                  minFontSize: 16,
-                                  text: amountConverted,
-                                  // text: amount,
-                                  textAlign: TextAlign.end,
-                                  fontSize: 35,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        widget.enableWalletPicker == false ||
-                                Provider.of<AllWallets>(context).list.length <=
-                                    1 ||
-                                (widget.hideWalletPickerIfOneCurrency &&
-                                    Provider.of<AllWallets>(context)
-                                        .allContainSameCurrency())
-                            ? SizedBox.shrink()
-                            : MediaQuery(
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsetsDirectional.symmetric(
-                                          vertical: 3.0),
-                                  child: AnimatedExpanded(
-                                    axis: Axis.horizontal,
-                                    expand: (getSelectedWallet(listen: true)
-                                                    ?.walletPk ==
-                                                appStateSettings[
-                                                    "selectedWalletPk"] ||
-                                            ((Provider.of<AllWallets>(context)
-                                                    .indexedByPk[
-                                                        getSelectedWallet(
-                                                                listen: true)
-                                                            ?.walletPk]
-                                                    ?.currency) ==
-                                                Provider.of<AllWallets>(context)
-                                                    .indexedByPk[
-                                                        appStateSettings[
-                                                            "selectedWalletPk"]]
-                                                    ?.currency)) ==
-                                        false,
-                                    child: Tappable(
-                                      key: ValueKey(
-                                          getSelectedWallet(listen: true)
-                                              ?.walletPk),
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondaryContainer,
-                                      borderRadius: 13,
-                                      onTap: () =>
-                                          convertAmountToSelectedCurrency(),
-                                      child: Padding(
-                                        padding: const EdgeInsetsDirectional
-                                            .symmetric(
-                                            horizontal: 8, vertical: 7),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Icon(
-                                              Icons.currency_exchange_rounded,
-                                              size: 16,
-                                            ),
-                                            SizedBox(height: 2),
-                                            TextFont(
-                                              text: Provider.of<AllWallets>(
-                                                          context)
-                                                      .indexedByPk[
-                                                          appStateSettings[
-                                                              "selectedWalletPk"]]
-                                                      ?.currency
-                                                      .toString()
-                                                      .toUpperCase() ??
-                                                  "",
-                                              fontSize: 11,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                data: MediaQuery.of(context).copyWith(
-                                    textScaler: TextScaler.linear(1.0)),
-                              ),
-                      ],
-                    );
+                    Widget amountWidget = amountWidgetBuilder(amountConverted);
                     return AnimatedSize(
                       curve: Curves.easeInOut,
                       clipBehavior: Clip.none,
