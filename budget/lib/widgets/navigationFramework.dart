@@ -718,11 +718,22 @@ class AddMoreThingsPopup extends StatelessWidget {
                       );
                     },
                     getLabel: (TransactionWithCount transactionWithCount) {
-                      double amountInPrimary =
-                          transactionWithCount.transaction.amount *
-                              (amountRatioToPrimaryCurrencyGivenPk(
-                                  Provider.of<AllWallets>(context),
-                                  transactionWithCount.transaction.walletFk));
+                      // Keep the currency displayed in the primary currency
+                      // Therefore no need to convert using the code below...
+                      //
+                      // double amountInPrimary =
+                      //     transactionWithCount.transaction.amount *
+                      //         (amountRatioToPrimaryCurrencyGivenPk(
+                      //             Provider.of<AllWallets>(context),
+                      //             transactionWithCount.transaction.walletFk));
+                      // convertToMoney(
+                      //       Provider.of<AllWallets>(context),
+                      //       amountInPrimary,
+                      //       currencyKey: Provider.of<AllWallets>(context)
+                      //           .indexedByPk[
+                      //               transactionWithCount.transaction.walletFk]
+                      //           ?.currency,
+                      //     )
                       return getTransactionLabelSync(
                             transactionWithCount.transaction,
                             categoriesIndexed[
@@ -732,7 +743,7 @@ class AddMoreThingsPopup extends StatelessWidget {
                           "(" +
                           convertToMoney(
                             Provider.of<AllWallets>(context),
-                            amountInPrimary,
+                            transactionWithCount.transaction.amount,
                             currencyKey: Provider.of<AllWallets>(context)
                                 .indexedByPk[
                                     transactionWithCount.transaction.walletFk]
