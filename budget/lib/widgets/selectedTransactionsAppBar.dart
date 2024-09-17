@@ -269,7 +269,11 @@ class SelectedTransactionsAppBarMenu extends StatelessWidget {
         useCurrentDate: duplicateForNow,
       );
     } else {
-      duplicateMultipleTransactions(context, selectedTransactionPks);
+      duplicateMultipleTransactions(
+        context,
+        selectedTransactionPks,
+        useCurrentDate: duplicateForNow,
+      );
     }
     if (showDetailedSnackbarMessage == false) {
       if (duplicateForNow) {
