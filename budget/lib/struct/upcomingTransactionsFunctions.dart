@@ -18,7 +18,8 @@ import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:provider/provider.dart';
 
 Future createNewSubscriptionTransaction(
-    BuildContext context, Transaction transaction) async {
+    BuildContext context, Transaction transaction,
+    {String? closelyRelatedPairedTransactionFk}) async {
   if (transaction.createdAnotherFutureTransaction == false) {
     if (transaction.type == TransactionSpecialType.subscription ||
         transaction.type == TransactionSpecialType.repetitive) {
@@ -98,6 +99,9 @@ Future createNewSubscriptionTransaction(
         transactionPk: updatePredictableKey(transaction.transactionPk),
         dateCreated: newDate,
         createdAnotherFutureTransaction: Value(false),
+        pairedTransactionFk: closelyRelatedPairedTransactionFk != null
+            ? Value(updatePredictableKey(closelyRelatedPairedTransactionFk))
+            : Value(null),
       );
       await database.createOrUpdateTransaction(insert: false, newTransaction);
       String transactionName = await getTransactionLabel(transaction);
@@ -264,6 +268,7 @@ Future markAsPaid({
   // Avoid infinite recursion
   bool updatingCloselyRelated = false,
 }) async {
+  String? closelyRelatedPairedTransactionFk;
   if (updatingCloselyRelated == false && transaction.categoryFk == "0") {
     Transaction? closelyRelatedTransferCorrectionTransaction = await database
         .getCloselyRelatedBalanceCorrectionTransaction(transaction);
@@ -272,6 +277,8 @@ Future markAsPaid({
         transaction: closelyRelatedTransferCorrectionTransaction,
         updatingCloselyRelated: true,
       );
+      closelyRelatedPairedTransactionFk =
+          closelyRelatedTransferCorrectionTransaction.transactionPk;
     }
   }
   Transaction transactionNew = transaction.copyWith(
@@ -283,7 +290,10 @@ Future markAsPaid({
   );
   await database.createOrUpdateTransaction(transactionNew);
   await createNewSubscriptionTransaction(
-      navigatorKey.currentContext!, transaction);
+    navigatorKey.currentContext!,
+    transaction,
+    closelyRelatedPairedTransactionFk: closelyRelatedPairedTransactionFk,
+  );
   await setUpcomingNotifications(navigatorKey.currentContext!);
 }
 
@@ -292,6 +302,7 @@ Future markAsSkipped({
   // Avoid infinite recursion
   bool updatingCloselyRelated = false,
 }) async {
+  String? closelyRelatedPairedTransactionFk;
   if (updatingCloselyRelated == false && transaction.categoryFk == "0") {
     Transaction? closelyRelatedTransferCorrectionTransaction = await database
         .getCloselyRelatedBalanceCorrectionTransaction(transaction);
@@ -300,6 +311,8 @@ Future markAsSkipped({
         transaction: closelyRelatedTransferCorrectionTransaction,
         updatingCloselyRelated: true,
       );
+      closelyRelatedPairedTransactionFk =
+          closelyRelatedTransferCorrectionTransaction.transactionPk;
     }
   }
   Transaction transactionNew = transaction.copyWith(
@@ -309,7 +322,10 @@ Future markAsSkipped({
   );
   await database.createOrUpdateTransaction(transactionNew);
   await createNewSubscriptionTransaction(
-      navigatorKey.currentContext!, transaction);
+    navigatorKey.currentContext!,
+    transaction,
+    closelyRelatedPairedTransactionFk: closelyRelatedPairedTransactionFk,
+  );
   await setUpcomingNotifications(navigatorKey.currentContext!);
 }
 

@@ -936,6 +936,7 @@ Future duplicateTransaction(
   // Since the transaction list is sorted by date created
   transaction = transaction.copyWith(
     dateCreated: transaction.dateCreated.add(Duration(seconds: 1)),
+    pairedTransactionFk: Value(null),
   );
   int? rowId = await database.createOrUpdateTransaction(
     transaction,
@@ -1004,6 +1005,7 @@ Future duplicateMultipleTransactions(
 }) async {
   List<Transaction> transactions =
       await database.getTransactionsFromPk(transactionPks);
+
   if (useCurrentDate) {
     transactions = transactions
         .map((transaction) => transaction.copyWith(dateCreated: DateTime.now()))
@@ -1025,10 +1027,65 @@ Future duplicateMultipleTransactions(
           ))
       .toList();
 
-  List<TransactionsCompanion> transactionsCompanion = transactions
-      .map((transaction) =>
-          transaction.toCompanion(true).copyWith(transactionPk: Value.absent()))
-      .toList();
+  // Handle duplicating of paired transfer entries
+  // Find matching pairs and pre-generate a key for the pair
+  Map<String, String> relatedMatchingPairs = findMatchingPairsPks(transactions);
+  Map<String, String> generatedMatchingPairKeys =
+      relatedMatchingPairs.map((key, value) => MapEntry(key, uuid.v4()));
+
+  List<TransactionsCompanion> transactionsCompanion =
+      transactions.map((transaction) {
+    // Handle duplicating of paired transfer entries
+    if (transaction.categoryFk == "0" &&
+        transaction.pairedTransactionFk != null &&
+        relatedMatchingPairs[transaction.pairedTransactionFk] != null) {
+      // print("usingPaired: " +
+      //     (generatedMatchingPairKeys[transaction.pairedTransactionFk] ?? ""));
+      return transaction.toCompanion(true).copyWith(
+            transactionPk: Value.absent(),
+            pairedTransactionFk: Value(
+                generatedMatchingPairKeys[transaction.pairedTransactionFk]),
+          );
+    } else if (transaction.categoryFk == "0" &&
+        transaction.pairedTransactionFk == null &&
+        relatedMatchingPairs[transaction.transactionPk] != null) {
+      // print("usingNew: " +
+      //     (generatedMatchingPairKeys[transaction.transactionPk] ?? ""));
+      return transaction.toCompanion(true).copyWith(
+            transactionPk: Value(
+                generatedMatchingPairKeys[transaction.transactionPk] ?? ""),
+            pairedTransactionFk: Value.absent(),
+          );
+    }
+
+    return transaction.toCompanion(true).copyWith(
+          transactionPk: Value.absent(),
+        );
+  }).toList();
 
   await database.createBatchTransactionsOnly(transactionsCompanion);
+}
+
+// Create a map of the key pairs for paired transfer transactions
+Map<String, String> findMatchingPairsPks(List<Transaction> transactions) {
+  Map<String, String> pairs = {};
+
+  final Map<String, Transaction> transactionMap = {
+    for (Transaction transaction in transactions)
+      transaction.transactionPk: transaction
+  };
+
+  for (Transaction transaction in transactions) {
+    if (transaction.categoryFk == "0" &&
+        transaction.pairedTransactionFk != null &&
+        transactionMap.containsKey(transaction.pairedTransactionFk!)) {
+      Transaction pairedTransaction =
+          transactionMap[transaction.pairedTransactionFk!]!;
+
+      pairs[transaction.transactionPk] = pairedTransaction.transactionPk;
+      pairs[pairedTransaction.transactionPk] = transaction.transactionPk;
+    }
+  }
+
+  return pairs;
 }
