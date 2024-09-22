@@ -10,6 +10,7 @@ import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/selectAmount.dart';
+import 'package:budget/widgets/selectedTransactionsAppBar.dart';
 import 'package:budget/widgets/transactionEntry/transactionLabel.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:easy_localization/easy_localization.dart';
@@ -593,6 +594,11 @@ Future<bool> markSubscriptionsAsPaid(BuildContext context,
       if (appStateSettings["automaticallyPayRepetitive"])
         ...(await database.getAllOverdueRepetitiveTransactions().$2)
     ];
+
+    // Handle creation of paired transfer entries
+    Map<String, String> relatedMatchingPairs =
+        findMatchingPairsPks(subscriptions);
+
     bool hasUpdatedASubscription = false;
     for (Transaction transaction in subscriptions) {
       // Only mark it as paid if it was not marked as unpaid at any point (createdAnotherFutureTransaction == false)
@@ -607,7 +613,17 @@ Future<bool> markSubscriptionsAsPaid(BuildContext context,
           createdAnotherFutureTransaction: Value(true),
         );
         await database.createOrUpdateTransaction(transactionNew);
-        await createNewSubscriptionTransaction(context, transaction);
+        if (transaction.categoryFk == "0" &&
+            transaction.pairedTransactionFk != null &&
+            relatedMatchingPairs[transaction.pairedTransactionFk] != null) {
+          // print("PAIR:" +
+          //     relatedMatchingPairs[transaction.transactionPk].toString());
+          await createNewSubscriptionTransaction(context, transaction,
+              closelyRelatedPairedTransactionFk:
+                  relatedMatchingPairs[transaction.transactionPk]);
+        } else {
+          await createNewSubscriptionTransaction(context, transaction);
+        }
       }
     }
     if (hasUpdatedASubscription) {
