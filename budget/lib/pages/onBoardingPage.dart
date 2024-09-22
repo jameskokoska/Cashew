@@ -464,7 +464,6 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                         await signInGoogle(
                           context: context,
                           waitForCompletion: false,
-                          drivePermissions: true,
                           next: () {},
                         );
                         if (appStateSettings["username"] == "" &&

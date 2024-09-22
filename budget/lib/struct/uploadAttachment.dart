@@ -35,8 +35,7 @@ Future<String?> getPhotoAndUpload({required ImageSource source}) async {
           "Error uploading file, trying again and requesting new permissions " +
               e.toString());
       await signOutGoogle();
-      await signInGoogle(
-          drivePermissions: true, drivePermissionsAttachments: true);
+      await signInGoogle(drivePermissionsAttachments: true);
       return await uploadFileToDrive(
           fileBytes: fileBytes, fileName: photo.name, mediaStream: mediaStream);
     }
@@ -83,8 +82,7 @@ Future<String?> getFileAndUpload() async {
           "Error uploading file, trying again and requesting new permissions " +
               e.toString());
       await signOutGoogle();
-      await signInGoogle(
-          drivePermissions: true, drivePermissionsAttachments: true);
+      await signInGoogle(drivePermissionsAttachments: true);
       return await uploadFileToDrive(
         fileBytes: fileBytes,
         fileName: result.files.single.name,
@@ -112,8 +110,7 @@ Future<String?> uploadFileToDrive({
   required String fileName,
 }) async {
   if (googleUser == null) {
-    await signInGoogle(
-        drivePermissions: true, drivePermissionsAttachments: true);
+    await signInGoogle(drivePermissionsAttachments: true);
   }
 
   final authHeaders = await googleUser!.authHeaders;

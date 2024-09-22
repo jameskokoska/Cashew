@@ -76,7 +76,6 @@ signIn.GoogleSignInAccount? googleUser;
 Future<bool> signInGoogle(
     {BuildContext? context,
     bool? waitForCompletion,
-    bool? drivePermissions,
     bool? gMailPermissions,
     bool? drivePermissionsAttachments,
     bool? silentSignIn,
@@ -113,7 +112,12 @@ Future<bool> signInGoogle(
     if (waitForCompletion == true && context != null) openLoadingPopup(context);
     if (googleUser == null) {
       List<String> scopes = [
-        ...(drivePermissions == true ? [drive.DriveApi.driveAppdataScope] : []),
+        // See https://github.com/flutter/flutter/issues/155490 and https://github.com/flutter/flutter/issues/155429
+        // Once an account is logged in with these scopes, they are not needed
+        // So we will keep these to apply for all users to prevent errors, especially on silent sign in
+        "https://www.googleapis.com/auth/userinfo.profile",
+        "https://www.googleapis.com/auth/userinfo.email",
+        drive.DriveApi.driveAppdataScope,
         ...(drivePermissionsAttachments == true
             ? [drive.DriveApi.driveFileScope]
             : []),
@@ -180,7 +184,6 @@ Future<bool> signInGoogle(
         timeout: Duration(milliseconds: 3400),
         onTap: () => signInGoogle(
           context: context,
-          drivePermissions: drivePermissions,
           drivePermissionsAttachments: drivePermissionsAttachments,
           gMailPermissions: gMailPermissions,
           next: next,
@@ -268,7 +271,6 @@ Future<bool> signInAndSync(BuildContext context,
     await signInGoogle(
       context: context,
       waitForCompletion: false,
-      drivePermissions: true,
       next: next,
     );
     if (appStateSettings["username"] == "" && googleUser != null) {
@@ -562,7 +564,7 @@ Future<void> loadBackup(
         .get(file.id ?? "", downloadOptions: drive.DownloadOptions.fullMedia);
     response.stream.listen(
       (data) {
-        print("Data: ${data.length}");
+        // print("Data: ${data.length}");
         dataStore.insertAll(dataStore.length, data);
       },
       onDone: () async {

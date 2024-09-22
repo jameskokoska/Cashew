@@ -4144,8 +4144,7 @@ Future<List<int>?> getGoogleDriveFileImageData(String url) async {
       if (fileId == null) throw ("No file id found!");
 
       if (googleUser == null) {
-        await signInGoogle(
-            drivePermissions: true, drivePermissionsAttachments: true);
+        await signInGoogle(drivePermissionsAttachments: true);
       }
 
       final authHeaders = await googleUser!.authHeaders;
