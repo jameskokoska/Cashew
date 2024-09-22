@@ -100,25 +100,25 @@ Future<T?> openPopup<T extends Object?>(
         child: Center(
           child: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: getWidthBottomSheet(context)),
-            child: IntrinsicWidth(
-              child: Container(
-                margin: EdgeInsets.only(
-                  left: MediaQuery.paddingOf(context).left + 20,
-                  right: MediaQuery.paddingOf(context).right + 20,
-                  top: MediaQuery.paddingOf(context).top + 20,
-                  bottom: MediaQuery.paddingOf(context).bottom + 20,
-                ),
-                decoration: BoxDecoration(
-                  color: appStateSettings["materialYou"]
-                      ? dynamicPastel(context,
-                          Theme.of(context).colorScheme.secondaryContainer,
-                          amount: 0.5)
-                      : getColor(context, "lightDarkAccent"),
-                  borderRadius: BorderRadiusDirectional.circular(borderRadius),
-                  boxShadow: boxShadowGeneral(context),
-                ),
-                child: SingleChildScrollView(
-                  child: Column(
+            child: Container(
+              margin: EdgeInsets.only(
+                left: MediaQuery.paddingOf(context).left + 20,
+                right: MediaQuery.paddingOf(context).right + 20,
+                top: MediaQuery.paddingOf(context).top + 20,
+                bottom: MediaQuery.paddingOf(context).bottom + 20,
+              ),
+              decoration: BoxDecoration(
+                color: appStateSettings["materialYou"]
+                    ? dynamicPastel(context,
+                        Theme.of(context).colorScheme.secondaryContainer,
+                        amount: 0.5)
+                    : getColor(context, "lightDarkAccent"),
+                borderRadius: BorderRadiusDirectional.circular(borderRadius),
+                boxShadow: boxShadowGeneral(context),
+              ),
+              child: SingleChildScrollView(
+                child: Builder(builder: (context) {
+                  Widget content = Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Padding(
@@ -282,8 +282,14 @@ Future<T?> openPopup<T extends Object?>(
                         ),
                       // SizedBox(height: 16),
                     ],
-                  ),
-                ),
+                  );
+                  // Only use intrinsic width if the content is controlled
+                  if (onExtraLabel2 != null &&
+                      descriptionWidget == null &&
+                      beforeDescriptionWidget == null)
+                    return IntrinsicWidth(child: content);
+                  return content;
+                }),
               ),
             ),
           ),
