@@ -57,6 +57,13 @@ double getHorizontalPaddingConstrained(BuildContext context,
   return (fullWidth - getWidthBottomSheet(context)) / 3;
 }
 
+Color getPopupBackgroundColor(BuildContext context) {
+  return appStateSettings["materialYou"]
+      ? dynamicPastel(context, Theme.of(context).colorScheme.secondaryContainer,
+          amountDark: 0.3, amountLight: 0.6)
+      : getColor(context, "lightDarkAccent");
+}
+
 SheetController? bottomSheetControllerGlobalCustomAssigned;
 
 late SheetController bottomSheetControllerGlobal;
@@ -111,11 +118,8 @@ Future openBottomSheet(
 
       double deviceAspectRatio =
           MediaQuery.sizeOf(context).height / MediaQuery.sizeOf(context).width;
-      Color bottomPaddingColor = appStateSettings["materialYou"]
-          ? dynamicPastel(themeContext ?? context,
-              Theme.of(themeContext ?? context).colorScheme.secondaryContainer,
-              amountDark: 0.3, amountLight: 0.6)
-          : getColor(themeContext ?? context, "lightDarkAccent");
+      Color bottomPaddingColor =
+          getPopupBackgroundColor(themeContext ?? context);
 
       return SlidingSheetDialog(
         isDismissable: isDismissable,

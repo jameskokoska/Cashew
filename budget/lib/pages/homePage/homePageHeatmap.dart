@@ -398,11 +398,7 @@ Future<dynamic> openTransactionsOnDayBottomSheet(
         renderType: TransactionEntriesRenderType.nonSlivers,
         day,
         day,
-        transactionBackgroundColor: appStateSettings["materialYou"]
-            ? dynamicPastel(
-                context, Theme.of(context).colorScheme.secondaryContainer,
-                amountDark: 0.3, amountLight: 0.6)
-            : getColor(context, "lightDarkAccent"),
+        transactionBackgroundColor: getPopupBackgroundColor(context),
         dateDividerColor: Colors.transparent,
         includeDateDivider: false,
         allowSelect: false,

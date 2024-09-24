@@ -176,6 +176,7 @@ class SettingsContainerOpenPage extends StatelessWidget {
     this.isWideOutlined,
     this.descriptionColor,
     this.afterWidget,
+    this.backgroundColor,
     this.onTap,
   }) : super(key: key);
 
@@ -192,6 +193,7 @@ class SettingsContainerOpenPage extends StatelessWidget {
   final bool? isWideOutlined;
   final Color? descriptionColor;
   final Widget? afterWidget;
+  final Color? backgroundColor;
   final Function(VoidCallback openContainer)? onTap;
 
   @override
@@ -204,7 +206,8 @@ class SettingsContainerOpenPage extends StatelessWidget {
       child: OpenContainerNavigation(
         onClosed: onClosed,
         onOpen: onOpen,
-        closedColor: Theme.of(context).colorScheme.background,
+        closedColor:
+            backgroundColor ?? Theme.of(context).colorScheme.background,
         borderRadius: isOutlined == true
             ? 10
             : getIsFullScreen(context)
@@ -217,6 +220,7 @@ class SettingsContainerOpenPage extends StatelessWidget {
             icon: icon,
             iconSize: iconSize,
             iconScale: iconScale,
+            backgroundColor: backgroundColor,
             onTap: onTap != null
                 ? () => onTap!(openContainer)
                 : () {

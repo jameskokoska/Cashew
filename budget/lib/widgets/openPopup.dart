@@ -496,6 +496,7 @@ Future openLoadingPopupTryCatch(
     if (onSuccess != null) onSuccess(result);
     return result;
   } catch (e) {
+    print("Error caught: " + e.toString());
     popRoute(context ?? navigatorKey.currentContext!, null);
     if (onError != null)
       onError(e);

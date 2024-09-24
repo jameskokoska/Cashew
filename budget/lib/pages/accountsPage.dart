@@ -348,7 +348,8 @@ class AccountsPageState extends State<AccountsPage> {
                       //       },
                       //     ),
                       //   ),
-                      getPlatform() == PlatformOS.isIOS
+                      getPlatform() == PlatformOS.isIOS &&
+                              appStateSettings["showExtraInfoText"] != false
                           ? Padding(
                               padding: const EdgeInsetsDirectional.symmetric(
                                   vertical: 20, horizontal: 7),

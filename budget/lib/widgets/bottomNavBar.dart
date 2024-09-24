@@ -124,7 +124,8 @@ class BottomNavBarState extends State<BottomNavBar> {
             boxShadow: boxShadowSharp(context),
           ),
           padding: EdgeInsetsDirectional.only(
-              bottom: max(0, MediaQuery.paddingOf(context).bottom - 5.5)),
+              top: 2,
+              bottom: max(2, MediaQuery.paddingOf(context).bottom - 5.5)),
           child: Row(
             children: [
               NavBarSpaceButton(
