@@ -5,6 +5,7 @@ import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/listenableSelector.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/struct/upcomingTransactionsFunctions.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/breathingAnimation.dart';
 import 'package:budget/widgets/categoryIcon.dart';
@@ -14,9 +15,11 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntryTypeButton.dart';
 import 'package:budget/widgets/transactionEntry/transactionLabel.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/colors.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -302,18 +305,15 @@ class TransactionEntry extends StatelessWidget {
               selectTransaction: selectTransaction,
             )
           : SizedBox.shrink();
-      Widget categoryIcon = Container(
-        child: CategoryIcon(
-          cacheImage: true,
-          category: category,
-          categoryPk: transaction.categoryFk,
-          size: 27,
-          sizePadding: 20,
-          margin: EdgeInsetsDirectional.zero,
-          borderRadius: 100,
-          onTap: openContainer,
-          tintColor: categoryTintColor,
-        ),
+      Widget categoryIcon = CategoryIcon(
+        cacheImage: true,
+        category: category,
+        categoryPk: transaction.categoryFk,
+        size: 27,
+        sizePadding: 20,
+        margin: EdgeInsetsDirectional.zero,
+        borderRadius: 100,
+        onTap: openContainer,
       );
       Widget actionButton(EdgeInsetsDirectional padding) {
         Widget actionButton = TransactionEntryActionButton(
@@ -336,7 +336,45 @@ class TransactionEntry extends StatelessWidget {
               ? Container(child: actionButton)
               : actionButton,
         );
-        return actionButton;
+        return Stack(
+            clipBehavior: Clip.none,
+            alignment: AlignmentDirectional.bottomStart,
+            children: [
+              actionButton,
+              PositionedDirectional(
+                bottom: -2,
+                start: -2,
+                child: IgnorePointer(
+                  child: Builder(builder: (context) {
+                    int? numberRepeats =
+                        transaction.createdAnotherFutureTransaction == true
+                            ? null
+                            : countTransactionOccurrences(
+                                type: transaction.type,
+                                reoccurrence: transaction.reoccurrence,
+                                periodLength: transaction.periodLength,
+                                dateCreated: transaction.dateCreated,
+                                endDate: transaction.endDate,
+                              );
+                    if (numberRepeats == null) return SizedBox.shrink();
+                    return Container(
+                      transform: Matrix4.translationValues(
+                          (padding.start - padding.end) / 2, 0, 0),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          color: Theme.of(context).colorScheme.secondary),
+                      padding: EdgeInsetsDirectional.symmetric(
+                          vertical: 2, horizontal: 4),
+                      child: TextFont(
+                        textColor: Theme.of(context).colorScheme.onSecondary,
+                        text: " ×" + numberRepeats.toString() + " ",
+                        fontSize: 10,
+                      ),
+                    );
+                  }),
+                ),
+              ),
+            ]);
       }
 
       double fontSize = getIsFullScreen(context) == false ? 15.5 : 16.5;

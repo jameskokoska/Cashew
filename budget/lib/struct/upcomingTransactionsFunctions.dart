@@ -134,8 +134,8 @@ Future createNewSubscriptionTransaction(
 
 int? countTransactionOccurrences({
   required TransactionSpecialType? type,
-  required BudgetReoccurence reoccurrence,
-  required int periodLength,
+  required BudgetReoccurence? reoccurrence,
+  required int? periodLength,
   required DateTime dateCreated,
   required DateTime? endDate,
 }) {
@@ -143,7 +143,10 @@ int? countTransactionOccurrences({
       type != TransactionSpecialType.repetitive) {
     return null;
   }
-  if (endDate == null) return null;
+  if (endDate == null ||
+      reoccurrence == null ||
+      reoccurrence == BudgetReoccurence.custom ||
+      periodLength == null) return null;
 
   int yearOffset = 0;
   int monthOffset = 0;
@@ -214,6 +217,26 @@ Future openPayPopup(
   Function? runBefore,
 }) async {
   String transactionName = await getTransactionLabel(transaction);
+  int? numberRepeats = transaction.createdAnotherFutureTransaction == true
+      ? null
+      : countTransactionOccurrences(
+          type: transaction.type,
+          reoccurrence: transaction.reoccurrence,
+          periodLength: transaction.periodLength,
+          dateCreated: transaction.dateCreated,
+          endDate: transaction.endDate,
+        );
+  String repeatsLeftLabel = numberRepeats == null
+      ? ""
+      : "\n× " +
+          numberRepeats.toString() +
+          " " +
+          "remain".tr() +
+          " " +
+          "until".tr() +
+          " " +
+          getWordedDateShort(transaction.endDate ?? DateTime.now(),
+              includeYear: transaction.endDate?.year != DateTime.now().year);
   return await openPopup(
     context,
     icon: appStateSettings["outlinedIcons"]
@@ -221,9 +244,10 @@ Future openPayPopup(
         : Icons.check_circle_rounded,
     title: (transaction.income ? "deposit".tr() : "pay".tr()) + "?",
     subtitle: transactionName,
-    description: transaction.income
-        ? "deposit-description".tr()
-        : "pay-description".tr(),
+    description: (transaction.income
+            ? "deposit-description".tr()
+            : "pay-description".tr()) +
+        repeatsLeftLabel,
     onCancelLabel: "cancel".tr().tr(),
     onCancel: () {
       popRoute(context, false);
