@@ -162,6 +162,19 @@ class _DateRangePickerPopupState extends State<DateRangePickerPopup> {
     return null;
   }
 
+  String? formatDateLabel(DateTime? dateTime) {
+    if (dateTime == null) return null;
+    return getWordedDateShortMore(
+      dateTime,
+      showTodayTomorrow: false,
+      includeYear: (startDate?.year != endDate?.year ||
+              DateTime.now().year != startDate?.year ||
+              DateTime.now().year != endDate?.year) &&
+          startDate?.year != null &&
+          endDate?.year != null,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     bool materialYou = appStateSettings["materialYou"] == true;
@@ -228,12 +241,7 @@ class _DateRangePickerPopupState extends State<DateRangePickerPopup> {
                         runSpacing: 2,
                         children: [
                           TappableTextEntry(
-                            title: startDate == null
-                                ? null
-                                : getWordedDateShortMore(
-                                    startDate ?? DateTime.now(),
-                                    showTodayTomorrow: false,
-                                  ),
+                            title: formatDateLabel(startDate),
                             placeholder: MaterialLocalizations.of(context)
                                 .dateRangeStartLabel,
                             onTap: () async {
@@ -260,12 +268,7 @@ class _DateRangePickerPopupState extends State<DateRangePickerPopup> {
                                 : Icons.arrow_right_rounded,
                           ),
                           TappableTextEntry(
-                            title: endDate == null
-                                ? null
-                                : getWordedDateShortMore(
-                                    endDate ?? DateTime.now(),
-                                    showTodayTomorrow: false,
-                                  ),
+                            title: formatDateLabel(endDate),
                             placeholder: MaterialLocalizations.of(context)
                                 .dateRangeEndLabel,
                             onTap: () async {
