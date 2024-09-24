@@ -747,3 +747,64 @@ class _TotalSpentToggleState extends State<TotalSpentToggle> {
     );
   }
 }
+
+Future duplicateBudgetPopup(
+  BuildContext context, {
+  required Budget budget,
+}) async {
+  dynamic result = await openPopup(
+    context,
+    title: "duplicate-budget-question".tr(),
+    subtitle: budget.name,
+    onCancelLabel: "cancel".tr(),
+    onCancel: () => Navigator.pop(context),
+    onSubmitLabel: "duplicate".tr(),
+    onSubmit: () => Navigator.pop(context, true),
+  );
+  if (result == true)
+    openLoadingPopupTryCatch(
+      () async {
+        int? rowId = await database.createOrUpdateBudget(
+          budget.copyWith(
+            dateCreated: DateTime.now(),
+            name: budget.name + " (" + "copy".tr() + ")",
+          ),
+          insert: true,
+        );
+
+        Budget? budgetJustAdded = null;
+        budgetJustAdded = await database.getBudgetFromRowId(rowId);
+
+        List<CategoryBudgetLimit> categoryLimits = await database
+            .getAllCategorySpendingLimitsInBudget(budget.budgetPk);
+        for (CategoryBudgetLimit categoryLimit in categoryLimits) {
+          await database.createOrUpdateCategoryLimit(
+            categoryLimit.copyWith(budgetFk: budgetJustAdded.budgetPk),
+            insert: true,
+          );
+        }
+        return budgetJustAdded;
+      },
+      onSuccess: (result) {
+        if (result is Budget) {
+          openSnackbar(
+            SnackbarMessage(
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.file_copy_outlined
+                  : Icons.file_copy_rounded,
+              title: "created-copy".tr(),
+              description: result.name,
+            ),
+          );
+          Navigator.pop(context);
+          pushRoute(
+            context,
+            AddBudgetPage(
+              budget: result,
+              routesToPopAfterDelete: RoutesToPopAfterDelete.One,
+            ),
+          );
+        }
+      },
+    );
+}

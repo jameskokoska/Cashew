@@ -3385,6 +3385,10 @@ class FinanceDatabase extends _$FinanceDatabase {
         .getSingle();
   }
 
+  Future<Budget> getBudgetFromRowId(int rowId) {
+    return (select(budgets)..where((t) => t.rowId.equals(rowId))).getSingle();
+  }
+
   Future<TransactionWallet> getWalletFromRowId(int rowId) {
     return (select(wallets)..where((w) => w.rowId.equals(rowId))).getSingle();
   }
@@ -4617,6 +4621,13 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   Future<List<CategoryBudgetLimit>> getAllCategorySpendingLimits() {
     return (select(categoryBudgetLimits)).get();
+  }
+
+  Future<List<CategoryBudgetLimit>> getAllCategorySpendingLimitsInBudget(
+      String budgetPk) {
+    return (select(categoryBudgetLimits)
+          ..where((l) => l.budgetFk.equals(budgetPk)))
+        .get();
   }
 
   Future<List<Objective>> getAllObjectives(

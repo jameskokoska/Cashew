@@ -1,5 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/editBudgetLimitsPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
@@ -27,12 +28,14 @@ import 'package:budget/widgets/saveBottomButton.dart';
 import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/selectColor.dart';
+import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/util/showDatePicker.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -607,9 +610,27 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         },
         actions: [
           CustomPopupMenuButton(
-            showButtons: widget.budget == null || enableDoubleColumn(context),
+            showButtons: true,
             keepOutFirst: true,
             items: [
+              if (widget.budget != null &&
+                  mapRecurrence(selectedRecurrence) ==
+                      BudgetReoccurence.custom &&
+                  canAddBudget == true)
+                DropdownItemMenu(
+                  id: "duplicate-budget",
+                  label: "duplicate-budget".tr(),
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Icons.copy_outlined
+                      : Icons.copy_rounded,
+                  action: () async {
+                    Budget savedBudget = await createBudget();
+                    duplicateBudgetPopup(
+                      context,
+                      budget: savedBudget,
+                    );
+                  },
+                ),
               if (widget.budget != null &&
                   widget.routesToPopAfterDelete !=
                       RoutesToPopAfterDelete.PreventDelete)
@@ -627,6 +648,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                     );
                   },
                 ),
+
               // DropdownItemMenu(
               //   id: "pin-to-home",
               //   label: selectedPin
@@ -823,64 +845,57 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
             child: widget.budget == null
                 ? SizedBox.shrink()
                 : Padding(
-                    padding: EdgeInsetsDirectional.symmetric(
-                        horizontal: getHorizontalPaddingConstrained(context)),
-                    child: Padding(
-                      padding: const EdgeInsetsDirectional.only(
-                        start: 20,
-                        end: 20,
-                        bottom: 15,
-                      ),
-                      child: Button(
-                        flexibleLayout: true,
-                        icon: appStateSettings["outlinedIcons"]
-                            ? Icons.fact_check_outlined
-                            : Icons.fact_check_rounded,
-                        label: widget.budget?.income == true
-                            ? "set-saving-goals".tr()
-                            : "set-spending-goals".tr(),
-                        onTap: () async {
-                          Budget budget = await createBudget();
-                          pushRoute(
-                            context,
-                            StreamBuilder<Budget>(
-                              stream:
-                                  database.getBudget(widget.budget!.budgetPk),
-                              builder: (context, snapshot) {
-                                if (snapshot.data == null)
-                                  return SizedBox.shrink();
-                                return EditBudgetLimitsPage(
-                                  budget: budget,
-                                  currentIsAbsoluteSpendingLimit:
-                                      snapshot.data!.isAbsoluteSpendingLimit,
-                                );
-                              },
-                            ),
-                          );
-                        },
-                        color: Theme.of(context).colorScheme.secondaryContainer,
-                        textColor:
-                            Theme.of(context).colorScheme.onSecondaryContainer,
-                      ),
+                    padding: const EdgeInsetsDirectional.only(
+                      start: 24,
+                      end: 24,
+                      bottom: 15,
+                    ),
+                    child: SettingsContainer(
+                      isOutlined: true,
+                      onTap: () async {
+                        Budget budget = await createBudget();
+                        pushRoute(
+                          context,
+                          StreamBuilder<Budget>(
+                            stream: database.getBudget(widget.budget!.budgetPk),
+                            builder: (context, snapshot) {
+                              if (snapshot.data == null)
+                                return SizedBox.shrink();
+                              return EditBudgetLimitsPage(
+                                budget: budget,
+                                currentIsAbsoluteSpendingLimit:
+                                    snapshot.data!.isAbsoluteSpendingLimit,
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      title: selectedIncome
+                          ? "set-saving-goals".tr()
+                          : "set-spending-goals".tr(),
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.fact_check_outlined
+                          : Icons.fact_check_rounded,
+                      iconScale: 1,
+                      isWideOutlined: true,
                     ),
                   ),
           ),
-          SliverStickyLabelDivider(
-            info: "select-color".tr(),
-            sliver: SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsetsDirectional.only(bottom: 8),
-                child: Container(
-                  height: 65,
-                  child: SelectColor(
-                    horizontalList: true,
-                    selectedColor: selectedColor,
-                    setSelectedColor: setSelectedColor,
-                  ),
-                ),
+          SliverToBoxAdapter(
+            child: Container(
+              height: 65,
+              child: SelectColor(
+                horizontalList: true,
+                selectedColor: selectedColor,
+                setSelectedColor: setSelectedColor,
               ),
             ),
           ),
+          SliverToBoxAdapter(
+              child: HorizontalBreak(
+            padding: EdgeInsetsDirectional.symmetric(vertical: 15),
+          )),
+
           widget.budget != null
               ? SliverToBoxAdapter(child: SizedBox.shrink())
               : SliverStickyLabelDivider(
