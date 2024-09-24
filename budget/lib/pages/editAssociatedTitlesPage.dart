@@ -6,8 +6,10 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/categoryIcon.dart';
+import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/globalSnackbar.dart';
 import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -80,19 +82,39 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
           ),
         ),
         actions: [
-          IconButton(
-            padding: EdgeInsetsDirectional.all(15),
-            tooltip: "add-title".tr(),
-            onPressed: () {
-              openBottomSheet(
-                context,
-                popupWithKeyboard: true,
-                AddAssociatedTitlePage(),
-              );
-            },
-            icon: Icon(appStateSettings["outlinedIcons"]
-                ? Icons.add_outlined
-                : Icons.add_rounded),
+          CustomPopupMenuButton(
+            showButtons: true,
+            keepOutFirst: true,
+            items: [
+              DropdownItemMenu(
+                id: "add-title",
+                label: "add-title".tr(),
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.add_outlined
+                    : Icons.add_rounded,
+                action: () {
+                  openBottomSheet(
+                    context,
+                    popupWithKeyboard: true,
+                    AddAssociatedTitlePage(),
+                  );
+                },
+              ),
+              DropdownItemMenu(
+                id: "settings",
+                label: "settings".tr(),
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.more_vert_outlined
+                    : Icons.more_vert_rounded,
+                action: () => openBottomSheet(
+                  context,
+                  PopupFramework(
+                    hasPadding: false,
+                    child: TitlesSettings(),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
         slivers: [
@@ -125,18 +147,12 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
               ),
             ),
           ),
-          SliverToBoxAdapter(
-            child: AnimatedExpanded(
-              expand: hideIfSearching(searchValue, isFocused, context) == false,
-              child: AskForTitlesToggle(),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: AnimatedExpanded(
-              expand: hideIfSearching(searchValue, isFocused, context) == false,
-              child: AutoTitlesToggle(),
-            ),
-          ),
+          // SliverToBoxAdapter(
+          //   child: AnimatedExpanded(
+          //     expand: hideIfSearching(searchValue, isFocused, context) == false,
+          //     child: TitlesSettings(),
+          //   ),
+          // ),
           StreamBuilder<List<TransactionAssociatedTitleWithCategory>>(
             stream: database.watchAllAssociatedTitles(
                 searchFor: searchValue == "" ? null : searchValue),
@@ -372,6 +388,19 @@ class AskForNotesToggle extends StatelessWidget {
       icon: appStateSettings["outlinedIcons"]
           ? Icons.sticky_note_2_outlined
           : Icons.sticky_note_2_rounded,
+    );
+  }
+}
+
+class TitlesSettings extends StatelessWidget {
+  const TitlesSettings({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        AskForTitlesToggle(),
+        AutoTitlesToggle(),
+      ],
     );
   }
 }

@@ -2,10 +2,12 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addWalletPage.dart';
+import 'package:budget/pages/editAssociatedTitlesPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
+import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
@@ -84,20 +86,41 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
           ),
         ),
         actions: [
-          IconButton(
-            padding: EdgeInsetsDirectional.all(15),
-            tooltip: "add-account".tr(),
-            onPressed: () {
-              pushRoute(
-                context,
-                AddWalletPage(
-                  routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+          CustomPopupMenuButton(
+            showButtons: true,
+            keepOutFirst: true,
+            items: [
+              DropdownItemMenu(
+                id: "add-account",
+                label: "add-account".tr(),
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.add_outlined
+                    : Icons.add_rounded,
+                action: () {
+                  pushRoute(
+                    context,
+                    AddWalletPage(
+                      routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                    ),
+                  );
+                },
+              ),
+              DropdownItemMenu(
+                id: "settings",
+                label: "settings".tr(),
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.more_vert_outlined
+                    : Icons.more_vert_rounded,
+                action: () => openBottomSheet(
+                  context,
+                  PopupFramework(
+                    hasPadding: false,
+                    child: WalletsSettings(
+                        backgroundColor: getPopupBackgroundColor(context)),
+                  ),
                 ),
-              );
-            },
-            icon: Icon(appStateSettings["outlinedIcons"]
-                ? Icons.add_outlined
-                : Icons.add_rounded),
+              ),
+            ],
           ),
         ],
         slivers: [
@@ -130,30 +153,30 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
               ),
             ),
           ),
-          SliverToBoxAdapter(
-            child: AnimatedExpanded(
-              expand: hideIfSearching(searchValue, isFocused, context) == false,
-              child: ShowAccountLabelSettingToggle(),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: AnimatedExpanded(
-              expand: hideIfSearching(searchValue, isFocused, context) == false,
-              child: SettingsContainerOpenPage(
-                onOpen: () {
-                  checkIfExchangeRateChangeBefore();
-                },
-                onClosed: () {
-                  checkIfExchangeRateChangeAfter();
-                },
-                openPage: ExchangeRates(),
-                title: "exchange-rates".tr(),
-                icon: appStateSettings["outlinedIcons"]
-                    ? Icons.account_balance_wallet_outlined
-                    : Icons.account_balance_wallet_rounded,
-              ),
-            ),
-          ),
+          // SliverToBoxAdapter(
+          //   child: AnimatedExpanded(
+          //     expand: hideIfSearching(searchValue, isFocused, context) == false,
+          //     child: ShowAccountLabelSettingToggle(),
+          //   ),
+          // ),
+          // SliverToBoxAdapter(
+          //   child: AnimatedExpanded(
+          //     expand: hideIfSearching(searchValue, isFocused, context) == false,
+          //     child: SettingsContainerOpenPage(
+          //       onOpen: () {
+          //         checkIfExchangeRateChangeBefore();
+          //       },
+          //       onClosed: () {
+          //         checkIfExchangeRateChangeAfter();
+          //       },
+          //       openPage: ExchangeRates(),
+          //       title: "exchange-rates".tr(),
+          //       icon: appStateSettings["outlinedIcons"]
+          //           ? Icons.account_balance_wallet_outlined
+          //           : Icons.account_balance_wallet_rounded,
+          //     ),
+          //   ),
+          // ),
           // SliverToBoxAdapter(
           //   child: AnimatedExpanded(
           //     expand: hideIfSearching(searchValue, isFocused, context) == false,
@@ -603,11 +626,13 @@ class ShowAccountLabelSettingToggle extends StatelessWidget {
 }
 
 class ExchangeRateSettingPage extends StatelessWidget {
-  const ExchangeRateSettingPage({super.key});
+  const ExchangeRateSettingPage({this.backgroundColor, super.key});
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
     return SettingsContainerOpenPage(
+      backgroundColor: backgroundColor,
       onOpen: () {
         checkIfExchangeRateChangeBefore();
       },
@@ -673,6 +698,21 @@ class PrimaryCurrencySetting extends StatelessWidget {
               wallet: Provider.of<AllWallets>(context)
                   .indexedByPk[appStateSettings["selectedWalletPk"]],
             ),
+    );
+  }
+}
+
+class WalletsSettings extends StatelessWidget {
+  const WalletsSettings({this.backgroundColor, super.key});
+  final Color? backgroundColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ShowAccountLabelSettingToggle(),
+        ExchangeRateSettingPage(backgroundColor: backgroundColor),
+      ],
     );
   }
 }

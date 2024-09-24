@@ -11,6 +11,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/categoryIcon.dart';
+import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
@@ -89,23 +90,38 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
           ),
         ),
         actions: [
-          IconButton(
-            padding: EdgeInsetsDirectional.all(15),
-            tooltip: widget.objectiveType == ObjectiveType.loan
-                ? "add-loan".tr()
-                : "add-goal".tr(),
-            onPressed: () {
-              pushRoute(
-                context,
-                AddObjectivePage(
-                  routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-                  objectiveType: widget.objectiveType,
+          CustomPopupMenuButton(
+            showButtons: true,
+            keepOutFirst: true,
+            items: [
+              DropdownItemMenu(
+                id: "add-loan",
+                label: widget.objectiveType == ObjectiveType.loan
+                    ? "add-loan".tr()
+                    : "add-goal".tr(),
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.add_outlined
+                    : Icons.add_rounded,
+                action: () => pushRoute(
+                  context,
+                  AddObjectivePage(
+                    routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                    objectiveType: widget.objectiveType,
+                  ),
                 ),
-              );
-            },
-            icon: Icon(appStateSettings["outlinedIcons"]
-                ? Icons.add_outlined
-                : Icons.add_rounded),
+              ),
+              DropdownItemMenu(
+                id: "settings",
+                label: "settings".tr(),
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.more_vert_outlined
+                    : Icons.more_vert_rounded,
+                action: () => openBottomSheet(
+                  context,
+                  PopupFramework(hasPadding: false, child: ObjectiveSettings()),
+                ),
+              ),
+            ],
           ),
         ],
         slivers: [
@@ -140,12 +156,12 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
               ),
             ),
           ),
-          SliverToBoxAdapter(
-            child: AnimatedExpanded(
-              expand: hideIfSearching(searchValue, isFocused, context) == false,
-              child: TotalSpentToggle(isForGoalTotal: true),
-            ),
-          ),
+          // SliverToBoxAdapter(
+          //   child: AnimatedExpanded(
+          //     expand: hideIfSearching(searchValue, isFocused, context) == false,
+          //     child: ObjectiveSettings(),
+          //   ),
+          // ),
           StreamBuilder<List<Objective>>(
             stream: database.watchAllObjectives(
               objectiveType: widget.objectiveType,

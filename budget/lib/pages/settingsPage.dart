@@ -701,16 +701,15 @@ class MoreOptionsPagePreferences extends StatelessWidget {
         SettingsHeader(title: "transactions".tr()),
         TransactionsSettings(),
         SettingsHeader(title: "accounts".tr()),
-        ShowAccountLabelSettingToggle(),
-        ExchangeRateSettingPage(),
+        WalletsSettings(),
         PrimaryCurrencySetting(),
         SettingsHeader(title: "budgets".tr()),
         BudgetSettings(),
         SettingsHeader(title: "goals".tr()),
         ObjectiveSettings(),
         SettingsHeader(title: "titles".tr()),
-        AskForTitlesToggle(),
-        AutoTitlesToggle(),
+        TitlesSettings(),
+        SettingsHeader(title: "widgets".tr()),
         WidgetSettings(),
         SettingsHeader(title: "formatting".tr()),
         NumberFormattingSetting(),
@@ -734,7 +733,6 @@ class WidgetSettings extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SettingsHeader(title: "widgets".tr()),
         SettingsContainer(
           title: "net-worth-total-widget".tr(),
           description: "select-accounts-and-time-period".tr(),

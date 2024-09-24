@@ -8,6 +8,7 @@ import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/categoryIcon.dart';
+import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
@@ -77,20 +78,35 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
           ),
         ),
         actions: [
-          IconButton(
-            padding: EdgeInsetsDirectional.all(15),
-            tooltip: "add-category".tr(),
-            onPressed: () {
-              pushRoute(
-                context,
-                AddCategoryPage(
-                  routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+          CustomPopupMenuButton(
+            showButtons: true,
+            keepOutFirst: true,
+            items: [
+              DropdownItemMenu(
+                id: "add-category",
+                label: "add-category".tr(),
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.add_outlined
+                    : Icons.add_rounded,
+                action: () => pushRoute(
+                  context,
+                  AddCategoryPage(
+                    routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                  ),
                 ),
-              );
-            },
-            icon: Icon(appStateSettings["outlinedIcons"]
-                ? Icons.add_outlined
-                : Icons.add_rounded),
+              ),
+              // DropdownItemMenu(
+              //   id: "settings",
+              //   label: "settings".tr(),
+              //   icon: appStateSettings["outlinedIcons"]
+              //       ? Icons.more_vert_outlined
+              //       : Icons.more_vert_rounded,
+              //   action: () => openBottomSheet(
+              //     context,
+              //     PopupFramework(hasPadding: false, child: CategorySettings()),
+              //   ),
+              // ),
+            ],
           ),
         ],
         slivers: [
@@ -810,4 +826,14 @@ void makeSubCategoryPopup(
       ),
     ),
   );
+}
+
+class CategorySettings extends StatelessWidget {
+  const CategorySettings({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    //return CategoryIconPackSelection();
+    return SizedBox.shrink();
+  }
 }
