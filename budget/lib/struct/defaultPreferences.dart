@@ -224,6 +224,8 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "numberPadFormat": NumberPadFormat.format123.index,
     "numberPadHapticFeedback": false,
     "savingHapticFeedback": false,
+    "closeNavigationHapticFeedback": false,
+    "tabNavigationHapticFeedback": false,
     "percentagePrecision": 0, //number of decimals to round percentages to
     "allSpendingLastPage": 0, //index of the last tab on the all spending page
     "loansLastPage": 0, //index of the last tab on the loans page

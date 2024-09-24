@@ -22,6 +22,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart' hide TextInput;
 import 'package:universal_html/html.dart' as html;
 import 'package:budget/struct/randomConstants.dart';
 import 'package:budget/widgets/sliderSelector.dart';
@@ -196,7 +197,6 @@ class DebugPage extends StatelessWidget {
               : Icons.battery_charging_full_rounded,
         ),
         SettingsContainerSwitch(
-          enableBorderRadius: true,
           onSwitched: (value) {
             updateSettings("savingHapticFeedback", value,
                 pagesNeedingRefresh: [], updateGlobalState: false);
@@ -204,6 +204,31 @@ class DebugPage extends StatelessWidget {
           initialValue: appStateSettings["savingHapticFeedback"] == true,
           title: "Saving Haptic Feedback".tr(),
           description: "When saving changes or adding, provide haptic feedback",
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.vibration_outlined
+              : Icons.vibration_rounded,
+        ),
+        SettingsContainerSwitch(
+          onSwitched: (value) {
+            updateSettings("closeNavigationHapticFeedback", value,
+                pagesNeedingRefresh: [], updateGlobalState: false);
+          },
+          initialValue:
+              appStateSettings["closeNavigationHapticFeedback"] == true,
+          title: "Close Navigation Haptic Feedback".tr(),
+          description: "When closing navigation, provide haptic feedback",
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.vibration_outlined
+              : Icons.vibration_rounded,
+        ),
+        SettingsContainerSwitch(
+          onSwitched: (value) {
+            updateSettings("tabNavigationHapticFeedback", value,
+                pagesNeedingRefresh: [], updateGlobalState: false);
+          },
+          initialValue: appStateSettings["tabNavigationHapticFeedback"] == true,
+          title: "Navigation Haptic Feedback".tr(),
+          description: "When changing tabs, provide haptic feedback",
           icon: appStateSettings["outlinedIcons"]
               ? Icons.vibration_outlined
               : Icons.vibration_rounded,
@@ -719,6 +744,27 @@ class DebugPage extends StatelessWidget {
                   text: kIsWeb
                       ? html.window.navigator.userAgent.toString().toLowerCase()
                       : ""),
+              SizedBox(height: 20),
+              Button(
+                label: "Haptic Light",
+                onTap: () => HapticFeedback.lightImpact(),
+              ),
+              Button(
+                label: "Haptic Medium",
+                onTap: () => HapticFeedback.mediumImpact(),
+              ),
+              Button(
+                label: "Haptic Heavy",
+                onTap: () => HapticFeedback.heavyImpact(),
+              ),
+              Button(
+                label: "Haptic Selection",
+                onTap: () => HapticFeedback.selectionClick(),
+              ),
+              Button(
+                label: "Haptic Vibrate",
+                onTap: () => HapticFeedback.vibrate(),
+              ),
             ],
           ),
         ),

@@ -396,6 +396,9 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       previousPage = currentPage;
       currentPage = page;
     });
+    if (appStateSettings["tabNavigationHapticFeedback"] == true) {
+      HapticFeedback.mediumImpact();
+    }
   }
 
   @override

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 import 'package:budget/functions.dart';
@@ -13,6 +14,7 @@ import 'package:budget/widgets/transactionEntry/swipeToSelectTransactions.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:budget/widgets/pullDownToRefreshSync.dart';
+import 'package:flutter/services.dart';
 
 ValueNotifier<bool> isSwipingToDismissPageDown = ValueNotifier<bool>(false);
 ValueNotifier<bool> callRefreshToPages = ValueNotifier<bool>(false);
@@ -312,6 +314,7 @@ class PageFrameworkState extends State<PageFramework>
   bool isBackSideSwiping = false;
   double calculatedYOffsetForX = 0;
   double calculatedYOffsetForY = 0;
+  Timer? hapticFeedbackTimer;
 
   _onPointerMove(PointerMoveEvent ptr) {
     if ((widget.onDragDownToDismiss != null ||
@@ -319,6 +322,13 @@ class PageFrameworkState extends State<PageFramework>
         (widget.dragDownToDismissEnabled || widget.backSwipeToDismissEnabled) &&
         selectingTransactionsActive == 0) {
       if (isBackSideSwiping && widget.backSwipeToDismissEnabled) {
+        if (appStateSettings["closeNavigationHapticFeedback"] == true &&
+            totalDragX < 90 &&
+            totalDragX + ptr.delta.dx >= 90) {
+          HapticFeedback.selectionClick();
+          hapticFeedbackTimer = Timer(Duration(milliseconds: 200), () {});
+        }
+
         totalDragX = totalDragX + ptr.delta.dx;
         calculatedYOffsetForX = totalDragX / 500;
 
@@ -328,6 +338,13 @@ class PageFrameworkState extends State<PageFramework>
         }
       }
       if (swipeDownToDismiss && widget.dragDownToDismissEnabled) {
+        if (appStateSettings["closeNavigationHapticFeedback"] == true &&
+            totalDragY < 125 &&
+            totalDragY + ptr.delta.dy >= 125) {
+          HapticFeedback.selectionClick();
+          hapticFeedbackTimer = Timer(Duration(milliseconds: 200), () {});
+        }
+
         totalDragY = totalDragY + ptr.delta.dy;
         calculatedYOffsetForY = totalDragY / 500;
 
@@ -346,7 +363,11 @@ class PageFrameworkState extends State<PageFramework>
     if (widget.dragDownToDismissEnabled || widget.backSwipeToDismissEnabled) {
       if ((totalDragX >= 90 || totalDragY >= 125) &&
           !(ModalRoute.of(context)?.isFirst ?? true)) {
-        // HapticFeedback.lightImpact();
+        if (appStateSettings["closeNavigationHapticFeedback"] == true &&
+            hapticFeedbackTimer?.isActive == false) {
+          HapticFeedback.mediumImpact();
+        }
+
         if (widget.onDragDownToDismiss != null) {
           widget.onDragDownToDismiss!();
         } else {
@@ -848,6 +869,11 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
               opacity: animationControllerOpacity!,
               child: IconButton(
                 onPressed: () {
+                  if (appStateSettings["closeNavigationHapticFeedback"] ==
+                      true) {
+                    HapticFeedback.mediumImpact();
+                  }
+
                   if (onBackButton != null)
                     onBackButton!();
                   else
