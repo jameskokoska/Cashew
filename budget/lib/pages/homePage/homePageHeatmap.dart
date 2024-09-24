@@ -69,6 +69,7 @@ class _HomePageHeatMapState extends State<HomePageHeatMap> {
               customEndDate: DateTime.now(),
               totalSpentBefore: 0,
               isIncome: null,
+              removeBalanceCorrection: true,
               allWallets: Provider.of<AllWallets>(context, listen: false),
               showCumulativeSpending: false,
               appStateSettingsPassed: appStateSettings,

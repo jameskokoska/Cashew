@@ -272,6 +272,7 @@ class CalculatePointsParams {
   final DateTime customEndDate;
   final double totalSpentBefore;
   final bool? isIncome;
+  final bool? removeBalanceCorrection;
   final AllWallets allWallets;
   final bool showCumulativeSpending;
   final Map<String, dynamic> appStateSettingsPassed;
@@ -285,6 +286,7 @@ class CalculatePointsParams {
     required this.customEndDate,
     required this.totalSpentBefore,
     required this.isIncome,
+    this.removeBalanceCorrection = null,
     required this.allWallets,
     required this.showCumulativeSpending,
     required this.appStateSettingsPassed,
@@ -304,6 +306,9 @@ List<Pair> calculatePoints(CalculatePointsParams p) {
   for (Transaction transaction in p.transactions) {
     // Remove balance correction transactions if not showing all transactions
     if (p.isIncome != null && transaction.categoryFk == "0") continue;
+
+    if (p.removeBalanceCorrection == true && transaction.categoryFk == "0")
+      continue;
 
     if (p.isPaidOnly && transaction.paid == false) continue;
 
