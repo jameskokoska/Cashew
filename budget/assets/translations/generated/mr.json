@@ -1178,5 +1178,7 @@
   "loans-details": "कर्ज तपशील",
   "set-details": "तपशील सेट करा",
   "import-warning": "इंपोर्ट चेतावणी",
-  "import-warning-description": "आयात अयशस्वी होऊ शकते! कृपया खात्री करा की तुम्ही वैध काजू [.sqlite] किंवा [.sql] बॅकअप फाइल निवडली आहे."
+  "import-warning-description": "आयात अयशस्वी होऊ शकते! कृपया खात्री करा की तुम्ही वैध काजू [.sqlite] किंवा [.sql] बॅकअप फाइल निवडली आहे.",
+  "duplicate-budget-question": "डुप्लिकेट बजेट?",
+  "duplicate-budget": "डुप्लिकेट बजेट"
 }

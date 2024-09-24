@@ -601,5 +601,7 @@
   "loans-details": "Lenings besonderhede",
   "set-details": "Stel besonderhede in",
   "import-warning": "Invoer waarskuwing",
-  "import-warning-description": "Invoer kan misluk! Maak asseblief seker dat jy 'n geldige Cashew [.sqlite] of [.sql] rugsteunlêer gekies het"
+  "import-warning-description": "Invoer kan misluk! Maak asseblief seker dat jy 'n geldige Cashew [.sqlite] of [.sql] rugsteunlêer gekies het",
+  "duplicate-budget-question": "Duplikaat begroting?",
+  "duplicate-budget": "Duplikaat begroting"
 }

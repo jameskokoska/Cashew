@@ -1178,5 +1178,7 @@
   "loans-details": "Podrobnosti o půjčkách",
   "set-details": "Nastavit Podrobnosti",
   "import-warning": "Upozornění na import",
-  "import-warning-description": "Import může selhat! Ujistěte se, že jste vybrali platný záložní soubor kešu [.sqlite] nebo [.sql]"
+  "import-warning-description": "Import může selhat! Ujistěte se, že jste vybrali platný záložní soubor kešu [.sqlite] nebo [.sql]",
+  "duplicate-budget-question": "Duplicitní rozpočet?",
+  "duplicate-budget": "Duplicitní rozpočet"
 }

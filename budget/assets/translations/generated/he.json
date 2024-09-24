@@ -1178,5 +1178,7 @@
   "loans-details": "פרטי הלוואות",
   "set-details": "הגדר פרטים",
   "import-warning": "אזהרת ייבוא",
-  "import-warning-description": "הייבוא ​​עלול להיכשל! אנא ודא שבחרת בקובץ גיבוי קשיו [.sqlite] או [.sql] חוקי"
+  "import-warning-description": "הייבוא ​​עלול להיכשל! אנא ודא שבחרת בקובץ גיבוי קשיו [.sqlite] או [.sql] חוקי",
+  "duplicate-budget-question": "לשכפל תקציב?",
+  "duplicate-budget": "שכפול תקציב"
 }

@@ -1178,5 +1178,7 @@
   "loans-details": "قرض کی تفصیلات",
   "set-details": "تفصیلات مرتب کریں۔",
   "import-warning": "انتباہ درآمد کریں۔",
-  "import-warning-description": "درآمد ناکام ہو سکتا ہے! براہ کرم یقینی بنائیں کہ آپ نے ایک درست کاجو [.sqlite] یا [.sql] بیک اپ فائل کا انتخاب کیا ہے۔"
+  "import-warning-description": "درآمد ناکام ہو سکتا ہے! براہ کرم یقینی بنائیں کہ آپ نے ایک درست کاجو [.sqlite] یا [.sql] بیک اپ فائل کا انتخاب کیا ہے۔",
+  "duplicate-budget-question": "ڈپلیکیٹ بجٹ؟",
+  "duplicate-budget": "ڈپلیکیٹ بجٹ"
 }

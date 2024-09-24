@@ -1178,5 +1178,7 @@
   "loans-details": "تفاصيل القروض",
   "set-details": "تعيين التفاصيل",
   "import-warning": "تحذير الاستيراد",
-  "import-warning-description": "قد يفشل الاستيراد! الرجاء التأكد من تحديد ملف نسخة احتياطية صالح لـ Cashew [.sqlite] أو [.sql]."
+  "import-warning-description": "قد يفشل الاستيراد! الرجاء التأكد من تحديد ملف نسخة احتياطية صالح لـ Cashew [.sqlite] أو [.sql].",
+  "duplicate-budget-question": "ميزانية مكررة؟",
+  "duplicate-budget": "ميزانية مكررة"
 }

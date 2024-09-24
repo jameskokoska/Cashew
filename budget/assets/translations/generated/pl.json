@@ -1178,5 +1178,7 @@
   "loans-details": "Szczegóły pożyczki",
   "set-details": "Ustaw szczegóły",
   "import-warning": "Ostrzeżenie dotyczące importu",
-  "import-warning-description": "Import może się nie powieść! Upewnij się, że wybrałeś odpowiedni rodzaj kopii zapasowej Cashew [.sqlite] lub [.sql]"
+  "import-warning-description": "Import może się nie powieść! Upewnij się, że wybrałeś odpowiedni rodzaj kopii zapasowej Cashew [.sqlite] lub [.sql]",
+  "duplicate-budget-question": "Zduplikowany budżet?",
+  "duplicate-budget": "Duplikat budżetu"
 }

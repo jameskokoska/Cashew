@@ -1178,5 +1178,7 @@
   "loans-details": "Kölcsönök részletei",
   "set-details": "Részletek beállítása",
   "import-warning": "Importálási figyelmeztetés",
-  "import-warning-description": "Az importálás sikertelen lehet! Kérjük, győződjön meg arról, hogy egy érvényes Cashew [.sqlite] vagy [.sql] biztonsági mentési fájlt választott"
+  "import-warning-description": "Az importálás sikertelen lehet! Kérjük, győződjön meg arról, hogy egy érvényes Cashew [.sqlite] vagy [.sql] biztonsági mentési fájlt választott",
+  "duplicate-budget-question": "Ismétlődő költségkeret?",
+  "duplicate-budget": "Ismétlődő költségvetés"
 }

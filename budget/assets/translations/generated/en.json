@@ -1178,5 +1178,7 @@
   "loans-details": "Loans Details",
   "set-details": "Set Details",
   "import-warning": "Import Warning",
-  "import-warning-description": "Import may fail! Please make sure you have selected a valid Cashew [.sqlite] or [.sql] backup file"
+  "import-warning-description": "Import may fail! Please make sure you have selected a valid Cashew [.sqlite] or [.sql] backup file",
+  "duplicate-budget-question": "Duplicate Budget?",
+  "duplicate-budget": "Duplicate Budget"
 }

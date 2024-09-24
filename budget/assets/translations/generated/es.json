@@ -1178,5 +1178,7 @@
   "loans-details": "Detalles de préstamos",
   "set-details": "Establecer detalles",
   "import-warning": "Advertencia de importación",
-  "import-warning-description": "¡La importación puede fallar! Asegúrese de haber seleccionado un archivo de copia de seguridad de anacardo [.sqlite] o [.sql] válido"
+  "import-warning-description": "¡La importación puede fallar! Asegúrese de haber seleccionado un archivo de copia de seguridad de anacardo [.sqlite] o [.sql] válido",
+  "duplicate-budget-question": "¿Presupuesto duplicado?",
+  "duplicate-budget": "Presupuesto duplicado"
 }

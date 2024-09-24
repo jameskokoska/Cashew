@@ -1178,5 +1178,7 @@
   "loans-details": "Kredi Detayları",
   "set-details": "Ayrıntıları Ayarla",
   "import-warning": "İthalat Uyarısı",
-  "import-warning-description": "İçe aktarma başarısız olabilir! Lütfen geçerli bir Kaju [.sqlite] veya [.sql] yedekleme dosyası seçtiğinizden emin olun."
+  "import-warning-description": "İçe aktarma başarısız olabilir! Lütfen geçerli bir Kaju [.sqlite] veya [.sql] yedekleme dosyası seçtiğinizden emin olun.",
+  "duplicate-budget-question": "Yinelenen Bütçe mi?",
+  "duplicate-budget": "Yinelenen Bütçe"
 }

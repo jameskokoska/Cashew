@@ -228,5 +228,7 @@
   "loans-details": "Детали за заеми",
   "set-details": "Поставете детали",
   "import-warning": "Предупредување за увоз",
-  "import-warning-description": "Увозот може да не успее! Проверете дали сте избрале валидна резервна датотека Кашу [.sqlite] или [.sql]"
+  "import-warning-description": "Увозот може да не успее! Проверете дали сте избрале валидна резервна датотека Кашу [.sqlite] или [.sql]",
+  "duplicate-budget-question": "Дупликат буџет?",
+  "duplicate-budget": "Дупликат буџет"
 }

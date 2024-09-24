@@ -1178,5 +1178,7 @@
   "loans-details": "Mga Detalye ng Pautang",
   "set-details": "Itakda ang Mga Detalye",
   "import-warning": "Babala sa Pag-import",
-  "import-warning-description": "Maaaring mabigo ang pag-import! Pakitiyak na nakapili ka ng wastong Cashew [.sqlite] o [.sql] backup file"
+  "import-warning-description": "Maaaring mabigo ang pag-import! Pakitiyak na nakapili ka ng wastong Cashew [.sqlite] o [.sql] backup file",
+  "duplicate-budget-question": "Duplicate na Badyet?",
+  "duplicate-budget": "Dobleng Badyet"
 }

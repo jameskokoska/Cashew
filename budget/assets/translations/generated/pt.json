@@ -326,7 +326,7 @@
   "notification-reminder-3": "Atualize seu orçamento com as despesas de hoje.",
   "notification-reminder-4": "Adicione as despesas de hoje ao seu rastreador de orçamento.",
   "notification-reminder-5": "Registre suas transações do dia.",
-  "notification-reminder-6": "Mantenha -se no topo do seu orçamento adicionando suas transações diárias.",
+  "notification-reminder-6": "Mantenha-se no topo do seu orçamento adicionando suas transações diárias.",
   "notification-reminder-7": "Não se esqueça de adicionar suas transações diárias.",
   "notification-reminder-8": "Atualize seu orçamento com as despesas de hoje.",
   "notification-reminder-9": "Adicione suas despesas de hoje ao aplicativo.",
@@ -1178,5 +1178,7 @@
   "loans-details": "Detalhes dos empréstimos",
   "set-details": "Definir detalhes",
   "import-warning": "Aviso de importação",
-  "import-warning-description": "A importação pode falhar! Certifique-se de ter selecionado um arquivo de backup válido do Cashew [.sqlite] ou [.sql]"
+  "import-warning-description": "A importação pode falhar! Certifique-se de ter selecionado um arquivo de backup válido do Cashew [.sqlite] ou [.sql]",
+  "duplicate-budget-question": "Orçamento duplicado?",
+  "duplicate-budget": "Orçamento duplicado"
 }

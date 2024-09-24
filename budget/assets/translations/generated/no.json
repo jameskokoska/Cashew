@@ -1178,5 +1178,7 @@
   "loans-details": "Lånedetaljer",
   "set-details": "Angi detaljer",
   "import-warning": "Import Advarsel",
-  "import-warning-description": "Importen kan mislykkes! Sørg for at du har valgt en gyldig Cashew [.sqlite] eller [.sql] sikkerhetskopifil"
+  "import-warning-description": "Importen kan mislykkes! Sørg for at du har valgt en gyldig Cashew [.sqlite] eller [.sql] sikkerhetskopifil",
+  "duplicate-budget-question": "Duplisert budsjett?",
+  "duplicate-budget": "Duplikatbudsjett"
 }

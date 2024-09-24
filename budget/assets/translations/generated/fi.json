@@ -1178,5 +1178,7 @@
   "loans-details": "Lainojen tiedot",
   "set-details": "Aseta tiedot",
   "import-warning": "Tuo varoitus",
-  "import-warning-description": "Tuonti voi epäonnistua! Varmista, että olet valinnut kelvollisen Cashew-[.sqlite]- tai [.sql]-varmuuskopiotiedoston"
+  "import-warning-description": "Tuonti voi epäonnistua! Varmista, että olet valinnut kelvollisen Cashew-[.sqlite]- tai [.sql]-varmuuskopiotiedoston",
+  "duplicate-budget-question": "Päällekkäinen budjetti?",
+  "duplicate-budget": "Päällekkäinen budjetti"
 }

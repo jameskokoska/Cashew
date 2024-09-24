@@ -1178,5 +1178,7 @@
   "loans-details": "Деталі кредитів",
   "set-details": "Деталі набору",
   "import-warning": "Попередження про імпорт",
-  "import-warning-description": "Імпорт може не вдатися! Переконайтеся, що ви вибрали дійсний файл резервної копії Cashew [.sqlite] або [.sql]"
+  "import-warning-description": "Імпорт може не вдатися! Переконайтеся, що ви вибрали дійсний файл резервної копії Cashew [.sqlite] або [.sql]",
+  "duplicate-budget-question": "Дубльований бюджет?",
+  "duplicate-budget": "Дубльований бюджет"
 }

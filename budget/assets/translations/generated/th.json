@@ -1178,5 +1178,7 @@
   "loans-details": "รายละเอียดสินเชื่อ",
   "set-details": "ตั้งค่ารายละเอียด",
   "import-warning": "คำเตือนการนำเข้า",
-  "import-warning-description": "การนำเข้าอาจล้มเหลว! โปรดตรวจสอบให้แน่ใจว่าคุณได้เลือกไฟล์สำรองข้อมูล Cashew [.sqlite] หรือ [.sql] ที่ถูกต้อง"
+  "import-warning-description": "การนำเข้าอาจล้มเหลว! โปรดตรวจสอบให้แน่ใจว่าคุณได้เลือกไฟล์สำรองข้อมูล Cashew [.sqlite] หรือ [.sql] ที่ถูกต้อง",
+  "duplicate-budget-question": "งบประมาณซ้ำซ้อน?",
+  "duplicate-budget": "งบประมาณซ้ำซ้อน"
 }

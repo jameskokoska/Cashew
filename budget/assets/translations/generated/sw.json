@@ -1178,5 +1178,7 @@
   "loans-details": "Maelezo ya Mikopo",
   "set-details": "Weka Maelezo",
   "import-warning": "Ingiza Onyo",
-  "import-warning-description": "Uingizaji unaweza kushindwa! Tafadhali hakikisha kuwa umechagua faili halali ya Korosho [.sqlite] au [.sql] faili mbadala"
+  "import-warning-description": "Uingizaji unaweza kushindwa! Tafadhali hakikisha kuwa umechagua faili halali ya Korosho [.sqlite] au [.sql] faili mbadala",
+  "duplicate-budget-question": "Nakala ya Bajeti?",
+  "duplicate-budget": "Nakala ya Bajeti"
 }

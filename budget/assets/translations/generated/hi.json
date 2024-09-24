@@ -1178,5 +1178,7 @@
   "loans-details": "ऋण विवरण",
   "set-details": "विवरण सेट करें",
   "import-warning": "आयात चेतावनी",
-  "import-warning-description": "आयात विफल हो सकता है! कृपया सुनिश्चित करें कि आपने वैध काजू [.sqlite] या [.sql] बैकअप फ़ाइल का चयन किया है"
+  "import-warning-description": "आयात विफल हो सकता है! कृपया सुनिश्चित करें कि आपने वैध काजू [.sqlite] या [.sql] बैकअप फ़ाइल का चयन किया है",
+  "duplicate-budget-question": "डुप्लीकेट बजट?",
+  "duplicate-budget": "डुप्लीकेट बजट"
 }

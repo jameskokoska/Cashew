@@ -1178,5 +1178,7 @@
   "loans-details": "جزئیات وام",
   "set-details": "تنظیم جزئیات",
   "import-warning": "هشدار واردات",
-  "import-warning-description": "واردات ممکن است شکست بخورد! لطفاً مطمئن شوید که یک فایل پشتیبان معتبر بادام هندی [.sqlite] یا [.sql] را انتخاب کرده اید"
+  "import-warning-description": "واردات ممکن است شکست بخورد! لطفاً مطمئن شوید که یک فایل پشتیبان معتبر بادام هندی [.sqlite] یا [.sql] را انتخاب کرده اید",
+  "duplicate-budget-question": "بودجه تکراری؟",
+  "duplicate-budget": "بودجه تکراری"
 }

@@ -1,7 +1,7 @@
 {
   "default-account-name": "Banco",
   "default-budget-name": "Orçamento",
-  "budget-history": "Orçamento - Histórico",
+  "budget-history": "Histórico do Orçamento",
   "home": "Início",
   "transactions": "Transações",
   "budgets": "Orçamentos",
@@ -30,7 +30,7 @@
   "greetings-general-2": "Olá",
   "greetings-general-3": "Olá",
   "greetings-general-4": "Como é que está?",
-  "greetings-general-5": "Como é que está?",
+  "greetings-general-5": "Tudo bem?",
   "greetings-general-6": "Olá",
   "greetings-general-7": "Olá",
   "greetings-morning-1": "Bom dia",
@@ -254,7 +254,7 @@
   "change-limit-warning": "Alterar o limite das cópias de segurança para um número menor irá eliminar quaisquer cópias de segurança antigas ​​que estejam atualmente armazenadas, caso excedam o limite, e sempre que uma cópia de segurança for feita.",
   "change": "Alterar",
   "load-backup": "Carregar cópia de segurança?",
-  "load-backup-warning": "Isto substituirá todos os dados atuais!",
+  "load-backup-warning": "Isto irá substituir todos os dados atuais!",
   "load": "Carregar",
   "delete-backup": "Eliminar cópia de segurança?",
   "deleted-backup": "Cópia de segurança eliminada",
@@ -1178,5 +1178,7 @@
   "loans-details": "Detalhes dos empréstimos",
   "set-details": "Definir detalhes",
   "import-warning": "Aviso de importação",
-  "import-warning-description": "A importação pode falhar! Certifique-se de ter selecionado um arquivo de backup válido do Cashew [.sqlite] ou [.sql]"
+  "import-warning-description": "A importação pode falhar! Certifique-se de ter selecionado um arquivo de backup válido do Cashew [.sqlite] ou [.sql]",
+  "duplicate-budget-question": "Orçamento duplicado?",
+  "duplicate-budget": "Orçamento duplicado"
 }

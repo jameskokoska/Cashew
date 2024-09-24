@@ -1,9 +1,9 @@
 {
   "default-account-name": "银行",
   "default-budget-name": "预算",
-  "budget-history": " ",
+  "budget-history": "预算历史",
   "home": "主页",
-  "transactions": " ",
+  "transactions": "交易",
   "budgets": "预算",
   "more-actions": "更多操作",
   "subscriptions": "订阅",
@@ -1178,5 +1178,7 @@
   "loans-details": "贷款详情",
   "set-details": "设置详情",
   "import-warning": "进口警告",
-  "import-warning-description": "导入可能会失败！请确保您选择了有效的 Cashew [.sqlite] 或 [.sql] 备份文件"
+  "import-warning-description": "导入可能会失败！请确保您选择了有效的 Cashew [.sqlite] 或 [.sql] 备份文件",
+  "duplicate-budget-question": "预算重复？",
+  "duplicate-budget": "重复预算"
 }
