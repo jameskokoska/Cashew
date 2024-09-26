@@ -1179,6 +1179,6 @@
   "set-details": "Đặt chi tiết",
   "import-warning": "Cảnh báo nhập khẩu",
   "import-warning-description": "Quá trình nhập có thể thất bại! Vui lòng đảm bảo rằng bạn đã chọn tệp sao lưu Cashew [.sqlite] hoặc [.sql] hợp lệ",
-  "duplicate-budget-question": "Ngân sách trùng lặp?",
-  "duplicate-budget": "Ngân sách trùng lặp"
+  "duplicate-budget-question": "Nhân đôi ngân sách?",
+  "duplicate-budget": "Nhân đôi ngân sách"
 }
