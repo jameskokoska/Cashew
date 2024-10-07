@@ -4356,6 +4356,9 @@ class _TransactionNotesTextInputState extends State<TransactionNotesTextInput> {
         children: [
           Focus(
             child: TextInput(
+              // Allow the user to edit the notes and scroll freely
+              // they have a check button to finish editing
+              handleOnTapOutside: false,
               borderRadius: BorderRadius.zero,
               padding: EdgeInsetsDirectional.zero,
               labelText: "notes-placeholder".tr(),
@@ -4965,243 +4968,238 @@ class _TitleInputState extends State<TitleInput> {
 
   @override
   Widget build(BuildContext context) {
-    return TapRegion(
-      onTapOutside: (event) => handleOnTapOutsideTextInput(context),
-      child: Padding(
-        padding: widget.padding,
-        child: ClipRRect(
-          borderRadius: BorderRadiusDirectional.circular(
-              getPlatform() == PlatformOS.isIOS ? 8 : 15),
-          child: Column(
-            children: [
-              Focus(
-                onFocusChange: (value) {
-                  if (value == false && widget.clearWhenUnfocused == true)
-                    setState(() {
-                      foundAssociatedTitles = [];
-                    });
+    return Padding(
+      padding: widget.padding,
+      child: ClipRRect(
+        borderRadius: BorderRadiusDirectional.circular(
+            getPlatform() == PlatformOS.isIOS ? 8 : 15),
+        child: Column(
+          children: [
+            Focus(
+              onFocusChange: (value) {
+                if (value == false && widget.clearWhenUnfocused == true)
+                  setState(() {
+                    foundAssociatedTitles = [];
+                  });
+              },
+              child: TextInput(
+                // To allow the user to select and scroll to the dropdown options
+                handleOnTapOutside: false,
+                maxLines: widget.maxLines,
+                focusNode: widget.focusNode,
+                scrollController: widget.titleInputScrollController,
+                borderRadius: BorderRadius.zero,
+                padding: EdgeInsetsDirectional.zero,
+                labelText: widget.labelText ?? "title-placeholder".tr(),
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.title_outlined
+                    : Icons.title_rounded,
+                controller: _titleInputController,
+                onChanged: (text) async {
+                  widget.setSelectedTitle(text);
+                  List<TransactionAssociatedTitleWithCategory>
+                      newFoundAssociatedTitles = [];
+                  if (text.trim() != "") {
+                    newFoundAssociatedTitles =
+                        await database.getSimilarAssociatedTitles(
+                      title: widget.textToSearchFilter != null
+                          ? widget.textToSearchFilter!(text)
+                          : text,
+                      excludeTitles: widget.getTextToExclude != null
+                          ? widget.getTextToExclude!(text)
+                          : [],
+                      limit: enableDoubleColumn(context) ? 5 : 3,
+                      alsoSearchCategories: widget.alsoSearchCategories,
+                      tryToCompleteSearch: widget.tryToCompleteSearch,
+                    );
+                  }
+
+                  if (foundAssociatedTitles.toString() !=
+                      newFoundAssociatedTitles.toString()) {
+                    if (widget.resizePopupWhenChanged) fixResizingPopup();
+                    if (widget.onNewRecommendedTitle != null)
+                      widget.onNewRecommendedTitle!();
+                  }
+
+                  foundAssociatedTitles = newFoundAssociatedTitles;
+                  setState(() {});
                 },
-                child: TextInput(
-                  handleOnTapOutside: false,
-                  maxLines: widget.maxLines,
-                  focusNode: widget.focusNode,
-                  scrollController: widget.titleInputScrollController,
-                  borderRadius: BorderRadius.zero,
-                  padding: EdgeInsetsDirectional.zero,
-                  labelText: widget.labelText ?? "title-placeholder".tr(),
-                  icon: appStateSettings["outlinedIcons"]
-                      ? Icons.title_outlined
-                      : Icons.title_rounded,
-                  controller: _titleInputController,
-                  onChanged: (text) async {
-                    widget.setSelectedTitle(text);
-                    List<TransactionAssociatedTitleWithCategory>
-                        newFoundAssociatedTitles = [];
-                    if (text.trim() != "") {
-                      newFoundAssociatedTitles =
-                          await database.getSimilarAssociatedTitles(
-                        title: widget.textToSearchFilter != null
-                            ? widget.textToSearchFilter!(text)
-                            : text,
-                        excludeTitles: widget.getTextToExclude != null
-                            ? widget.getTextToExclude!(text)
-                            : [],
-                        limit: enableDoubleColumn(context) ? 5 : 3,
-                        alsoSearchCategories: widget.alsoSearchCategories,
-                        tryToCompleteSearch: widget.tryToCompleteSearch,
-                      );
-                    }
-
-                    if (foundAssociatedTitles.toString() !=
-                        newFoundAssociatedTitles.toString()) {
-                      if (widget.resizePopupWhenChanged) fixResizingPopup();
-                      if (widget.onNewRecommendedTitle != null)
-                        widget.onNewRecommendedTitle!();
-                    }
-
-                    foundAssociatedTitles = newFoundAssociatedTitles;
-                    setState(() {});
-                  },
-                  onSubmitted: widget.onSubmitted,
-                  autoFocus:
-                      widget.autoFocus ?? kIsWeb && getIsFullScreen(context),
-                ),
+                onSubmitted: widget.onSubmitted,
+                autoFocus:
+                    widget.autoFocus ?? kIsWeb && getIsFullScreen(context),
               ),
-              AnimatedSizeSwitcher(
-                child: foundAssociatedTitles.length <= 0
-                    ? Container(
-                        key: ValueKey(0),
-                      )
-                    : AnimatedSize(
-                        key: ValueKey(1),
-                        duration: Duration(milliseconds: 250),
-                        curve: Curves.easeInOut,
-                        alignment: AlignmentDirectional.topCenter,
-                        child: Column(
-                          children: [
-                            HorizontalBreak(
-                              padding: EdgeInsetsDirectional.zero,
-                              color: dynamicPastel(
-                                context,
-                                Theme.of(context)
-                                    .colorScheme
-                                    .secondaryContainer,
-                                amount: 0.1,
-                                inverse: true,
-                              ),
+            ),
+            AnimatedSizeSwitcher(
+              child: foundAssociatedTitles.length <= 0
+                  ? Container(
+                      key: ValueKey(0),
+                    )
+                  : AnimatedSize(
+                      key: ValueKey(1),
+                      duration: Duration(milliseconds: 250),
+                      curve: Curves.easeInOut,
+                      alignment: AlignmentDirectional.topCenter,
+                      child: Column(
+                        children: [
+                          HorizontalBreak(
+                            padding: EdgeInsetsDirectional.zero,
+                            color: dynamicPastel(
+                              context,
+                              Theme.of(context).colorScheme.secondaryContainer,
+                              amount: 0.1,
+                              inverse: true,
                             ),
-                            for (TransactionAssociatedTitleWithCategory foundAssociatedTitle
-                                in foundAssociatedTitles)
-                              Container(
-                                color: appStateSettings["materialYou"]
-                                    ? Theme.of(context)
-                                        .colorScheme
-                                        .secondaryContainer
-                                    : getColor(context, "canvasContainer"),
-                                child: Tappable(
-                                  borderRadius: 0,
-                                  color: Colors.transparent,
-                                  onTap: () async {
-                                    if (widget.handleOnRecommendedTitleTapped) {
-                                      if (foundAssociatedTitle
-                                              .category.mainCategoryPk !=
-                                          null) {
-                                        widget.setSelectedCategory(
-                                            await database.getCategoryInstance(
-                                                foundAssociatedTitle
-                                                    .category.mainCategoryPk!));
-                                        widget.setSelectedSubCategory(
-                                            foundAssociatedTitle.category);
-                                      } else {
-                                        widget.setSelectedCategory(
-                                            foundAssociatedTitle.category);
-                                      }
-
-                                      if (foundAssociatedTitle.type !=
-                                              TitleType.CategoryName &&
-                                          foundAssociatedTitle.type !=
-                                              TitleType.SubCategoryName) {
-                                        widget.setSelectedTitle(
-                                            foundAssociatedTitle.title.title);
-                                        setTextInput(_titleInputController,
-                                            foundAssociatedTitle.title.title);
-                                      } else {
-                                        widget.setSelectedTitle("");
-                                        setTextInput(_titleInputController, "");
-                                      }
-
-                                      if (widget.unfocusWhenRecommendedTapped)
-                                        FocusScope.of(context).unfocus();
+                          ),
+                          for (TransactionAssociatedTitleWithCategory foundAssociatedTitle
+                              in foundAssociatedTitles)
+                            Container(
+                              color: appStateSettings["materialYou"]
+                                  ? Theme.of(context)
+                                      .colorScheme
+                                      .secondaryContainer
+                                  : getColor(context, "canvasContainer"),
+                              child: Tappable(
+                                borderRadius: 0,
+                                color: Colors.transparent,
+                                onTap: () async {
+                                  if (widget.handleOnRecommendedTitleTapped) {
+                                    if (foundAssociatedTitle
+                                            .category.mainCategoryPk !=
+                                        null) {
+                                      widget.setSelectedCategory(
+                                          await database.getCategoryInstance(
+                                              foundAssociatedTitle
+                                                  .category.mainCategoryPk!));
+                                      widget.setSelectedSubCategory(
+                                          foundAssociatedTitle.category);
+                                    } else {
+                                      widget.setSelectedCategory(
+                                          foundAssociatedTitle.category);
                                     }
 
-                                    setState(() {
-                                      foundAssociatedTitles = [];
-                                    });
+                                    if (foundAssociatedTitle.type !=
+                                            TitleType.CategoryName &&
+                                        foundAssociatedTitle.type !=
+                                            TitleType.SubCategoryName) {
+                                      widget.setSelectedTitle(
+                                          foundAssociatedTitle.title.title);
+                                      setTextInput(_titleInputController,
+                                          foundAssociatedTitle.title.title);
+                                    } else {
+                                      widget.setSelectedTitle("");
+                                      setTextInput(_titleInputController, "");
+                                    }
 
-                                    if (widget.onRecommendedTitleTapped != null)
-                                      widget.onRecommendedTitleTapped!(
-                                          foundAssociatedTitle);
-                                    if (widget.resizePopupWhenChanged)
-                                      fixResizingPopup();
-                                  },
-                                  child: Row(
-                                    children: [
-                                      if (widget
-                                          .showCategoryIconForRecommendedTitles)
-                                        IgnorePointer(
-                                          child: CategoryIcon(
-                                            categoryPk: foundAssociatedTitle
-                                                .title.categoryFk,
-                                            size: 23,
-                                            margin: EdgeInsetsDirectional.zero,
-                                            sizePadding: 16,
-                                            borderRadius: 0,
-                                          ),
-                                        ),
-                                      SizedBox(width: 13),
-                                      Expanded(
-                                          child: Padding(
-                                        padding: widget
-                                                .showCategoryIconForRecommendedTitles
-                                            ? EdgeInsetsDirectional.zero
-                                            : const EdgeInsetsDirectional.only(
-                                                bottom: 12, top: 11, start: 5),
-                                        child: TextFont(
-                                          text: "",
-                                          richTextSpan: generateSpans(
-                                            context: context,
-                                            fontSize: 16,
-                                            mainText: foundAssociatedTitle
-                                                .title.title,
-                                            boldedText: foundAssociatedTitle
-                                                .partialTitleString,
-                                          ),
-                                        ),
-                                      )),
-                                      Opacity(
-                                        opacity: 0.65,
-                                        child: foundAssociatedTitle.type ==
-                                                    TitleType.CategoryName ||
-                                                foundAssociatedTitle.type ==
-                                                    TitleType.SubCategoryName
-                                            ? Padding(
-                                                padding:
-                                                    const EdgeInsetsDirectional
-                                                        .symmetric(
-                                                        horizontal: 7.5),
-                                                child: Icon(
-                                                  appStateSettings[
-                                                          "outlinedIcons"]
-                                                      ? Icons.category_outlined
-                                                      : Icons.category_rounded,
-                                                  size: 20,
-                                                ),
-                                              )
-                                            : IconButtonScaled(
-                                                iconData: appStateSettings[
-                                                        "outlinedIcons"]
-                                                    ? Icons.clear_outlined
-                                                    : Icons.clear_rounded,
-                                                iconSize: 18,
-                                                scale: 1.1,
-                                                onTap: () async {
-                                                  if (widget.onDeleteButton !=
-                                                      null)
-                                                    widget.onDeleteButton!();
-                                                  if (widget
-                                                      .resizePopupWhenChanged)
-                                                    fixResizingPopup();
+                                    if (widget.unfocusWhenRecommendedTapped)
+                                      FocusScope.of(context).unfocus();
+                                  }
 
-                                                  DeletePopupAction? action =
-                                                      await deleteAssociatedTitlePopup(
-                                                    context,
-                                                    title: foundAssociatedTitle
-                                                        .title,
-                                                    routesToPopAfterDelete:
-                                                        RoutesToPopAfterDelete
-                                                            .None,
-                                                  );
-                                                  if (action ==
-                                                      DeletePopupAction
-                                                          .Delete) {
-                                                    foundAssociatedTitles.remove(
-                                                        foundAssociatedTitle);
-                                                    setState(() {});
-                                                  }
-                                                },
-                                              ),
+                                  setState(() {
+                                    foundAssociatedTitles = [];
+                                  });
+
+                                  if (widget.onRecommendedTitleTapped != null)
+                                    widget.onRecommendedTitleTapped!(
+                                        foundAssociatedTitle);
+                                  if (widget.resizePopupWhenChanged)
+                                    fixResizingPopup();
+                                },
+                                child: Row(
+                                  children: [
+                                    if (widget
+                                        .showCategoryIconForRecommendedTitles)
+                                      IgnorePointer(
+                                        child: CategoryIcon(
+                                          categoryPk: foundAssociatedTitle
+                                              .title.categoryFk,
+                                          size: 23,
+                                          margin: EdgeInsetsDirectional.zero,
+                                          sizePadding: 16,
+                                          borderRadius: 0,
+                                        ),
                                       ),
-                                      SizedBox(width: 5),
-                                    ],
-                                  ),
+                                    SizedBox(width: 13),
+                                    Expanded(
+                                        child: Padding(
+                                      padding: widget
+                                              .showCategoryIconForRecommendedTitles
+                                          ? EdgeInsetsDirectional.zero
+                                          : const EdgeInsetsDirectional.only(
+                                              bottom: 12, top: 11, start: 5),
+                                      child: TextFont(
+                                        text: "",
+                                        richTextSpan: generateSpans(
+                                          context: context,
+                                          fontSize: 16,
+                                          mainText:
+                                              foundAssociatedTitle.title.title,
+                                          boldedText: foundAssociatedTitle
+                                              .partialTitleString,
+                                        ),
+                                      ),
+                                    )),
+                                    Opacity(
+                                      opacity: 0.65,
+                                      child: foundAssociatedTitle.type ==
+                                                  TitleType.CategoryName ||
+                                              foundAssociatedTitle.type ==
+                                                  TitleType.SubCategoryName
+                                          ? Padding(
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .symmetric(
+                                                      horizontal: 7.5),
+                                              child: Icon(
+                                                appStateSettings[
+                                                        "outlinedIcons"]
+                                                    ? Icons.category_outlined
+                                                    : Icons.category_rounded,
+                                                size: 20,
+                                              ),
+                                            )
+                                          : IconButtonScaled(
+                                              iconData: appStateSettings[
+                                                      "outlinedIcons"]
+                                                  ? Icons.clear_outlined
+                                                  : Icons.clear_rounded,
+                                              iconSize: 18,
+                                              scale: 1.1,
+                                              onTap: () async {
+                                                if (widget.onDeleteButton !=
+                                                    null)
+                                                  widget.onDeleteButton!();
+                                                if (widget
+                                                    .resizePopupWhenChanged)
+                                                  fixResizingPopup();
+
+                                                DeletePopupAction? action =
+                                                    await deleteAssociatedTitlePopup(
+                                                  context,
+                                                  title: foundAssociatedTitle
+                                                      .title,
+                                                  routesToPopAfterDelete:
+                                                      RoutesToPopAfterDelete
+                                                          .None,
+                                                );
+                                                if (action ==
+                                                    DeletePopupAction.Delete) {
+                                                  foundAssociatedTitles.remove(
+                                                      foundAssociatedTitle);
+                                                  setState(() {});
+                                                }
+                                              },
+                                            ),
+                                    ),
+                                    SizedBox(width: 5),
+                                  ],
                                 ),
                               ),
-                          ],
-                        ),
+                            ),
+                        ],
                       ),
-              ),
-            ],
-          ),
+                    ),
+            ),
+          ],
         ),
       ),
     );

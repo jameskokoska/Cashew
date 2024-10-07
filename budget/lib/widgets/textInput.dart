@@ -315,5 +315,6 @@ class TextInput extends StatelessWidget {
 void handleOnTapOutsideTextInput(BuildContext context) {
   Widget? popupFramework =
       context.findAncestorWidgetOfExactType<PopupFramework>();
-  if (popupFramework == null) minimizeKeyboard(context);
+  TextInput? textInput = context.findAncestorWidgetOfExactType<TextInput>();
+  if (popupFramework == null && textInput == null) minimizeKeyboard(context);
 }
