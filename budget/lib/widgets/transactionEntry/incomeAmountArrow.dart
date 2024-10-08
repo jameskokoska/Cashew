@@ -68,6 +68,7 @@ class AmountWithColorAndArrow extends StatelessWidget {
     this.countNumberDuration = const Duration(milliseconds: 450),
     this.absoluteValueWhenNoArrow = false,
     this.customTextBuilder,
+    this.currencyKey,
     super.key,
   });
   final bool showIncomeArrow;
@@ -85,6 +86,7 @@ class AmountWithColorAndArrow extends StatelessWidget {
   final Duration countNumberDuration;
   final bool absoluteValueWhenNoArrow;
   final Widget Function(double amount, Color textColor)? customTextBuilder;
+  final String? currencyKey;
 
   @override
   Widget build(BuildContext context) {
@@ -108,8 +110,12 @@ class AmountWithColorAndArrow extends StatelessWidget {
       if (customTextBuilder != null)
         return customTextBuilder!(number, finalColor);
       return TextFont(
-        text: convertToMoney(Provider.of<AllWallets>(context), number,
-            finalNumber: finalNumber),
+        text: convertToMoney(
+          Provider.of<AllWallets>(context),
+          number,
+          currencyKey: currencyKey,
+          finalNumber: finalNumber,
+        ),
         fontSize: fontSize,
         textColor: finalColor,
         fontWeight: bold ? FontWeight.bold : FontWeight.normal,

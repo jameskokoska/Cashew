@@ -855,6 +855,7 @@ class _CorrectBalancePopupState extends State<CorrectBalancePopup> {
                   iconSize: 24,
                   iconWidth: 15,
                   countNumberDuration: Duration(milliseconds: 300),
+                  currencyKey: widget.wallet.currency,
                 );
               }),
               SizedBox(height: 8),
