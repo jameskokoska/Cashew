@@ -1169,8 +1169,9 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
       return;
     }
 
-    String transferString =
-        walletFrom.name + (isNegative ? " ← " : " → ") + walletTo!.name;
+    String transferString = getWalletStringName(allWallets, walletFrom) +
+        (isNegative ? " ← " : " → ") +
+        getWalletStringName(allWallets, walletTo);
 
     String note = "transferred-balance".tr() + "\n" + transferString;
 

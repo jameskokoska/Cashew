@@ -68,10 +68,10 @@ class TransactionEntryTag extends StatelessWidget {
                       .indexedByPk[transaction.walletFk]
                       ?.colour,
                   defaultColor: Theme.of(context).colorScheme.primary),
-              name: Provider.of<AllWallets>(context)
-                      .indexedByPk[transaction.walletFk]
-                      ?.name ??
-                  "",
+              name: getWalletStringName(
+                  Provider.of<AllWallets>(context),
+                  Provider.of<AllWallets>(context)
+                      .indexedByPk[transaction.walletFk]),
             ),
             // 1
             Builder(builder: (context) {
@@ -129,7 +129,6 @@ class TransactionEntryTag extends StatelessWidget {
               return StreamBuilder<Objective>(
                 stream: database.getObjective(transaction.objectiveLoanFk!),
                 builder: (context, snapshot) {
-                  print("LOOKED UP");
                   if (snapshot.hasData) {
                     if (snapshot.data == null) return Container();
                     Objective objective = snapshot.data!;
@@ -156,7 +155,6 @@ class TransactionEntryTag extends StatelessWidget {
               return StreamBuilder<Objective>(
                 stream: database.getObjective(transaction.objectiveFk!),
                 builder: (context, snapshot) {
-                  print("LOOKED UP");
                   if (snapshot.hasData) {
                     Objective objective = snapshot.data!;
                     return ObjectivePercentTag(
@@ -300,7 +298,18 @@ class TransactionTag extends StatelessWidget {
               text: name,
               fontSize: 11.5,
               textColor: getColor(context, "black").withOpacity(0.7),
-              maxLines: 1,
+              maxLines:
+                  appStateSettings["fadeTransactionNameOverflows"] == false
+                      ? null
+                      : 1,
+              overflow:
+                  appStateSettings["fadeTransactionNameOverflows"] == false
+                      ? null
+                      : TextOverflow.fade,
+              softWrap:
+                  appStateSettings["fadeTransactionNameOverflows"] == false
+                      ? null
+                      : false,
             ),
           ),
         ],

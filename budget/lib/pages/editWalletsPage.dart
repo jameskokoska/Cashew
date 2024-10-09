@@ -29,6 +29,7 @@ import 'package:flutter/material.dart' hide SliverReorderableList;
 import 'package:flutter/services.dart' hide TextInput;
 import 'package:budget/widgets/editRowEntry.dart';
 import 'package:budget/modified/reorderable_list.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:provider/provider.dart';
 import 'exchangeRatesPage.dart';
 
@@ -625,6 +626,29 @@ class ShowAccountLabelSettingToggle extends StatelessWidget {
   }
 }
 
+class ShowCurrencyLabelSettingToggle extends StatelessWidget {
+  const ShowCurrencyLabelSettingToggle({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedExpanded(
+      expand:
+          Provider.of<AllWallets>(context).allContainSameCurrency() == false,
+      child: SettingsContainerSwitch(
+        title: "currency-label".tr(),
+        description: "currency-label-description".tr(),
+        onSwitched: (value) {
+          updateSettings("showCurrencyLabel", value, updateGlobalState: true);
+        },
+        initialValue: appStateSettings["showCurrencyLabel"] == true,
+        icon: appStateSettings["outlinedIcons"]
+            ? Symbols.event_list_sharp
+            : Symbols.event_list_rounded,
+      ),
+    );
+  }
+}
+
 class ExchangeRateSettingPage extends StatelessWidget {
   const ExchangeRateSettingPage({this.backgroundColor, super.key});
   final Color? backgroundColor;
@@ -711,6 +735,7 @@ class WalletsSettings extends StatelessWidget {
     return Column(
       children: [
         ShowAccountLabelSettingToggle(),
+        ShowCurrencyLabelSettingToggle(),
         ExchangeRateSettingPage(backgroundColor: backgroundColor),
       ],
     );

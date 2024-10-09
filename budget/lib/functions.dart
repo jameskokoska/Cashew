@@ -1414,13 +1414,21 @@ String absoluteZeroString(String number) {
 
 // Will only include the currency if the user has wallets of different currencies
 // e.g. Wallet (USD)
-String getWalletStringName(AllWallets allWallets, TransactionWallet wallet) {
+String getWalletStringName(AllWallets allWallets, TransactionWallet? wallet) {
+  if (wallet == null) return "";
   if (wallet.name == wallet.currency.toString().toUpperCase()) {
     return wallet.currency.toString().toUpperCase();
-  } else if (allWallets.allContainSameCurrency() == true) {
-    return wallet.name;
   } else {
-    return wallet.name + " (" + wallet.currency.toString().toUpperCase() + ")";
+    bool showCurrencyLabel = appStateSettings["showCurrencyLabel"] == true &&
+        allWallets.allContainSameCurrency() == false;
+    if (showCurrencyLabel) {
+      return wallet.name +
+          " (" +
+          wallet.currency.toString().toUpperCase() +
+          ")";
+    } else {
+      return wallet.name;
+    }
   }
 }
 

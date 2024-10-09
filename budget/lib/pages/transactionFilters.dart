@@ -814,57 +814,46 @@ class _TransactionFiltersSelectionState
             },
           ),
 
-        StreamBuilder<List<TransactionWallet>>(
-          stream: database.watchAllWallets(),
-          builder: (context, snapshot) {
-            if (snapshot.data != null && snapshot.data!.length <= 1)
-              return SizedBox.shrink();
-            if (snapshot.hasData) {
-              return SelectChips(
-                items: snapshot.data!,
-                onLongPress: (TransactionWallet? item) {
-                  pushRoute(
-                    context,
-                    AddWalletPage(
-                      wallet: item,
-                      routesToPopAfterDelete:
-                          RoutesToPopAfterDelete.PreventDelete,
-                    ),
-                  );
-                },
-                getLabel: (TransactionWallet item) {
-                  return item.name;
-                },
-                onSelected: (TransactionWallet item) {
-                  if (selectedFilters.walletPks.contains(item.walletPk)) {
-                    selectedFilters.walletPks.remove(item.walletPk);
-                  } else {
-                    selectedFilters.walletPks.add(item.walletPk);
-                  }
-                  setSearchFilters();
-                },
-                getSelected: (TransactionWallet item) {
-                  return selectedFilters.walletPks.contains(item.walletPk);
-                },
-                getCustomBorderColor: (TransactionWallet item) {
-                  return dynamicPastel(
-                    context,
-                    lightenPastel(
-                      HexColor(
-                        item.colour,
-                        defaultColor: Theme.of(context).colorScheme.primary,
-                      ),
-                      amount: 0.3,
-                    ),
-                    amount: 0.4,
-                  );
-                },
-              );
+        SelectChips(
+          items: Provider.of<AllWallets>(context).list,
+          onLongPress: (TransactionWallet? item) {
+            pushRoute(
+              context,
+              AddWalletPage(
+                wallet: item,
+                routesToPopAfterDelete: RoutesToPopAfterDelete.PreventDelete,
+              ),
+            );
+          },
+          getLabel: (TransactionWallet item) {
+            return getWalletStringName(Provider.of<AllWallets>(context), item);
+          },
+          onSelected: (TransactionWallet item) {
+            if (selectedFilters.walletPks.contains(item.walletPk)) {
+              selectedFilters.walletPks.remove(item.walletPk);
             } else {
-              return SizedBox.shrink();
+              selectedFilters.walletPks.add(item.walletPk);
             }
+            setSearchFilters();
+          },
+          getSelected: (TransactionWallet item) {
+            return selectedFilters.walletPks.contains(item.walletPk);
+          },
+          getCustomBorderColor: (TransactionWallet item) {
+            return dynamicPastel(
+              context,
+              lightenPastel(
+                HexColor(
+                  item.colour,
+                  defaultColor: Theme.of(context).colorScheme.primary,
+                ),
+                amount: 0.3,
+              ),
+              amount: 0.4,
+            );
           },
         ),
+
         StreamBuilder<List<Budget>>(
           stream: database.watchAllAddableBudgets(),
           builder: (context, snapshot) {
@@ -1433,7 +1422,9 @@ class AppliedFilterChips extends StatelessWidget {
     // Wallets
     for (String walletPk in searchFilters.walletPks) {
       out.add(AppliedFilterChip(
-        label: allWallets.indexedByPk[walletPk]?.name ?? "",
+        label: getWalletStringName(
+            Provider.of<AllWallets>(context, listen: false),
+            allWallets.indexedByPk[walletPk]),
         customBorderColor: HexColor(
           allWallets.indexedByPk[walletPk]?.colour,
           defaultColor: Theme.of(context).colorScheme.primary,

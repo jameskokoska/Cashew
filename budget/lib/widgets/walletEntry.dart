@@ -376,7 +376,9 @@ class AmountAccount extends StatelessWidget {
                 finalNumber: finalTotal,
                 currencyKey: walletWithDetails.wallet.currency,
                 decimals: walletWithDetails.wallet.decimals,
-                addCurrencyName: true,
+                addCurrencyName:
+                    Provider.of<AllWallets>(context).allContainSameCurrency() ==
+                        false,
               ),
               textColor: textColor,
               fontSize: fontSize,
