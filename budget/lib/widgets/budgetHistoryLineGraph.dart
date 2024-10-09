@@ -551,8 +551,7 @@ class _BudgetHistoryLineGraphState extends State<_BudgetHistoryLineGraph> {
                         TextSpan(
                           text: startAndEndDateString,
                           style: TextStyle(
-                            color: getColor(context, "black")
-                                .withOpacity(lineBarsSpot.length > 1 ? 0.7 : 1),
+                            color: getColor(context, "black").withOpacity(0.8),
                             fontWeight: FontWeight.bold,
                             fontSize: 12,
                             fontFamilyFallback: ['Inter'],
@@ -565,9 +564,7 @@ class _BudgetHistoryLineGraphState extends State<_BudgetHistoryLineGraph> {
                         style: TextStyle(
                           color: lineBarSpot.bar.color ==
                                   lightenPastel(widget.color, amount: 0.3)
-                              ? widget.extraCategorySpots.keys.length <= 0
-                                  ? Colors.white.withOpacity(0.9)
-                                  : getColor(context, "black").withOpacity(0.7)
+                              ? getColor(context, "black").withOpacity(0.8)
                               : lineBarSpot.bar.color,
                           fontWeight: FontWeight.bold,
                           fontSize: 12,

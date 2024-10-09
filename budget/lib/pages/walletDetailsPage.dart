@@ -2526,17 +2526,14 @@ class _AllSpendingPastSpendingGraphState
       if (widget.appStateSettingsNetAllSpendingTotal) {
         List<FlSpot> spots = [];
         double total = totalNetBefore;
-        for (int i = expenseData.length - 1; i >= 0; i--) {
-          double expenseSpending = (nullIfIndexOutOfRange(expenseData, i) ??
-                  TotalWithCount(total: 0, count: 0))
-              .total;
-          double incomeSpending = (nullIfIndexOutOfRange(incomeData, i) ??
+        for (int i = netData.length - 1; i >= 0; i--) {
+          double netSpending = (nullIfIndexOutOfRange(netData, i) ??
                   TotalWithCount(total: 0, count: 0))
               .total;
 
-          total = total + expenseSpending.abs() * -1 + incomeSpending.abs();
+          total = total + netSpending;
           spots.add(FlSpot(
-            expenseData.length - 1 - i.toDouble(),
+            netData.length - 1 - i.toDouble(),
             (total).abs() == 0 ? minimumYValue : total,
           ));
         }
