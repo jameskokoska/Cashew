@@ -143,10 +143,10 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
     _focusAttachment = _focusNode.attach(context, onKeyEvent: (node, event) {
       if (event.logicalKey.keyLabel == "Go Back" ||
           event.logicalKey == LogicalKeyboardKey.escape) {
-        nextNavigation();
+        if (widget.popNavigationWhenDone) nextNavigation();
       } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.arrowRight) {
-        nextOnBoardPage(4);
+        nextOnBoardPage();
       } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.arrowLeft) {
         previousOnBoardPage();
@@ -169,13 +169,14 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
     super.dispose();
   }
 
-  void nextOnBoardPage(int numPages) {
-    controller.nextPage(
-      duration: Duration(milliseconds: 1100),
-      curve: ElasticOutCurve(1.3),
-    );
+  void nextOnBoardPage() {
     if ((controller.page?.round().toInt() ?? 0) + 1 == numPages) {
       nextNavigation();
+    } else {
+      controller.nextPage(
+        duration: Duration(milliseconds: 1100),
+        curve: ElasticOutCurve(1.3),
+      );
     }
   }
 
@@ -186,6 +187,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
     );
   }
 
+  int numPages = 3;
   @override
   Widget build(BuildContext context) {
     _focusAttachment.reparent();
@@ -570,6 +572,9 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
       ),
     ];
 
+    if (numPages != children.length)
+      print("Error: onboarding pages mismatch in length!");
+
     return Stack(
       children: [
         PageView(
@@ -652,11 +657,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                                   : 1,
                           duration: Duration(milliseconds: 200),
                           child: ButtonIcon(
-                            onTap: () {
-                              if (currentIndex < children.length - 1 ||
-                                  getPlatform() == PlatformOS.isIOS)
-                                nextOnBoardPage(children.length);
-                            },
+                            onTap: () => nextOnBoardPage(),
                             icon: getPlatform() == PlatformOS.isIOS
                                 ? appStateSettings["outlinedIcons"]
                                     ? Icons.chevron_right_outlined
