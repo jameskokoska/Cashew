@@ -38,13 +38,14 @@ Future<bool> createDefaultCategories() async {
 }
 
 TransactionWallet defaultWallet() {
+  final now = DateTime.now();
   return TransactionWallet(
     walletPk: "0",
     name: "default-account-name".tr(),
-    dateCreated: DateTime.now(),
+    dateCreated: now,
+    dateTimeModified: now,
     order: 0,
     currency: getDevicesDefaultCurrencyCode(),
-    dateTimeModified: null,
     decimals: 2,
     homePageWidgetDisplay: defaultWalletHomePageWidgetDisplay,
   );

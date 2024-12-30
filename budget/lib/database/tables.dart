@@ -5432,6 +5432,7 @@ class FinanceDatabase extends _$FinanceDatabase {
         for (final item in list) {
           categoryTotals[item.category.categoryPk] = CategoryWithTotal(
             category: item.category,
+            categoryBudgetLimit: item.categoryBudgetLimit,
             total: item.total +
                 (categoryTotals[item.category.categoryPk]?.total ?? 0),
             transactionCount: item.transactionCount +
@@ -7353,27 +7354,23 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Future<Transaction> getTransactionFromPk(String transactionPk) {
-    return (select(transactions)
-          ..where((t) => t.transactionPk.equals(transactionPk)))
+    return (select(transactions)..where((t) => t.transactionPk.equals(transactionPk)))
         .getSingle();
   }
 
   Future<Transaction?> tryGetTransactionFromPk(String transactionPk) {
-    return (select(transactions)
-          ..where((t) => t.transactionPk.equals(transactionPk)))
+    return (select(transactions)..where((t) => t.transactionPk.equals(transactionPk)))
         .getSingleOrNull();
   }
 
   Future<List<Transaction>> getTransactionsFromPk(List<String> transactionPks) {
-    return (select(transactions)
-          ..where((t) => t.transactionPk.isIn(transactionPks)))
+    return (select(transactions)..where((t) => t.transactionPk.isIn(transactionPks)))
         .get();
   }
 
   Future<List<Transaction>> getTransactionsSortedFromPk(
       List<String> transactionPks) {
-    return (select(transactions)
-          ..where((t) => t.transactionPk.isIn(transactionPks))
+    return (select(transactions)..where((t) => t.transactionPk.isIn(transactionPks))
           ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)]))
         .get();
   }
@@ -7601,6 +7598,27 @@ class FinanceDatabase extends _$FinanceDatabase {
     }
     await updateBatchTransactionsOnly(transactionsToUpdate);
     return transactionsToUpdate.length;
+  }
+
+  Future<void> mergeWalletData(TransactionWallet incoming) async {
+    final existing = await getWallet(incoming.walletPk);
+    if (existing == null || 
+        (incoming.dateTimeModified != null && 
+         (existing.dateTimeModified == null || 
+          incoming.dateTimeModified.isAfter(existing.dateTimeModified)))) {
+      await createOrUpdateWallet(incoming);
+    }
+  }
+
+  Future<void> syncWallets(List<TransactionWallet> remoteWallets) async {
+    final localWallets = await getAllWallets();
+    final deletedWallets = await getDeletedWallets();
+    
+    for (var remote in remoteWallets) {
+      if (!deletedWallets.contains(remote.walletPk)) {
+        await mergeWalletData(remote);
+      }
+    }
   }
 }
 
