@@ -55,3 +55,6 @@ keystore.jks
 
 /.firebase
 .firebase/
+
+# FVM Version Cache
+.fvm/
