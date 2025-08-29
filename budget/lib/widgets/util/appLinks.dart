@@ -278,10 +278,8 @@ Future executeAppLink(BuildContext? context, Uri uri,
     {Function(dynamic)? onDebug}) async {
   if (appStateSettings["hasOnboarded"] != true) return;
   if (!appLinksThrottler.canProceed()) return;
-
   String endPoint = getApiEndpoint(uri);
   Map<String, String> params = parseAppLink(uri);
-
   // Note these URIs must be unique from the launch from widget URIs!
   switch (endPoint) {
     case "addTransaction":
@@ -541,10 +539,10 @@ String getApiEndpoint(Uri uri) {
 }
 
 Map<String, String> parseAppLink(Uri uri) {
+  
   Map<String, String> params = {};
-
   uri.queryParameters.forEach((key, value) {
-    params[key] = Uri.decodeComponent(value);
+    params[key] = value;
   });
 
   return params;
