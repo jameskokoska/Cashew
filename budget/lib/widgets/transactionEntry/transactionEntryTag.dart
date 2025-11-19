@@ -239,11 +239,47 @@ class ObjectivePercentTag extends StatelessWidget {
   final bool showObjectivePercentageCheck;
   @override
   Widget build(BuildContext context) {
+    // Create a TransactionCategory from the objective for icon display
+    TransactionCategory objectiveCategory = TransactionCategory(
+      categoryPk: "-1",
+      name: "",
+      dateCreated: DateTime.now(),
+      dateTimeModified: null,
+      order: 0,
+      income: false,
+      iconName: objective.iconName,
+      colour: objective.colour,
+      emojiIconName: objective.emojiIconName,
+    );
+
+    // Build the icon widget (similar to SubCategoryTag)
+    Widget? iconWidget = objective.emojiIconName != null
+        ? null
+        : Padding(
+            padding: const EdgeInsetsDirectional.only(end: 3),
+            child: CategoryIcon(
+              categoryPk: "-1",
+              category: objectiveCategory,
+              size: 14,
+              sizePadding: 1,
+              noBackground: true,
+              canEditByLongPress: false,
+              margin: EdgeInsetsDirectional.zero,
+            ),
+          );
+
+    // Build the name with emoji prefix if needed
+    String nameWithEmoji = (objective.emojiIconName != null
+            ? ((objective.emojiIconName ?? "") + " ")
+            : "") +
+        objective.name;
+
     if (getIsDifferenceOnlyLoan(objective)) {
       return TransactionTag(
         color: HexColor(objective.colour,
             defaultColor: Theme.of(context).colorScheme.primary),
-        name: objective.name,
+        name: nameWithEmoji,
+        leading: iconWidget,
       );
     }
     return WatchTotalAndAmountOfObjective(
@@ -252,11 +288,12 @@ class ObjectivePercentTag extends StatelessWidget {
         return TransactionTag(
           color: HexColor(objective.colour,
               defaultColor: Theme.of(context).colorScheme.primary),
-          name: objective.name +
+          name: nameWithEmoji +
               ": " +
               convertToPercent(percentageTowardsGoal * 100,
                   numberDecimals: 0, useLessThanZero: true),
           progress: percentageTowardsGoal,
+          leading: iconWidget,
         );
       },
     );

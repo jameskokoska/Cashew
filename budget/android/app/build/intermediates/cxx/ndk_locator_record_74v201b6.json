@@ -1,0 +1,11 @@
+{
+  "ndk": "/home/shyamsundar/Android/Sdk/ndk/27.0.12077973",
+  "revision": {
+    "mMajor": 27,
+    "mMinor": 0,
+    "mMicro": 12077973,
+    "mPreview": 0,
+    "mPrecision": "MICRO",
+    "mPreviewSeparator": " "
+  }
+}
