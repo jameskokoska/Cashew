@@ -283,7 +283,7 @@ class _TransactionEntriesState extends State<TransactionEntries> {
           DateTime? currentDate;
           int totalPastUniqueDays = 0;
 
-          for (TransactionWithCategory transactionWithCategory in data ?? []) {
+          for (final TransactionWithCategory transactionWithCategory in data) {
             if (widget.pastDaysLimitToShow != null &&
                 totalPastUniqueDays > widget.pastDaysLimitToShow!) break;
 

@@ -16,7 +16,13 @@ import 'package:budget/colors.dart';
 import 'package:budget/widgets/pullDownToRefreshSync.dart';
 import 'package:flutter/services.dart';
 
-ValueNotifier<bool> isSwipingToDismissPageDown = ValueNotifier<bool>(false);
+class SwipeDismissNotifier extends ValueNotifier<bool> {
+  SwipeDismissNotifier() : super(false);
+
+  void refresh() => notifyListeners();
+}
+
+SwipeDismissNotifier isSwipingToDismissPageDown = SwipeDismissNotifier();
 ValueNotifier<bool> callRefreshToPages = ValueNotifier<bool>(false);
 
 refreshPageFrameworks() async {
@@ -334,7 +340,7 @@ class PageFrameworkState extends State<PageFramework>
 
         if (totalDragX > 20) {
           isSwipingToDismissPageDown.value = true;
-          isSwipingToDismissPageDown.notifyListeners();
+          isSwipingToDismissPageDown.refresh();
         }
       }
       if (swipeDownToDismiss && widget.dragDownToDismissEnabled) {
@@ -350,7 +356,7 @@ class PageFrameworkState extends State<PageFramework>
 
         if (totalDragY > 20) {
           isSwipingToDismissPageDown.value = true;
-          isSwipingToDismissPageDown.notifyListeners();
+          isSwipingToDismissPageDown.refresh();
         }
       }
       _animationControllerDragY.value =
@@ -384,7 +390,7 @@ class PageFrameworkState extends State<PageFramework>
       isBackSideSwiping = false;
       _animationControllerDragY.reverse();
       isSwipingToDismissPageDown.value = false;
-      isSwipingToDismissPageDown.notifyListeners();
+      isSwipingToDismissPageDown.refresh();
     }
   }
 

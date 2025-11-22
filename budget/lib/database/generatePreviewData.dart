@@ -75,6 +75,8 @@ Future deletePreviewData({bool resetOnboard = false}) async {
 }
 
 Future generatePreviewData() async {
+  print("Preview data generation disabled.");
+  return;
   updateSettings("previewDemo", true, updateGlobalState: false);
   loadingIndeterminateKey.currentState?.setVisibility(true);
   await createDefaultCategories();

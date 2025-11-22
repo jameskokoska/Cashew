@@ -59,6 +59,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:app_settings/app_settings.dart';
 import 'package:budget/widgets/outlinedButtonStacked.dart';
+import 'package:budget/services/finvu_service.dart';
 
 //To get SHA1 Key run
 // ./gradlew signingReport
@@ -700,6 +701,8 @@ class MoreOptionsPagePreferences extends StatelessWidget {
         IncreaseTextContrastSetting(),
         SettingsHeader(title: "transactions".tr()),
         TransactionsSettings(),
+        SettingsHeader(title: "Finvu Integration"),
+        FinvuSettings(),
         SettingsHeader(title: "accounts".tr()),
         WalletsSettings(),
         PrimaryCurrencySetting(),
@@ -1818,4 +1821,26 @@ List<String> getWeekdayNames() {
   }
 
   return localizedWeekdayNames;
+}
+
+class FinvuSettings extends StatelessWidget {
+  const FinvuSettings({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SettingsContainer(
+          title: "Connect Finvu Account",
+          description: "Link your bank accounts for automatic transaction fetching.",
+          icon: Icons.account_balance,
+          onTap: () async {
+            final finvuService = FinvuService();
+            await finvuService.initialize();
+            await finvuService.connect();
+          },
+        ),
+      ],
+    );
+  }
 }

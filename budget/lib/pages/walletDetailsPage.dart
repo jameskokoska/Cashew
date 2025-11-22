@@ -1214,7 +1214,7 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
       onWillPop: () async {
         if ((globalSelectedID.value[listID] ?? []).length > 0) {
           globalSelectedID.value[listID] = [];
-          globalSelectedID.notifyListeners();
+          globalSelectedID.refresh();
           return false;
         } else {
           return true;

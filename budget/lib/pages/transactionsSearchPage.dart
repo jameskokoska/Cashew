@@ -161,7 +161,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
       onWillPop: () async {
         if ((globalSelectedID.value["TransactionsSearch"] ?? []).length > 0) {
           globalSelectedID.value["TransactionsSearch"] = [];
-          globalSelectedID.notifyListeners();
+          globalSelectedID.refresh();
           return false;
         } else {
           return true;

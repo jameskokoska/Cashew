@@ -234,7 +234,7 @@ class HandleWillPopScope extends StatelessWidget {
           if (globalSelectedID.value[key]?.isNotEmpty == true) notEmpty++;
           globalSelectedID.value[key] = [];
         }
-        globalSelectedID.notifyListeners();
+        globalSelectedID.refresh();
 
         // Allow the back button to exit the app when on home
         if (notEmpty <= 0) {

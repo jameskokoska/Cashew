@@ -313,7 +313,7 @@ class CreditDebtTransactionsState extends State<CreditDebtTransactions>
       onWillPop: () async {
         if ((globalSelectedID.value[pageId] ?? []).length > 0) {
           globalSelectedID.value[pageId] = [];
-          globalSelectedID.notifyListeners();
+          globalSelectedID.refresh();
           return false;
         } else {
           return true;

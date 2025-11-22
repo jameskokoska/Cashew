@@ -9,6 +9,9 @@ import 'package:budget/widgets/util/infiniteRotationAnimation.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/tagIcon.dart';
+import 'package:budget/widgets/tagSelectionModal.dart';
 import 'package:provider/provider.dart';
 
 class TransactionEntryTag extends StatelessWidget {
@@ -172,6 +175,46 @@ class TransactionEntryTag extends StatelessWidget {
             TransactionTag(
               color: Colors.grey,
               name: "excluded".tr(),
+            ),
+            // 6 - Custom Tags
+            StreamBuilder<List<TransactionTagData>>(
+              stream: database.getTransactionTags(transaction.transactionPk),
+              builder: (context, snapshot) {
+                List<Widget> tagWidgets = [];
+                if (snapshot.hasData) {
+                  tagWidgets = snapshot.data!.map((tagData) {
+                    return TransactionTag(
+                      color: HexColor(tagData.tag.color),
+                      name: tagData.tag.name,
+                      leading: Padding(
+                        padding: const EdgeInsetsDirectional.only(end: 4),
+                        child: TagIcon(tag: tagData.tag, size: 14, color: HexColor(tagData.tag.color)),
+                      ),
+                    );
+                  }).toList();
+                }
+                
+                return GestureDetector(
+                  onTap: () {
+                    openBottomSheet(
+                      context,
+                      TagSelectionModal(transactionPk: transaction.transactionPk),
+                    );
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ...tagWidgets,
+                      if (tagWidgets.isEmpty)
+                        TransactionTag(
+                          color: Theme.of(context).colorScheme.secondary,
+                          name: "Add Tag",
+                          leading: Icon(Icons.add, size: 14, color: Theme.of(context).colorScheme.onSecondaryContainer),
+                        ),
+                    ],
+                  ),
+                );
+              },
             ),
           ];
           // work in preogress...

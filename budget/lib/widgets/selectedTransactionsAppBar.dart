@@ -123,7 +123,7 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                         ),
                         onPressed: () {
                           globalSelectedID.value[pageID] = [];
-                          globalSelectedID.notifyListeners();
+                          globalSelectedID.refresh();
                         },
                       ),
                       Expanded(
@@ -303,7 +303,7 @@ class SelectedTransactionsAppBarMenu extends StatelessWidget {
       }
     }
     globalSelectedID.value[pageID] = [];
-    globalSelectedID.notifyListeners();
+    globalSelectedID.refresh();
   }
 
   @override
@@ -349,7 +349,7 @@ class SelectedTransactionsAppBarMenu extends StatelessWidget {
                         );
                         if (result == DeletePopupAction.Delete) {
                           globalSelectedID.value[pageID] = [];
-                          globalSelectedID.notifyListeners();
+                          globalSelectedID.refresh();
                         }
                       },
                     ),
@@ -381,7 +381,7 @@ class SelectedTransactionsAppBarMenu extends StatelessWidget {
                             ),
                           );
                           globalSelectedID.value[pageID] = [];
-                          globalSelectedID.notifyListeners();
+                          globalSelectedID.refresh();
                         },
                       ),
                     if (globalTransactionsListedOnPageID[pageID] != null)
@@ -412,7 +412,7 @@ class SelectedTransactionsAppBarMenu extends StatelessWidget {
                           }
                           globalSelectedID.value[pageID] =
                               globalTransactionsListedOnPageID[pageID] ?? [];
-                          globalSelectedID.notifyListeners();
+                          globalSelectedID.refresh();
                         },
                       ),
                     if (enableDuplicate)
@@ -474,7 +474,7 @@ class SelectedTransactionsAppBarMenu extends StatelessWidget {
                                 ),
                               );
                               globalSelectedID.value[pageID] = [];
-                              globalSelectedID.notifyListeners();
+                              globalSelectedID.refresh();
                             },
                           ),
                           EditSelectedTransactionsContainer(
@@ -557,7 +557,7 @@ class SelectedTransactionsAppBarMenu extends StatelessWidget {
                               );
 
                               globalSelectedID.value[pageID] = [];
-                              globalSelectedID.notifyListeners();
+                              globalSelectedID.refresh();
                             },
                           ),
                           EditSelectedTransactionsContainer(
@@ -608,7 +608,7 @@ class SelectedTransactionsAppBarMenu extends StatelessWidget {
                                 ),
                               );
                               globalSelectedID.value[pageID] = [];
-                              globalSelectedID.notifyListeners();
+                              globalSelectedID.refresh();
                             },
                           ),
                           if (enableWalletSelection)
@@ -652,7 +652,7 @@ class SelectedTransactionsAppBarMenu extends StatelessWidget {
                                   ),
                                 );
                                 globalSelectedID.value[pageID] = [];
-                                globalSelectedID.notifyListeners();
+                                globalSelectedID.refresh();
                               },
                             ),
                           if (enableAddableBudgetSelection)
@@ -708,7 +708,7 @@ class SelectedTransactionsAppBarMenu extends StatelessWidget {
                                 );
 
                                 globalSelectedID.value[pageID] = [];
-                                globalSelectedID.notifyListeners();
+                                globalSelectedID.refresh();
                               },
                             ),
                           if (enableObjectiveSelection)
@@ -760,7 +760,7 @@ class SelectedTransactionsAppBarMenu extends StatelessWidget {
                                 );
 
                                 globalSelectedID.value[pageID] = [];
-                                globalSelectedID.notifyListeners();
+                                globalSelectedID.refresh();
                               },
                             ),
                           if (enableObjectiveLoansSection)
@@ -810,7 +810,7 @@ class SelectedTransactionsAppBarMenu extends StatelessWidget {
                                 );
 
                                 globalSelectedID.value[pageID] = [];
-                                globalSelectedID.notifyListeners();
+                                globalSelectedID.refresh();
                               },
                             ),
                         ];

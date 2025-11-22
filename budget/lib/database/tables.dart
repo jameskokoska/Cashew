@@ -26,7 +26,7 @@ import 'package:budget/pages/activityPage.dart';
 import 'package:flutter/material.dart' show RangeValues;
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 46;
+int schemaVersionGlobal = 47;
 
 // To update and migrate the database, check the README
 
@@ -125,6 +125,7 @@ enum MethodAdded {
   csv,
   preview,
   appLink,
+  finvu,
 }
 
 enum SharedStatus { waiting, shared, error }
@@ -407,6 +408,48 @@ class AssociatedTitles extends Table {
   Set<Column> get primaryKey => {associatedTitlePk};
 }
 
+@DataClassName('Tag')
+class Tags extends Table {
+  TextColumn get tagPk => text().clientDefault(() => uuid.v4())();
+  TextColumn get name => text().withLength(max: NAME_LIMIT)();
+  DateTimeColumn get dateCreated =>
+      dateTime().clientDefault(() => new DateTime.now())();
+  DateTimeColumn get dateTimeModified =>
+      dateTime().withDefault(Constant(DateTime.now())).nullable()();
+  TextColumn get iconName => text().nullable()();
+  TextColumn get color => text().withLength(max: COLOUR_LIMIT).nullable()();
+
+  @override
+  Set<Column> get primaryKey => {tagPk};
+}
+
+@DataClassName('TransactionTag')
+class TransactionTags extends Table {
+  TextColumn get transactionTagPk => text().clientDefault(() => uuid.v4())();
+  TextColumn get transactionFk => text().references(Transactions, #transactionPk)();
+  TextColumn get tagFk => text().references(Tags, #tagPk)();
+  DateTimeColumn get dateCreated =>
+      dateTime().clientDefault(() => new DateTime.now())();
+
+  @override
+  Set<Column> get primaryKey => {transactionTagPk};
+}
+
+@DataClassName('TransactionAssociatedTag')
+class TransactionAssociatedTags extends Table {
+  TextColumn get transactionAssociatedTagPk => text().clientDefault(() => uuid.v4())();
+  TextColumn get tagFk => text().references(Tags, #tagPk)();
+  TextColumn get title => text().withLength(max: NAME_LIMIT)(); // Keyword to match
+  DateTimeColumn get dateCreated =>
+      dateTime().clientDefault(() => new DateTime.now())();
+  DateTimeColumn get dateTimeModified =>
+      dateTime().withDefault(Constant(DateTime.now())).nullable()();
+  BoolColumn get isExactMatch => boolean().withDefault(const Constant(false))();
+
+  @override
+  Set<Column> get primaryKey => {transactionAssociatedTagPk};
+}
+
 // @DataClassName('TransactionLabel')
 // class Labels extends Table {
 //   IntColumn get label_pk => integer().autoIncrement()();
@@ -591,6 +634,12 @@ class WalletWithDetails {
   });
 }
 
+class TransactionTagData {
+  final TransactionTag transactionTag;
+  final Tag tag;
+  TransactionTagData({required this.transactionTag, required this.tag});
+}
+
 class AllWallets {
   final List<TransactionWallet> list;
   final Map<String, TransactionWallet> indexedByPk;
@@ -687,7 +736,11 @@ class CategoryWithTotal {
   AppSettings,
   ScannerTemplates,
   DeleteLogs,
+  DeleteLogs,
   Objectives,
+  Tags,
+  TransactionTags,
+  TransactionAssociatedTags,
 ])
 class FinanceDatabase extends _$FinanceDatabase {
   // FinanceDatabase() : super(_openConnection());
@@ -1164,6 +1217,24 @@ class FinanceDatabase extends _$FinanceDatabase {
                         e.toString());
               }
             },
+            from46To47: (m, schema) async {
+              print("46 to 47");
+              try {
+                await m.createTable(schema.tags);
+              } catch (e) {
+                print("Migration Error: Error creating table Tags " + e.toString());
+              }
+              try {
+                await m.createTable(schema.transactionTags);
+              } catch (e) {
+                print("Migration Error: Error creating table TransactionTags " + e.toString());
+              }
+              try {
+                await m.createTable(schema.transactionAssociatedTags);
+              } catch (e) {
+                print("Migration Error: Error creating table TransactionAssociatedTags " + e.toString());
+              }
+            },
           ),
         );
       },
@@ -1349,6 +1420,50 @@ class FinanceDatabase extends _$FinanceDatabase {
     final SimpleSelectStatement<$TransactionsTable, Transaction> query =
         select(transactions)..where((tbl) => tbl.dateCreated.equals(date));
     return (query.watch(), query.get());
+  }
+
+  Stream<List<TransactionTagData>> getTransactionTags(String transactionPk) {
+    final query = select(transactionTags).join([
+      innerJoin(tags, tags.tagPk.equalsExp(transactionTags.tagFk)),
+    ])
+      ..where(transactionTags.transactionFk.equals(transactionPk));
+
+    return query.watch().map((rows) {
+      return rows.map((row) {
+        return TransactionTagData(
+          transactionTag: row.readTable(transactionTags),
+          tag: row.readTable(tags),
+        );
+      }).toList();
+    });
+  }
+
+  Future<int> createOrUpdateTag(Tag entry) {
+    return into(tags).insertOnConflictUpdate(entry);
+  }
+
+  Future<List<Tag>> getAllTags() {
+    return select(tags).get();
+  }
+
+  Stream<List<Tag>> watchAllTags() {
+    return select(tags).watch();
+  }
+
+  Future<int> createOrUpdateTransactionTag(TransactionTag entry) {
+    return into(transactionTags).insertOnConflictUpdate(entry);
+  }
+
+  Future<int> deleteTransactionTag(String transactionTagPk) {
+    return (delete(transactionTags)..where((t) => t.transactionTagPk.equals(transactionTagPk))).go();
+  }
+
+  Future<List<TransactionAssociatedTag>> getAllTransactionAssociatedTags() {
+    return select(transactionAssociatedTags).get();
+  }
+
+  Future<int> createOrUpdateTransactionAssociatedTag(TransactionAssociatedTag entry) {
+    return into(transactionAssociatedTags).insertOnConflictUpdate(entry);
   }
 
   // get the net total of the list of transactions that would come before a start date (i.e. total net at that point in time)

@@ -3,7 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 // Prevent scrolling of the parent scroll when scrolling through the infinite list
-ValueNotifier<bool> cancelParentScroll = ValueNotifier<bool>(false);
+class CancelParentScrollNotifier extends ValueNotifier<bool> {
+  CancelParentScrollNotifier() : super(false);
+
+  void refresh() => notifyListeners();
+}
+
+CancelParentScrollNotifier cancelParentScroll =
+    CancelParentScrollNotifier();
 
 class MultiDirectionalInfiniteScroll extends StatefulWidget {
   const MultiDirectionalInfiniteScroll({
@@ -90,7 +97,7 @@ class MultiDirectionalInfiniteScrollState
     if (_scrollController.position.minScrollExtent == clampedPosition ||
         _scrollController.position.maxScrollExtent == clampedPosition) {
       // Update the scroll position for the possibility of a new item being added
-      _scrollController.notifyListeners();
+      _scrollListener();
       Future.delayed(Duration(milliseconds: 1), () {
         clampedPosition = positionToScroll.clamp(
             _scrollController.position.minScrollExtent,
@@ -159,11 +166,11 @@ class MultiDirectionalInfiniteScrollState
     return MouseRegion(
       onEnter: (_) {
         cancelParentScroll.value = true;
-        cancelParentScroll.notifyListeners();
+        cancelParentScroll.refresh();
       },
       onExit: (_) {
         cancelParentScroll.value = false;
-        cancelParentScroll.notifyListeners();
+        cancelParentScroll.refresh();
       },
       child: Listener(
         onPointerSignal: (event) {

@@ -19,6 +19,12 @@ Future<bool> initializeDefaultDatabase() async {
       customDateTimeModified: DateTime(0),
     );
   }
+
+  // Initialize default tags
+  if ((await database.getAllTags()).length <= 0) {
+    await createDefaultTags();
+  }
+
   return true;
 }
 
@@ -32,6 +38,27 @@ Future<bool> createDefaultCategories() async {
           e.toString() + " default category does not already exist, creating");
       await database.createOrUpdateCategory(category,
           customDateTimeModified: DateTime(0));
+    }
+  }
+  return true;
+}
+
+Future<bool> createDefaultTags() async {
+  print("Creating default tags");
+  List<Tag> defaultTags = [
+    Tag(tagPk: "tag_groceries", name: "Groceries", iconName: "shopping_cart", color: "0xFF4CAF50", dateCreated: DateTime.now()),
+    Tag(tagPk: "tag_travel", name: "Travel", iconName: "flight", color: "0xFF2196F3", dateCreated: DateTime.now()),
+    Tag(tagPk: "tag_bills", name: "Bills", iconName: "receipt", color: "0xFFF44336", dateCreated: DateTime.now()),
+    Tag(tagPk: "tag_entertainment", name: "Entertainment", iconName: "movie", color: "0xFF9C27B0", dateCreated: DateTime.now()),
+    Tag(tagPk: "tag_dining", name: "Dining", iconName: "restaurant", color: "0xFFFF9800", dateCreated: DateTime.now()),
+    Tag(tagPk: "tag_health", name: "Health", iconName: "local_hospital", color: "0xFFE91E63", dateCreated: DateTime.now()),
+  ];
+
+  for (Tag tag in defaultTags) {
+    try {
+      await database.createOrUpdateTag(tag);
+    } catch (e) {
+      print("Error creating default tag: " + e.toString());
     }
   }
   return true;

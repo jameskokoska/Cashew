@@ -54,14 +54,14 @@ class EmptyPieChart extends StatelessWidget {
 
 class PieChartWrapper extends StatelessWidget {
   const PieChartWrapper({
-    Key? key,
+    super.key,
     required this.data,
     required this.totalSpent,
     required this.setSelectedCategory,
     required this.pieChartDisplayStateKey,
     this.middleColor,
     this.disableLarge = false,
-  }) : super(key: key);
+  });
   final List<CategoryWithTotal> data;
   final double totalSpent;
   final Function(String categoryPk, TransactionCategory? category)
@@ -101,7 +101,7 @@ class PieChartWrapper extends StatelessWidget {
                       color: Theme.of(context)
                           .colorScheme
                           .secondaryContainer
-                          .withOpacity(0.3),
+                          .withValues(alpha: 0.3),
                     ),
                   )
                 : PieChartDisplay(
@@ -122,8 +122,8 @@ class PieChartWrapper extends StatelessWidget {
                     ? 105
                     : 130,
                 decoration: BoxDecoration(
-                  color: middleColor?.withOpacity(0.2) ??
-                      getColor(context, "white").withOpacity(0.2),
+                  color: middleColor?.withValues(alpha: 0.2) ??
+                      getColor(context, "white").withValues(alpha: 0.2),
                   shape: BoxShape.circle,
                 ),
               ),
@@ -139,9 +139,10 @@ class PieChartWrapper extends StatelessWidget {
                     ? 80
                     : 110,
                 decoration: BoxDecoration(
-                    color:
-                        middleColor ?? Theme.of(context).colorScheme.background,
-                    shape: BoxShape.circle),
+                  color:
+                      middleColor ?? Theme.of(context).colorScheme.surface,
+                  shape: BoxShape.circle,
+                ),
               ),
             ),
           ),
@@ -154,13 +155,13 @@ class PieChartWrapper extends StatelessWidget {
 GlobalKey<PieChartDisplayState> pieChartDisplayStatePastBudgetKey = GlobalKey();
 
 class PieChartDisplay extends StatefulWidget {
-  PieChartDisplay({
-    Key? key,
+  const PieChartDisplay({
+    super.key,
     required this.data,
     required this.totalSpent,
     required this.setSelectedCategory,
     this.disableLarge = false,
-  }) : super(key: key);
+  });
   final List<CategoryWithTotal> data;
   final double totalSpent;
   final Function(String categoryPk, TransactionCategory? category)
@@ -177,12 +178,12 @@ class PieChartDisplayState extends State<PieChartDisplay> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 0), () {
+    Future.delayed(Duration.zero, () {
       setState(() {
         scaleIn = true;
       });
     });
-    Future.delayed(Duration(milliseconds: 500), () async {
+    Future.delayed(const Duration(milliseconds: 500), () async {
       int numCategories = (await database.getAllCategories()).length;
       for (int i = 1; i <= numCategories + 25; i++) {
         await Future.delayed(const Duration(milliseconds: 70));
@@ -220,8 +221,8 @@ class PieChartDisplayState extends State<PieChartDisplay> {
   @override
   Widget build(BuildContext context) {
     return PinWheelReveal(
-      delay: Duration(milliseconds: 0),
-      duration: Duration(milliseconds: 850),
+      delay: Duration.zero,
+      duration: const Duration(milliseconds: 850),
       child: PieChart(
         PieChartData(
           startDegreeOffset: -45,
@@ -264,8 +265,8 @@ class PieChartDisplayState extends State<PieChartDisplay> {
           centerSpaceRadius: 0,
           sections: showingSections(),
         ),
-        swapAnimationDuration: Duration(milliseconds: 1300),
-        swapAnimationCurve: ElasticOutCurve(0.6),
+        swapAnimationDuration: const Duration(milliseconds: 1300),
+        swapAnimationCurve: const ElasticOutCurve(0.6),
       ),
     );
   }
@@ -284,10 +285,12 @@ class PieChartDisplayState extends State<PieChartDisplay> {
                   : 136.0;
       final double widgetScale = isTouched ? 1.3 : 1.0;
       bool isTouchingSameColorSection = false;
-      if (nullIfIndexOutOfRange(widget.data, i - 1)?.category?.colour ==
-              widget.data[i].category.colour ||
-          nullIfIndexOutOfRange(widget.data, i + 1)?.category?.colour ==
-              widget.data[i].category.colour) {
+      final previousColor =
+          nullIfIndexOutOfRange(widget.data, i - 1)?.category.colour;
+      final nextColor =
+          nullIfIndexOutOfRange(widget.data, i + 1)?.category.colour;
+      if (previousColor == widget.data[i].category.colour ||
+          nextColor == widget.data[i].category.colour) {
         isTouchingSameColorSection = true;
       }
       final Color color = dynamicPastel(
@@ -359,14 +362,16 @@ class _Badge extends StatelessWidget {
   Widget build(BuildContext context) {
     bool showIcon = percent.abs() < 5;
     return AnimatedScale(
-      curve: showIcon ? Curves.easeInOutCubicEmphasized : ElasticOutCurve(0.6),
-      duration:
-          showIcon ? Duration(milliseconds: 700) : Duration(milliseconds: 1300),
+      curve:
+          showIcon ? Curves.easeInOutCubicEmphasized : const ElasticOutCurve(0.6),
+      duration: showIcon
+          ? const Duration(milliseconds: 700)
+          : const Duration(milliseconds: 1300),
       scale: showIcon && isTouched == false
           ? 0
           : (showLabels || isTouched ? (showIcon ? 1 : scale) : 0),
       child: AnimatedSwitcher(
-        duration: Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 500),
         child: Container(
           key: ValueKey(iconName),
           height: 45,
@@ -381,8 +386,8 @@ class _Badge extends StatelessWidget {
             alignment: AlignmentDirectional.center,
             children: [
               AnimatedOpacity(
-                duration: Duration(milliseconds: 200),
-                opacity: this.scale == 1 ? 0 : 1,
+                duration: const Duration(milliseconds: 200),
+                opacity: scale == 1 ? 0 : 1,
                 child: Center(
                   child: Transform.translate(
                     offset: Offset(
@@ -402,7 +407,7 @@ class _Badge extends StatelessWidget {
                             color: color,
                             width: 1.5,
                           ),
-                          color: Theme.of(context).colorScheme.background,
+                          color: Theme.of(context).colorScheme.surface,
                         ),
                         child: Center(
                           child: MediaQuery(
@@ -412,8 +417,9 @@ class _Badge extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                               textAlign: TextAlign.center,
                             ),
-                            data: MediaQuery.of(context)
-                                .copyWith(textScaleFactor: 1.0),
+                            data: MediaQuery.of(context).copyWith(
+                              textScaler: const TextScaler.linear(1.0),
+                            ),
                           ),
                         ),
                       ),
@@ -424,7 +430,7 @@ class _Badge extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Theme.of(context).colorScheme.background,
+                  color: Theme.of(context).colorScheme.surface,
                 ),
                 child: Center(
                   // child: SimpleShadow(
@@ -447,20 +453,21 @@ class _Badge extends StatelessWidget {
                     ),
                     padding: EdgeInsetsDirectional.all(8),
                     child: emojiIconName != null
-                        ? Container()
-                        : CacheCategoryIcon(
+                      ? const SizedBox.shrink()
+                      : CacheCategoryIcon(
                             iconName: iconName,
                             size: 34,
                           ),
                   ),
                 ),
               ),
-              emojiIconName != null
-                  ? EmojiIcon(
-                      emojiIconName: emojiIconName,
-                      size: 34 * 0.7,
-                    )
-                  : SizedBox.shrink(),
+              if (emojiIconName != null)
+                EmojiIcon(
+                  emojiIconName: emojiIconName,
+                  size: 34 * 0.7,
+                )
+              else
+                const SizedBox.shrink(),
             ],
           ),
         ),

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/budget/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/budget/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/budget/build" />
+      <excludeFolder url="file://$MODULE_DIR$/budget/packages/implicitly_animated_reorderable_list-0.4.2-modified/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/budget/packages/implicitly_animated_reorderable_list-0.4.2-modified/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/budget/packages/implicitly_animated_reorderable_list-0.4.2-modified/build" />
+      <excludeFolder url="file://$MODULE_DIR$/budget/packages/sliding_sheet-0.5.2-modified/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/budget/packages/sliding_sheet-0.5.2-modified/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/budget/packages/sliding_sheet-0.5.2-modified/build" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
