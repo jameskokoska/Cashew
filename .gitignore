@@ -1,2 +1,5 @@
 # Miscellaneous
 /.vscode/
+
+# FVM Version Cache
+.fvm/
