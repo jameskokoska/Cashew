@@ -106,7 +106,6 @@ class _ImportCSVState extends State<ImportCSV> {
     try {
       List<List<String>> fileContents = CsvToListConverter().convert(
         csvString,
-        eol: '\n',
         shouldParseNumbers: false,
       );
       int maxColumns = fileContents.fold(
