@@ -402,11 +402,11 @@ Note: required Firebase.
 
 ### Wallets vs. Accounts
 
-- `Wallets` have been been renamed to `Accounts` on the front-end but internally, the name `Wallet` is still used.
+- `Wallets` have been renamed to `Accounts` on the front-end but internally, the name `Wallet` is still used.
 
 ### Objectives vs. Goals
 
-- `Objectives` have been been renamed to `Goals` on the front-end but internally, the name `Objectives` is still used.
+- `Objectives` have been renamed to `Goals` on the front-end but internally, the name `Objectives` is still used.
 
 ### Long Term Loans
 
