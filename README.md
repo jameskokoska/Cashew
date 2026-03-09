@@ -1,10 +1,12 @@
 <h1 align="center" style="font-size:28px; line-height:1"><b>Cashew</b></h1>
 
-<a href="https://cashewapp.web.app/">
-  <div align="center">
-    <img alt="Icon" src="promotional/icons/icon.png" width="150px">
-  </div>
-</a>
+
+<div align="center">
+  <a href="https://cashewapp.web.app/">
+    <img alt="Icon" src="promotional/icons/icon.png" width="150px" >
+  </a>
+</div>
+
 
 <br />
 
@@ -155,152 +157,9 @@ Changes and progress about development is all heavily documented in GitHub [comm
 - Import Google Sheets: Seamlessly import Google Sheets tables, quickly importing many transactions from a spreadsheet.
 - App Links: Automatically create transactions with pre-filled data using app linking (documentation below)
 
-## App Links
+## Automation
 
-A discussion/thread on App Links (example usage and how to harness the power of App Links) can be found at this issue: https://github.com/jameskokoska/Cashew/issues/127#issuecomment-1975096357. 
-App links allow direct navigation and automation of actions using application URLs. Some examples are below.
-
-### Changelog
-* Introduce iOS support (Cashew v5.3.5+400 and up)
-* **Breaking:** Remove unsupported app link domain - `cashew://budget.app` (Cashew v5.3.4+396 and up)
-* Support for more parameters documented under `Detailed Parameters` (Cashew v5.2.9+358 and up)
-* Introduce Android and web support (Cashew v5.2.3+328 and up)
-
-### Examples (for Android and iOS)
-
-Ensure Cashew is installed on the device you are launching these URLs from.
-
-#### Example 1: Create an expense transaction for 100 with the category Shopping at the current time
-
-> https://cashewapp.web.app/addTransaction?amount=-100&title=All%20the%20shopping&category=Shopping&notes=Went%20shopping
-
-#### Example 2: Create an income transaction with a missing category at the current time
-
-> https://cashewapp.web.app/addTransaction?amount=100&title=Income&notes=Got%20money
-
-#### Example 3: Open the add transaction page with a custom date with prefilled details
-
-> https://cashewapp.web.app/addTransactionRoute?amount=-50&title=All%20the%20shopping&notes=Went%20shopping&date=2024-03-02
-
-#### Example 4: Create multiple transactions with one link using JSON
-
-> https://cashewapp.web.app/addTransaction?JSON=%7B%22transactions%22%3A%5B%7B%22amount%22%3A%22-100%22%2C%20%22notes%22%3A%22This%20is%20a%20note%22%2C%20%22category%22%3A%22Shopping%22%7D%2C%7B%22amount%22%3A%22-150%22%2C%20%22notes%22%3A%22This%20is%20a%20note%202%22%7D%5D%7D
-
-See `JSON List of Transactions` below to view how the link is formatted.
-
-### Routes
-
-| Routes for Android and iOS                  | Routes for Web App                             |
-| ------------------------------------------- | ---------------------------------------------- |
-| `https://cashewapp.web.app/[Endpoint here]` | `https://budget-track.web.app/[Endpoint here]` |
-
-### Endpoints
-
-| Endpoint               | Description                                                               |
-| ---------------------- | ------------------------------------------------------------------------- |
-| `/addTransaction`      | Add a new transaction without a UI prompt (unless a category is missing). |
-| `/addTransactionRoute` | Open the add new transaction route with information filled in.            |
-
-### Parameters
-
-| Parameter     | Description                                                                                                                                                                                                                                                                                          | Required | Default         |
-| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | --------------- |
-| `amount`      | The amount of the transaction. If negative, it represents an expense; if positive, it represents income.                                                                                                                                                                                             | No       | 0               |
-| `title`       | The title of the transaction. If an associated title is found and the category is not set, the associated title's category will be used.                                                                                                                                                             | No       | Empty string    |
-| `notes`       | The notes associated with the transaction.                                                                                                                                                                                                                                                           | No       | Empty string    |
-| `date`        | The date of the transaction. Supported string formats can be found in the `getCommonDateFormats()` method [here](https://github.com/jameskokoska/Cashew/blob/5.2.3%2B328/budget/lib/struct/commonDateFormats.dart).                                                                                  | No       | Current time    |
-| `category`    | The name of the category to add the transaction to. Executes a name search, takes the first entry, not case sensitive.                                                                                                                                                                               | No       | Prompt user     |
-| `subcategory` | The name of the subcategory to add the transaction to. If provided, it overwrites the category if a subcategory is found under a main category. Executes a name search, takes the first entry, not case sensitive.                                                                                   | No       | None            |
-| `account`     | The name of the account. Executes a name search, takes the first entry, not case sensitive.                                                                                                                                                                                                          | No       | Primary account |
-| `JSON`        | A list of JSON objects of transactions. If provided, Cashew will import a list/multiple transactions at once. Each JSON object in the list can use any of the aforementioned parameters. The JSON object should be keyed with `transactions` followed by the list of objects. See the example below. | No       | None            |
-
-<details> 
-  <summary>Detailed Parameters</summary>
-
-The following is a list of all and additional (not fully supported) parameters that can be passed in. They are ordered in terms of precedence, the parameters at the top will be parsed before the ones below. Therefore, overlapping fields will be proceeded by the first parameter.
-
-**Class:** related parameters will have the same class.
-
-**Standalone parameters:** only this parameter will be used, all other parameters will be ignored.
-
-App link parsing can be found [here](https://github.com/jameskokoska/Cashew/blob/main/budget/lib/widgets/util/deepLinks.dart).
-
-| Class | Parameter        | Description                                                                                                                                                                                                                                                                                                                              | Required | Default         | Standalone |
-| ----- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | --------------- | ---------- |
-| a     | `messageToParse` | Uses a scanner template to parse the passed in message. Only `date` or `dateCreated` can be passed along with this standalone parameter. All other fields will be constructed by the scanner template. Scanner templates are not enabled in Cashew by default. To enable this feature, enable `Notification Transactions` debug feature. | None     | None            | Yes        |
-| b     | `JSON`           | Description in the above table.                                                                                                                                                                                                                                                                                                          | No       | None            | Yes        |
-| c     | `subcategoryPk`  | The primary key of the subcategory entry within the database.                                                                                                                                                                                                                                                                            | No       | None            |
-| c     | `subcategory`    | Description in the above table.                                                                                                                                                                                                                                                                                                          | No       | None            |
-| c     | `categoryPk`     | The primary key of the category entry within the database.                                                                                                                                                                                                                                                                               | No       | Prompt user     |
-| c     | `category`       | Description in the above table.                                                                                                                                                                                                                                                                                                          | No       | Prompt user     |
-| d     | `walletPk`       | The primary key of the wallet entry within the database.                                                                                                                                                                                                                                                                                 | No       | Primary account |
-| d     | `account`        | Description in the above table.                                                                                                                                                                                                                                                                                                          | No       | Primary account |
-| d     | `wallet`         | Same as `account`.                                                                                                                                                                                                                                                                                                                       | No       | Primary account |
-| e     | `date`           | Description in the above table.                                                                                                                                                                                                                                                                                                          | No       | Current time    |
-| e     | `dateCreated`    | Same as `date`.                                                                                                                                                                                                                                                                                                                          | No       | Current time    |
-| f     | `amount`         | Description in the above table.                                                                                                                                                                                                                                                                                                          | No       | 0               |
-| g     | `title`          | Description in the above table.                                                                                                                                                                                                                                                                                                          | No       | Empty string    |
-| g     | `name`           | Same as `title`.                                                                                                                                                                                                                                                                                                                         | No       | Empty string    |
-| h     | `notes`          | Description in the above table.                                                                                                                                                                                                                                                                                                          | No       | Empty string    |
-| h     | `note`           | Same as `notes`.                                                                                                                                                                                                                                                                                                                         | No       | Empty string    |
-
-</details>
-
-### JSON List of Transactions
-
-The input JSON for `addTransaction` and `addTransactionRoute` should follow the following format:
-
-```JSON
-{
-  "transactions":[
-    { ... },
-    { ... },
-    { ... }
-  ]
-}
-```
-
-As an example:
-
-```JSON
-{
-  "transactions": [
-    {
-      "amount": "-100",
-      "notes": "This is a note",
-      "category": "Shopping"
-    },
-    {
-      "amount": "-150",
-      "notes": "This is a note 2"
-    }
-  ]
-}
-```
-
-Don't forget to encode the JSON in the URL as JSON uses invalid URI characters. Once encoded, the output link would look something like:
-
-> https://cashewapp.web.app/addTransaction?JSON=%7B%22transactions%22%3A%5B%7B%22amount%22%3A%22-100%22%2C%20%22notes%22%3A%22This%20is%20a%20note%22%2C%20%22category%22%3A%22Shopping%22%7D%2C%7B%22amount%22%3A%22-150%22%2C%20%22notes%22%3A%22This%20is%20a%20note%202%22%7D%5D%7D
-
-
-### Troubleshooting
-
-#### Android
-If you get redirected to the website instead of the Cashew app, your device may not be correctly set up to open App Links. Ensure Cashew can open its respective app link. On your Android device head to your device settings, 'Default apps', 'Opening links' and ensure Cashew has permission to open from the domain `cashewapp.web.app` under 'Supported web addresses'. This may be disabled by default if you did not install a Google Play signed copy of Cashew (i.e. downloaded from GitHub). This is because Cashew now uses App Links which need to be verified as per Android 12+ requirements with an app's signature public key. Alternatively, you can use a redirect application such as LinkSheet which can manage which apps open when certain links are activated.
-
-### Testing
-
-#### Using ADB for Android
-
-You can use ADB to test app links. For example
-
-```shell
-adb shell am start -a android.intent.action.VIEW -d "https://cashewapp.web.app/addTransaction?amount=-70\&title=Grocery%20Shopping\&date=2024-03-02\&category=Food\&subcategory=Groceries\&notes=Bought%20fruits%20and%20vegetables\&account=test"
-```
-
-#### Using links
-
-You can click links and open them with Cashew. See the example section above to test.
+See the `Automation` section on the FAQ website for information on how to add transactions automatically: https://cashewapp.web.app/faq.html#automation
 
 ## Bundled Packages
 
