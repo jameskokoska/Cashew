@@ -387,6 +387,16 @@ class _EditHomePageState extends State<EditHomePage> {
               openHeatMapHomePageBottomSheetSettings(context);
             },
           ),
+          "calendar": EditHomePageItem(
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.calendar_month_outlined
+                : Icons.calendar_month_rounded,
+            name: "calendar".tr(),
+            isEnabled: isHomeScreenSectionEnabled(context, "showCalendar"),
+            onSwitched: (value) {
+              switchHomeScreenSection(context, "showCalendar", value);
+            },
+          ),
           "transactionsList": EditHomePageItem(
             icon: navBarIconsData["transactions"]!.iconData,
             name: "transactions-list".tr(),
