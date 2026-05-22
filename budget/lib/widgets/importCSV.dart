@@ -31,6 +31,7 @@ import 'package:flutter_charset_detector/flutter_charset_detector.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:uuid/uuid.dart';
 
 class ImportCSV extends StatefulWidget {
   const ImportCSV({Key? key}) : super(key: key);
@@ -102,9 +103,9 @@ class _ImportCSVState extends State<ImportCSV> {
   }
 
   Future<void> _assignColumns(String csvString,
-      {bool importFromSheets = false}) async {
+      {bool importFromSheets = false, bool importFromWallet = false}) async {
     try {
-      List<List<String>> fileContents = CsvToListConverter().convert(
+      List<List<String>> fileContents = importFromWallet ? CsvToListConverter(fieldDelimiter: ";").convert(csvString, eol: "\n", shouldParseNumbers: false) : CsvToListConverter().convert(
         csvString,
         eol: '\n',
         shouldParseNumbers: false,
@@ -183,21 +184,72 @@ class _ImportCSVState extends State<ImportCSV> {
           "canSelectCurrentWallet": true,
         },
       };
-      for (dynamic key in assignedColumns.keys) {
-        String setHeaderValue = determineInitialValue(
-            assignedColumns[key]!["headerValues"],
-            headers,
-            assignedColumns[key]!["required"],
-            assignedColumns[key]!["canSelectCurrentWallet"]);
-        assignedColumns[key]!["setHeaderValue"] = setHeaderValue;
-        assignedColumns[key]!["setHeaderIndex"] =
-            _getHeaderIndex(headers, setHeaderValue);
+
+      if (importFromWallet) {
+        dateFormat = "yyyy-MM-dd HH:mm:ss";
+        assignedColumns = {
+          "date": {
+            "displayName": "date",
+            "headerValues": ["date"],
+            "required": true,
+            "setHeaderValue": "date",
+            "setHeaderIndex": _getHeaderIndex(headers, "date"),
+          },
+          "amount": {
+            "displayName": "amount",
+            "headerValues": ["amount"],
+            "required": true,
+            "setHeaderValue": "amount",
+            "setHeaderIndex": _getHeaderIndex(headers, "amount"),
+          },
+          "category": {
+            "displayName": "category",
+            "headerValues": ["labels"],
+            "required": true,
+            "setHeaderValue": "labels",
+            "setHeaderIndex": _getHeaderIndex(headers, "labels"),
+          },
+          "name": {
+            "displayName": "title",
+            "headerValues": ["category"],
+            "required": false,
+            "setHeaderValue": "category",
+            "setHeaderIndex": _getHeaderIndex(headers, "category"),
+          },
+          "note": {
+            "displayName": "note",
+            "headerValues": ["note"],
+            "required": false,
+            "setHeaderValue": "note",
+            "setHeaderIndex": _getHeaderIndex(headers, "note"),
+          },
+          "wallet": {
+            "displayName": "account",
+            "headerValues": ["account"],
+            "required": true,
+            "setHeaderValue": "account",
+            "setHeaderIndex": _getHeaderIndex(headers, "account"),
+            "canSelectCurrentWallet": true,
+          },
+        };
+      } else {
+        for (dynamic key in assignedColumns.keys) {
+          String setHeaderValue = determineInitialValue(
+              assignedColumns[key]!["headerValues"],
+              headers,
+              assignedColumns[key]!["required"],
+              assignedColumns[key]!["canSelectCurrentWallet"]);
+          assignedColumns[key]!["setHeaderValue"] = setHeaderValue;
+          assignedColumns[key]!["setHeaderIndex"] =
+              _getHeaderIndex(headers, setHeaderValue);
+        }
       }
 
+
       // Skip assigning columns, if they used the template this will succeed
-      if (importFromSheets) {
+      if (importFromSheets || importFromWallet) {
         try {
-          await _importEntries(assignedColumns, dateFormat, fileContents,
+          await _importEntries(assignedColumns, dateFormat, fileContents, importFromWallet: importFromWallet,
               noPop: true);
           return;
         } catch (e) {
@@ -435,7 +487,7 @@ class _ImportCSVState extends State<ImportCSV> {
 
   Future<void> _importEntries(Map<String, Map<String, dynamic>> assignedColumns,
       String dateFormat, List<List<String>> fileContents,
-      {bool noPop = false}) async {
+      {bool noPop = false, bool importFromWallet = false}) async {
     try {
       //Check to see if all the required parameters have been set
       for (dynamic key in assignedColumns.keys) {
@@ -462,6 +514,7 @@ class _ImportCSVState extends State<ImportCSV> {
       context,
       title: "importing-loading".tr(),
       child: ImportingEntriesPopup(
+        importFromWallet: importFromWallet,
         dateFormat: dateFormat,
         assignedColumns: assignedColumns,
         fileContents: fileContents,
@@ -653,6 +706,19 @@ class _ImportCSVState extends State<ImportCSV> {
             text: "template".tr(),
           ),
         ),
+        SettingsContainer(
+          onTap: () async {
+            String? csvString = await _getCSVStringFromBackupFile();
+            if (csvString != null) {
+              _assignColumns(csvString, importFromWallet: true);
+            }
+          },
+          title: "Import Wallet by Budgetbakers",
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.account_balance_wallet_outlined
+              : Icons.account_balance_wallet_rounded,
+        ),
+
       ],
     );
   }
@@ -845,12 +911,14 @@ class ImportingEntriesPopup extends StatefulWidget {
     required this.dateFormat,
     required this.fileContents,
     required this.next,
+    this.importFromWallet = false,
     Key? key,
   }) : super(key: key);
 
   final Map<String, Map<String, dynamic>> assignedColumns;
   final String dateFormat;
   final List<List<String>> fileContents;
+  final bool importFromWallet;
   final Function(int numberOfErrors) next;
 
   @override
@@ -858,7 +926,9 @@ class ImportingEntriesPopup extends StatefulWidget {
 }
 
 class ImportingTransactionAndTitle {
-  ImportingTransactionAndTitle(this.transaction, this.title);
+  String? walletEnvelopeId;
+  bool isWalletTransfer = false;
+  ImportingTransactionAndTitle(this.transaction, this.title, {this.walletEnvelopeId, this.isWalletTransfer = false});
 
   Transaction transaction;
   TransactionAssociatedTitle? title;
@@ -873,7 +943,7 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => _importEntries(
-        widget.assignedColumns, widget.dateFormat, widget.fileContents));
+        widget.assignedColumns, widget.dateFormat, widget.fileContents, widget.importFromWallet));
   }
 
   Future<ImportingTransactionAndTitle> _importEntry(
@@ -881,7 +951,9 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
       String dateFormat,
       List<String> row,
       int i,
-      {int? transactionTypeIndex}) async {
+      {int? transactionTypeIndex,
+      bool importFromWallet = false,
+      List<String>? headers}) async {
     String name = "";
     if (assignedColumns["name"]!["setHeaderIndex"] != -1) {
       name = row[assignedColumns["name"]!["setHeaderIndex"]].toString().trim();
@@ -1077,13 +1149,36 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
         ? null
         : selectedCategory.categoryPk;
 
+    String? walletEnvelopeId;
+    bool isWalletTransfer = false;
+    if (importFromWallet && headers != null) {
+      int transferIndex = _getHeaderIndex(headers, "transfer");
+      int envelopeIdIndex = _getHeaderIndex(headers, "envelope_id");
+      int categoryColIndex = _getHeaderIndex(headers, "category");
+
+      if (transferIndex != -1 && row.length > transferIndex) {
+        if (row[transferIndex].toString().toLowerCase().trim() == "true") {
+          isWalletTransfer = true;
+        }
+      }
+      if (categoryColIndex != -1 && row.length > categoryColIndex) {
+        if (row[categoryColIndex].toString().toUpperCase().trim() == "TRANSFER") {
+          isWalletTransfer = true;
+        }
+      }
+      if (isWalletTransfer && envelopeIdIndex != -1 && row.length > envelopeIdIndex) {
+        walletEnvelopeId = row[envelopeIdIndex].toString().trim();
+        if (walletEnvelopeId == "") walletEnvelopeId = null;
+      }
+    }
+
     return ImportingTransactionAndTitle(
       Transaction(
         transactionPk: "-1",
         name: name,
         amount: amount,
         note: note,
-        categoryFk: mainCategoryFk,
+        categoryFk: isWalletTransfer ? "0" : mainCategoryFk,
         subCategoryFk: subCategoryFk,
         walletFk: walletFk,
         dateCreated: dateCreated,
@@ -1093,7 +1188,7 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
         skipPaid: false,
         methodAdded: MethodAdded.csv,
       ),
-      name == ""
+      name == "" || isWalletTransfer
           ? null
           : TransactionAssociatedTitle(
               associatedTitlePk: "-1",
@@ -1104,14 +1199,17 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
               dateTimeModified: DateTime.now(),
               order: 0,
             ),
+      walletEnvelopeId: walletEnvelopeId,
+      isWalletTransfer: isWalletTransfer,
     );
   }
 
   Future<void> _importEntries(Map<String, Map<String, dynamic>> assignedColumns,
-      String dateFormat, List<List<String>> fileContents) async {
+      String dateFormat, List<List<String>> fileContents, bool importFromWallet) async {
     List<String> skippedError = [];
     try {
       List<TransactionsCompanion> transactionsInserting = [];
+      List<Map<String, dynamic>> walletTransfersInfo = [];
       List<AssociatedTitlesCompanion> titlesInserting = [];
 
       int headersIndex =
@@ -1149,6 +1247,8 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
             row,
             i,
             transactionTypeIndex: transactionTypeIndex,
+            importFromWallet: importFromWallet,
+            headers: header,
           );
         } catch (e) {
           transactionAndTitle = null;
@@ -1162,6 +1262,13 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
             transactionAndTitle.transaction.toCompanion(true);
         companionTransactionToInsert = companionTransactionToInsert.copyWith(
             transactionPk: Value.absent());
+
+        if (importFromWallet && transactionAndTitle.isWalletTransfer) {
+           String envelopeId = transactionAndTitle.walletEnvelopeId ?? (transactionAndTitle.transaction.dateCreated.toString() + "_" + transactionAndTitle.transaction.amount.abs().toString());
+           // Non possiamo salvare extra dati nel Companion, usiamo una mappa esterna
+           walletTransfersInfo.add({"index": transactionsInserting.length, "envelopeId": envelopeId});
+        }
+
         transactionsInserting.add(companionTransactionToInsert);
         // Use auto generated ID when inserting
         if (transactionAndTitle.title != null) {
@@ -1170,6 +1277,45 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
           companionTitleToInsert = companionTitleToInsert.copyWith(
               associatedTitlePk: Value.absent());
           titlesInserting.add(companionTitleToInsert);
+        }
+      }
+
+      if (importFromWallet && walletTransfersInfo.isNotEmpty) {
+        Map<String, List<int>> transfersByEnvelope = {};
+        for (var info in walletTransfersInfo) {
+          String envId = info["envelopeId"];
+          if (!transfersByEnvelope.containsKey(envId)) transfersByEnvelope[envId] = [];
+          transfersByEnvelope[envId]!.add(info["index"]);
+        }
+
+        var uuid = Uuid();
+
+        for (String envId in transfersByEnvelope.keys) {
+          List<int> indices = transfersByEnvelope[envId]!;
+          if (indices.length == 2) {
+             String pk1 = uuid.v4();
+             String pk2 = uuid.v4();
+
+             TransactionsCompanion c1 = transactionsInserting[indices[0]];
+             TransactionsCompanion c2 = transactionsInserting[indices[1]];
+
+             transactionsInserting[indices[0]] = c1.copyWith(
+               transactionPk: Value(pk1),
+               pairedTransactionFk: Value(pk2),
+             );
+
+             transactionsInserting[indices[1]] = c2.copyWith(
+               transactionPk: Value(pk2),
+               pairedTransactionFk: Value(pk1),
+             );
+          } else {
+             // If more or less than 2, just assign unique IDs so they are inserted
+             for(int idx in indices) {
+                 transactionsInserting[idx] = transactionsInserting[idx].copyWith(
+                     transactionPk: Value(uuid.v4())
+                 );
+             }
+          }
         }
       }
 

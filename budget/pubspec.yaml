@@ -25,7 +25,7 @@ dependencies:
     sdk: flutter
   simple_animations: ^5.0.2
   sa3_liquid: ^1.0.1
-  intl: ^0.18.1
+  intl: ^0.20.2
   animations: ^2.0.11
   flutter_sticky_header: ^0.6.5
   sticky_and_expandable_list: ^1.1.3
