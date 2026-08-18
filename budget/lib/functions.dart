@@ -554,6 +554,49 @@ DateTime getDatePastToDetermineBudgetDate(int index, Budget budget,
   return DateTime(year, month, day, 0, 0, 1);
 }
 
+int getBudgetPeriodsBeforeDate(Budget budget, DateTime periodStart) {
+  DateTime budgetStart = budget.startDate.justDay();
+  if (budget.reoccurrence == null ||
+      budget.reoccurrence == BudgetReoccurence.custom ||
+      !periodStart.isAfter(budgetStart)) {
+    return 0;
+  }
+
+  int periodLength = budget.periodLength <= 0 ? 1 : budget.periodLength;
+  if (budget.reoccurrence == BudgetReoccurence.daily ||
+      budget.reoccurrence == BudgetReoccurence.weekly) {
+    int daysBetween = DateTime.utc(
+      periodStart.year,
+      periodStart.month,
+      periodStart.day,
+    )
+        .difference(DateTime.utc(
+          budgetStart.year,
+          budgetStart.month,
+          budgetStart.day,
+        ))
+        .inDays;
+    int periodDays = budget.reoccurrence == BudgetReoccurence.weekly
+        ? periodLength * 7
+        : periodLength;
+    return daysBetween ~/ periodDays;
+  }
+
+  DateTime currentPeriodStart = budgetStart;
+  for (int completedPeriods = 0; completedPeriods < 10000; completedPeriods++) {
+    if (budget.reoccurrence == BudgetReoccurence.monthly) {
+      currentPeriodStart =
+          currentPeriodStart.justDay(monthOffset: periodLength);
+    } else if (budget.reoccurrence == BudgetReoccurence.yearly) {
+      currentPeriodStart = currentPeriodStart.justDay(yearOffset: periodLength);
+    }
+    if (currentPeriodStart.isAfter(periodStart)) {
+      return completedPeriods;
+    }
+  }
+  return 10000;
+}
+
 BudgetReoccurence mapRecurrence(String? recurrenceString) {
   if (recurrenceString == null) {
     return BudgetReoccurence.monthly;

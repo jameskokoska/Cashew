@@ -458,6 +458,8 @@ class _CyclePeriodSelectionState extends State<CyclePeriodSelection> {
               isAbsoluteSpendingLimit: false,
               income: false,
               archived: false,
+              rollover: false,
+              rolloverLimit: null,
             ),
             DateTime.now(),
           );
@@ -511,6 +513,8 @@ Budget getCustomCycleTempBudget(String cycleSettingsExtension) {
     isAbsoluteSpendingLimit: false,
     income: false,
     archived: false,
+    rollover: false,
+    rolloverLimit: null,
   );
 }
 

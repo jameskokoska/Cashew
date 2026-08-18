@@ -47,15 +47,25 @@ class BudgetContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double budgetAmount = budgetAmountToPrimaryCurrency(
-        Provider.of<AllWallets>(context, listen: true), budget);
+    AllWallets allWallets = Provider.of<AllWallets>(context, listen: true);
+    double baseBudgetAmount = budgetAmountToPrimaryCurrency(allWallets, budget);
     DateTime dateForRangeLocal =
         dateForRange == null ? DateTime.now() : dateForRange!;
     DateTimeRange budgetRange = getBudgetDate(budget, dateForRangeLocal);
     bool isOutOfRange = budgetRange.end.difference(DateTime.now()).inDays < 0 ||
         budgetRange.start.difference(DateTime.now()).inDays > 0;
-    var widget = StreamBuilder<List<CategoryWithTotal>>(
-      stream: database.watchTotalSpentInEachCategoryInTimeRangeFromCategories(
+    var widget = StreamBuilder<double>(
+      stream: database.watchBudgetAmountForPeriod(
+        allWallets: allWallets,
+        budget: budget,
+        dateForRange: dateForRangeLocal,
+      ),
+      initialData: baseBudgetAmount,
+      builder: (context, budgetAmountSnapshot) {
+        double budgetAmount = budgetAmountSnapshot.data ?? baseBudgetAmount;
+        return StreamBuilder<List<CategoryWithTotal>>(
+          stream:
+              database.watchTotalSpentInEachCategoryInTimeRangeFromCategories(
         allWallets: Provider.of<AllWallets>(context),
         start: budgetRange.start,
         end: budgetRange.end,
@@ -115,8 +125,10 @@ class BudgetContainer extends StatelessWidget {
                             ),
                             budgetAmount - totalSpent >= 0
                                 ? Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
                                     children: [
                                       Container(
                                         child: CountNumber(
@@ -124,7 +136,8 @@ class BudgetContainer extends StatelessWidget {
                                                   "showTotalSpentForBudget"]
                                               ? totalSpent
                                               : budgetAmount - totalSpent,
-                                          duration: Duration(milliseconds: 700),
+                                              duration:
+                                                  Duration(milliseconds: 700),
                                           initialCount: (0),
                                           textBuilder: (number) {
                                             return TextFont(
@@ -135,7 +148,8 @@ class BudgetContainer extends StatelessWidget {
                                                 finalNumber: appStateSettings[
                                                         "showTotalSpentForBudget"]
                                                     ? totalSpent
-                                                    : budgetAmount - totalSpent,
+                                                        : budgetAmount -
+                                                            totalSpent,
                                               ),
                                               fontSize: 18,
                                               textAlign: TextAlign.start,
@@ -147,14 +161,15 @@ class BudgetContainer extends StatelessWidget {
                                       Flexible(
                                         child: Padding(
                                           padding:
-                                              const EdgeInsetsDirectional.only(
-                                                  bottom: 1.4),
+                                                  const EdgeInsetsDirectional
+                                                      .only(bottom: 1.4),
                                           child: Container(
                                             child: TextFont(
                                               text: getBudgetSpentText(
                                                       budget.income) +
                                                   convertToMoney(
-                                                      Provider.of<AllWallets>(
+                                                          Provider.of<
+                                                                  AllWallets>(
                                                           context),
                                                       budgetAmount),
                                               fontSize: 13,
@@ -166,8 +181,10 @@ class BudgetContainer extends StatelessWidget {
                                     ],
                                   )
                                 : Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
                                     children: [
                                       Container(
                                         child: CountNumber(
@@ -175,7 +192,8 @@ class BudgetContainer extends StatelessWidget {
                                                   "showTotalSpentForBudget"]
                                               ? totalSpent
                                               : totalSpent - budgetAmount,
-                                          duration: Duration(milliseconds: 700),
+                                              duration:
+                                                  Duration(milliseconds: 700),
                                           initialCount: (0),
                                           textBuilder: (number) {
                                             return TextFont(
@@ -198,8 +216,8 @@ class BudgetContainer extends StatelessWidget {
                                       Flexible(
                                         child: Container(
                                           padding:
-                                              const EdgeInsetsDirectional.only(
-                                                  bottom: 1.4),
+                                                  const EdgeInsetsDirectional
+                                                      .only(bottom: 1.4),
                                           child: TextFont(
                                             text: getBudgetOverSpentText(
                                                     budget.income) +
@@ -222,7 +240,8 @@ class BudgetContainer extends StatelessWidget {
                         child: Container(
                           padding: EdgeInsetsDirectional.only(
                               top: 10, end: 10, start: 10),
-                          child: budget.reoccurrence == BudgetReoccurence.custom
+                              child: budget.reoccurrence ==
+                                      BudgetReoccurence.custom
                               ? SizedBox.shrink()
                               : ButtonIcon(
                                   onTap: () {
@@ -262,12 +281,13 @@ class BudgetContainer extends StatelessWidget {
                         ? EdgeInsetsDirectional.only(
                             start: 15,
                             end: 15,
-                            top: squishInactiveBudgetContainerHeight == true &&
+                                top: squishInactiveBudgetContainerHeight ==
+                                            true &&
                                     isOutOfRange
                                 ? 8.5
                                 : 16.5,
-                            bottom:
-                                squishInactiveBudgetContainerHeight == true &&
+                                bottom: squishInactiveBudgetContainerHeight ==
+                                            true &&
                                         isOutOfRange
                                     ? 0
                                     : 8.5,
@@ -290,8 +310,8 @@ class BudgetContainer extends StatelessWidget {
                                   ? budget.budgetPk
                                   : null,
                           budget: budget,
-                          searchFilters:
-                              SearchFilters(paidStatus: [PaidStatus.notPaid]),
+                              searchFilters: SearchFilters(
+                                  paidStatus: [PaidStatus.notPaid]),
                           paidOnly: false,
                         ),
                         builder: (context, snapshot) {
@@ -307,7 +327,8 @@ class BudgetContainer extends StatelessWidget {
                             ghostPercent: budgetAmount == 0
                                 ? 0
                                 : (((snapshot.data ?? 0) *
-                                            determineBudgetPolarity(budget)) /
+                                                determineBudgetPolarity(
+                                                    budget)) /
                                         budgetAmount) *
                                     100,
                           );
@@ -316,6 +337,7 @@ class BudgetContainer extends StatelessWidget {
                   DaySpending(
                     budget: budget,
                     totalAmount: totalSpent,
+                        budgetAmount: budgetAmount,
                     budgetRange: budgetRange,
                     padding: EdgeInsetsDirectional.only(
                       start: 10,
@@ -334,6 +356,8 @@ class BudgetContainer extends StatelessWidget {
         } else {
           return Container(height: height, width: double.infinity);
         }
+      },
+    );
       },
     );
     ColorScheme budgetColorScheme = ColorScheme.fromSeed(
@@ -411,18 +435,19 @@ class DaySpending extends StatelessWidget {
     bool this.large = false,
     required this.budgetRange,
     required this.padding,
+    required this.budgetAmount,
   }) : super(key: key);
 
   final Budget budget;
   final bool large;
   final double totalAmount;
+  final double budgetAmount;
   final DateTimeRange budgetRange;
   final EdgeInsetsDirectional padding;
 
   @override
   Widget build(BuildContext context) {
-    double budgetAmount = budgetAmountToPrimaryCurrency(
-        Provider.of<AllWallets>(context, listen: true), budget);
+    double budgetAmount = this.budgetAmount;
     bool isOutOfRange = budgetRange.end.difference(DateTime.now()).inDays < 0 ||
         budgetRange.start.difference(DateTime.now()).inDays > 0;
     Widget textWidget = Padding(

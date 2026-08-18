@@ -143,6 +143,8 @@ Future generatePreviewData() async {
       isAbsoluteSpendingLimit: true,
       income: false,
       archived: false,
+      rollover: false,
+      rolloverLimit: null,
     ),
   );
   await database.createOrUpdateObjective(
@@ -456,6 +458,8 @@ Future generatePreviewData() async {
         sharedAllMembersEver: null,
         isAbsoluteSpendingLimit: false,
         income: false,
+        rollover: false,
+        rolloverLimit: null,
         archived: false),
   );
   await database.createOrUpdateTransaction(

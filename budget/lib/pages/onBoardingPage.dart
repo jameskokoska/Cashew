@@ -118,6 +118,8 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           ],
           income: false,
           archived: false,
+          rollover: false,
+          rolloverLimit: null,
         ),
       );
     }

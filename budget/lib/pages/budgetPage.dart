@@ -227,8 +227,9 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
 
   @override
   Widget build(BuildContext context) {
-    double budgetAmount = budgetAmountToPrimaryCurrency(
-        Provider.of<AllWallets>(context, listen: true), widget.budget);
+    AllWallets allWallets = Provider.of<AllWallets>(context, listen: true);
+    double baseBudgetAmount =
+        budgetAmountToPrimaryCurrency(allWallets, widget.budget);
     DateTimeRange budgetRange = getBudgetDate(widget.budget, dateForRange);
     String pageId = budgetRange.start.millisecondsSinceEpoch.toString() +
         widget.budget.name +
@@ -260,6 +261,15 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
         ? startDateString
         : startDateString + " – " + endDateString;
     bool showingSelectedPeriodAppBar = widget.openedFromHistory == true;
+    return StreamBuilder<double>(
+      stream: database.watchBudgetAmountForPeriod(
+        allWallets: allWallets,
+        budget: widget.budget,
+        dateForRange: dateForRange,
+      ),
+      initialData: baseBudgetAmount,
+      builder: (context, budgetAmountSnapshot) {
+        double budgetAmount = budgetAmountSnapshot.data ?? baseBudgetAmount;
     return WillPopScope(
       onWillPop: () async {
         if ((globalSelectedID.value[pageId] ?? []).length > 0) {
@@ -273,15 +283,17 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
       child: PageFramework(
         belowAppBarPaddingWhenCenteredTitleSmall: 0,
         subtitle: StreamBuilder<List<CategoryWithTotal>>(
-          stream:
-              database.watchTotalSpentInEachCategoryInTimeRangeFromCategories(
+              stream: database
+                  .watchTotalSpentInEachCategoryInTimeRangeFromCategories(
             allWallets: Provider.of<AllWallets>(context),
             start: budgetRange.start,
             end: budgetRange.end,
             categoryFks: widget.budget.categoryFks,
             categoryFksExclude: widget.budget.categoryFksExclude,
-            budgetTransactionFilters: widget.budget.budgetTransactionFilters,
-            memberTransactionFilters: widget.budget.memberTransactionFilters,
+                budgetTransactionFilters:
+                    widget.budget.budgetTransactionFilters,
+                memberTransactionFilters:
+                    widget.budget.memberTransactionFilters,
             member: selectedMember,
             onlyShowTransactionsBelongingToBudgetPk:
                 widget.budget.sharedKey != null ||
@@ -296,13 +308,15 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
               snapshot.data!.forEach((category) {
                 totalSpent = totalSpent + category.total;
               });
-              totalSpent = totalSpent * determineBudgetPolarity(widget.budget);
+                  totalSpent =
+                      totalSpent * determineBudgetPolarity(widget.budget);
             }
 
             if (snapshot.hasData) {
               return TotalSpent(
                 budget: widget.budget,
                 totalSpent: totalSpent,
+                    budgetAmount: budgetAmount,
               );
             } else {
               return SizedBox.shrink();
@@ -386,7 +400,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
         ],
         title: widget.budget.name,
         capitalizeTitle: false,
-        appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+            appBarBackgroundColor:
+                Theme.of(context).colorScheme.secondaryContainer,
         appBarBackgroundColorStart:
             Theme.of(context).colorScheme.secondaryContainer,
         textColor: getColor(context, "black"),
@@ -429,7 +444,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                       if (c.categoryBudgetLimit != null) {
                         return true;
                       }
-                      return (allCategoryLimitsSnap.data ?? []).any((other) =>
+                          return (allCategoryLimitsSnap.data ?? []).any(
+                              (other) =>
                           other.categoryBudgetLimit != null &&
                           other.category.mainCategoryPk ==
                               c.category.categoryPk);
@@ -443,7 +459,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                     List<CategoryWithTotal> categoryWithTotals = [
                       ...(categoryWithTotalsSnap.data ?? []),
                       ...(allCategoryLimits).where((c) =>
-                          !existingCategoryPks.contains(c.category.categoryPk)),
+                              !existingCategoryPks
+                                  .contains(c.category.categoryPk)),
                     ];
 
                     //Count number of categories that have a spending limit, but no spending
@@ -457,7 +474,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                         watchTotalSpentInTimeRangeHelper(
                       dataInput: categoryWithTotals,
                       showAllSubcategories: showAllSubcategories,
-                      multiplyTotalBy: determineBudgetPolarity(widget.budget),
+                          multiplyTotalBy:
+                              determineBudgetPolarity(widget.budget),
                     );
                     List<Widget> categoryEntries = [];
                     double totalSpentPercent = 45 / 360;
@@ -466,7 +484,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                         categoryEntries.add(
                           CategoryEntry(
                             alwaysHide:
-                                showAllCategoriesWithCategoryLimit == false &&
+                                    showAllCategoriesWithCategoryLimit ==
+                                            false &&
                                     category.transactionCount == -1,
                             percentageOffset: totalSpentPercent,
                             getPercentageAfterText: (double categorySpent) {
@@ -482,14 +501,15 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                     : "of-spending".tr().toLowerCase();
                               }
                             },
-                            selectedSubCategoryPk: selectedCategory?.categoryPk,
+                                selectedSubCategoryPk:
+                                    selectedCategory?.categoryPk,
                             expandSubcategories: showAllSubcategories ||
                                 category.category.categoryPk ==
                                     selectedCategory?.categoryPk ||
                                 category.category.categoryPk ==
                                     selectedCategory?.mainCategoryPk,
-                            subcategoriesWithTotalMap:
-                                s.subCategorySpendingIndexedByMainCategoryPk,
+                                subcategoriesWithTotalMap: s
+                                    .subCategorySpendingIndexedByMainCategoryPk,
                             todayPercent: todayPercent,
                             overSpentColor: category.total > 0
                                 ? getColor(context, "incomeAmount")
@@ -509,7 +529,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                             isAbsoluteSpendingLimit:
                                 widget.budget.isAbsoluteSpendingLimit,
                             budgetLimit: budgetAmount,
-                            categoryBudgetLimit: category.categoryBudgetLimit,
+                                categoryBudgetLimit:
+                                    category.categoryBudgetLimit,
                             category: category.category,
                             totalSpent: s.totalSpent,
                             transactionCount: category.transactionCount,
@@ -593,27 +614,32 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsetsDirectional.symmetric(
+                                        padding:
+                                            EdgeInsetsDirectional.symmetric(
                                       horizontal:
                                           getHorizontalPaddingConstrained(
                                               context),
                                     ),
                                     child: StreamBuilder<double?>(
                                       stream: database.watchTotalOfBudget(
-                                        allWallets:
-                                            Provider.of<AllWallets>(context),
+                                            allWallets: Provider.of<AllWallets>(
+                                                context),
                                         start: budgetRange.start,
                                         end: budgetRange.end,
-                                        categoryFks: widget.budget.categoryFks,
-                                        categoryFksExclude:
-                                            widget.budget.categoryFksExclude,
+                                            categoryFks:
+                                                widget.budget.categoryFks,
+                                            categoryFksExclude: widget
+                                                .budget.categoryFksExclude,
                                         budgetTransactionFilters: widget
-                                            .budget.budgetTransactionFilters,
+                                                .budget
+                                                .budgetTransactionFilters,
                                         memberTransactionFilters: widget
-                                            .budget.memberTransactionFilters,
+                                                .budget
+                                                .memberTransactionFilters,
                                         member: selectedMember,
                                         onlyShowTransactionsBelongingToBudgetPk:
-                                            widget.budget.sharedKey != null ||
+                                                widget.budget.sharedKey !=
+                                                            null ||
                                                     widget.budget
                                                             .addedTransactionsOnly ==
                                                         true
@@ -621,7 +647,9 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                                 : null,
                                         budget: widget.budget,
                                         searchFilters: SearchFilters(
-                                            paidStatus: [PaidStatus.notPaid]),
+                                                paidStatus: [
+                                                  PaidStatus.notPaid
+                                                ]),
                                         paidOnly: false,
                                       ),
                                       builder: (context, snapshot) {
@@ -642,7 +670,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                               ? 0
                                               : (((snapshot.data ?? 0) *
                                                           determineBudgetPolarity(
-                                                              widget.budget)) /
+                                                                  widget
+                                                                      .budget)) /
                                                       budgetAmount) *
                                                   100,
                                         );
@@ -654,11 +683,12 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                       : DaySpending(
                                           budget: widget.budget,
                                           totalAmount: s.totalSpent,
+                                              budgetAmount: budgetAmount,
                                           large: true,
                                           budgetRange: budgetRange,
                                           padding:
-                                              const EdgeInsetsDirectional.only(
-                                                  top: 15, bottom: 0),
+                                                  const EdgeInsetsDirectional
+                                                      .only(top: 15, bottom: 0),
                                         ),
                                 ],
                               ),
@@ -674,14 +704,15 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                   padding: const EdgeInsetsDirectional.only(
                                       bottom: 3, top: 3),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                     children: [
                                       Padding(
                                         padding: const EdgeInsetsDirectional
                                             .symmetric(horizontal: 10),
                                         child: IconButtonScaled(
-                                          iconData:
-                                              appStateSettings["outlinedIcons"]
+                                              iconData: appStateSettings[
+                                                      "outlinedIcons"]
                                                   ? Icons.chevron_left_outlined
                                                   : Icons.chevron_left_rounded,
                                           iconSize: 18,
@@ -713,8 +744,10 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                           child: IconButtonScaled(
                                             iconData: appStateSettings[
                                                     "outlinedIcons"]
-                                                ? Icons.chevron_right_outlined
-                                                : Icons.chevron_right_rounded,
+                                                    ? Icons
+                                                        .chevron_right_outlined
+                                                    : Icons
+                                                        .chevron_right_rounded,
                                             iconSize: 18,
                                             scale: 1,
                                             onTap: () =>
@@ -725,8 +758,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                     ],
                                   ),
                                   decoration: BoxDecoration(
-                                    boxShadow:
-                                        boxShadowCheck(boxShadowSharp(context)),
+                                        boxShadow: boxShadowCheck(
+                                            boxShadowSharp(context)),
                                     color: Theme.of(context)
                                         .colorScheme
                                         .secondaryContainer,
@@ -758,7 +791,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                               budgetRange: budgetRange,
                               totalSpent: s.totalSpent,
                               showAllSubcategories: showAllSubcategories,
-                              toggleAllSubCategories: toggleAllSubcategories,
+                                  toggleAllSubCategories:
+                                      toggleAllSubcategories,
                               dataFilterUnassignedTransactions:
                                   s.dataFilterUnassignedTransactions,
                               hasSubCategories: s.hasSubCategories,
@@ -773,8 +807,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                             expand: selectedCategory == null &&
                                 extraCategoriesCountWithSpendingLimit > 0,
                             child: Padding(
-                              padding:
-                                  const EdgeInsetsDirectional.only(bottom: 15),
+                                  padding: const EdgeInsetsDirectional.only(
+                                      bottom: 15),
                               child: AnimatedSizeSwitcher(
                                 child: Center(
                                   key: ValueKey(
@@ -787,10 +821,12 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                     },
                                     text: showAllCategoriesWithCategoryLimit
                                         ? "collapse-empty-categories".tr()
-                                        : "expand-all-with-spending-goals".tr(),
+                                            : "expand-all-with-spending-goals"
+                                                .tr(),
                                     extraWidgetAtBeginning: true,
                                     extraWidget: Padding(
-                                      padding: const EdgeInsetsDirectional.only(
+                                          padding:
+                                              const EdgeInsetsDirectional.only(
                                           end: 3),
                                       child: Transform.scale(
                                         scale: 1.6,
@@ -798,8 +834,10 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                           showAllCategoriesWithCategoryLimit
                                               ? appStateSettings[
                                                       "outlinedIcons"]
-                                                  ? Icons.arrow_drop_up_outlined
-                                                  : Icons.arrow_drop_up_rounded
+                                                      ? Icons
+                                                          .arrow_drop_up_outlined
+                                                      : Icons
+                                                          .arrow_drop_up_rounded
                                               : appStateSettings[
                                                       "outlinedIcons"]
                                                   ? Icons
@@ -865,6 +903,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                   selectedCategory: selectedCategory,
                   budgetRange: budgetRange,
                   showIfNone: false,
+                      budgetAmount: budgetAmount,
                 ),
               ),
             ),
@@ -879,8 +918,10 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                 ? null
                 : widget.budget.categoryFksExclude,
             listID: pageId,
-            budgetTransactionFilters: widget.budget.budgetTransactionFilters,
-            memberTransactionFilters: widget.budget.memberTransactionFilters,
+                budgetTransactionFilters:
+                    widget.budget.budgetTransactionFilters,
+                memberTransactionFilters:
+                    widget.budget.memberTransactionFilters,
             member: selectedMember,
             onlyShowTransactionsBelongingToBudgetPk:
                 widget.budget.sharedKey != null ||
@@ -892,8 +933,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
             dateDividerColor: pageBackgroundColor,
             transactionBackgroundColor: pageBackgroundColor,
             categoryTintColor: Theme.of(context).colorScheme.primary,
-            noResultsExtraWidget:
-                widget.budget.reoccurrence != BudgetReoccurence.custom &&
+                noResultsExtraWidget: widget.budget.reoccurrence !=
+                            BudgetReoccurence.custom &&
                         isPastBudget == false &&
                         isPastBudgetButCurrentPeriod == false
                     ? Padding(
@@ -938,8 +979,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                 transaction.budgetFksExclude
                     ?.contains(widget.budget.budgetPk) ==
                 true,
-            renderType:
-                appStateSettings["appAnimations"] != AppAnimations.all.index
+                renderType: appStateSettings["appAnimations"] !=
+                        AppAnimations.all.index
                     ? TransactionEntriesRenderType.sliversNotSticky
                     : TransactionEntriesRenderType.implicitlyAnimatedSlivers,
           ),
@@ -975,6 +1016,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
           pageID: pageId,
         ),
       ),
+    );
+      },
     );
   }
 }
@@ -1028,6 +1071,7 @@ class BudgetLineGraph extends StatefulWidget {
     required this.isPastBudget,
     required this.selectedCategory,
     required this.budgetRange,
+    required this.budgetAmount,
     this.showPastSpending = true,
     this.showIfNone = true,
     this.padding = EdgeInsetsDirectional.zero,
@@ -1039,6 +1083,7 @@ class BudgetLineGraph extends StatefulWidget {
   final bool? isPastBudget;
   final TransactionCategory? selectedCategory;
   final DateTimeRange budgetRange;
+  final double budgetAmount;
   final bool showPastSpending;
   final bool showIfNone;
   final EdgeInsetsDirectional padding;
@@ -1138,8 +1183,7 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
 
   @override
   Widget build(BuildContext context) {
-    double budgetAmount = budgetAmountToPrimaryCurrency(
-        Provider.of<AllWallets>(context, listen: true), widget.budget);
+    double budgetAmount = widget.budgetAmount;
 
     return StreamBuilder<List<List<Transaction>>>(
       stream: mergedStreamsPastSpendingTotals,
@@ -1296,10 +1340,12 @@ class TotalSpent extends StatefulWidget {
     super.key,
     required this.totalSpent,
     required this.budget,
+    required this.budgetAmount,
   });
 
   final double totalSpent;
   final Budget budget;
+  final double budgetAmount;
 
   @override
   State<TotalSpent> createState() => _TotalSpentState();
@@ -1318,8 +1364,7 @@ class _TotalSpentState extends State<TotalSpent> {
 
   @override
   Widget build(BuildContext context) {
-    double budgetAmount = budgetAmountToPrimaryCurrency(
-        Provider.of<AllWallets>(context, listen: true), widget.budget);
+    double budgetAmount = widget.budgetAmount;
 
     return GestureDetector(
       onTap: () {

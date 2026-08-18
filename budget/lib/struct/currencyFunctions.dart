@@ -134,6 +134,25 @@ double budgetAmountToPrimaryCurrency(AllWallets allWallets, Budget budget) {
       (amountRatioToPrimaryCurrencyGivenPk(allWallets, budget.walletFk));
 }
 
+double calculateRolloverBudgetAmount({
+  required double baseAmount,
+  required int completedPeriods,
+  required double amountUsedBeforePeriod,
+  double? rolloverLimit,
+}) {
+  int periodsBefore = completedPeriods < 0 ? 0 : completedPeriods;
+  double availableAmount =
+      baseAmount * (periodsBefore + 1) - amountUsedBeforePeriod;
+  if (availableAmount <= 0) return 0;
+
+  if (rolloverLimit != null) {
+    double effectiveLimit =
+        rolloverLimit < baseAmount ? baseAmount : rolloverLimit;
+    if (availableAmount > effectiveLimit) return effectiveLimit;
+  }
+  return availableAmount;
+}
+
 double objectiveAmountToPrimaryCurrency(
     AllWallets allWallets, Objective objective) {
   return objective.amount *

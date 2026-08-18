@@ -26,7 +26,7 @@ import 'package:budget/pages/activityPage.dart';
 import 'package:flutter/material.dart' show RangeValues;
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 46;
+int schemaVersionGlobal = 47;
 
 // To update and migrate the database, check the README
 
@@ -469,6 +469,8 @@ class Budgets extends Table {
       text().map(const StringListInColumnConverter()).nullable()();
   BoolColumn get isAbsoluteSpendingLimit =>
       boolean().withDefault(const Constant(false))();
+  BoolColumn get rollover => boolean().withDefault(const Constant(false))();
+  RealColumn get rolloverLimit => real().nullable()();
 
   @override
   Set<Column> get primaryKey => {budgetPk};
@@ -1161,6 +1163,22 @@ class FinanceDatabase extends _$FinanceDatabase {
               } catch (e) {
                 print(
                     "Migration Error: Error creating column objectives.type " +
+                        e.toString());
+              }
+            },
+            from46To47: (m, schema) async {
+              try {
+                await m.addColumn(schema.budgets, schema.budgets.rollover);
+              } catch (e) {
+                print(
+                    "Migration Error: Error creating column budgets.rollover " +
+                        e.toString());
+              }
+              try {
+                await m.addColumn(schema.budgets, schema.budgets.rolloverLimit);
+              } catch (e) {
+                print(
+                    "Migration Error: Error creating column budgets.rolloverLimit " +
                         e.toString());
               }
             },
@@ -4227,6 +4245,12 @@ class FinanceDatabase extends _$FinanceDatabase {
 
     double maxAmount = 999999999999;
     if (budget.amount >= maxAmount) budget = budget.copyWith(amount: maxAmount);
+    if (budget.rolloverLimit != null) {
+      double rolloverLimit = budget.rolloverLimit!;
+      if (rolloverLimit > maxAmount) rolloverLimit = maxAmount;
+      if (rolloverLimit < budget.amount) rolloverLimit = budget.amount;
+      budget = budget.copyWith(rolloverLimit: Value(rolloverLimit));
+    }
 
     if (updateSharedEntry == true && appStateSettings["sharedBudgets"] == false)
       updateSharedEntry = false;
@@ -4249,6 +4273,8 @@ class FinanceDatabase extends _$FinanceDatabase {
         "endDate": budget.endDate,
         "periodLength": budget.periodLength,
         "reoccurrence": enumRecurrence[budget.reoccurrence],
+        "rollover": budget.rollover,
+        "rolloverLimit": budget.rolloverLimit,
       });
     }
 
@@ -6541,6 +6567,48 @@ class FinanceDatabase extends _$FinanceDatabase {
           .watchSingle());
     }
     return totalDoubleStream(mergedStreams);
+  }
+
+  Stream<double> watchBudgetAmountForPeriod({
+    required AllWallets allWallets,
+    required Budget budget,
+    required DateTime dateForRange,
+  }) {
+    double conversionRatio =
+        amountRatioToPrimaryCurrencyGivenPk(allWallets, budget.walletFk);
+    double baseAmount = budget.amount * conversionRatio;
+    if (!budget.rollover || budget.reoccurrence == BudgetReoccurence.custom) {
+      return Stream.value(baseAmount);
+    }
+
+    DateTimeRange budgetRange = getBudgetDate(budget, dateForRange);
+    int completedPeriods =
+        getBudgetPeriodsBeforeDate(budget, budgetRange.start);
+    if (completedPeriods <= 0) return Stream.value(baseAmount);
+
+    return watchTotalOfBudget(
+      allWallets: allWallets,
+      start: budget.startDate,
+      end: budgetRange.start.justDay(dayOffset: -1),
+      categoryFks: budget.categoryFks,
+      categoryFksExclude: budget.categoryFksExclude,
+      budgetTransactionFilters: budget.budgetTransactionFilters,
+      memberTransactionFilters: budget.memberTransactionFilters,
+      onlyShowTransactionsBelongingToBudgetPk:
+          budget.sharedKey != null || budget.addedTransactionsOnly
+              ? budget.budgetPk
+              : null,
+      budget: budget,
+    ).map((amountUsed) {
+      return calculateRolloverBudgetAmount(
+        baseAmount: baseAmount,
+        completedPeriods: completedPeriods,
+        amountUsedBeforePeriod: (amountUsed ?? 0) * (budget.income ? 1 : -1),
+        rolloverLimit: budget.rolloverLimit == null
+            ? null
+            : budget.rolloverLimit! * conversionRatio,
+      );
+    });
   }
 
   // The total amount of that category will always be that last column

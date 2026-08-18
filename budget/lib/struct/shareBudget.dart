@@ -37,6 +37,8 @@ Future<bool> shareBudget(Budget? budgetToShare, context) async {
     "endDate": budgetToShare.endDate,
     "periodLength": budgetToShare.periodLength,
     "reoccurrence": enumRecurrence[budgetToShare.reoccurrence],
+    "rollover": budgetToShare.rollover,
+    "rolloverLimit": budgetToShare.rolloverLimit,
     "members": [
       // FirebaseAuth.instance.currentUser!.email
     ],
@@ -371,6 +373,10 @@ Future<int> downloadTransactionsFromBudgets(
         isAbsoluteSpendingLimit: false,
         income: false,
         archived: false,
+        rollover: budgetDecoded["rollover"] == true,
+        rolloverLimit: budgetDecoded["rolloverLimit"] == null
+            ? null
+            : budgetDecoded["rolloverLimit"].toDouble(),
       ),
     );
 

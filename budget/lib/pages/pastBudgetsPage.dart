@@ -482,7 +482,10 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                                             ),
                                             dateRanges: dateTimeRanges,
                                             spots: [spots],
-                                            horizontalLineAt: budgetAmount,
+                                            horizontalLineAt:
+                                                widget.budget.rollover
+                                                    ? null
+                                                    : budgetAmount,
                                             budget: widget.budget,
                                             extraCategorySpots:
                                                 categorySpentPoints,
@@ -962,13 +965,23 @@ class PastBudgetContainer extends StatelessWidget {
     Color progressBackgroundColor =
         Theme.of(context).colorScheme.secondaryContainer;
     Color progressOverageColor = Theme.of(context).colorScheme.tertiary;
-    double budgetAmount = budgetAmountToPrimaryCurrency(
-        Provider.of<AllWallets>(context, listen: true), budget);
+    AllWallets allWallets = Provider.of<AllWallets>(context, listen: true);
+    double baseBudgetAmount = budgetAmountToPrimaryCurrency(allWallets, budget);
     DateTime dateForRangeLocal =
         dateForRange == null ? DateTime.now() : dateForRange!;
     DateTimeRange budgetRange = getBudgetDate(budget, dateForRangeLocal);
-    var widget = StreamBuilder<List<CategoryWithTotal>>(
-      stream: database.watchTotalSpentInEachCategoryInTimeRangeFromCategories(
+    var widget = StreamBuilder<double>(
+      stream: database.watchBudgetAmountForPeriod(
+        allWallets: allWallets,
+        budget: budget,
+        dateForRange: dateForRangeLocal,
+      ),
+      initialData: baseBudgetAmount,
+      builder: (context, budgetAmountSnapshot) {
+        double budgetAmount = budgetAmountSnapshot.data ?? baseBudgetAmount;
+        return StreamBuilder<List<CategoryWithTotal>>(
+          stream:
+              database.watchTotalSpentInEachCategoryInTimeRangeFromCategories(
         allWallets: Provider.of<AllWallets>(context),
         start: budgetRange.start,
         end: budgetRange.end,
@@ -992,8 +1005,8 @@ class PastBudgetContainer extends StatelessWidget {
           totalSpent = absoluteZero(totalSpent);
 
           return Padding(
-            padding:
-                EdgeInsetsDirectional.symmetric(horizontal: 20, vertical: 10),
+                padding: EdgeInsetsDirectional.symmetric(
+                    horizontal: 20, vertical: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -1014,7 +1027,8 @@ class PastBudgetContainer extends StatelessWidget {
                                             budgetRange, DateTime.now()) <=
                                         100
                                     ? "current-period".tr()
-                                    : getWordedDateShortMore(budgetRange.start),
+                                        : getWordedDateShortMore(
+                                            budgetRange.start),
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -1039,8 +1053,10 @@ class PastBudgetContainer extends StatelessWidget {
                             ? Row(
                                 children: [
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
                                     children: [
                                       Container(
                                         child: CountNumber(
@@ -1048,7 +1064,8 @@ class PastBudgetContainer extends StatelessWidget {
                                                   "showTotalSpentForBudget"]
                                               ? totalSpent
                                               : budgetAmount - totalSpent,
-                                          duration: Duration(milliseconds: 700),
+                                              duration:
+                                                  Duration(milliseconds: 700),
                                           initialCount: (0),
                                           textBuilder: (number) {
                                             return TextFont(
@@ -1069,9 +1086,8 @@ class PastBudgetContainer extends StatelessWidget {
                                         ),
                                       ),
                                       Padding(
-                                        padding:
-                                            const EdgeInsetsDirectional.only(
-                                                bottom: 0.5),
+                                            padding: const EdgeInsetsDirectional
+                                                .only(bottom: 0.5),
                                         child: Container(
                                           child: TextFont(
                                             text: getBudgetSpentText(
@@ -1103,12 +1119,14 @@ class PastBudgetContainer extends StatelessWidget {
                                       textBuilder: (number) {
                                         return TextFont(
                                           text: convertToMoney(
-                                              Provider.of<AllWallets>(context),
+                                                  Provider.of<AllWallets>(
+                                                      context),
                                               number,
                                               finalNumber: appStateSettings[
                                                       "showTotalSpentForBudget"]
                                                   ? totalSpent
-                                                  : totalSpent - budgetAmount),
+                                                      : totalSpent -
+                                                          budgetAmount),
                                           fontSize: 16,
                                           textAlign: TextAlign.start,
                                           fontWeight: FontWeight.bold,
@@ -1118,7 +1136,8 @@ class PastBudgetContainer extends StatelessWidget {
                                   ),
                                   Flexible(
                                     child: Container(
-                                      padding: const EdgeInsetsDirectional.only(
+                                          padding:
+                                              const EdgeInsetsDirectional.only(
                                           bottom: 0),
                                       child: TextFont(
                                         text: getBudgetOverSpentText(
@@ -1187,6 +1206,8 @@ class PastBudgetContainer extends StatelessWidget {
         } else {
           return Container(height: 80, width: double.infinity);
         }
+      },
+    );
       },
     );
     return Container(

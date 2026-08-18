@@ -82,6 +82,19 @@ class HomePageLineGraph extends StatelessWidget {
                           builder: (context, snapshot) {
                             if (snapshot.hasData && snapshot.data != null) {
                               Budget budget = snapshot.data!;
+                              AllWallets allWallets =
+                                  Provider.of<AllWallets>(context);
+                              double baseBudgetAmount =
+                                  budgetAmountToPrimaryCurrency(
+                                      allWallets, budget);
+                              return StreamBuilder<double>(
+                                stream: database.watchBudgetAmountForPeriod(
+                                  allWallets: allWallets,
+                                  budget: budget,
+                                  dateForRange: DateTime.now(),
+                                ),
+                                initialData: baseBudgetAmount,
+                                builder: (context, budgetAmountSnapshot) {
                               return BudgetLineGraph(
                                 key: ValueKey(budget.budgetPk),
                                 budget: budget,
@@ -91,6 +104,10 @@ class HomePageLineGraph extends StatelessWidget {
                                 isPastBudget: false,
                                 selectedCategory: null,
                                 showPastSpending: false,
+                                    budgetAmount: budgetAmountSnapshot.data ??
+                                        baseBudgetAmount,
+                                  );
+                                },
                               );
                             }
                             return SizedBox.shrink();

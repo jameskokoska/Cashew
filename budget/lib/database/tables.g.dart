@@ -262,9 +262,9 @@ class TransactionWallet extends DataClass
     }
     map['decimals'] = Variable<int>(decimals);
     if (!nullToAbsent || homePageWidgetDisplay != null) {
-      final converter = $WalletsTable.$converterhomePageWidgetDisplayn;
-      map['home_page_widget_display'] =
-          Variable<String>(converter.toSql(homePageWidgetDisplay));
+      map['home_page_widget_display'] = Variable<String>($WalletsTable
+          .$converterhomePageWidgetDisplayn
+          .toSql(homePageWidgetDisplay));
     }
     return map;
   }
@@ -550,10 +550,9 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
       map['decimals'] = Variable<int>(decimals.value);
     }
     if (homePageWidgetDisplay.present) {
-      final converter = $WalletsTable.$converterhomePageWidgetDisplayn;
-
-      map['home_page_widget_display'] =
-          Variable<String>(converter.toSql(homePageWidgetDisplay.value));
+      map['home_page_widget_display'] = Variable<String>($WalletsTable
+          .$converterhomePageWidgetDisplayn
+          .toSql(homePageWidgetDisplay.value));
     }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
@@ -840,8 +839,8 @@ class TransactionCategory extends DataClass
     map['order'] = Variable<int>(order);
     map['income'] = Variable<bool>(income);
     if (!nullToAbsent || methodAdded != null) {
-      final converter = $CategoriesTable.$convertermethodAddedn;
-      map['method_added'] = Variable<int>(converter.toSql(methodAdded));
+      map['method_added'] = Variable<int>(
+          $CategoriesTable.$convertermethodAddedn.toSql(methodAdded));
     }
     if (!nullToAbsent || mainCategoryPk != null) {
       map['main_category_pk'] = Variable<String>(mainCategoryPk);
@@ -1123,9 +1122,8 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       map['income'] = Variable<bool>(income.value);
     }
     if (methodAdded.present) {
-      final converter = $CategoriesTable.$convertermethodAddedn;
-
-      map['method_added'] = Variable<int>(converter.toSql(methodAdded.value));
+      map['method_added'] = Variable<int>(
+          $CategoriesTable.$convertermethodAddedn.toSql(methodAdded.value));
     }
     if (mainCategoryPk.present) {
       map['main_category_pk'] = Variable<String>(mainCategoryPk.value);
@@ -1461,8 +1459,7 @@ class Objective extends DataClass implements Insertable<Objective> {
     final map = <String, Expression>{};
     map['objective_pk'] = Variable<String>(objectivePk);
     {
-      final converter = $ObjectivesTable.$convertertype;
-      map['type'] = Variable<int>(converter.toSql(type));
+      map['type'] = Variable<int>($ObjectivesTable.$convertertype.toSql(type));
     }
     map['name'] = Variable<String>(name);
     map['amount'] = Variable<double>(amount);
@@ -1798,9 +1795,8 @@ class ObjectivesCompanion extends UpdateCompanion<Objective> {
       map['objective_pk'] = Variable<String>(objectivePk.value);
     }
     if (type.present) {
-      final converter = $ObjectivesTable.$convertertype;
-
-      map['type'] = Variable<int>(converter.toSql(type.value));
+      map['type'] =
+          Variable<int>($ObjectivesTable.$convertertype.toSql(type.value));
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
@@ -2528,8 +2524,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       map['period_length'] = Variable<int>(periodLength);
     }
     if (!nullToAbsent || reoccurrence != null) {
-      final converter = $TransactionsTable.$converterreoccurrencen;
-      map['reoccurrence'] = Variable<int>(converter.toSql(reoccurrence));
+      map['reoccurrence'] = Variable<int>(
+          $TransactionsTable.$converterreoccurrencen.toSql(reoccurrence));
     }
     if (!nullToAbsent || endDate != null) {
       map['end_date'] = Variable<DateTime>(endDate);
@@ -2539,8 +2535,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           Variable<bool>(upcomingTransactionNotification);
     }
     if (!nullToAbsent || type != null) {
-      final converter = $TransactionsTable.$convertertypen;
-      map['type'] = Variable<int>(converter.toSql(type));
+      map['type'] =
+          Variable<int>($TransactionsTable.$convertertypen.toSql(type));
     }
     map['paid'] = Variable<bool>(paid);
     if (!nullToAbsent || createdAnotherFutureTransaction != null) {
@@ -2549,8 +2545,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
     }
     map['skip_paid'] = Variable<bool>(skipPaid);
     if (!nullToAbsent || methodAdded != null) {
-      final converter = $TransactionsTable.$convertermethodAddedn;
-      map['method_added'] = Variable<int>(converter.toSql(methodAdded));
+      map['method_added'] = Variable<int>(
+          $TransactionsTable.$convertermethodAddedn.toSql(methodAdded));
     }
     if (!nullToAbsent || transactionOwnerEmail != null) {
       map['transaction_owner_email'] = Variable<String>(transactionOwnerEmail);
@@ -2566,8 +2562,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       map['shared_old_key'] = Variable<String>(sharedOldKey);
     }
     if (!nullToAbsent || sharedStatus != null) {
-      final converter = $TransactionsTable.$convertersharedStatusn;
-      map['shared_status'] = Variable<int>(converter.toSql(sharedStatus));
+      map['shared_status'] = Variable<int>(
+          $TransactionsTable.$convertersharedStatusn.toSql(sharedStatus));
     }
     if (!nullToAbsent || sharedDateUpdated != null) {
       map['shared_date_updated'] = Variable<DateTime>(sharedDateUpdated);
@@ -2583,9 +2579,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       map['objective_loan_fk'] = Variable<String>(objectiveLoanFk);
     }
     if (!nullToAbsent || budgetFksExclude != null) {
-      final converter = $TransactionsTable.$converterbudgetFksExcluden;
-      map['budget_fks_exclude'] =
-          Variable<String>(converter.toSql(budgetFksExclude));
+      map['budget_fks_exclude'] = Variable<String>($TransactionsTable
+          .$converterbudgetFksExcluden
+          .toSql(budgetFksExclude));
     }
     return map;
   }
@@ -3271,9 +3267,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       map['period_length'] = Variable<int>(periodLength.value);
     }
     if (reoccurrence.present) {
-      final converter = $TransactionsTable.$converterreoccurrencen;
-
-      map['reoccurrence'] = Variable<int>(converter.toSql(reoccurrence.value));
+      map['reoccurrence'] = Variable<int>(
+          $TransactionsTable.$converterreoccurrencen.toSql(reoccurrence.value));
     }
     if (endDate.present) {
       map['end_date'] = Variable<DateTime>(endDate.value);
@@ -3283,9 +3278,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
           Variable<bool>(upcomingTransactionNotification.value);
     }
     if (type.present) {
-      final converter = $TransactionsTable.$convertertypen;
-
-      map['type'] = Variable<int>(converter.toSql(type.value));
+      map['type'] =
+          Variable<int>($TransactionsTable.$convertertypen.toSql(type.value));
     }
     if (paid.present) {
       map['paid'] = Variable<bool>(paid.value);
@@ -3298,9 +3292,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       map['skip_paid'] = Variable<bool>(skipPaid.value);
     }
     if (methodAdded.present) {
-      final converter = $TransactionsTable.$convertermethodAddedn;
-
-      map['method_added'] = Variable<int>(converter.toSql(methodAdded.value));
+      map['method_added'] = Variable<int>(
+          $TransactionsTable.$convertermethodAddedn.toSql(methodAdded.value));
     }
     if (transactionOwnerEmail.present) {
       map['transaction_owner_email'] =
@@ -3317,9 +3310,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       map['shared_old_key'] = Variable<String>(sharedOldKey.value);
     }
     if (sharedStatus.present) {
-      final converter = $TransactionsTable.$convertersharedStatusn;
-
-      map['shared_status'] = Variable<int>(converter.toSql(sharedStatus.value));
+      map['shared_status'] = Variable<int>(
+          $TransactionsTable.$convertersharedStatusn.toSql(sharedStatus.value));
     }
     if (sharedDateUpdated.present) {
       map['shared_date_updated'] = Variable<DateTime>(sharedDateUpdated.value);
@@ -3335,10 +3327,9 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       map['objective_loan_fk'] = Variable<String>(objectiveLoanFk.value);
     }
     if (budgetFksExclude.present) {
-      final converter = $TransactionsTable.$converterbudgetFksExcluden;
-
-      map['budget_fks_exclude'] =
-          Variable<String>(converter.toSql(budgetFksExclude.value));
+      map['budget_fks_exclude'] = Variable<String>($TransactionsTable
+          .$converterbudgetFksExcluden
+          .toSql(budgetFksExclude.value));
     }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
@@ -3609,6 +3600,22 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
           defaultConstraints: GeneratedColumn.constraintIsAlways(
               'CHECK ("is_absolute_spending_limit" IN (0, 1))'),
           defaultValue: const Constant(false));
+  static const VerificationMeta _rolloverMeta =
+      const VerificationMeta('rollover');
+  @override
+  late final GeneratedColumn<bool> rollover = GeneratedColumn<bool>(
+      'rollover', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("rollover" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _rolloverLimitMeta =
+      const VerificationMeta('rolloverLimit');
+  @override
+  late final GeneratedColumn<double> rolloverLimit = GeneratedColumn<double>(
+      'rollover_limit', aliasedName, true,
+      type: DriftSqlType.double, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         budgetPk,
@@ -3637,7 +3644,9 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
         sharedDateUpdated,
         sharedMembers,
         sharedAllMembersEver,
-        isAbsoluteSpendingLimit
+        isAbsoluteSpendingLimit,
+        rollover,
+        rolloverLimit
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -3758,6 +3767,16 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
               data['is_absolute_spending_limit']!,
               _isAbsoluteSpendingLimitMeta));
     }
+    if (data.containsKey('rollover')) {
+      context.handle(_rolloverMeta,
+          rollover.isAcceptableOrUnknown(data['rollover']!, _rolloverMeta));
+    }
+    if (data.containsKey('rollover_limit')) {
+      context.handle(
+          _rolloverLimitMeta,
+          rolloverLimit.isAcceptableOrUnknown(
+              data['rollover_limit']!, _rolloverLimitMeta));
+    }
     return context;
   }
 
@@ -3834,6 +3853,10 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
       isAbsoluteSpendingLimit: attachedDatabase.typeMapping.read(
           DriftSqlType.bool,
           data['${effectivePrefix}is_absolute_spending_limit'])!,
+      rollover: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}rollover'])!,
+      rolloverLimit: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}rollover_limit']),
     );
   }
 
@@ -3915,6 +3938,8 @@ class Budget extends DataClass implements Insertable<Budget> {
   final List<String>? sharedMembers;
   final List<String>? sharedAllMembersEver;
   final bool isAbsoluteSpendingLimit;
+  final bool rollover;
+  final double? rolloverLimit;
   const Budget(
       {required this.budgetPk,
       required this.name,
@@ -3942,7 +3967,9 @@ class Budget extends DataClass implements Insertable<Budget> {
       this.sharedDateUpdated,
       this.sharedMembers,
       this.sharedAllMembersEver,
-      required this.isAbsoluteSpendingLimit});
+      required this.isAbsoluteSpendingLimit,
+      required this.rollover,
+      this.rolloverLimit});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -3955,25 +3982,25 @@ class Budget extends DataClass implements Insertable<Budget> {
     map['start_date'] = Variable<DateTime>(startDate);
     map['end_date'] = Variable<DateTime>(endDate);
     if (!nullToAbsent || walletFks != null) {
-      final converter = $BudgetsTable.$converterwalletFksn;
-      map['wallet_fks'] = Variable<String>(converter.toSql(walletFks));
+      map['wallet_fks'] =
+          Variable<String>($BudgetsTable.$converterwalletFksn.toSql(walletFks));
     }
     if (!nullToAbsent || categoryFks != null) {
-      final converter = $BudgetsTable.$convertercategoryFksn;
-      map['category_fks'] = Variable<String>(converter.toSql(categoryFks));
+      map['category_fks'] = Variable<String>(
+          $BudgetsTable.$convertercategoryFksn.toSql(categoryFks));
     }
     if (!nullToAbsent || categoryFksExclude != null) {
-      final converter = $BudgetsTable.$convertercategoryFksExcluden;
-      map['category_fks_exclude'] =
-          Variable<String>(converter.toSql(categoryFksExclude));
+      map['category_fks_exclude'] = Variable<String>($BudgetsTable
+          .$convertercategoryFksExcluden
+          .toSql(categoryFksExclude));
     }
     map['income'] = Variable<bool>(income);
     map['archived'] = Variable<bool>(archived);
     map['added_transactions_only'] = Variable<bool>(addedTransactionsOnly);
     map['period_length'] = Variable<int>(periodLength);
     if (!nullToAbsent || reoccurrence != null) {
-      final converter = $BudgetsTable.$converterreoccurrencen;
-      map['reoccurrence'] = Variable<int>(converter.toSql(reoccurrence));
+      map['reoccurrence'] = Variable<int>(
+          $BudgetsTable.$converterreoccurrencen.toSql(reoccurrence));
     }
     map['date_created'] = Variable<DateTime>(dateCreated);
     if (!nullToAbsent || dateTimeModified != null) {
@@ -3983,36 +4010,39 @@ class Budget extends DataClass implements Insertable<Budget> {
     map['order'] = Variable<int>(order);
     map['wallet_fk'] = Variable<String>(walletFk);
     if (!nullToAbsent || budgetTransactionFilters != null) {
-      final converter = $BudgetsTable.$converterbudgetTransactionFiltersn;
-      map['budget_transaction_filters'] =
-          Variable<String>(converter.toSql(budgetTransactionFilters));
+      map['budget_transaction_filters'] = Variable<String>($BudgetsTable
+          .$converterbudgetTransactionFiltersn
+          .toSql(budgetTransactionFilters));
     }
     if (!nullToAbsent || memberTransactionFilters != null) {
-      final converter = $BudgetsTable.$convertermemberTransactionFiltersn;
-      map['member_transaction_filters'] =
-          Variable<String>(converter.toSql(memberTransactionFilters));
+      map['member_transaction_filters'] = Variable<String>($BudgetsTable
+          .$convertermemberTransactionFiltersn
+          .toSql(memberTransactionFilters));
     }
     if (!nullToAbsent || sharedKey != null) {
       map['shared_key'] = Variable<String>(sharedKey);
     }
     if (!nullToAbsent || sharedOwnerMember != null) {
-      final converter = $BudgetsTable.$convertersharedOwnerMembern;
-      map['shared_owner_member'] =
-          Variable<int>(converter.toSql(sharedOwnerMember));
+      map['shared_owner_member'] = Variable<int>(
+          $BudgetsTable.$convertersharedOwnerMembern.toSql(sharedOwnerMember));
     }
     if (!nullToAbsent || sharedDateUpdated != null) {
       map['shared_date_updated'] = Variable<DateTime>(sharedDateUpdated);
     }
     if (!nullToAbsent || sharedMembers != null) {
-      final converter = $BudgetsTable.$convertersharedMembersn;
-      map['shared_members'] = Variable<String>(converter.toSql(sharedMembers));
+      map['shared_members'] = Variable<String>(
+          $BudgetsTable.$convertersharedMembersn.toSql(sharedMembers));
     }
     if (!nullToAbsent || sharedAllMembersEver != null) {
-      final converter = $BudgetsTable.$convertersharedAllMembersEvern;
-      map['shared_all_members_ever'] =
-          Variable<String>(converter.toSql(sharedAllMembersEver));
+      map['shared_all_members_ever'] = Variable<String>($BudgetsTable
+          .$convertersharedAllMembersEvern
+          .toSql(sharedAllMembersEver));
     }
     map['is_absolute_spending_limit'] = Variable<bool>(isAbsoluteSpendingLimit);
+    map['rollover'] = Variable<bool>(rollover);
+    if (!nullToAbsent || rolloverLimit != null) {
+      map['rollover_limit'] = Variable<double>(rolloverLimit);
+    }
     return map;
   }
 
@@ -4070,6 +4100,10 @@ class Budget extends DataClass implements Insertable<Budget> {
           ? const Value.absent()
           : Value(sharedAllMembersEver),
       isAbsoluteSpendingLimit: Value(isAbsoluteSpendingLimit),
+      rollover: Value(rollover),
+      rolloverLimit: rolloverLimit == null && nullToAbsent
+          ? const Value.absent()
+          : Value(rolloverLimit),
     );
   }
 
@@ -4115,6 +4149,8 @@ class Budget extends DataClass implements Insertable<Budget> {
           serializer.fromJson<List<String>?>(json['sharedAllMembersEver']),
       isAbsoluteSpendingLimit:
           serializer.fromJson<bool>(json['isAbsoluteSpendingLimit']),
+      rollover: serializer.fromJson<bool>(json['rollover']),
+      rolloverLimit: serializer.fromJson<double?>(json['rolloverLimit']),
     );
   }
   @override
@@ -4155,6 +4191,8 @@ class Budget extends DataClass implements Insertable<Budget> {
           serializer.toJson<List<String>?>(sharedAllMembersEver),
       'isAbsoluteSpendingLimit':
           serializer.toJson<bool>(isAbsoluteSpendingLimit),
+      'rollover': serializer.toJson<bool>(rollover),
+      'rolloverLimit': serializer.toJson<double?>(rolloverLimit),
     };
   }
 
@@ -4186,7 +4224,9 @@ class Budget extends DataClass implements Insertable<Budget> {
           Value<DateTime?> sharedDateUpdated = const Value.absent(),
           Value<List<String>?> sharedMembers = const Value.absent(),
           Value<List<String>?> sharedAllMembersEver = const Value.absent(),
-          bool? isAbsoluteSpendingLimit}) =>
+          bool? isAbsoluteSpendingLimit,
+          bool? rollover,
+          Value<double?> rolloverLimit = const Value.absent()}) =>
       Budget(
         budgetPk: budgetPk ?? this.budgetPk,
         name: name ?? this.name,
@@ -4233,6 +4273,9 @@ class Budget extends DataClass implements Insertable<Budget> {
             : this.sharedAllMembersEver,
         isAbsoluteSpendingLimit:
             isAbsoluteSpendingLimit ?? this.isAbsoluteSpendingLimit,
+        rollover: rollover ?? this.rollover,
+        rolloverLimit:
+            rolloverLimit.present ? rolloverLimit.value : this.rolloverLimit,
       );
   @override
   String toString() {
@@ -4263,7 +4306,9 @@ class Budget extends DataClass implements Insertable<Budget> {
           ..write('sharedDateUpdated: $sharedDateUpdated, ')
           ..write('sharedMembers: $sharedMembers, ')
           ..write('sharedAllMembersEver: $sharedAllMembersEver, ')
-          ..write('isAbsoluteSpendingLimit: $isAbsoluteSpendingLimit')
+          ..write('isAbsoluteSpendingLimit: $isAbsoluteSpendingLimit, ')
+          ..write('rollover: $rollover, ')
+          ..write('rolloverLimit: $rolloverLimit')
           ..write(')'))
         .toString();
   }
@@ -4296,7 +4341,9 @@ class Budget extends DataClass implements Insertable<Budget> {
         sharedDateUpdated,
         sharedMembers,
         sharedAllMembersEver,
-        isAbsoluteSpendingLimit
+        isAbsoluteSpendingLimit,
+        rollover,
+        rolloverLimit
       ]);
   @override
   bool operator ==(Object other) =>
@@ -4328,7 +4375,9 @@ class Budget extends DataClass implements Insertable<Budget> {
           other.sharedDateUpdated == this.sharedDateUpdated &&
           other.sharedMembers == this.sharedMembers &&
           other.sharedAllMembersEver == this.sharedAllMembersEver &&
-          other.isAbsoluteSpendingLimit == this.isAbsoluteSpendingLimit);
+          other.isAbsoluteSpendingLimit == this.isAbsoluteSpendingLimit &&
+          other.rollover == this.rollover &&
+          other.rolloverLimit == this.rolloverLimit);
 }
 
 class BudgetsCompanion extends UpdateCompanion<Budget> {
@@ -4359,6 +4408,8 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
   final Value<List<String>?> sharedMembers;
   final Value<List<String>?> sharedAllMembersEver;
   final Value<bool> isAbsoluteSpendingLimit;
+  final Value<bool> rollover;
+  final Value<double?> rolloverLimit;
   final Value<int> rowid;
   const BudgetsCompanion({
     this.budgetPk = const Value.absent(),
@@ -4388,6 +4439,8 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     this.sharedMembers = const Value.absent(),
     this.sharedAllMembersEver = const Value.absent(),
     this.isAbsoluteSpendingLimit = const Value.absent(),
+    this.rollover = const Value.absent(),
+    this.rolloverLimit = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   BudgetsCompanion.insert({
@@ -4418,6 +4471,8 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     this.sharedMembers = const Value.absent(),
     this.sharedAllMembersEver = const Value.absent(),
     this.isAbsoluteSpendingLimit = const Value.absent(),
+    this.rollover = const Value.absent(),
+    this.rolloverLimit = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : name = Value(name),
         amount = Value(amount),
@@ -4453,6 +4508,8 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     Expression<String>? sharedMembers,
     Expression<String>? sharedAllMembersEver,
     Expression<bool>? isAbsoluteSpendingLimit,
+    Expression<bool>? rollover,
+    Expression<double>? rolloverLimit,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -4489,6 +4546,8 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
         'shared_all_members_ever': sharedAllMembersEver,
       if (isAbsoluteSpendingLimit != null)
         'is_absolute_spending_limit': isAbsoluteSpendingLimit,
+      if (rollover != null) 'rollover': rollover,
+      if (rolloverLimit != null) 'rollover_limit': rolloverLimit,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -4521,6 +4580,8 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       Value<List<String>?>? sharedMembers,
       Value<List<String>?>? sharedAllMembersEver,
       Value<bool>? isAbsoluteSpendingLimit,
+      Value<bool>? rollover,
+      Value<double?>? rolloverLimit,
       Value<int>? rowid}) {
     return BudgetsCompanion(
       budgetPk: budgetPk ?? this.budgetPk,
@@ -4554,6 +4615,8 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       sharedAllMembersEver: sharedAllMembersEver ?? this.sharedAllMembersEver,
       isAbsoluteSpendingLimit:
           isAbsoluteSpendingLimit ?? this.isAbsoluteSpendingLimit,
+      rollover: rollover ?? this.rollover,
+      rolloverLimit: rolloverLimit ?? this.rolloverLimit,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -4580,21 +4643,17 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       map['end_date'] = Variable<DateTime>(endDate.value);
     }
     if (walletFks.present) {
-      final converter = $BudgetsTable.$converterwalletFksn;
-
-      map['wallet_fks'] = Variable<String>(converter.toSql(walletFks.value));
+      map['wallet_fks'] = Variable<String>(
+          $BudgetsTable.$converterwalletFksn.toSql(walletFks.value));
     }
     if (categoryFks.present) {
-      final converter = $BudgetsTable.$convertercategoryFksn;
-
-      map['category_fks'] =
-          Variable<String>(converter.toSql(categoryFks.value));
+      map['category_fks'] = Variable<String>(
+          $BudgetsTable.$convertercategoryFksn.toSql(categoryFks.value));
     }
     if (categoryFksExclude.present) {
-      final converter = $BudgetsTable.$convertercategoryFksExcluden;
-
-      map['category_fks_exclude'] =
-          Variable<String>(converter.toSql(categoryFksExclude.value));
+      map['category_fks_exclude'] = Variable<String>($BudgetsTable
+          .$convertercategoryFksExcluden
+          .toSql(categoryFksExclude.value));
     }
     if (income.present) {
       map['income'] = Variable<bool>(income.value);
@@ -4610,9 +4669,8 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       map['period_length'] = Variable<int>(periodLength.value);
     }
     if (reoccurrence.present) {
-      final converter = $BudgetsTable.$converterreoccurrencen;
-
-      map['reoccurrence'] = Variable<int>(converter.toSql(reoccurrence.value));
+      map['reoccurrence'] = Variable<int>(
+          $BudgetsTable.$converterreoccurrencen.toSql(reoccurrence.value));
     }
     if (dateCreated.present) {
       map['date_created'] = Variable<DateTime>(dateCreated.value);
@@ -4630,44 +4688,44 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       map['wallet_fk'] = Variable<String>(walletFk.value);
     }
     if (budgetTransactionFilters.present) {
-      final converter = $BudgetsTable.$converterbudgetTransactionFiltersn;
-
-      map['budget_transaction_filters'] =
-          Variable<String>(converter.toSql(budgetTransactionFilters.value));
+      map['budget_transaction_filters'] = Variable<String>($BudgetsTable
+          .$converterbudgetTransactionFiltersn
+          .toSql(budgetTransactionFilters.value));
     }
     if (memberTransactionFilters.present) {
-      final converter = $BudgetsTable.$convertermemberTransactionFiltersn;
-
-      map['member_transaction_filters'] =
-          Variable<String>(converter.toSql(memberTransactionFilters.value));
+      map['member_transaction_filters'] = Variable<String>($BudgetsTable
+          .$convertermemberTransactionFiltersn
+          .toSql(memberTransactionFilters.value));
     }
     if (sharedKey.present) {
       map['shared_key'] = Variable<String>(sharedKey.value);
     }
     if (sharedOwnerMember.present) {
-      final converter = $BudgetsTable.$convertersharedOwnerMembern;
-
-      map['shared_owner_member'] =
-          Variable<int>(converter.toSql(sharedOwnerMember.value));
+      map['shared_owner_member'] = Variable<int>($BudgetsTable
+          .$convertersharedOwnerMembern
+          .toSql(sharedOwnerMember.value));
     }
     if (sharedDateUpdated.present) {
       map['shared_date_updated'] = Variable<DateTime>(sharedDateUpdated.value);
     }
     if (sharedMembers.present) {
-      final converter = $BudgetsTable.$convertersharedMembersn;
-
-      map['shared_members'] =
-          Variable<String>(converter.toSql(sharedMembers.value));
+      map['shared_members'] = Variable<String>(
+          $BudgetsTable.$convertersharedMembersn.toSql(sharedMembers.value));
     }
     if (sharedAllMembersEver.present) {
-      final converter = $BudgetsTable.$convertersharedAllMembersEvern;
-
-      map['shared_all_members_ever'] =
-          Variable<String>(converter.toSql(sharedAllMembersEver.value));
+      map['shared_all_members_ever'] = Variable<String>($BudgetsTable
+          .$convertersharedAllMembersEvern
+          .toSql(sharedAllMembersEver.value));
     }
     if (isAbsoluteSpendingLimit.present) {
       map['is_absolute_spending_limit'] =
           Variable<bool>(isAbsoluteSpendingLimit.value);
+    }
+    if (rollover.present) {
+      map['rollover'] = Variable<bool>(rollover.value);
+    }
+    if (rolloverLimit.present) {
+      map['rollover_limit'] = Variable<double>(rolloverLimit.value);
     }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
@@ -4705,6 +4763,8 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
           ..write('sharedMembers: $sharedMembers, ')
           ..write('sharedAllMembersEver: $sharedAllMembersEver, ')
           ..write('isAbsoluteSpendingLimit: $isAbsoluteSpendingLimit, ')
+          ..write('rollover: $rollover, ')
+          ..write('rolloverLimit: $rolloverLimit, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -6454,8 +6514,7 @@ class DeleteLog extends DataClass implements Insertable<DeleteLog> {
     map['delete_log_pk'] = Variable<String>(deleteLogPk);
     map['entry_pk'] = Variable<String>(entryPk);
     {
-      final converter = $DeleteLogsTable.$convertertype;
-      map['type'] = Variable<int>(converter.toSql(type));
+      map['type'] = Variable<int>($DeleteLogsTable.$convertertype.toSql(type));
     }
     map['date_time_modified'] = Variable<DateTime>(dateTimeModified);
     return map;
@@ -6589,9 +6648,8 @@ class DeleteLogsCompanion extends UpdateCompanion<DeleteLog> {
       map['entry_pk'] = Variable<String>(entryPk.value);
     }
     if (type.present) {
-      final converter = $DeleteLogsTable.$convertertype;
-
-      map['type'] = Variable<int>(converter.toSql(type.value));
+      map['type'] =
+          Variable<int>($DeleteLogsTable.$convertertype.toSql(type.value));
     }
     if (dateTimeModified.present) {
       map['date_time_modified'] = Variable<DateTime>(dateTimeModified.value);

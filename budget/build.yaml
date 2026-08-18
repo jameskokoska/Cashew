@@ -1,0 +1,6 @@
+targets:
+  $default:
+    builders:
+      drift_dev:
+        options:
+          generate_manager: false

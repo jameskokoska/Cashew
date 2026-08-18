@@ -121,6 +121,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   bool selectedShared = false;
   bool selectedIncome = false;
   bool selectedAddedTransactionsOnly = false;
+  bool selectedRollover = false;
+  double? selectedRolloverLimit;
   List<BudgetTransactionFilters> selectedBudgetTransactionFilters = [
     BudgetTransactionFilters.defaultBudgetTransactionFilters
   ];
@@ -226,7 +228,46 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   void setSelectedAmount(double amount, String amountStringCalculation) {
     setState(() {
       selectedAmount = amount;
+      if (selectedRolloverLimit != null && selectedRolloverLimit! < amount) {
+        selectedRolloverLimit = amount;
+      }
     });
+  }
+
+  Future<void> selectRolloverLimit(BuildContext context) async {
+    await openBottomSheet(
+      context,
+      fullSnap: true,
+      PopupFramework(
+        title: "rollover-limit".tr(),
+        hasPadding: false,
+        underTitleSpace: false,
+        child: SelectAmount(
+          allowZero: true,
+          onlyShowCurrencyIcon: true,
+          amountPassed: (selectedRolloverLimit ?? 0).toString(),
+          setSelectedAmount: (amount, calculation) {
+            setState(() {
+              double rolloverLimit = amount.abs();
+              if (rolloverLimit == 0) {
+                selectedRolloverLimit = null;
+              } else {
+                selectedRolloverLimit = rolloverLimit < (selectedAmount ?? 0)
+                    ? selectedAmount
+                    : rolloverLimit;
+              }
+            });
+            determineBottomButton();
+          },
+          next: () {
+            popRoute(context);
+          },
+          nextLabel: "set-rollover-limit".tr(),
+          padding: EdgeInsetsDirectional.symmetric(horizontal: 18),
+          walletPkForCurrency: selectedWalletPk,
+        ),
+      ),
+    );
   }
 
   Future addBudget() async {
@@ -340,6 +381,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           currentInstance?.isAbsoluteSpendingLimit ?? false,
       income: selectedIncome,
       walletFks: selectedWalletFks,
+      rollover: selectedRecurrence != "Custom" && selectedRollover,
+      rolloverLimit: selectedRolloverLimit,
     );
   }
 
@@ -416,6 +459,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           : HexColor(widget.budget!.colour);
       selectedWalletPk = widget.budget!.walletFk;
       selectedWalletFks = widget.budget!.walletFks;
+      selectedRollover = widget.budget!.rollover;
+      selectedRolloverLimit = widget.budget!.rolloverLimit;
 
       selectedBudgetTransactionFilters =
           widget.budget!.budgetTransactionFilters ??
@@ -796,6 +841,61 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                 },
                 setSelectedWalletPk: setSelectedWalletPk,
                 initialSelectedWalletPk: selectedWalletPk,
+              ),
+              AnimatedExpanded(
+                expand: selectedRecurrence != "Custom",
+                child: Padding(
+                  padding: EdgeInsetsDirectional.symmetric(
+                    horizontal: 13 + getHorizontalPaddingConstrained(context),
+                  ),
+                  child: Column(
+                    children: [
+                      SettingsContainerSwitch(
+                        title: "rollover-budget".tr(),
+                        description: "rollover-budget-description".tr(),
+                        initialValue: selectedRollover,
+                        onSwitched: (value) {
+                          setState(() {
+                            selectedRollover = value;
+                          });
+                          determineBottomButton();
+                        },
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.autorenew_outlined
+                            : Icons.autorenew_rounded,
+                        enableBorderRadius: true,
+                      ),
+                      AnimatedExpanded(
+                        expand: selectedRollover,
+                        child: SettingsContainer(
+                          title: "rollover-limit".tr(),
+                          description: "rollover-limit-description".tr(),
+                          onTap: () {
+                            selectRolloverLimit(context);
+                          },
+                          icon: appStateSettings["outlinedIcons"]
+                              ? Icons.speed_outlined
+                              : Icons.speed_rounded,
+                          enableBorderRadius: true,
+                          afterWidget: TextFont(
+                            text: selectedRolloverLimit == null
+                                ? "no-cap".tr()
+                                : convertToMoney(
+                                    Provider.of<AllWallets>(context),
+                                    selectedRolloverLimit!,
+                                    currencyKey:
+                                        Provider.of<AllWallets>(context)
+                                            .indexedByPk[selectedWalletPk]
+                                            ?.currency,
+                                  ),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
               SizedBox(height: 10),
             ],
@@ -1859,6 +1959,8 @@ class _BudgetDetailsState extends State<BudgetDetails> {
                   isAbsoluteSpendingLimit: false,
                   income: false,
                   archived: false,
+                  rollover: false,
+                  rolloverLimit: null,
                 ),
                 DateTime.now(),
               );
