@@ -32,10 +32,20 @@
         android:requestLegacyExternalStorage="true"
         android:label="Cashew"
         android:icon="@mipmap/ic_launcher">
-        <!-- Use the new rendering engine Impeller (experimental) -->
-        <!-- <meta-data
+        <!-- Impeller (Vulkan backend) crashes on launch on some Android 17 beta
+             builds with a fatal "Check failed: back_texture. Context is valid:0"
+             in impeller/display_list/canvas.cc, aborting the raster thread
+             (SIGABRT) before the first frame is drawn. The underlying cause is
+             the Vulkan driver returning ErrorCompressionExhaustedEXT when
+             Impeller allocates a new render target image, which progressively
+             worsens over a session (each new screen/scroll allocates another
+             render target) until allocation fails outright. This is a known
+             class of Impeller/Vulkan driver-compatibility crash on Android,
+             unrelated to app data. Disabling Impeller falls back to the
+             Skia/OpenGL renderer, which does not hit this allocation path. -->
+        <meta-data
         android:name="io.flutter.embedding.android.EnableImpeller"
-        android:value="true" /> -->
+        android:value="false" />
         <activity
             android:exported="true" 
             android:name=".MainActivity"
