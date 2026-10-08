@@ -138,11 +138,12 @@ class AboutPageState extends State<AboutPage> {
       ),
       StudentMemberCard(
         containerColor: containerColor,
-        role: "Thành viên - Kiểm thử",
+        role: "Thành viên - Google Auth & Cloud DMS",
         name: "Lê Anh Tuấn",
         studentId: "2151060296",
-        task: "Chuẩn hóa dependencies, môi trường & test CRUD",
-        icon: Icons.fact_check_rounded,
+        task: "Xác thực Google Sign-In 1 chạm, Firebase Auth State & Kiểm thử",
+        icon: Icons.vpn_key_rounded,
+        highlight: true,
       ),
       StudentMemberCard(
         containerColor: containerColor,

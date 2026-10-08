@@ -1,6 +1,7 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart' hide AppSettings;
 import 'package:budget/pages/aboutPage.dart';
+import 'package:budget/pages/loginPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/billSplitter.dart';
 import 'package:budget/pages/budgetsListPage.dart';
@@ -622,6 +623,13 @@ class SettingsPageContent extends StatelessWidget {
         GoogleAccountLoginButton(
           isOutlinedButton: false,
           forceButtonName: "google-drive".tr(),
+        ),
+
+        SettingsContainerOpenPage(
+          openPage: const LoginPage(),
+          title: "Xác thực Google Cloud (Nhóm 16)",
+          description: "Google Sign-In một chạm & Quản lý Auth State — Lê Anh Tuấn",
+          icon: Icons.cloud_sync_rounded,
         ),
       ],
     );

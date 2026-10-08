@@ -1,18 +1,1 @@
-{
-  "hosting": {
-    "public": "build/web",
-    "predeploy": "flutter build web --release --web-renderer canvaskit --no-tree-shake-icons",
-    "site":"budget-track",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
-  }
-}
+{"hosting":{"public":"build/web","predeploy":"flutter build web --release --web-renderer canvaskit --no-tree-shake-icons","site":"budget-track","ignore":["firebase.json","**/.*","**/node_modules/**"],"rewrites":[{"source":"**","destination":"/index.html"}]},"flutter":{"platforms":{"android":{"default":{"projectId":"cashew-study-docs","appId":"1:547153434445:android:c66f373a46d8f3c42f4904","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"cashew-study-docs","configurations":{"android":"1:547153434445:android:c66f373a46d8f3c42f4904","ios":"1:547153434445:ios:862b587d838be2022f4904","web":"1:547153434445:web:cad786a0f50bb21d2f4904"}}}}}}
