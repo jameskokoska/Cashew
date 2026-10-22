@@ -26,7 +26,7 @@ import 'package:budget/pages/activityPage.dart';
 import 'package:flutter/material.dart' show RangeValues;
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 46;
+int schemaVersionGlobal = 47;
 
 // To update and migrate the database, check the README
 
@@ -538,6 +538,31 @@ class Objectives extends Table {
   Set<Column> get primaryKey => {objectivePk};
 }
 
+@DataClassName('DedupeEntry')
+class DedupeEntries extends Table {
+  TextColumn get entryPk => text().clientDefault(() => uuid.v4())();
+  TextColumn get eventKey => text()();
+  TextColumn get packageName => text().nullable()();
+  TextColumn get notificationId => text().nullable()();
+  RealColumn get amount => real().nullable()();
+  TextColumn get amountNormalized => text().nullable()();
+  TextColumn get currency => text().nullable()();
+  TextColumn get title => text().nullable()();
+  TextColumn get rawContent => text().nullable()();
+  TextColumn get source =>
+      text().withDefault(const Constant('notification'))();
+  DateTimeColumn get dateTimeCreated =>
+      dateTime().clientDefault(() => DateTime.now())();
+  DateTimeColumn get notificationTimestamp => dateTime().nullable()();
+  TextColumn get status =>
+      text().withDefault(const Constant('created'))();
+  TextColumn get createdTransactionPk => text().nullable()();
+  TextColumn get matchedEntryPk => text().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {entryPk};
+}
+
 class TransactionWithCategory {
   final TransactionCategory category;
   final Transaction transaction;
@@ -688,6 +713,7 @@ class CategoryWithTotal {
   ScannerTemplates,
   DeleteLogs,
   Objectives,
+  DedupeEntries,
 ])
 class FinanceDatabase extends _$FinanceDatabase {
   // FinanceDatabase() : super(_openConnection());
@@ -1164,6 +1190,15 @@ class FinanceDatabase extends _$FinanceDatabase {
                         e.toString());
               }
             },
+            from46To47: (m, schema) async {
+              try {
+                await m.createTable(schema.dedupeEntries);
+              } catch (e) {
+                print(
+                    "Migration Error: Error creating table dedupeEntries " +
+                        e.toString());
+              }
+            },
           ),
         );
       },
@@ -1294,6 +1329,35 @@ class FinanceDatabase extends _$FinanceDatabase {
   // +int schemaVersionGlobal = 38;
   // Sat Aug 12 03:26:31 2023 -0400
   // commit 3b1e604950ec04eba0a545991ba743954156246e
+
+  Future<int> insertDedupeEntry(DedupeEntriesCompanion entry) {
+    return into(dedupeEntries).insert(entry);
+  }
+
+  Future<List<DedupeEntry>> getAllDedupeEntries({int limit = 100}) {
+    return (select(dedupeEntries)
+          ..orderBy([(u) => OrderingTerm.desc(u.dateTimeCreated)])
+          ..limit(limit))
+        .get();
+  }
+
+  Future<int> updateDedupeEntryStatus(
+    String entryPk,
+    String status, {
+    String? matchedEntryPk,
+    String? createdTransactionPk,
+  }) {
+    return (update(dedupeEntries)..where((tbl) => tbl.entryPk.equals(entryPk))).write(
+      DedupeEntriesCompanion(
+        status: Value(status),
+        matchedEntryPk:
+            matchedEntryPk != null ? Value(matchedEntryPk) : const Value.absent(),
+        createdTransactionPk: createdTransactionPk != null
+            ? Value(createdTransactionPk)
+            : const Value.absent(),
+      ),
+    );
+  }
 
   Future<void> deleteEverything() {
     return transaction(() async {

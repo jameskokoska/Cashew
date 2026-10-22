@@ -59,7 +59,7 @@ Each slice ends in something runnable and testable. S1 to S4 depend on S0.
 - [x] **S0b Plugin upgrade decision.** Upstream inspection of `notification_listener_service: 1.0.0` completed. Upgrading is recommended: it fixes plugin issue #35 (`RECEIVER_NOT_EXPORTED` on API 34+), adds `timestamp` needed for dedupe windows, and retains full Dart API backwards compatibility with existing methods. Caveat: `EXTRA_BIG_TEXT` is still unhandled upstream in 1.0.0 (plugin still uses `EXTRA_TEXT` truncated to 500 chars).
 - [x] **S1 Single dispatcher (tracer for the refactor).** Move the global subscription into one dispatcher (`NotificationDispatcher`). Ignore `hasRemoved == true` events to eliminate duplicate transaction creation on notification dismissals. Keep current behavior for existing templates. Added unit test suite in `budget/test/notification_dispatcher_test.dart`.
 - [x] **S2 Google Pay source tracer bullet.** Added source classification by `packageName` (`com.google.android.apps.walletnfcrel`, `com.google.android.apps.nbu.paisa.user`, and `com.google.android.gms`), implemented `GooglePayParser` parsing merchant, amount, currency, and card hints, and wired into `NotificationDispatcher` to prefill `AddTransactionPage`. Verified that payload length (~49 chars) fits within `EXTRA_TEXT` (500 chars). Added unit tests in `google_pay_parser_test.dart` and real device sample in `.scratch/bank-samples/google-pay/sample-notification.md`.
-- [ ] **S3 Dedupe ledger.** Record a key per event (`packageName` + `id` + normalized amount/title/timestamp bucket) with a time window (default 5 min, to be tuned from S0 samples). A second match within the window is suppressed or sent to review. Store in a new Drift table (additive migration). Covers:
+- [x] **S3 Dedupe ledger.** Record a key per event (`packageName` + `id` + normalized amount/title/timestamp bucket) with a time window (default 5 min, to be tuned from S0 samples). A second match within the window is suppressed or sent to review. Store in a new Drift table (additive migration). Covers:
   - posted + removed events for the same notification
   - Google Pay + bank notification for the same payment
   - Apple Pay Shortcut firing twice, or App Link throttler retries
@@ -78,7 +78,7 @@ Each slice ends in something runnable and testable. S1 to S4 depend on S0.
 
 ## Roadblock
 
-None blocking S3. S3 (Dedupe ledger in Drift) is unblocked and ready for implementation.
+None blocking S4. S4 (Review route for uncertain matches) is unblocked and ready for implementation.
 
 ## Tried
 
@@ -86,10 +86,11 @@ None blocking S3. S3 (Dedupe ledger in Drift) is unblocked and ready for impleme
 - S0b evaluation of `notification_listener_service: 1.0.0` completed and recorded in `research.md`.
 - S1 implemented: upgraded to `notification_listener_service: ^1.0.0`, created `NotificationDispatcher` to own the listener stream, filtered out `hasRemoved == true` events, and added unit tests in `notification_dispatcher_test.dart`.
 - S2 implemented: created `GooglePayParser`, classified packages and payment content, routed to prefilled `AddTransactionPage`, and added unit tests with real 7-Eleven sample in `google_pay_parser_test.dart`.
+- S3 implemented: created `DedupeLedger` service, added additive Drift migration v46 -> v47 with `DedupeEntries` table and schema dump, wired deduplication into `NotificationDispatcher` and `appLinks`, and added unit tests in `dedupe_ledger_test.dart`.
 
 ## Resume / next step
 
-Proceed to S3: Design and implement the additive Drift dedupe ledger table with composite event key and time-window duplicate suppression.
+Proceed to S4: Implement review route for uncertain matches.
 
 ## Links
 

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:budget/functions.dart';
+import 'package:budget/struct/dedupeLedger.dart';
 import 'package:budget/struct/googlePayParser.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:notification_listener_service/notification_event.dart';
@@ -102,6 +103,25 @@ class NotificationDispatcher {
       return false;
     }
 
+    // Parse potential payment fields for deduplication check
+    final googlePayResult = GooglePayParser.parse(event.title, event.content);
+    final dedupeResult = await DedupeLedger.instance.checkAndRecordNotification(
+      packageName: event.packageName,
+      notificationId: event.id?.toString(),
+      amount: googlePayResult?.amount,
+      currency: googlePayResult?.currency,
+      title: googlePayResult?.merchant ?? event.title,
+      rawContent: event.content,
+      eventTime: event.timestamp != null && event.timestamp! > 0
+          ? DateTime.fromMillisecondsSinceEpoch(event.timestamp!)
+          : null,
+    );
+
+    // Suppress duplicate events within the time window
+    if (dedupeResult.isDuplicate) {
+      return false;
+    }
+
     String messageString = formatNotificationMessage(event);
     addCapturedNotification(messageString);
 
@@ -113,7 +133,7 @@ class NotificationDispatcher {
 
     // Check if event is from Google Wallet / Google Pay
     if (GooglePayParser.isGooglePayEvent(event)) {
-      final googlePayResult = GooglePayParser.parse(event.title, event.content);
+      // googlePayResult was parsed above for deduplication check
       if (googlePayResult != null) {
         final gPayHandler = onGooglePayTransaction ??
             GooglePayParser.processGooglePayTransaction;

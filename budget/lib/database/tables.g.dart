@@ -6615,6 +6615,584 @@ class DeleteLogsCompanion extends UpdateCompanion<DeleteLog> {
   }
 }
 
+
+class $DedupeEntriesTable extends DedupeEntries
+    with TableInfo<$DedupeEntriesTable, DedupeEntry> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $DedupeEntriesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _entryPkMeta =
+      const VerificationMeta('entryPk');
+  @override
+  late final GeneratedColumn<String> entryPk = GeneratedColumn<String>(
+      'entry_pk', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      clientDefault: () => uuid.v4());
+  static const VerificationMeta _eventKeyMeta =
+      const VerificationMeta('eventKey');
+  @override
+  late final GeneratedColumn<String> eventKey = GeneratedColumn<String>(
+      'event_key', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _packageNameMeta =
+      const VerificationMeta('packageName');
+  @override
+  late final GeneratedColumn<String> packageName = GeneratedColumn<String>(
+      'package_name', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _notificationIdMeta =
+      const VerificationMeta('notificationId');
+  @override
+  late final GeneratedColumn<String> notificationId = GeneratedColumn<String>(
+      'notification_id', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _amountMeta = const VerificationMeta('amount');
+  @override
+  late final GeneratedColumn<double> amount = GeneratedColumn<double>(
+      'amount', aliasedName, true,
+      type: DriftSqlType.double, requiredDuringInsert: false);
+  static const VerificationMeta _amountNormalizedMeta =
+      const VerificationMeta('amountNormalized');
+  @override
+  late final GeneratedColumn<String> amountNormalized = GeneratedColumn<String>(
+      'amount_normalized', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _currencyMeta =
+      const VerificationMeta('currency');
+  @override
+  late final GeneratedColumn<String> currency = GeneratedColumn<String>(
+      'currency', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+      'title', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _rawContentMeta =
+      const VerificationMeta('rawContent');
+  @override
+  late final GeneratedColumn<String> rawContent = GeneratedColumn<String>(
+      'raw_content', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _sourceMeta = const VerificationMeta('source');
+  @override
+  late final GeneratedColumn<String> source = GeneratedColumn<String>(
+      'source', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant('notification'));
+  static const VerificationMeta _dateTimeCreatedMeta =
+      const VerificationMeta('dateTimeCreated');
+  @override
+  late final GeneratedColumn<DateTime> dateTimeCreated =
+      GeneratedColumn<DateTime>('date_time_created', aliasedName, false,
+          type: DriftSqlType.dateTime,
+          requiredDuringInsert: false,
+          clientDefault: () => DateTime.now());
+  static const VerificationMeta _notificationTimestampMeta =
+      const VerificationMeta('notificationTimestamp');
+  @override
+  late final GeneratedColumn<DateTime> notificationTimestamp =
+      GeneratedColumn<DateTime>('notification_timestamp', aliasedName, true,
+          type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+      'status', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant('created'));
+  static const VerificationMeta _createdTransactionPkMeta =
+      const VerificationMeta('createdTransactionPk');
+  @override
+  late final GeneratedColumn<String> createdTransactionPk =
+      GeneratedColumn<String>('created_transaction_pk', aliasedName, true,
+          type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _matchedEntryPkMeta =
+      const VerificationMeta('matchedEntryPk');
+  @override
+  late final GeneratedColumn<String> matchedEntryPk = GeneratedColumn<String>(
+      'matched_entry_pk', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        entryPk,
+        eventKey,
+        packageName,
+        notificationId,
+        amount,
+        amountNormalized,
+        currency,
+        title,
+        rawContent,
+        source,
+        dateTimeCreated,
+        notificationTimestamp,
+        status,
+        createdTransactionPk,
+        matchedEntryPk,
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'dedupe_entries';
+  @override
+  VerificationContext validateIntegrity(Insertable<DedupeEntry> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('entry_pk')) {
+      context.handle(_entryPkMeta,
+          entryPk.isAcceptableOrUnknown(data['entry_pk']!, _entryPkMeta));
+    }
+    if (data.containsKey('event_key')) {
+      context.handle(_eventKeyMeta,
+          eventKey.isAcceptableOrUnknown(data['event_key']!, _eventKeyMeta));
+    } else if (isInserting) {
+      context.missing(_eventKeyMeta);
+    }
+    if (data.containsKey('package_name')) {
+      context.handle(
+          _packageNameMeta,
+          packageName.isAcceptableOrUnknown(
+              data['package_name']!, _packageNameMeta));
+    }
+    if (data.containsKey('notification_id')) {
+      context.handle(
+          _notificationIdMeta,
+          notificationId.isAcceptableOrUnknown(
+              data['notification_id']!, _notificationIdMeta));
+    }
+    if (data.containsKey('amount')) {
+      context.handle(_amountMeta,
+          amount.isAcceptableOrUnknown(data['amount']!, _amountMeta));
+    }
+    if (data.containsKey('amount_normalized')) {
+      context.handle(
+          _amountNormalizedMeta,
+          amountNormalized.isAcceptableOrUnknown(
+              data['amount_normalized']!, _amountNormalizedMeta));
+    }
+    if (data.containsKey('currency')) {
+      context.handle(_currencyMeta,
+          currency.isAcceptableOrUnknown(data['currency']!, _currencyMeta));
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
+    }
+    if (data.containsKey('raw_content')) {
+      context.handle(
+          _rawContentMeta,
+          rawContent.isAcceptableOrUnknown(
+              data['raw_content']!, _rawContentMeta));
+    }
+    if (data.containsKey('source')) {
+      context.handle(_sourceMeta,
+          source.isAcceptableOrUnknown(data['source']!, _sourceMeta));
+    }
+    if (data.containsKey('date_time_created')) {
+      context.handle(
+          _dateTimeCreatedMeta,
+          dateTimeCreated.isAcceptableOrUnknown(
+              data['date_time_created']!, _dateTimeCreatedMeta));
+    }
+    if (data.containsKey('notification_timestamp')) {
+      context.handle(
+          _notificationTimestampMeta,
+          notificationTimestamp.isAcceptableOrUnknown(
+              data['notification_timestamp']!, _notificationTimestampMeta));
+    }
+    if (data.containsKey('status')) {
+      context.handle(_statusMeta,
+          status.isAcceptableOrUnknown(data['status']!, _statusMeta));
+    }
+    if (data.containsKey('created_transaction_pk')) {
+      context.handle(
+          _createdTransactionPkMeta,
+          createdTransactionPk.isAcceptableOrUnknown(
+              data['created_transaction_pk']!, _createdTransactionPkMeta));
+    }
+    if (data.containsKey('matched_entry_pk')) {
+      context.handle(
+          _matchedEntryPkMeta,
+          matchedEntryPk.isAcceptableOrUnknown(
+              data['matched_entry_pk']!, _matchedEntryPkMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {entryPk};
+  @override
+  DedupeEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return DedupeEntry(
+      entryPk: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}entry_pk'])!,
+      eventKey: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}event_key'])!,
+      packageName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}package_name']),
+      notificationId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}notification_id']),
+      amount: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}amount']),
+      amountNormalized: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}amount_normalized']),
+      currency: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}currency']),
+      title: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}title']),
+      rawContent: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}raw_content']),
+      source: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}source'])!,
+      dateTimeCreated: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}date_time_created'])!,
+      notificationTimestamp: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime,
+          data['${effectivePrefix}notification_timestamp']),
+      status: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}status'])!,
+      createdTransactionPk: attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}created_transaction_pk']),
+      matchedEntryPk: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}matched_entry_pk']),
+    );
+  }
+
+  @override
+  $DedupeEntriesTable createAlias(String alias) {
+    return $DedupeEntriesTable(attachedDatabase, alias);
+  }
+}
+
+class DedupeEntry extends DataClass implements Insertable<DedupeEntry> {
+  final String entryPk;
+  final String eventKey;
+  final String? packageName;
+  final String? notificationId;
+  final double? amount;
+  final String? amountNormalized;
+  final String? currency;
+  final String? title;
+  final String? rawContent;
+  final String source;
+  final DateTime dateTimeCreated;
+  final DateTime? notificationTimestamp;
+  final String status;
+  final String? createdTransactionPk;
+  final String? matchedEntryPk;
+  const DedupeEntry({
+    required this.entryPk,
+    required this.eventKey,
+    this.packageName,
+    this.notificationId,
+    this.amount,
+    this.amountNormalized,
+    this.currency,
+    this.title,
+    this.rawContent,
+    required this.source,
+    required this.dateTimeCreated,
+    this.notificationTimestamp,
+    required this.status,
+    this.createdTransactionPk,
+    this.matchedEntryPk,
+  });
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['entry_pk'] = Variable<String>(entryPk);
+    map['event_key'] = Variable<String>(eventKey);
+    if (!nullToAbsent || packageName != null) {
+      map['package_name'] = Variable<String>(packageName);
+    }
+    if (!nullToAbsent || notificationId != null) {
+      map['notification_id'] = Variable<String>(notificationId);
+    }
+    if (!nullToAbsent || amount != null) {
+      map['amount'] = Variable<double>(amount);
+    }
+    if (!nullToAbsent || amountNormalized != null) {
+      map['amount_normalized'] = Variable<String>(amountNormalized);
+    }
+    if (!nullToAbsent || currency != null) {
+      map['currency'] = Variable<String>(currency);
+    }
+    if (!nullToAbsent || title != null) {
+      map['title'] = Variable<String>(title);
+    }
+    if (!nullToAbsent || rawContent != null) {
+      map['raw_content'] = Variable<String>(rawContent);
+    }
+    map['source'] = Variable<String>(source);
+    map['date_time_created'] = Variable<DateTime>(dateTimeCreated);
+    if (!nullToAbsent || notificationTimestamp != null) {
+      map['notification_timestamp'] = Variable<DateTime>(notificationTimestamp);
+    }
+    map['status'] = Variable<String>(status);
+    if (!nullToAbsent || createdTransactionPk != null) {
+      map['created_transaction_pk'] = Variable<String>(createdTransactionPk);
+    }
+    if (!nullToAbsent || matchedEntryPk != null) {
+      map['matched_entry_pk'] = Variable<String>(matchedEntryPk);
+    }
+    return map;
+  }
+
+  DedupeEntriesCompanion toCompanion(bool nullToAbsent) {
+    return DedupeEntriesCompanion(
+      entryPk: Value(entryPk),
+      eventKey: Value(eventKey),
+      packageName: packageName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(packageName),
+      notificationId: notificationId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(notificationId),
+      amount:
+          amount == null && nullToAbsent ? const Value.absent() : Value(amount),
+      amountNormalized: amountNormalized == null && nullToAbsent
+          ? const Value.absent()
+          : Value(amountNormalized),
+      currency: currency == null && nullToAbsent
+          ? const Value.absent()
+          : Value(currency),
+      title:
+          title == null && nullToAbsent ? const Value.absent() : Value(title),
+      rawContent: rawContent == null && nullToAbsent
+          ? const Value.absent()
+          : Value(rawContent),
+      source: Value(source),
+      dateTimeCreated: Value(dateTimeCreated),
+      notificationTimestamp: notificationTimestamp == null && nullToAbsent
+          ? const Value.absent()
+          : Value(notificationTimestamp),
+      status: Value(status),
+      createdTransactionPk: createdTransactionPk == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdTransactionPk),
+      matchedEntryPk: matchedEntryPk == null && nullToAbsent
+          ? const Value.absent()
+          : Value(matchedEntryPk),
+    );
+  }
+
+  factory DedupeEntry.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return DedupeEntry(
+      entryPk: serializer.fromJson<String>(json['entryPk']),
+      eventKey: serializer.fromJson<String>(json['eventKey']),
+      packageName: serializer.fromJson<String?>(json['packageName']),
+      notificationId: serializer.fromJson<String?>(json['notificationId']),
+      amount: serializer.fromJson<double?>(json['amount']),
+      amountNormalized: serializer.fromJson<String?>(json['amountNormalized']),
+      currency: serializer.fromJson<String?>(json['currency']),
+      title: serializer.fromJson<String?>(json['title']),
+      rawContent: serializer.fromJson<String?>(json['rawContent']),
+      source: serializer.fromJson<String>(json['source']),
+      dateTimeCreated: serializer.fromJson<DateTime>(json['dateTimeCreated']),
+      notificationTimestamp:
+          serializer.fromJson<DateTime?>(json['notificationTimestamp']),
+      status: serializer.fromJson<String>(json['status']),
+      createdTransactionPk:
+          serializer.fromJson<String?>(json['createdTransactionPk']),
+      matchedEntryPk: serializer.fromJson<String?>(json['matchedEntryPk']),
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'entryPk': serializer.toJson<String>(entryPk),
+      'eventKey': serializer.toJson<String>(eventKey),
+      'packageName': serializer.toJson<String?>(packageName),
+      'notificationId': serializer.toJson<String?>(notificationId),
+      'amount': serializer.toJson<double?>(amount),
+      'amountNormalized': serializer.toJson<String?>(amountNormalized),
+      'currency': serializer.toJson<String?>(currency),
+      'title': serializer.toJson<String?>(title),
+      'rawContent': serializer.toJson<String?>(rawContent),
+      'source': serializer.toJson<String>(source),
+      'dateTimeCreated': serializer.toJson<DateTime>(dateTimeCreated),
+      'notificationTimestamp':
+          serializer.toJson<DateTime?>(notificationTimestamp),
+      'status': serializer.toJson<String>(status),
+      'createdTransactionPk': serializer.toJson<String?>(createdTransactionPk),
+      'matchedEntryPk': serializer.toJson<String?>(matchedEntryPk),
+    };
+  }
+
+  DedupeEntry copyWith({
+    String? entryPk,
+    String? eventKey,
+    Value<String?> packageName = const Value.absent(),
+    Value<String?> notificationId = const Value.absent(),
+    Value<double?> amount = const Value.absent(),
+    Value<String?> amountNormalized = const Value.absent(),
+    Value<String?> currency = const Value.absent(),
+    Value<String?> title = const Value.absent(),
+    Value<String?> rawContent = const Value.absent(),
+    String? source,
+    DateTime? dateTimeCreated,
+    Value<DateTime?> notificationTimestamp = const Value.absent(),
+    String? status,
+    Value<String?> createdTransactionPk = const Value.absent(),
+    Value<String?> matchedEntryPk = const Value.absent(),
+  }) =>
+      DedupeEntry(
+        entryPk: entryPk ?? this.entryPk,
+        eventKey: eventKey ?? this.eventKey,
+        packageName: packageName.present ? packageName.value : this.packageName,
+        notificationId: notificationId.present
+            ? notificationId.value
+            : this.notificationId,
+        amount: amount.present ? amount.value : this.amount,
+        amountNormalized: amountNormalized.present
+            ? amountNormalized.value
+            : this.amountNormalized,
+        currency: currency.present ? currency.value : this.currency,
+        title: title.present ? title.value : this.title,
+        rawContent: rawContent.present ? rawContent.value : this.rawContent,
+        source: source ?? this.source,
+        dateTimeCreated: dateTimeCreated ?? this.dateTimeCreated,
+        notificationTimestamp: notificationTimestamp.present
+            ? notificationTimestamp.value
+            : this.notificationTimestamp,
+        status: status ?? this.status,
+        createdTransactionPk: createdTransactionPk.present
+            ? createdTransactionPk.value
+            : this.createdTransactionPk,
+        matchedEntryPk:
+            matchedEntryPk.present ? matchedEntryPk.value : this.matchedEntryPk,
+      );
+
+  @override
+  String toString() {
+    return (StringBuffer('DedupeEntry(')
+          ..write('entryPk: $entryPk, ')
+          ..write('eventKey: $eventKey, ')
+          ..write('packageName: $packageName, ')
+          ..write('notificationId: $notificationId, ')
+          ..write('amount: $amount, ')
+          ..write('amountNormalized: $amountNormalized, ')
+          ..write('currency: $currency, ')
+          ..write('title: $title, ')
+          ..write('rawContent: $rawContent, ')
+          ..write('source: $source, ')
+          ..write('dateTimeCreated: $dateTimeCreated, ')
+          ..write('notificationTimestamp: $notificationTimestamp, ')
+          ..write('status: $status, ')
+          ..write('createdTransactionPk: $createdTransactionPk, ')
+          ..write('matchedEntryPk: $matchedEntryPk')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        entryPk,
+        eventKey,
+        packageName,
+        notificationId,
+        amount,
+        amountNormalized,
+        currency,
+        title,
+        rawContent,
+        source,
+        dateTimeCreated,
+        notificationTimestamp,
+        status,
+        createdTransactionPk,
+        matchedEntryPk,
+      );
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is DedupeEntry &&
+          other.entryPk == this.entryPk &&
+          other.eventKey == this.eventKey &&
+          other.packageName == this.packageName &&
+          other.notificationId == this.notificationId &&
+          other.amount == this.amount &&
+          other.amountNormalized == this.amountNormalized &&
+          other.currency == this.currency &&
+          other.title == this.title &&
+          other.rawContent == this.rawContent &&
+          other.source == this.source &&
+          other.dateTimeCreated == this.dateTimeCreated &&
+          other.notificationTimestamp == this.notificationTimestamp &&
+          other.status == this.status &&
+          other.createdTransactionPk == this.createdTransactionPk &&
+          other.matchedEntryPk == this.matchedEntryPk);
+}
+
+class DedupeEntriesCompanion extends UpdateCompanion<DedupeEntry> {
+  final Value<String> entryPk;
+  final Value<String> eventKey;
+  final Value<String?> packageName;
+  final Value<String?> notificationId;
+  final Value<double?> amount;
+  final Value<String?> amountNormalized;
+  final Value<String?> currency;
+  final Value<String?> title;
+  final Value<String?> rawContent;
+  final Value<String> source;
+  final Value<DateTime> dateTimeCreated;
+  final Value<DateTime?> notificationTimestamp;
+  final Value<String> status;
+  final Value<String?> createdTransactionPk;
+  final Value<String?> matchedEntryPk;
+  final Value<int> rowid;
+  const DedupeEntriesCompanion({
+    this.entryPk = const Value.absent(),
+    this.eventKey = const Value.absent(),
+    this.packageName = const Value.absent(),
+    this.notificationId = const Value.absent(),
+    this.amount = const Value.absent(),
+    this.amountNormalized = const Value.absent(),
+    this.currency = const Value.absent(),
+    this.title = const Value.absent(),
+    this.rawContent = const Value.absent(),
+    this.source = const Value.absent(),
+    this.dateTimeCreated = const Value.absent(),
+    this.notificationTimestamp = const Value.absent(),
+    this.status = const Value.absent(),
+    this.createdTransactionPk = const Value.absent(),
+    this.matchedEntryPk = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  DedupeEntriesCompanion.insert({
+    this.entryPk = const Value.absent(),
+    required String eventKey,
+    this.packageName = const Value.absent(),
+    this.notificationId = const Value.absent(),
+    this.amount = const Value.absent(),
+    this.amountNormalized = const Value.absent(),
+    this.currency = const Value.absent(),
+    this.title = const Value.absent(),
+    this.rawContent = const Value.absent(),
+    this.source = const Value.absent(),
+    this.dateTimeCreated = const Value.absent(),
+    this.notificationTimestamp = const Value.absent(),
+    this.status = const Value.absent(),
+    this.createdTransactionPk = const Value.absent(),
+    this.matchedEntryPk = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : eventKey = Value(eventKey);
+}
+
 abstract class _$FinanceDatabase extends GeneratedDatabase {
   _$FinanceDatabase(QueryExecutor e) : super(e);
   late final $WalletsTable wallets = $WalletsTable(this);
@@ -6630,6 +7208,7 @@ abstract class _$FinanceDatabase extends GeneratedDatabase {
   late final $ScannerTemplatesTable scannerTemplates =
       $ScannerTemplatesTable(this);
   late final $DeleteLogsTable deleteLogs = $DeleteLogsTable(this);
+  late final $DedupeEntriesTable dedupeEntries = $DedupeEntriesTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -6644,6 +7223,7 @@ abstract class _$FinanceDatabase extends GeneratedDatabase {
         associatedTitles,
         appSettings,
         scannerTemplates,
-        deleteLogs
+        deleteLogs,
+        dedupeEntries
       ];
 }

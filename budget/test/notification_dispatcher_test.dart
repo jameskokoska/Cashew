@@ -1,3 +1,4 @@
+import 'package:budget/struct/dedupeLedger.dart';
 import 'package:budget/struct/notificationDispatcher.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:notification_listener_service/notification_event.dart';
@@ -69,6 +70,7 @@ void main() {
     late NotificationDispatcher dispatcher;
 
     setUp(() {
+      DedupeLedger.instance.clear();
       dispatcher = NotificationDispatcher.instance;
       dispatcher.recentCapturedNotifications.clear();
       dispatcher.queueHandler = null;

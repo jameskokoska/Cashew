@@ -6,6 +6,7 @@ import 'package:budget/pages/addEmailTemplate.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/dedupeLedger.dart';
 import 'package:budget/struct/notificationDispatcher.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/throttler.dart';
@@ -133,6 +134,16 @@ Future<Transaction?> processAddTransactionFromParams(
   String walletPk = wallet?.walletPk ?? appStateSettings["selectedWalletPk"];
   DateTime? dateCreated = await getDateTimeFromParams(params, context);
   double amount = getAmountFromParams(params);
+  if (amount > 0) {
+    final dedupeResult = await DedupeLedger.instance.checkAndRecordPayment(
+      amount: amount,
+      title: params["title"] ?? params["name"],
+      source: 'app_link',
+    );
+    if (dedupeResult.isDuplicate) {
+      return;
+    }
+  }
   String title = params["title"] ?? params["name"] ?? "";
   String note = params["note"] ?? params["notes"] ?? "";
 
@@ -237,6 +248,16 @@ Future processAddTransactionRouteFromParams(
   TransactionWallet? wallet = await getWalletFromParams(params);
   DateTime? dateCreated = await getDateTimeFromParams(params, context);
   double amount = getAmountFromParams(params);
+  if (amount > 0) {
+    final dedupeResult = await DedupeLedger.instance.checkAndRecordPayment(
+      amount: amount,
+      title: params["title"] ?? params["name"],
+      source: 'app_link',
+    );
+    if (dedupeResult.isDuplicate) {
+      return;
+    }
+  }
   // Add a delay so the keyboard can focus
   await Future.delayed(Duration(milliseconds: 50), () async {
     await pushRoute(
