@@ -78,7 +78,7 @@ Each slice ends in something runnable and testable. S1 to S4 depend on S0.
 
 ## Roadblock
 
-None blocking S4. S4 (Review route for uncertain matches) is unblocked and ready for implementation.
+PR #20 opened for S3 (`feat(notifications): add dedupe ledger and duplicate suppression (#7)`) on branch `feat/dedupe-ledger`. GitHub Actions CI quality gate failed at `Verify code formatting` (`dart format --output=none --set-exit-if-changed .`) on `schema_versions.dart`, `tables.dart`, `tables.g.dart`, and `dedupe_ledger_test.dart`. Needs `dart format .` run and committed before PR review.
 
 ## Tried
 
@@ -90,7 +90,10 @@ None blocking S4. S4 (Review route for uncertain matches) is unblocked and ready
 
 ## Resume / next step
 
-Proceed to S4: Implement review route for uncertain matches.
+1. In target workspace with Flutter/Dart SDK, format `budget/` via `dart format .` to fix CI on PR #20 and push.
+2. Run `/code-review` in an isolated session per `AGENTS.md`.
+3. Merge PR #20 into `main`.
+4. Proceed to S4: Implement review route for uncertain matches.
 
 ## Links
 
