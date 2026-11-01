@@ -8,6 +8,7 @@ import 'package:budget/pages/homePage/homePageNetWorth.dart';
 import 'package:budget/pages/homePage/homePageObjectives.dart';
 import 'package:budget/pages/homePage/homePagePieChart.dart';
 import 'package:budget/pages/homePage/homePageWalletList.dart';
+import 'package:budget/pages/homePage/homePageAccountCards.dart';
 import 'package:budget/pages/homePage/homePageWalletSwitcher.dart';
 import 'package:budget/pages/homePage/homeTransactions.dart';
 import 'package:budget/pages/homePage/homePageUsername.dart';
@@ -180,7 +181,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ? HomePageWalletSwitcher()
           : null,
       "walletsList": isHomeScreenSectionEnabled(context, "showWalletList")
-          ? HomePageWalletList()
+          ? HomePageAccountCards()
           : null,
       "budgets": isHomeScreenSectionEnabled(context, "showPinnedBudgets")
           ? HomePageBudgets()
