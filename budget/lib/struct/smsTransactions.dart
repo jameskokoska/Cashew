@@ -192,25 +192,24 @@ Future<SmsImportResult> processSmsMessages(List<SmsData> messages,
         BankSmsParser.parse(sms.body, sender: sms.address);
     if (parsed == null) {
       result.notTransactions++;
+      final ParsedBankBalance? onlyBalance =
+          BankSmsParser.parseBalance(sms.body, sender: sms.address);
+      if (onlyBalance != null &&
+          _saveBalance(balances, onlyBalance.accountLast4,
+              onlyBalance.balance, onlyBalance.bank, sms.date)) {
+        balancesChanged = true;
+      }
       continue;
     }
 
     // Remember the latest balance reported for each account
     if (parsed.balance != null && parsed.accountLast4 != null) {
-      final dynamic existing = balances[parsed.accountLast4];
-      final DateTime? existingDate = existing is Map
-          ? DateTime.tryParse(existing["date"]?.toString() ?? "")
-          : null;
-      if (existingDate == null || !sms.date.isBefore(existingDate)) {
-        balances[parsed.accountLast4!] = {
-          "balance": parsed.balance,
-          "date": sms.date.toIso8601String(),
-          "bank": parsed.bank,
-        };
+      if (_saveBalance(balances, parsed.accountLast4!, parsed.balance!,
+          parsed.bank, sms.date)) {
         balancesChanged = true;
       }
     } else if (parsed.accountLast4 != null &&
-        !balances.containsKey(parsed.accountLast4)) {
+        _matchAccountKey(balances, parsed.accountLast4!) == null) {
       // Record the account so it can be linked in settings
       balances[parsed.accountLast4!] = {
         "balance": null,
@@ -279,6 +278,32 @@ Future<SmsImportResult> processSmsMessages(List<SmsData> messages,
   return result;
 }
 
+// Banks print different lengths of the account number ("XX232" vs
+// "XXXX0232"), so match on the shorter one being the end of the longer one.
+String? _matchAccountKey(Map<String, dynamic> balances, String account) {
+  if (balances.containsKey(account)) return account;
+  for (final String key in balances.keys) {
+    if (key.endsWith(account) || account.endsWith(key)) return key;
+  }
+  return null;
+}
+
+bool _saveBalance(Map<String, dynamic> balances, String account,
+    double balance, String? bank, DateTime date) {
+  final String key = _matchAccountKey(balances, account) ?? account;
+  final dynamic existing = balances[key];
+  final DateTime? existingDate = existing is Map
+      ? DateTime.tryParse(existing["date"]?.toString() ?? "")
+      : null;
+  if (existingDate != null && date.isBefore(existingDate)) return false;
+  balances[key] = {
+    "balance": balance,
+    "date": date.toIso8601String(),
+    "bank": bank ?? (existing is Map ? existing["bank"] : null),
+  };
+  return true;
+}
+
 String smsDedupeKey(ParsedBankSms parsed, String body) {
   if (parsed.reference != null) {
     return "ref:${parsed.type.name}:${parsed.reference}";
@@ -303,7 +328,10 @@ Future<Transaction?> _buildTransaction(
   // Account: linked wallet for this account number, else the selected one
   final Map<String, dynamic> accountWallets = _stringMap("smsAccountWallets");
   String walletPk = appStateSettings["selectedWalletPk"]?.toString() ?? "0";
-  final dynamic linked = accountWallets[parsed.accountLast4];
+  final dynamic linked = parsed.accountLast4 == null
+      ? null
+      : accountWallets[_matchAccountKey(accountWallets, parsed.accountLast4!) ??
+          parsed.accountLast4];
   if (linked != null &&
       await database.getWalletInstanceOrNull(linked.toString()) != null) {
     walletPk = linked.toString();

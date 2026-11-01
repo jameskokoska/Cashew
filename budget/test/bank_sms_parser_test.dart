@@ -221,4 +221,33 @@ void main() {
     final r = BankSmsParser.parse("Sent Rs.500 to your account bro", sender: "+919876543210");
     expect(r, isNull);
   });
+  test("CUB credit", () {
+    final r = BankSmsParser.parse("Your a/c no. XXXXXXXX0232 is credited for Rs.1.00 on 01-11-2026 and debited from a/c no. XXXXXXXX1234 (UPI Ref no 630512349876) - CUB", sender: "AD-CUBANK-S");
+    expect(r, isNotNull);
+    expect(r!.type, BankSmsType.credit);
+    expect(r!.amount, 1.0);
+    expect(r!.accountLast4, "0232");
+    expect(r!.reference, "630512349876");
+    expect(r!.bank, "CUB");
+  });
+  test("IGNORE CUB mandate revoked", () {
+    final r = BankSmsParser.parse("UPI Autopay Mandate is successfully revoked towards ZEE ENT for Rs.99.00 from your A/c XXXX0232 - CUB", sender: "AX-CUBLTD-S");
+    expect(r, isNull);
+  });
+  test("IGNORE CUB balance alert (not a transaction)", () {
+    final r = BankSmsParser.parse("CUB Missed call alert:Bal in Savings No XXXX232 is Rs. 604.00 as on 01-11-2026", sender: "AX-CUBANK-S");
+    expect(r, isNull);
+  });
+  test("CUB balance alert updates balance", () {
+    final b = BankSmsParser.parseBalance(
+        "CUB Missed call alert:Bal in Savings No XXXX232 is Rs. 604.00 as on 01-11-2026",
+        sender: "AX-CUBANK-S");
+    expect(b, isNotNull);
+    expect(b!.accountLast4, "232");
+    expect(b.balance, 604.0);
+    expect(b.bank, "CUB");
+  });
+  test("OTP is not a balance", () {
+    expect(BankSmsParser.parseBalance("Your OTP is 1234 for A/c XX1234", sender: "AD-HDFCBK"), isNull);
+  });
 }

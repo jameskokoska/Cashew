@@ -71,6 +71,14 @@ class ParsedBankSms {
       "bal: $balance, autopay: $isAutopay, ref: $reference, bank: $bank, channel: $channel)";
 }
 
+class ParsedBankBalance {
+  ParsedBankBalance(
+      {required this.accountLast4, required this.balance, this.bank});
+  final String accountLast4;
+  final double balance;
+  final String? bank;
+}
+
 class BankSmsParser {
   static const String _cur = r"(?:rs\.?|inr|₹)";
   static const String _num = r"([0-9][0-9,]*(?:\.[0-9]{1,2})?)";
@@ -124,6 +132,7 @@ class BankSmsParser {
 
   // ---- Account / card ----
   static final List<RegExp> _accountPatterns = [
+    _re(r"\b(?:savings|sb|current|ca)\s*(?:a/?c|account)?\s*(?:no\.?|number)?\s*:?\s*[x*.\-]*\s*([0-9]{3,6})\b"),
     _re(r"\b(?:a/?c|acct|account|ac)\b\.?\s*(?:no\.?|number|num)?\s*:?\s*(?:ending\s*(?:with|in)?\s*)?[x*.\-]*\s*([0-9]{3,6})\b"),
     _re(r"\bcard\b\s*(?:no\.?|number)?\s*(?:ending\s*(?:with|in)?\s*)?[x*.\-]*\s*([0-9]{4})\b"),
     _re(r"\bending\s*(?:with|in)?\s*[x*]*([0-9]{4})\b"),
@@ -169,6 +178,12 @@ class BankSmsParser {
     "IndusInd": _re(r"indusind|indusb"),
     "AU Bank": _re(r"\bau bank|aubank"),
     "Federal": _re(r"federal|fedbnk"),
+    "CUB": _re(r"\bcub\b|cubank|cubltd|city union"),
+    "Indian Bank": _re(r"indian bank|indbnk"),
+    "IOB": _re(r"\biob\b|iobchn|indian overseas"),
+    "KVB": _re(r"\bkvb\b|kvbank|karur vysya"),
+    "TMB": _re(r"\btmb\b|tmbank|tamilnad mercantile"),
+    "Bank of India": _re(r"bank of india|boiind"),
   };
 
   /// Returns null if the SMS is not a completed bank transaction.
@@ -222,6 +237,28 @@ class BankSmsParser {
       reference: _findReference(text),
       bank: bank,
       channel: _findChannel(text),
+    );
+  }
+
+  static final RegExp _balanceOnly = _re(
+      r"\bbal(?:ance)?\b.{0,50}?(?:\bis\b|:)\s*(?:" + _cur + r")\s*:?\s*(-?" + _num.substring(1));
+
+  /// For balance alerts with no transaction ("Bal in Savings No XX232 is Rs. 604").
+  /// Returns null unless both an account number and a balance are found.
+  static ParsedBankBalance? parseBalance(String body, {String? sender}) {
+    final String text = body.replaceAll(RegExp(r"[ \t]+"), " ").trim();
+    if (sender != null && _looksLikePersonalNumber(sender)) return null;
+    if (_re(r"\botp\b|limit|due|outstanding").hasMatch(text)) return null;
+    final String? account = _findAccount(text);
+    if (account == null) return null;
+    final RegExpMatch? m = _balanceOnly.firstMatch(text) ?? _balance.firstMatch(text);
+    if (m == null) return null;
+    final double? balance = _toDouble(m.group(1)!);
+    if (balance == null) return null;
+    return ParsedBankBalance(
+      accountLast4: account,
+      balance: balance,
+      bank: _findBank("${sender ?? ""} $text"),
     );
   }
 
