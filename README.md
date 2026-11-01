@@ -45,6 +45,72 @@ Cashew is a full-fledged, feature-rich application designed to empower users in 
 
 ---
 
+## 📩 This fork: automatic transactions from bank SMS (India)
+
+This is a fork of [jameskokoska/Cashew](https://github.com/jameskokoska/Cashew) that adds **automatic transactions from bank SMS** on Android, built for Indian banks and UPI. Everything else in Cashew works as before.
+
+### ⬇️ Download
+
+Get the latest APK from **[Releases](https://github.com/SKVhacks/Cashew/releases)**. Install `app-arm64-v8a-release.apk` (works on almost every modern Android phone; `armeabi-v7a` is for very old phones).
+
+> **Switching from the Play Store version?** Export a backup in Cashew first, uninstall the Play Store app, install this APK, then restore the backup. The two versions are signed with different keys, so Android won't install one over the other.
+
+### ✨ Features
+
+- **Reads bank SMS and adds transactions automatically.** New SMS are added instantly while Cashew is open; anything that arrived while it was closed is added when you open it.
+- **Debits, credits, UPI, cards, ATM, IMPS/NEFT/RTGS and autopay.** Picks up the amount, who you paid or who paid you, the account or card number, the UPI/UTR reference and the balance.
+- **Autopay tagging.** NACH, e-mandate and UPI autopay debits are added as "Autopay: Netflix" and so on.
+- **Skips what isn't a real transaction.** OTPs, offers, failed payments, collect requests, "will be debited" reminders, mandate set-up/revoke messages and card bill reminders are ignored. SMS from personal phone numbers are ignored too.
+- **Never adds a payment twice.** Each payment is matched by its UPI/UTR reference (or the SMS text).
+- **All major Indian banks.** About 60 banks and card issuers are recognised by name and SMS sender code, including SBI, HDFC, ICICI, Axis, Kotak, PNB, Bank of Baroda, Canara, Union Bank, Indian Bank, IOB, City Union Bank, KVB, TMB, Federal, South Indian Bank, IDFC First, Yes Bank, IndusInd, AU and other small finance banks, payments banks (Airtel, India Post, Paytm, Jio, Fino), and cards such as SBI Card, OneCard and Amex.
+- **Bank-wise accounts.** Every bank account and card gets its own Cashew account. An existing account named after the bank (e.g. "City Union Bank") is used; otherwise one is created, like `SBI ••1234` or `HDFC Card ••5678`. The same last digits at two different banks are never mixed up.
+- **Matches your bank balance.** When an SMS shows your balance (including missed-call balance alerts), Cashew adds a "Balance matched to bank" entry so the account equals the bank's figure.
+- **Notifications.** A notification for each transaction added, for example: **₹500 paid to Swiggy** · *City Union Bank ••0232 · Balance ₹5,541.94*. More than 5 at once are grouped into one summary.
+- **Smart categories.** Once you've used a merchant name (e.g. "Swiggy") under a category, future SMS from that merchant use the same category. Otherwise your chosen default expense and income categories are used.
+- **Import old SMS.** Pick a date range to bring in past transactions; ones already added are skipped.
+
+### ⚙️ Setup
+
+1. Open **Settings → SMS Transactions** and turn on **Add transactions from SMS**.
+2. Allow SMS access (and notifications) when Android asks.
+3. Optional: choose default categories, tap a bank account to change which Cashew account it uses, or use **Import old bank SMS**.
+
+Switches on the same page: **Notify me**, **Separate account for each bank**, and **Match bank balance**.
+
+### 🔒 Privacy
+
+SMS are read and processed only on your phone. Nothing is uploaded anywhere by this feature.
+
+### ⚠️ Limitations
+
+- Android only (iOS doesn't allow apps to read SMS).
+- Not available on the Play Store: Google only allows SMS permission for default SMS apps, so this build is installed as an APK.
+- Google sign-in, sync and Google Drive backup from the original app don't work in this build, because they are tied to the original developer's Firebase project. Local backup and restore work.
+- If Cashew is fully closed when an SMS arrives, the transaction is added the next time you open the app.
+
+### 🛠️ How it's built
+
+| File | What it does |
+| --- | --- |
+| `budget/lib/struct/bankSmsParser.dart` | Parses Indian bank / UPI SMS (pure Dart, unit tested) |
+| `budget/lib/struct/smsTransactions.dart` | Reads the inbox, listens for new SMS, adds transactions, bank-wise accounts, balance matching, notifications |
+| `budget/lib/pages/smsTransactionsPage.dart` | The SMS Transactions settings page |
+| `budget/android/.../MainActivity.kt` | Android SMS permission, inbox reading and live SMS listener |
+| `budget/test/bank_sms_parser_test.dart` | Tests with sample SMS from many banks |
+| `.github/workflows/build-apk.yml` | Tests the parser and builds a signed APK on every push |
+
+**Building:** pushes to `main` build automatically, or run **Actions → Build APK → Run workflow**. The APK is published under Releases. Add a repository secret `CASHEW_KEYSTORE` (base64 of a keystore) so every build is signed with the same key and installs as an update.
+
+To build locally: install Flutter 3.19.6, then run `cd budget && flutter test test/bank_sms_parser_test.dart && flutter build apk --release`.
+
+**Found an SMS that isn't picked up?** Open an issue with the SMS text (hide your account number and name) so a sample can be added to the tests.
+
+### 📜 Credits and license
+
+Cashew is created by [James Kokoska](https://github.com/jameskokoska). This fork keeps the original [GPL-3.0 license](LICENSE); the SMS features are released under the same license.
+
+---
+
 ## Features
 
 <a href="https://www.youtube.com/watch?v=Oar9pkc7BSc&t=235s">
@@ -156,6 +222,7 @@ Changes and progress about development is all heavily documented in GitHub [comm
 - Import CSV Files: Seamlessly import financial data by uploading CSV files, facilitating a smooth transition from other applications or platforms.
 - Import Google Sheets: Seamlessly import Google Sheets tables, quickly importing many transactions from a spreadsheet.
 - App Links: Automatically create transactions with pre-filled data using app linking (documentation below)
+- Bank SMS (this fork, Android): Automatically add transactions from Indian bank and UPI SMS, with bank-wise accounts, balance matching and notifications (see above)
 
 ## Automation
 
