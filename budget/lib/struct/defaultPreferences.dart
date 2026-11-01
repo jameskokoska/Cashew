@@ -187,6 +187,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "smsRecentLog": [],
     "smsAutoCreateAccounts": true,
     "smsMatchBalance": true,
+    "smsNotifications": true,
     "emailScanningPullToRefresh": false,
     "incognitoKeyboard": false,
     // the key is the budgetPk (in String!)

@@ -7,6 +7,8 @@ import 'package:budget/struct/smsTransactions.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/globalSnackbar.dart';
+import 'package:budget/widgets/notificationsSettings.dart'
+    show checkNotificationsPermissionAll;
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/selectCategory.dart';
@@ -46,6 +48,9 @@ class _SmsTransactionsPageState extends State<SmsTransactionsPage> {
           updateGlobalState: false);
       await updateSettings("smsTransactions", true, updateGlobalState: false);
       startSmsListener();
+      if (appStateSettings["smsNotifications"] != false) {
+        await checkNotificationsPermissionAll();
+      }
     } else {
       await updateSettings("smsTransactions", false, updateGlobalState: false);
       stopSmsListener();
@@ -186,6 +191,19 @@ class _SmsTransactionsPageState extends State<SmsTransactionsPage> {
           icon: _icon(Icons.sms_outlined, Icons.sms_rounded),
         ),
         if (enabled) ...[
+          SettingsContainerSwitch(
+            title: "Notify me",
+            description:
+                "A notification for each transaction added: amount, paid to / received from, and remaining balance.",
+            initialValue: appStateSettings["smsNotifications"] != false,
+            onSwitched: (bool value) async {
+              if (value) await checkNotificationsPermissionAll();
+              await updateSettings("smsNotifications", value,
+                  updateGlobalState: false);
+            },
+            icon: _icon(Icons.notifications_active_outlined,
+                Icons.notifications_active_rounded),
+          ),
           _sectionHeader("Categories"),
           FutureBuilder<TransactionCategory?>(
             future: database.getCategoryInstanceOrNull(

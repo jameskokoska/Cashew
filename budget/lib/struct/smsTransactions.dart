@@ -25,6 +25,9 @@ import 'package:budget/widgets/util/onAppResume.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:budget/struct/notificationsGlobal.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:intl/intl.dart' show NumberFormat;
 
 const MethodChannel _smsChannel = MethodChannel("cashew/sms");
 const EventChannel _smsEvents = EventChannel("cashew/sms_events");
@@ -189,6 +192,7 @@ Future<SmsImportResult> processSmsMessages(List<SmsData> messages,
           ? appStateSettings["smsRecentLog"]
           : []);
   bool balancesChanged = false;
+  final List<_AddedSms> added = [];
 
 
   for (final SmsData sms in messages) {
@@ -240,6 +244,7 @@ Future<SmsImportResult> processSmsMessages(List<SmsData> messages,
     processed.add(key);
     processedList.add(key);
     result.added++;
+    added.add(_AddedSms(parsed, transaction));
     if (rowId != null) {
       try {
         result.lastAdded = await database.getTransactionFromRowId(rowId);
@@ -282,7 +287,16 @@ Future<SmsImportResult> processSmsMessages(List<SmsData> messages,
     }
   }
 
-  if (showSnackbar && result.added > 0) {
+  final bool notify = appStateSettings["smsNotifications"] != false;
+  if (showSnackbar && notify && added.isNotEmpty) {
+    try {
+      await _notifyAdded(added);
+    } catch (e) {
+      print("SMS notification failed: $e");
+    }
+  }
+
+  if (showSnackbar && !notify && result.added > 0) {
     openSnackbar(
       SnackbarMessage(
         title: result.added == 1
@@ -653,6 +667,108 @@ class _InitializeSmsTransactionsState extends State<InitializeSmsTransactions> {
         await scanNewSms();
       },
       child: widget.child,
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Notifications
+// ---------------------------------------------------------------------------
+
+class _AddedSms {
+  _AddedSms(this.parsed, this.transaction);
+  final ParsedBankSms parsed;
+  final Transaction transaction;
+}
+
+int _notificationCounter = 0;
+
+final NumberFormat _rupees =
+    NumberFormat.currency(locale: "en_IN", symbol: "₹", decimalDigits: 2);
+
+String _formatRupees(double amount) {
+  final String text = _rupees.format(amount.abs());
+  // "₹1,000.00" -> "₹1,000" for whole amounts
+  final String trimmed =
+      text.endsWith(".00") ? text.substring(0, text.length - 3) : text;
+  return amount < 0 ? "-$trimmed" : trimmed;
+}
+
+String _notificationTitle(ParsedBankSms p) {
+  final String amount = _formatRupees(p.amount);
+  final String? who = p.merchant;
+  if (p.isAutopay) {
+    return who != null ? "$amount autopay to $who" : "$amount autopay debited";
+  }
+  if (p.channel == "ATM" && p.isDebit) return "$amount withdrawn at ATM";
+  if (p.isDebit) {
+    if (p.isCard) return who != null ? "$amount spent at $who" : "$amount spent on card";
+    return who != null ? "$amount paid to $who" : "$amount debited";
+  }
+  return who != null ? "$amount received from $who" : "$amount credited";
+}
+
+Future<void> _notifyAdded(List<_AddedSms> items) async {
+  const AndroidNotificationDetails android = AndroidNotificationDetails(
+    'smsTransactions',
+    'SMS Transactions',
+    channelDescription: 'A notification each time a bank SMS is added',
+    importance: Importance.high,
+    priority: Priority.high,
+  );
+  const NotificationDetails details = NotificationDetails(android: android);
+
+  // Many at once (e.g. after the app was closed for a while): one summary
+  if (items.length > 5) {
+    double spent = 0, received = 0;
+    for (final _AddedSms i in items) {
+      if (i.parsed.isDebit) {
+        spent += i.parsed.amount;
+      } else {
+        received += i.parsed.amount;
+      }
+    }
+    await flutterLocalNotificationsPlugin.show(
+      7000 + (_notificationCounter++ % 500),
+      "Added ${items.length} transactions from SMS",
+      "Spent ${_formatRupees(spent)} · Received ${_formatRupees(received)}",
+      details,
+      payload: "smsTransactions",
+    );
+    return;
+  }
+
+  for (final _AddedSms i in items) {
+    final TransactionWallet? wallet =
+        await database.getWalletInstanceOrNull(i.transaction.walletFk);
+    final List<String> parts = [
+      [
+        wallet?.name ?? i.parsed.bank ?? "Bank",
+        if (i.parsed.accountLast4 != null &&
+            !(wallet?.name.contains(i.parsed.accountLast4!) ?? false))
+          "••${i.parsed.accountLast4}",
+      ].join(" "),
+    ];
+
+    // Remaining: the bank's own figure if the SMS has it, else Cashew's total
+    if (i.parsed.balance != null) {
+      parts.add("Balance ${_formatRupees(i.parsed.balance!)}");
+    } else if (wallet != null) {
+      final double total =
+          await _walletTotalUntil(wallet.walletPk, DateTime(9999));
+      if (i.parsed.isCard) {
+        if (total < 0) parts.add("Card outstanding ${_formatRupees(-total)}");
+      } else {
+        parts.add("Balance ${_formatRupees(total)}");
+      }
+    }
+
+    await flutterLocalNotificationsPlugin.show(
+      7000 + (_notificationCounter++ % 500),
+      _notificationTitle(i.parsed),
+      parts.join(" · "),
+      details,
+      payload: "smsTransactions",
     );
   }
 }
