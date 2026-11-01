@@ -81,11 +81,12 @@ class _SmsTransactionsPageState extends State<SmsTransactionsPage> {
     );
   }
 
-  Future<void> _linkAccount(String last4) async {
+  Future<void> _linkAccount(String key) async {
+    final String last4 = splitAccountKey(key).$2;
     final Map<String, dynamic> links = smsAccountWallets();
-    final TransactionWallet? current = links[last4] == null
+    final TransactionWallet? current = links[key] == null
         ? null
-        : await database.getWalletInstanceOrNull(links[last4].toString());
+        : await database.getWalletInstanceOrNull(links[key].toString());
     final TransactionWallet? wallet = await selectWalletPopup(
       context,
       title: "Account for ••$last4",
@@ -95,7 +96,7 @@ class _SmsTransactionsPageState extends State<SmsTransactionsPage> {
       allowDeleteWallet: false,
     );
     if (wallet == null) return;
-    links[last4] = wallet.walletPk;
+    links[key] = wallet.walletPk;
     await updateSettings("smsAccountWallets", links, updateGlobalState: false);
     if (mounted) setState(() {});
   }
@@ -219,13 +220,36 @@ class _SmsTransactionsPageState extends State<SmsTransactionsPage> {
             ),
           ),
           _sectionHeader("Bank accounts & balances"),
+          SettingsContainerSwitch(
+            title: "Separate account for each bank",
+            description:
+                "Each bank account and card gets its own Cashew account (e.g. CUB ••0232). Uses your existing account if its name matches the bank.",
+            initialValue: appStateSettings["smsAutoCreateAccounts"] != false,
+            onSwitched: (bool value) async {
+              await updateSettings("smsAutoCreateAccounts", value,
+                  updateGlobalState: false);
+            },
+            icon: _icon(Icons.account_balance_wallet_outlined,
+                Icons.account_balance_wallet_rounded),
+          ),
+          SettingsContainerSwitch(
+            title: "Match bank balance",
+            description:
+                "When an SMS shows your balance, add a correction so the Cashew account equals it.",
+            initialValue: appStateSettings["smsMatchBalance"] != false,
+            onSwitched: (bool value) async {
+              await updateSettings("smsMatchBalance", value,
+                  updateGlobalState: false);
+            },
+            icon: _icon(Icons.balance_outlined, Icons.balance_rounded),
+          ),
           if (balances.isEmpty)
             Padding(
               padding: const EdgeInsetsDirectional.symmetric(
                   horizontal: 20, vertical: 6),
               child: TextFont(
                 text:
-                    "Accounts will appear here after the first bank SMS. Link each one to a Cashew account.",
+                    "Accounts appear here after the first bank SMS. Tap one to change which Cashew account it uses.",
                 fontSize: 14,
                 maxLines: 5,
               ),
@@ -238,15 +262,17 @@ class _SmsTransactionsPageState extends State<SmsTransactionsPage> {
                   DateTime.tryParse(info["date"]?.toString() ?? "");
               final String? linkedPk = links[entry.key]?.toString();
               final String linkedName = linkedPk == null
-                  ? "Not linked · uses your selected account"
+                  ? "Account is created on the next transaction"
                   : (allWallets.indexedByPk[linkedPk]?.name ??
-                      "Not linked · uses your selected account");
+                      "Account is created on the next transaction");
               final String balanceText = bal is num
                   ? "Balance ${money(bal.toDouble())}"
                       "${date != null ? " · ${getWordedDateShort(date)}" : ""}"
                   : "No balance in SMS yet";
+              final String digits = splitAccountKey(entry.key).$2;
               return SettingsContainer(
-                title: "${info["bank"] ?? "Bank"} ••${entry.key}",
+                title:
+                    "${info["bank"] ?? "Bank"}${info["card"] == true ? " Card" : ""} ••$digits",
                 description: "$balanceText\n→ $linkedName",
                 icon: _icon(Icons.account_balance_outlined,
                     Icons.account_balance_rounded),

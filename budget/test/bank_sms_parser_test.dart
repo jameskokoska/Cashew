@@ -40,7 +40,8 @@ void main() {
     expect(r!.amount, 499.0);
     expect(r!.merchant, "Amazon Pay");
     expect(r!.accountLast4, "4321");
-    expect(r!.bank, "SBI");
+    expect(r!.bank, "SBI Card");
+    expect(r!.isCard, true);
   });
   test("HDFC UPI sent", () {
     final r = BankSmsParser.parse("Sent Rs.500.00\nFrom HDFC Bank A/C *1234\nTo SWIGGY\nOn 01/11/26\nRef 630511112222\nNot You?\nCall 18002586161/SMS BLOCK UPI to 7308080808", sender: "VM-HDFCBK");
@@ -51,6 +52,7 @@ void main() {
     expect(r!.accountLast4, "1234");
     expect(r!.reference, "630511112222");
     expect(r!.bank, "HDFC");
+    expect(r!.isCard, false);
   });
   test("HDFC UPI received", () {
     final r = BankSmsParser.parse("Received Rs.1000.00 in your A/C *1234 from priya.sharma@okicici on 01-11-26 by UPI ref no 630533334444", sender: "VM-HDFCBK");
@@ -80,6 +82,7 @@ void main() {
     expect(r!.merchant, "Zomato");
     expect(r!.accountLast4, "5678");
     expect(r!.bank, "HDFC");
+    expect(r!.isCard, true);
   });
   test("ICICI UPI debit", () {
     final r = BankSmsParser.parse("ICICI Bank Acct XX123 debited for Rs 250.00 on 01-Nov-26; ZOMATO credited. UPI:630577778888. Call 18002662 for dispute. SMS BLOCK 123 to 9215676766.", sender: "JD-ICICIT");
@@ -238,16 +241,100 @@ void main() {
     final r = BankSmsParser.parse("CUB Missed call alert:Bal in Savings No XXXX232 is Rs. 604.00 as on 01-11-2026", sender: "AX-CUBANK-S");
     expect(r, isNull);
   });
+  test("CUB credit 1000 (real)", () {
+    final r = BankSmsParser.parse("Your a/c no. XXXXXXXX0232 is credited for Rs.1000.00 on 01-11-2026 and debited from a/c no. XXXXXXXX7070 (UPI Ref no 667153216748) -CUB", sender: "AX-CUBANK-S");
+    expect(r, isNotNull);
+    expect(r!.type, BankSmsType.credit);
+    expect(r!.amount, 1000.0);
+    expect(r!.accountLast4, "0232");
+    expect(r!.reference, "667153216748");
+    expect(r!.bank, "CUB");
+    expect(r!.isCard, false);
+  });
+  test("PNB debit", () {
+    final r = BankSmsParser.parse("Your A/c XX1234 debited INR 500.00 on 01-11-26 thru UPI:630512341111. Avl Bal INR 2,000.00 CR - PNB", sender: "VM-PNBSMS");
+    expect(r, isNotNull);
+    expect(r!.type, BankSmsType.debit);
+    expect(r!.amount, 500.0);
+    expect(r!.accountLast4, "1234");
+    expect(r!.balance, 2000.0);
+    expect(r!.bank, "PNB");
+  });
+  test("BOB transfer", () {
+    final r = BankSmsParser.parse("Rs.500.00 transferred from A/c ...1234 to:UPI/630512342222/SWIGGY. Total Bal:Rs.2000.00CR. Avlbl Amt:Rs.2000.00(01-11-2026 10:20:30) - Bank of Baroda", sender: "VM-BOBTXN");
+    expect(r, isNotNull);
+    expect(r!.type, BankSmsType.debit);
+    expect(r!.amount, 500.0);
+    expect(r!.accountLast4, "1234");
+    expect(r!.balance, 2000.0);
+    expect(r!.bank, "BOB");
+    expect(r!.merchant, "Swiggy");
+  });
+  test("Canara debit", () {
+    final r = BankSmsParser.parse("An amount of INR 500.00 has been DEBITED to your account XXX123 on 01/11/2026 towards UPI/DR/630512343333/ZOMATO. Total Avail.bal INR 2,500.00. - Canara Bank", sender: "VM-CANBNK");
+    expect(r, isNotNull);
+    expect(r!.type, BankSmsType.debit);
+    expect(r!.amount, 500.0);
+    expect(r!.accountLast4, "123");
+    expect(r!.balance, 2500.0);
+    expect(r!.bank, "Canara");
+    expect(r!.merchant, "Zomato");
+  });
+  test("Union Rs: format", () {
+    final r = BankSmsParser.parse("A/c *1234 Debited for Rs:500.00 on 01-11-2026 10:20:30 by Mob Bk ref no 630512344444 Avl Bal Rs:2000.00. Never Share OTP/PIN/CVV-Union Bank of India", sender: "VM-UNIONB");
+    expect(r, isNotNull);
+    expect(r!.type, BankSmsType.debit);
+    expect(r!.amount, 500.0);
+    expect(r!.accountLast4, "1234");
+    expect(r!.balance, 2000.0);
+    expect(r!.bank, "Union Bank");
+  });
+  test("Indian Bank NEFT credit", () {
+    final r = BankSmsParser.parse("Your A/c XX1234 is credited by Rs.5,000.00 on 01-11-26 through NEFT from RAMESH KUMAR. Avl Bal Rs.11,000.00 -Indian Bank", sender: "VM-INDBNK");
+    expect(r, isNotNull);
+    expect(r!.type, BankSmsType.credit);
+    expect(r!.amount, 5000.0);
+    expect(r!.accountLast4, "1234");
+    expect(r!.balance, 11000.0);
+    expect(r!.bank, "Indian Bank");
+    expect(r!.merchant, "Ramesh Kumar");
+  });
+  test("Cash deposit", () {
+    final r = BankSmsParser.parse("Rs.5000.00 deposited in your A/c XX1234 by cash on 01-11-2026. Avl Bal Rs.8000.00 - KVB", sender: "VM-KVBANK");
+    expect(r, isNotNull);
+    expect(r!.type, BankSmsType.credit);
+    expect(r!.amount, 5000.0);
+    expect(r!.accountLast4, "1234");
+    expect(r!.bank, "KVB");
+  });
+  test("Federal via UPI", () {
+    final r = BankSmsParser.parse("Rs 250.00 debited from your A/c XX1234 via UPI to grocery@okhdfcbank on 01-11-2026. UPI Ref 630512345555. -Federal Bank", sender: "AD-FEDBNK");
+    expect(r, isNotNull);
+    expect(r!.type, BankSmsType.debit);
+    expect(r!.amount, 250.0);
+    expect(r!.accountLast4, "1234");
+    expect(r!.bank, "Federal");
+    expect(r!.merchant, "Grocery");
+  });
+  test("IGNORE CUB failed", () {
+    final r = BankSmsParser.parse("Your UPI transaction of Rs.500.00 from a/c no. XXXXXXXX0232 failed. Amount if debited will be reversed. -CUB", sender: "AX-CUBANK-S");
+    expect(r, isNull);
+  });
   test("CUB balance alert updates balance", () {
     final b = BankSmsParser.parseBalance(
-        "CUB Missed call alert:Bal in Savings No XXXX232 is Rs. 604.00 as on 01-11-2026",
+        "CUB Missed call alert:Bal in Savings No XXXX232 is Rs. 6040.94,;",
         sender: "AX-CUBANK-S");
     expect(b, isNotNull);
     expect(b!.accountLast4, "232");
-    expect(b.balance, 604.0);
+    expect(b.balance, 6040.94);
     expect(b.bank, "CUB");
   });
   test("OTP is not a balance", () {
     expect(BankSmsParser.parseBalance("Your OTP is 1234 for A/c XX1234", sender: "AD-HDFCBK"), isNull);
+  });
+  test("Bank list finds full names", () {
+    expect(BankSmsParser.findBankInfo("AX-CUBANK-S")?.fullName, "City Union Bank");
+    expect(BankSmsParser.findBankInfo("VM-SBIINB")?.shortName, "SBI");
+    expect(BankSmsParser.findBankInfo("South Indian Bank")?.shortName, "South Indian Bank");
   });
 }

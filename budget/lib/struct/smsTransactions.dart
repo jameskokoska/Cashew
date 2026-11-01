@@ -10,8 +10,12 @@
 
 import 'dart:async';
 
+import 'package:drift/drift.dart' hide Column, Table;
+
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/pages/addWalletPage.dart'
+    show createCorrectionTransaction;
 import 'package:budget/struct/bankSmsParser.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
@@ -186,6 +190,7 @@ Future<SmsImportResult> processSmsMessages(List<SmsData> messages,
           : []);
   bool balancesChanged = false;
 
+
   for (final SmsData sms in messages) {
     result.scanned++;
     final ParsedBankSms? parsed =
@@ -194,27 +199,29 @@ Future<SmsImportResult> processSmsMessages(List<SmsData> messages,
       result.notTransactions++;
       final ParsedBankBalance? onlyBalance =
           BankSmsParser.parseBalance(sms.body, sender: sms.address);
-      if (onlyBalance != null &&
-          _saveBalance(balances, onlyBalance.accountLast4,
-              onlyBalance.balance, onlyBalance.bank, sms.date)) {
-        balancesChanged = true;
+      if (onlyBalance != null) {
+        final String? k = _saveBalance(balances, onlyBalance.bank,
+            onlyBalance.accountLast4, onlyBalance.balance, sms.date);
+        if (k != null) balancesChanged = true;
       }
       continue;
     }
 
     // Remember the latest balance reported for each account
     if (parsed.balance != null && parsed.accountLast4 != null) {
-      if (_saveBalance(balances, parsed.accountLast4!, parsed.balance!,
-          parsed.bank, sms.date)) {
-        balancesChanged = true;
-      }
+      final String? k = _saveBalance(balances, parsed.bank,
+          parsed.accountLast4!, parsed.balance!, sms.date,
+          isCard: parsed.isCard);
+      if (k != null) balancesChanged = true;
     } else if (parsed.accountLast4 != null &&
-        _matchAccountKey(balances, parsed.accountLast4!) == null) {
-      // Record the account so it can be linked in settings
-      balances[parsed.accountLast4!] = {
+        _matchAccountKey(balances, parsed.bank, parsed.accountLast4!) ==
+            null) {
+      // Record the account so it shows up in settings
+      balances[accountKey(parsed.bank, parsed.accountLast4!)] = {
         "balance": null,
         "date": sms.date.toIso8601String(),
         "bank": parsed.bank,
+        "card": parsed.isCard,
       };
       balancesChanged = true;
     }
@@ -262,6 +269,19 @@ Future<SmsImportResult> processSmsMessages(List<SmsData> messages,
         updateGlobalState: false);
   }
 
+  // Make each bank account in Cashew match the latest balance from SMS
+  if (appStateSettings["smsMatchBalance"] != false) {
+    // Checks every known account (only a few), so older imported SMS or
+    // edits are also corrected. Nothing is added when it already matches.
+    for (final String k in balances.keys.toList()) {
+      try {
+        await _reconcileBalance(k, balances[k]);
+      } catch (e) {
+        print("SMS balance match failed for $k: $e");
+      }
+    }
+  }
+
   if (showSnackbar && result.added > 0) {
     openSnackbar(
       SnackbarMessage(
@@ -278,30 +298,194 @@ Future<SmsImportResult> processSmsMessages(List<SmsData> messages,
   return result;
 }
 
+// Accounts are stored as "BANK:digits" (e.g. "CUB:0232") so the same last
+// digits at two different banks never get mixed up.
+String accountKey(String? bank, String account) => "${bank ?? "?"}:$account";
+
+/// Splits a stored key into (bank, digits). Old keys without a bank give "?".
+(String, String) splitAccountKey(String key) {
+  final int i = key.lastIndexOf(":");
+  if (i < 0) return ("?", key);
+  return (key.substring(0, i), key.substring(i + 1));
+}
+
 // Banks print different lengths of the account number ("XX232" vs
-// "XXXX0232"), so match on the shorter one being the end of the longer one.
-String? _matchAccountKey(Map<String, dynamic> balances, String account) {
-  if (balances.containsKey(account)) return account;
-  for (final String key in balances.keys) {
-    if (key.endsWith(account) || account.endsWith(key)) return key;
+// "XXXX0232"), so the shorter one being the end of the longer one matches,
+// as long as the bank is the same (or unknown).
+String? _matchAccountKey(
+    Map<String, dynamic> map, String? bank, String account) {
+  final String exact = accountKey(bank, account);
+  if (map.containsKey(exact)) return exact;
+  for (final String key in map.keys) {
+    final (String keyBank, String keyAccount) = splitAccountKey(key);
+    final bool sameBank = keyBank == "?" || bank == null || keyBank == bank;
+    if (sameBank &&
+        (keyAccount.endsWith(account) || account.endsWith(keyAccount))) {
+      return key;
+    }
   }
   return null;
 }
 
-bool _saveBalance(Map<String, dynamic> balances, String account,
-    double balance, String? bank, DateTime date) {
-  final String key = _matchAccountKey(balances, account) ?? account;
+/// Stores the balance if it's newer than what we have. Returns the key used,
+/// or null when the stored balance is already newer.
+String? _saveBalance(Map<String, dynamic> balances, String? bank,
+    String account, double balance, DateTime date,
+    {bool isCard = false}) {
+  final String key =
+      _matchAccountKey(balances, bank, account) ?? accountKey(bank, account);
   final dynamic existing = balances[key];
-  final DateTime? existingDate = existing is Map
-      ? DateTime.tryParse(existing["date"]?.toString() ?? "")
-      : null;
-  if (existingDate != null && date.isBefore(existingDate)) return false;
+  final DateTime? existingDate =
+      existing is Map && existing["balance"] != null
+          ? DateTime.tryParse(existing["date"]?.toString() ?? "")
+          : null;
+  if (existingDate != null && date.isBefore(existingDate)) return null;
   balances[key] = {
     "balance": balance,
     "date": date.toIso8601String(),
     "bank": bank ?? (existing is Map ? existing["bank"] : null),
+    "card": isCard || (existing is Map && existing["card"] == true),
   };
-  return true;
+  return key;
+}
+
+// ---------------------------------------------------------------------------
+// Bank-wise accounts
+// ---------------------------------------------------------------------------
+
+String _normalizeName(String s) =>
+    s.toLowerCase().replaceAll(RegExp(r"[^a-z0-9]"), "");
+
+/// The Cashew account (wallet) for a bank account or card. Uses the linked
+/// one, else an existing account whose name matches the bank, else creates
+/// a new one like "CUB ••0232".
+Future<String> walletForBankAccount(
+    {required String? bank, required String? account, bool isCard = false}) async {
+  final String fallback =
+      appStateSettings["selectedWalletPk"]?.toString() ?? "0";
+  if (account == null) return fallback;
+
+  final Map<String, dynamic> links = _stringMap("smsAccountWallets");
+  final String? linkedKey = _matchAccountKey(links, bank, account);
+  if (linkedKey != null) {
+    final TransactionWallet? linked =
+        await database.getWalletInstanceOrNull(links[linkedKey].toString());
+    if (linked != null) return linked.walletPk;
+  }
+  if (appStateSettings["smsAutoCreateAccounts"] == false) return fallback;
+
+  final String key = linkedKey ?? accountKey(bank, account);
+  final List<TransactionWallet> wallets = await database.getAllWallets();
+  final Set<String> alreadyLinked =
+      links.values.map((e) => e.toString()).toSet();
+  TransactionWallet? match;
+
+  // 1. A wallet whose name contains these account digits ("SBI 1234")
+  for (final TransactionWallet w in wallets) {
+    if (alreadyLinked.contains(w.walletPk)) continue;
+    if (RegExp("(?<![0-9])$account(?![0-9])").hasMatch(w.name)) {
+      match = w;
+      break;
+    }
+  }
+
+  // 2. A wallet named after the bank ("City Union Bank"), not already used
+  //    for another account at that bank. Cards only match wallets named "card".
+  BankInfo? info;
+  for (final BankInfo b in BankSmsParser.banks) {
+    if (b.shortName == bank) info = b;
+  }
+  if (match == null && info != null) {
+    for (final TransactionWallet w in wallets) {
+      if (alreadyLinked.contains(w.walletPk)) continue;
+      final bool walletIsCard = w.name.toLowerCase().contains("card");
+      if (walletIsCard != isCard) continue;
+      final String n = _normalizeName(w.name);
+      if (n.contains(_normalizeName(info.fullName)) ||
+          n == _normalizeName(info.shortName) ||
+          info.pattern.hasMatch(w.name)) {
+        match = w;
+        break;
+      }
+    }
+  }
+
+  // 3. Create a new account
+  if (match == null) {
+    String name = bank ?? "Bank";
+    if (isCard && !name.toLowerCase().contains("card")) name += " Card";
+    name += " ••$account";
+    final TransactionWallet? selected =
+        await database.getWalletInstanceOrNull(fallback);
+    final int count = (await database.getTotalCountOfWallets())[0] ?? 0;
+    final int rowId = await database.createOrUpdateWallet(
+      TransactionWallet(
+        walletPk: "-1",
+        name: name,
+        colour: null,
+        iconName: null,
+        dateCreated: DateTime.now(),
+        dateTimeModified: null,
+        order: count,
+        currency: selected?.currency ?? "inr",
+        currencyFormat: selected?.currencyFormat,
+        decimals: 2,
+        homePageWidgetDisplay: defaultWalletHomePageWidgetDisplay,
+      ),
+      insert: true,
+    );
+    match = await database.getWalletFromRowId(rowId);
+  }
+
+  links[key] = match.walletPk;
+  await updateSettings("smsAccountWallets", links, updateGlobalState: false);
+  return match.walletPk;
+}
+
+/// Adds a "balance correction" so the Cashew account equals the bank's
+/// balance at the time of that SMS.
+Future<void> _reconcileBalance(String key, dynamic info) async {
+  if (info is! Map || info["balance"] is! num) return;
+  final DateTime? at = DateTime.tryParse(info["date"]?.toString() ?? "");
+  if (at == null) return;
+  final (String bank, String account) = splitAccountKey(key);
+  final String walletPk = await walletForBankAccount(
+    bank: bank == "?" ? info["bank"]?.toString() : bank,
+    account: account,
+    isCard: info["card"] == true,
+  );
+  final TransactionWallet? wallet =
+      await database.getWalletInstanceOrNull(walletPk);
+  if (wallet == null) return;
+
+  // Corrections are saved at :30/:31 seconds, so count the whole minute.
+  final DateTime until = DateTime(at.year, at.month, at.day, at.hour, at.minute)
+      .add(Duration(seconds: 59, milliseconds: 999));
+  final double total = await _walletTotalUntil(wallet.walletPk, until);
+  final double bankBalance = (info["balance"] as num).toDouble();
+  final double difference =
+      ((bankBalance - total) * 100).roundToDouble() / 100;
+  if (difference.abs() < 0.01) return;
+
+  await createCorrectionTransaction(
+    difference,
+    wallet,
+    title: "Balance matched to bank",
+    note: "Added from SMS so this account matches the bank balance of "
+        "${bankBalance.toStringAsFixed(2)}",
+    dateTime: until.subtract(Duration(seconds: 29)),
+  );
+}
+
+Future<double> _walletTotalUntil(String walletPk, DateTime until) async {
+  final Expression<double> totalAmt = database.transactions.amount.sum();
+  final query = database.selectOnly(database.transactions)
+    ..addColumns([totalAmt])
+    ..where(database.transactions.walletFk.equals(walletPk) &
+        database.transactions.paid.equals(true) &
+        database.transactions.dateCreated.isSmallerOrEqualValue(until));
+  final TypedResult? row = await query.getSingleOrNull();
+  return row?.read(totalAmt) ?? 0;
 }
 
 String smsDedupeKey(ParsedBankSms parsed, String body) {
@@ -325,17 +509,12 @@ Future<Transaction?> _buildTransaction(
     ParsedBankSms parsed, SmsData sms) async {
   final bool income = !parsed.isDebit;
 
-  // Account: linked wallet for this account number, else the selected one
-  final Map<String, dynamic> accountWallets = _stringMap("smsAccountWallets");
-  String walletPk = appStateSettings["selectedWalletPk"]?.toString() ?? "0";
-  final dynamic linked = parsed.accountLast4 == null
-      ? null
-      : accountWallets[_matchAccountKey(accountWallets, parsed.accountLast4!) ??
-          parsed.accountLast4];
-  if (linked != null &&
-      await database.getWalletInstanceOrNull(linked.toString()) != null) {
-    walletPk = linked.toString();
-  }
+  // Bank-wise: each bank account / card goes to its own Cashew account
+  final String walletPk = await walletForBankAccount(
+    bank: parsed.bank,
+    account: parsed.accountLast4,
+    isCard: parsed.isCard,
+  );
 
   final TransactionCategory? category =
       await _pickCategory(parsed, income: income);

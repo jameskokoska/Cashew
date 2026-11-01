@@ -14,6 +14,7 @@ class ParsedBankSms {
     required this.amount,
     this.merchant,
     this.accountLast4,
+    this.isCard = false,
     this.balance,
     this.isAutopay = false,
     this.reference,
@@ -29,6 +30,9 @@ class ParsedBankSms {
 
   /// Last 4 digits of the account or card, if found.
   final String? accountLast4;
+
+  /// True when the number is a card (credit/debit card), not a bank account.
+  final bool isCard;
 
   /// Available balance after the transaction, if the SMS reports it.
   final double? balance;
@@ -71,6 +75,13 @@ class ParsedBankSms {
       "bal: $balance, autopay: $isAutopay, ref: $reference, bank: $bank, channel: $channel)";
 }
 
+class BankInfo {
+  const BankInfo(this.shortName, this.fullName, this.pattern);
+  final String shortName;
+  final String fullName;
+  final RegExp pattern;
+}
+
 class ParsedBankBalance {
   ParsedBankBalance(
       {required this.accountLast4, required this.balance, this.bank});
@@ -80,7 +91,7 @@ class ParsedBankBalance {
 }
 
 class BankSmsParser {
-  static const String _cur = r"(?:rs\.?|inr|₹)";
+  static const String _cur = r"(?:rs\s*[.:]?|inr\s*[.:]?|₹)";
   static const String _num = r"([0-9][0-9,]*(?:\.[0-9]{1,2})?)";
 
   static RegExp _re(String pattern) =>
@@ -106,6 +117,9 @@ class BankSmsParser {
     _re(r"\bcard\b.{0,60}\b(payment|pymt)\b.{0,40}\breceived\b"),
   ];
 
+  static final RegExp _shareWarning = _re(
+      r"\b(?:never|do not|don't|dont|pls do not|please do not|not to)\s+(?:share|disclose)\b[^.\n]{0,40}");
+
   // ---- Direction keywords ----
   static final RegExp _debitWords = _re(
       r"\b(?:debited|spent|paid|sent|withdrawn|withdrawal|purchase|debit(?!\s*card))\b|\bdr\.?(?=\s)");
@@ -125,7 +139,7 @@ class BankSmsParser {
 
   // ---- Balance ----
   static final RegExp _balance = _re(
-      r"\b(?:avl\.?|avail(?:able)?|aval|updated|clear|total|net|a/c|ac)?\s*bal(?:ance)?\.?\s*(?:is|:|-|of|as on [0-9a-z/ -]+?:)?\s*(?:" +
+      r"\b(?:avl|avlbl|avail(?:able)?|aval|updated|clear|clr|total|net|a/c|ac)?\.?\s*bal(?:ance)?\.?\s*(?:is|:|-|of|as on [0-9a-z/ -]+?:)?\s*(?:" +
           _cur +
           r")?\s*:?\s*(-?" +
           _num.substring(1));
@@ -141,6 +155,7 @@ class BankSmsParser {
   // ---- Reference numbers ----
   static final List<RegExp> _refPatterns = [
     _re(r"\bupi/p2[am]/([0-9]{8,})"),
+    _re(r"\bupi/(?:dr|cr)/([0-9]{8,})"),
     _re(r"\b(?:upi\s*(?:ref|txn)?\.?\s*(?:no|id)?\.?|ref(?:erence)?\.?\s*(?:no|num|number|id)?\.?|refno|utr(?:\s*no)?|rrn|txn\s*(?:id|no)|transaction\s*id)\s*[:.\-#]?\s*([a-z0-9]{6,})"),
   ];
 
@@ -148,43 +163,84 @@ class BankSmsParser {
   static const String _stop =
       r"(?=\s+(?:on|ref|refno|upi|via|avl|avail|using|from|for|info|txn|dt|date|is|has|thru|through|with|bal|not|if|call)\b|\s*(?:[;,(\n]|\.(?:\s|$))|\s+\d|$)";
   static final List<RegExp> _debitMerchantPatterns = [
-    _re(r"\bupi/p2[am]/[0-9]+/([^/\n]+)"),
+    _re(r"\bupi/p2[am]/[0-9]+/([^/\n]+?)(?=/|\.\s|\.$|\s+(?:on|ref|total|avl|avail|bal|not)\b|\n|$)"),
+    _re(r"\bupi/(?:dr|cr)/[0-9]+/([^/\n]+?)(?=/|\.\s|\.$|\s+(?:on|ref|total|avl|avail|bal|not)\b|\n|$)"),
+    _re(r"\bupi[/:][0-9]{6,}/([^/\n]+?)(?=/|\.\s|\.$|\s+(?:on|ref|total|avl|avail|bal|not)\b|\n|$)"),
     _re(r";\s*([a-z0-9 &._@'-]{2,40}?)\s+credited\b"),
     _re(r"\b(?:to|at|towards|trf to|transfer to|paid to|sent to)\s+(?:vpa\s+|a/c\s+)?([a-z0-9][a-z0-9 &._@'*-]{1,40}?)" +
         _stop),
     _re(r"\binfo:?\s*(?:upi[/-])?([a-z0-9][a-z0-9 &._@'*/-]{2,40}?)" + _stop),
   ];
   static final List<RegExp> _creditMerchantPatterns = [
-    _re(r"\bupi/p2[am]/[0-9]+/([^/\n]+)"),
+    _re(r"\bupi/p2[am]/[0-9]+/([^/\n]+?)(?=/|\.\s|\.$|\s+(?:on|ref|total|avl|avail|bal|not)\b|\n|$)"),
+    _re(r"\bupi/(?:dr|cr)/[0-9]+/([^/\n]+?)(?=/|\.\s|\.$|\s+(?:on|ref|total|avl|avail|bal|not)\b|\n|$)"),
+    _re(r"\bupi[/:][0-9]{6,}/([^/\n]+?)(?=/|\.\s|\.$|\s+(?:on|ref|total|avl|avail|bal|not)\b|\n|$)"),
     _re(r"\bfrom\s+(?:vpa\s+)?([a-z0-9][a-z0-9 &._@'*-]{1,40}?)" +
         _stop),
     _re(r"\binfo:?\s*(?:upi[/-])?([a-z0-9][a-z0-9 &._@'*/-]{2,40}?)" + _stop),
   ];
 
-  // ---- Bank names ----
-  static final Map<String, RegExp> _banks = {
-    "SBI": _re(r"\bsbi\b|sbiinb|sbiupi|sbicrd|state bank"),
-    "HDFC": _re(r"hdfc"),
-    "ICICI": _re(r"icici"),
-    "Axis": _re(r"\baxis\b|axisbk"),
-    "Kotak": _re(r"kotak"),
-    "Paytm": _re(r"paytm"),
-    "PNB": _re(r"\bpnb\b|punjab national"),
-    "Bank of Baroda": _re(r"\bbob\b|bank of baroda|barodambank"),
-    "Canara": _re(r"canara"),
-    "Union Bank": _re(r"union bank|unionb"),
-    "IDFC First": _re(r"idfc"),
-    "Yes Bank": _re(r"yes ?bank|yesbnk"),
-    "IndusInd": _re(r"indusind|indusb"),
-    "AU Bank": _re(r"\bau bank|aubank"),
-    "Federal": _re(r"federal|fedbnk"),
-    "CUB": _re(r"\bcub\b|cubank|cubltd|city union"),
-    "Indian Bank": _re(r"indian bank|indbnk"),
-    "IOB": _re(r"\biob\b|iobchn|indian overseas"),
-    "KVB": _re(r"\bkvb\b|kvbank|karur vysya"),
-    "TMB": _re(r"\btmb\b|tmbank|tamilnad mercantile"),
-    "Bank of India": _re(r"bank of india|boiind"),
-  };
+  // ---- Bank names (short name, full name, pattern) ----
+  static final List<BankInfo> banks = [
+    BankInfo("SBI Card", "SBI Card", _re(r"sbicrd|sbi ?card")),
+    BankInfo("SBI", "State Bank of India", _re(r"\bsbi\b|sbiinb|sbiupi|sbmsms|sbipsg|cbssbi|state bank")),
+    BankInfo("HDFC", "HDFC Bank", _re(r"hdfc")),
+    BankInfo("ICICI", "ICICI Bank", _re(r"icici")),
+    BankInfo("Axis", "Axis Bank", _re(r"\baxis\b|axisbk")),
+    BankInfo("Kotak", "Kotak Mahindra Bank", _re(r"kotak")),
+    BankInfo("PNB", "Punjab National Bank", _re(r"\bpnb\b|pnbsms|punjab national")),
+    BankInfo("BOB", "Bank of Baroda", _re(r"\bbob\b|bobtxn|bobsms|bank of baroda|barodambank")),
+    BankInfo("Canara", "Canara Bank", _re(r"canara|canbnk")),
+    BankInfo("Union Bank", "Union Bank of India", _re(r"union bank|unionb|ubiin")),
+    BankInfo("South Indian Bank", "South Indian Bank", _re(r"south indian|sibsms|\bsib\b")),
+    BankInfo("Indian Bank", "Indian Bank", _re(r"indian bank|indbnk")),
+    BankInfo("IOB", "Indian Overseas Bank", _re(r"\biob\b|iobchn|iobbnk|indian overseas")),
+    BankInfo("Central Bank", "Central Bank of India", _re(r"central bank|centbk|cbiinb")),
+    BankInfo("UCO", "UCO Bank", _re(r"\buco\b|ucobnk")),
+    BankInfo("BOI", "Bank of India", _re(r"bank of india|boiind|\bboi\b")),
+    BankInfo("Bank of Maharashtra", "Bank of Maharashtra", _re(r"maharashtra|mahabk")),
+    BankInfo("Punjab & Sind", "Punjab & Sind Bank", _re(r"punjab ?& ?sind|psbank")),
+    BankInfo("IDBI", "IDBI Bank", _re(r"idbi")),
+    BankInfo("IDFC First", "IDFC First Bank", _re(r"idfc")),
+    BankInfo("Yes Bank", "Yes Bank", _re(r"yes ?bank|yesbnk")),
+    BankInfo("IndusInd", "IndusInd Bank", _re(r"indusind|indusb")),
+    BankInfo("RBL", "RBL Bank", _re(r"\brbl\b|rblbnk")),
+    BankInfo("Federal", "Federal Bank", _re(r"federal|fedbnk")),
+    BankInfo("CUB", "City Union Bank", _re(r"\bcub\b|cubank|cubltd|city union")),
+    BankInfo("KVB", "Karur Vysya Bank", _re(r"\bkvb\b|kvbank|karur vysya")),
+    BankInfo("TMB", "Tamilnad Mercantile Bank", _re(r"\btmb\b|tmbank|tamilnad mercantile")),
+    BankInfo("Karnataka Bank", "Karnataka Bank", _re(r"karnataka bank|karbnk|ktkbnk")),
+    BankInfo("CSB", "CSB Bank", _re(r"\bcsb\b|csbbnk|catholic syrian")),
+    BankInfo("Dhanlaxmi", "Dhanlaxmi Bank", _re(r"dhanla?xmi|dhanbk")),
+    BankInfo("J&K Bank", "Jammu & Kashmir Bank", _re(r"j ?& ?k bank|jkbank|jammu")),
+    BankInfo("Bandhan", "Bandhan Bank", _re(r"bandhan|bandhn")),
+    BankInfo("DCB", "DCB Bank", _re(r"\bdcb\b|dcbbnk")),
+    BankInfo("AU Bank", "AU Small Finance Bank", _re(r"\bau bank|aubank|au small")),
+    BankInfo("Equitas", "Equitas Small Finance Bank", _re(r"equitas|equtas")),
+    BankInfo("Ujjivan", "Ujjivan Small Finance Bank", _re(r"ujjivan|ujjivn")),
+    BankInfo("ESAF", "ESAF Small Finance Bank", _re(r"\besaf\b|esafbk")),
+    BankInfo("Jana", "Jana Small Finance Bank", _re(r"\bjana\b|janabk")),
+    BankInfo("Suryoday", "Suryoday Small Finance Bank", _re(r"suryoday|suryod")),
+    BankInfo("Utkarsh", "Utkarsh Small Finance Bank", _re(r"utkarsh|utksfb")),
+    BankInfo("Standard Chartered", "Standard Chartered", _re(r"standard chartered|scbank|\bstanc")),
+    BankInfo("Citi", "Citibank", _re(r"\bciti|citibk")),
+    BankInfo("HSBC", "HSBC", _re(r"hsbc")),
+    BankInfo("DBS", "DBS Bank", _re(r"\bdbs\b|dbsbnk|digibank")),
+    BankInfo("Saraswat", "Saraswat Bank", _re(r"saraswat|sarbnk")),
+    BankInfo("Cosmos", "Cosmos Bank", _re(r"cosmos")),
+    BankInfo("SVC", "SVC Bank", _re(r"\bsvc\b|svcbnk")),
+    BankInfo("TJSB", "TJSB Bank", _re(r"tjsb")),
+    BankInfo("Airtel Payments", "Airtel Payments Bank", _re(r"airtel ?payments|airbnk|airtel bank")),
+    BankInfo("India Post", "India Post Payments Bank", _re(r"ippb|india post")),
+    BankInfo("Fino", "Fino Payments Bank", _re(r"\bfino\b|finobk")),
+    BankInfo("Jio Payments", "Jio Payments Bank", _re(r"jio ?payments|jiopbs")),
+    BankInfo("NSDL", "NSDL Payments Bank", _re(r"nsdl")),
+    BankInfo("Paytm", "Paytm", _re(r"paytm")),
+    BankInfo("Amazon Pay", "Amazon Pay", _re(r"amazon ?pay|apaysms")),
+    BankInfo("OneCard", "OneCard", _re(r"onecard|onecrd")),
+    BankInfo("Slice", "Slice", _re(r"\bslice\b|sliceit")),
+    BankInfo("Amex", "American Express", _re(r"\bamex\b|american express|amexin")),
+  ];
 
   /// Returns null if the SMS is not a completed bank transaction.
   ///
@@ -195,8 +251,10 @@ class BankSmsParser {
     if (text.isEmpty) return null;
 
     if (sender != null && _looksLikePersonalNumber(sender)) return null;
+    // Remove safety warnings ("Never share OTP/PIN") before checking for OTPs
+    final String checkText = text.replaceAll(_shareWarning, " ");
     for (final RegExp r in _ignore) {
-      if (r.hasMatch(text)) return null;
+      if (r.hasMatch(checkText)) return null;
     }
 
     // Direction
@@ -213,6 +271,10 @@ class BankSmsParser {
       type = BankSmsType.debit;
     } else if (creditMatch != null) {
       type = BankSmsType.credit;
+    } else if (_re(r"\btransferred\b").hasMatch(text)) {
+      type = _re(r"\btransferred\s+(?:in)?to\s+(?:your|ur)\b").hasMatch(text)
+          ? BankSmsType.credit
+          : BankSmsType.debit;
     } else {
       return null;
     }
@@ -226,12 +288,13 @@ class BankSmsParser {
     final double? amount = _findAmount(text);
     if (amount == null || amount <= 0) return null;
 
-    final String? bank = _findBank("${sender ?? ""} $text");
+    final String? bank = _findBank(text, sender);
     return ParsedBankSms(
       type: type,
       amount: amount,
       merchant: _findMerchant(text, type),
       accountLast4: _findAccount(text),
+      isCard: _accountIsCard(text),
       balance: _findBalance(text),
       isAutopay: type == BankSmsType.debit && _autopay.hasMatch(text),
       reference: _findReference(text),
@@ -258,7 +321,7 @@ class BankSmsParser {
     return ParsedBankBalance(
       accountLast4: account,
       balance: balance,
-      bank: _findBank("${sender ?? ""} $text"),
+      bank: _findBank(text, sender),
     );
   }
 
@@ -305,6 +368,18 @@ class BankSmsParser {
     return null;
   }
 
+  static bool _accountIsCard(String text) {
+    for (int i = 0; i < _accountPatterns.length; i++) {
+      if (_accountPatterns[i].hasMatch(text)) {
+        // Order: savings, a/c, card, "ending"
+        if (i == 2) return true;
+        if (i == 3) return _re(r"\bcard\b").hasMatch(text);
+        return false;
+      }
+    }
+    return false;
+  }
+
   static String? _findReference(String text) {
     for (final RegExp r in _refPatterns) {
       for (final RegExpMatch m in r.allMatches(text)) {
@@ -316,9 +391,15 @@ class BankSmsParser {
     return null;
   }
 
-  static String? _findBank(String text) {
-    for (final MapEntry<String, RegExp> e in _banks.entries) {
-      if (e.value.hasMatch(text)) return e.key;
+  static String? _findBank(String text, String? sender) =>
+      (sender == null ? null : findBankInfo(sender))?.shortName ??
+      findBankInfo(text)?.shortName;
+
+  /// The bank mentioned in [text] (sender header and/or message).
+  static BankInfo? findBankInfo(String text) {
+    // Prefer the sender header (e.g. "AD-CUBANK-S"), then the message body.
+    for (final BankInfo b in banks) {
+      if (b.pattern.hasMatch(text)) return b;
     }
     return null;
   }
