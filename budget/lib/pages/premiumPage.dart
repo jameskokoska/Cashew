@@ -715,7 +715,8 @@ showHelpRestorePopup(BuildContext context) {
 }
 
 bool hidePremiumPopup() {
-  return premiumPopupEnabled == false ||
+  return true ||
+      premiumPopupEnabled == false ||
       appStateSettings["purchaseID"] != null ||
       appStateSettings["previewDemo"] == true;
 }
