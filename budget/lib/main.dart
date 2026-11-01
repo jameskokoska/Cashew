@@ -14,6 +14,7 @@ import 'package:budget/widgets/util/watchForDayChange.dart';
 import 'package:budget/widgets/watchAllWallets.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/smsTransactions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/notificationsGlobal.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
@@ -153,7 +154,8 @@ class App extends StatelessWidget {
           },
           child: InitializeBiometrics(
             child: InitializeNotificationService(
-              child: InitializeAppLinks(
+              child: InitializeSmsTransactions(
+                child: InitializeAppLinks(
                 child: WatchForDayChange(
                   child: WatchSelectedWalletPk(
                     child: WatchAllWallets(
@@ -163,6 +165,7 @@ class App extends StatelessWidget {
                 ),
               ),
             ),
+          ),
           ),
         );
 

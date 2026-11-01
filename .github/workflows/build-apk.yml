@@ -1,0 +1,72 @@
+name: Build APK
+
+# Run manually from the Actions tab (works from the GitHub mobile site too),
+# or automatically whenever code is pushed to main.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "budget/**"
+      - ".github/workflows/build-apk.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: budget
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.19.6"
+          channel: stable
+          cache: true
+
+      - name: Get packages
+        run: flutter pub get
+
+      - name: Test the bank SMS parser
+        run: flutter test test/bank_sms_parser_test.dart
+
+      - name: Set up signing key
+        env:
+          CASHEW_KEYSTORE: ${{ secrets.CASHEW_KEYSTORE }}
+        run: |
+          if [ -n "$CASHEW_KEYSTORE" ]; then
+            echo "$CASHEW_KEYSTORE" | base64 -d > android/app/release.jks
+            echo "Using your saved signing key (updates install over the previous version)."
+          else
+            echo "::warning::No CASHEW_KEYSTORE secret found. Using a one-off key: you will have to uninstall before installing the next build."
+            keytool -genkeypair -v -keystore android/app/release.jks -storepass cashewsms -keypass cashewsms \
+              -alias cashew -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Cashew SMS"
+          fi
+          cat > android/key.properties <<EOF
+          storePassword=cashewsms
+          keyPassword=cashewsms
+          keyAlias=cashew
+          storeFile=release.jks
+          EOF
+
+      - name: Build APK
+        run: flutter build apk --release --split-per-abi
+
+      - name: Publish to Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: sms-build-${{ github.run_number }}
+          name: Cashew with SMS transactions (build ${{ github.run_number }})
+          body: |
+            Install **app-arm64-v8a-release.apk** on almost any modern Android phone.
+            Use app-armeabi-v7a-release.apk only for very old phones.
+          files: budget/build/app/outputs/flutter-apk/*.apk

@@ -1,3 +1,5 @@
+import 'package:budget/pages/smsTransactionsPage.dart';
+import 'package:budget/struct/smsTransactions.dart';
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart' hide AppSettings;
 import 'package:budget/pages/aboutPage.dart';
@@ -576,6 +578,17 @@ class SettingsPageContent extends StatelessWidget {
                 icon: appStateSettings["outlinedIcons"]
                     ? Icons.mark_email_unread_outlined
                     : Icons.mark_email_unread_rounded,
+              )
+            : SizedBox.shrink(),
+
+        smsTransactionsSupported()
+            ? SettingsContainerOpenPage(
+                openPage: SmsTransactionsPage(),
+                title: "SMS Transactions",
+                description: "Add bank transactions automatically",
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.sms_outlined
+                    : Icons.sms_rounded,
               )
             : SizedBox.shrink(),
 
