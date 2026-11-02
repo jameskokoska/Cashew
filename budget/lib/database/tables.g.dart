@@ -7189,6 +7189,162 @@ class DedupeEntriesCompanion extends UpdateCompanion<DedupeEntry> {
     this.matchedEntryPk = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : eventKey = Value(eventKey);
+  static Insertable<DedupeEntry> custom({
+    Expression<String>? entryPk,
+    Expression<String>? eventKey,
+    Expression<String>? packageName,
+    Expression<String>? notificationId,
+    Expression<double>? amount,
+    Expression<String>? amountNormalized,
+    Expression<String>? currency,
+    Expression<String>? title,
+    Expression<String>? rawContent,
+    Expression<String>? source,
+    Expression<DateTime>? dateTimeCreated,
+    Expression<DateTime>? notificationTimestamp,
+    Expression<String>? status,
+    Expression<String>? createdTransactionPk,
+    Expression<String>? matchedEntryPk,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (entryPk != null) 'entry_pk': entryPk,
+      if (eventKey != null) 'event_key': eventKey,
+      if (packageName != null) 'package_name': packageName,
+      if (notificationId != null) 'notification_id': notificationId,
+      if (amount != null) 'amount': amount,
+      if (amountNormalized != null) 'amount_normalized': amountNormalized,
+      if (currency != null) 'currency': currency,
+      if (title != null) 'title': title,
+      if (rawContent != null) 'raw_content': rawContent,
+      if (source != null) 'source': source,
+      if (dateTimeCreated != null) 'date_time_created': dateTimeCreated,
+      if (notificationTimestamp != null)
+        'notification_timestamp': notificationTimestamp,
+      if (status != null) 'status': status,
+      if (createdTransactionPk != null)
+        'created_transaction_pk': createdTransactionPk,
+      if (matchedEntryPk != null) 'matched_entry_pk': matchedEntryPk,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  DedupeEntriesCompanion copyWith(
+      {Value<String>? entryPk,
+      Value<String>? eventKey,
+      Value<String?>? packageName,
+      Value<String?>? notificationId,
+      Value<double?>? amount,
+      Value<String?>? amountNormalized,
+      Value<String?>? currency,
+      Value<String?>? title,
+      Value<String?>? rawContent,
+      Value<String>? source,
+      Value<DateTime>? dateTimeCreated,
+      Value<DateTime?>? notificationTimestamp,
+      Value<String>? status,
+      Value<String?>? createdTransactionPk,
+      Value<String?>? matchedEntryPk,
+      Value<int>? rowid}) {
+    return DedupeEntriesCompanion(
+      entryPk: entryPk ?? this.entryPk,
+      eventKey: eventKey ?? this.eventKey,
+      packageName: packageName ?? this.packageName,
+      notificationId: notificationId ?? this.notificationId,
+      amount: amount ?? this.amount,
+      amountNormalized: amountNormalized ?? this.amountNormalized,
+      currency: currency ?? this.currency,
+      title: title ?? this.title,
+      rawContent: rawContent ?? this.rawContent,
+      source: source ?? this.source,
+      dateTimeCreated: dateTimeCreated ?? this.dateTimeCreated,
+      notificationTimestamp:
+          notificationTimestamp ?? this.notificationTimestamp,
+      status: status ?? this.status,
+      createdTransactionPk: createdTransactionPk ?? this.createdTransactionPk,
+      matchedEntryPk: matchedEntryPk ?? this.matchedEntryPk,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (entryPk.present) {
+      map['entry_pk'] = Variable<String>(entryPk.value);
+    }
+    if (eventKey.present) {
+      map['event_key'] = Variable<String>(eventKey.value);
+    }
+    if (packageName.present) {
+      map['package_name'] = Variable<String>(packageName.value);
+    }
+    if (notificationId.present) {
+      map['notification_id'] = Variable<String>(notificationId.value);
+    }
+    if (amount.present) {
+      map['amount'] = Variable<double>(amount.value);
+    }
+    if (amountNormalized.present) {
+      map['amount_normalized'] = Variable<String>(amountNormalized.value);
+    }
+    if (currency.present) {
+      map['currency'] = Variable<String>(currency.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (rawContent.present) {
+      map['raw_content'] = Variable<String>(rawContent.value);
+    }
+    if (source.present) {
+      map['source'] = Variable<String>(source.value);
+    }
+    if (dateTimeCreated.present) {
+      map['date_time_created'] = Variable<DateTime>(dateTimeCreated.value);
+    }
+    if (notificationTimestamp.present) {
+      map['notification_timestamp'] =
+          Variable<DateTime>(notificationTimestamp.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
+    if (createdTransactionPk.present) {
+      map['created_transaction_pk'] =
+          Variable<String>(createdTransactionPk.value);
+    }
+    if (matchedEntryPk.present) {
+      map['matched_entry_pk'] = Variable<String>(matchedEntryPk.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DedupeEntriesCompanion(')
+          ..write('entryPk: $entryPk, ')
+          ..write('eventKey: $eventKey, ')
+          ..write('packageName: $packageName, ')
+          ..write('notificationId: $notificationId, ')
+          ..write('amount: $amount, ')
+          ..write('amountNormalized: $amountNormalized, ')
+          ..write('currency: $currency, ')
+          ..write('title: $title, ')
+          ..write('rawContent: $rawContent, ')
+          ..write('source: $source, ')
+          ..write('dateTimeCreated: $dateTimeCreated, ')
+          ..write('notificationTimestamp: $notificationTimestamp, ')
+          ..write('status: $status, ')
+          ..write('createdTransactionPk: $createdTransactionPk, ')
+          ..write('matchedEntryPk: $matchedEntryPk, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
 }
 
 abstract class _$FinanceDatabase extends GeneratedDatabase {
