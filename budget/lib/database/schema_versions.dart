@@ -4956,7 +4956,6 @@ class Shape36 extends i0.VersionedTable {
       columnsByName['is_absolute_spending_limit']! as i1.GeneratedColumn<bool>;
 }
 
-
 i1.GeneratedColumn<String> _column_101(String aliasedName) =>
     i1.GeneratedColumn<String>('entry_pk', aliasedName, false,
         type: i1.DriftSqlType.string);
@@ -4996,8 +4995,7 @@ i1.GeneratedColumn<DateTime> _column_112(String aliasedName) =>
         type: i1.DriftSqlType.dateTime);
 i1.GeneratedColumn<String> _column_113(String aliasedName) =>
     i1.GeneratedColumn<String>('status', aliasedName, false,
-        type: i1.DriftSqlType.string,
-        defaultValue: const Constant('created'));
+        type: i1.DriftSqlType.string, defaultValue: const Constant('created'));
 i1.GeneratedColumn<String> _column_114(String aliasedName) =>
     i1.GeneratedColumn<String>('created_transaction_pk', aliasedName, true,
         type: i1.DriftSqlType.string);

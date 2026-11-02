@@ -549,13 +549,11 @@ class DedupeEntries extends Table {
   TextColumn get currency => text().nullable()();
   TextColumn get title => text().nullable()();
   TextColumn get rawContent => text().nullable()();
-  TextColumn get source =>
-      text().withDefault(const Constant('notification'))();
+  TextColumn get source => text().withDefault(const Constant('notification'))();
   DateTimeColumn get dateTimeCreated =>
       dateTime().clientDefault(() => DateTime.now())();
   DateTimeColumn get notificationTimestamp => dateTime().nullable()();
-  TextColumn get status =>
-      text().withDefault(const Constant('created'))();
+  TextColumn get status => text().withDefault(const Constant('created'))();
   TextColumn get createdTransactionPk => text().nullable()();
   TextColumn get matchedEntryPk => text().nullable()();
 
@@ -1194,9 +1192,8 @@ class FinanceDatabase extends _$FinanceDatabase {
               try {
                 await m.createTable(schema.dedupeEntries);
               } catch (e) {
-                print(
-                    "Migration Error: Error creating table dedupeEntries " +
-                        e.toString());
+                print("Migration Error: Error creating table dedupeEntries " +
+                    e.toString());
               }
             },
           ),
@@ -1347,11 +1344,13 @@ class FinanceDatabase extends _$FinanceDatabase {
     String? matchedEntryPk,
     String? createdTransactionPk,
   }) {
-    return (update(dedupeEntries)..where((tbl) => tbl.entryPk.equals(entryPk))).write(
+    return (update(dedupeEntries)..where((tbl) => tbl.entryPk.equals(entryPk)))
+        .write(
       DedupeEntriesCompanion(
         status: Value(status),
-        matchedEntryPk:
-            matchedEntryPk != null ? Value(matchedEntryPk) : const Value.absent(),
+        matchedEntryPk: matchedEntryPk != null
+            ? Value(matchedEntryPk)
+            : const Value.absent(),
         createdTransactionPk: createdTransactionPk != null
             ? Value(createdTransactionPk)
             : const Value.absent(),

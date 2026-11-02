@@ -80,7 +80,8 @@ void main() {
       expect(ledger.entries.first.notificationId, equals('42'));
     });
 
-    test('second notification with same package and id within 5 min is duplicate',
+    test(
+        'second notification with same package and id within 5 min is duplicate',
         () async {
       final t0 = DateTime(2026, 10, 22, 12, 0, 0);
       final t1 = t0.add(const Duration(minutes: 2));
@@ -178,9 +179,7 @@ void main() {
       expect(ledger.suppressedEntries.length, equals(1));
     });
 
-    test(
-        'different amounts within window are not marked duplicate',
-        () async {
+    test('different amounts within window are not marked duplicate', () async {
       final t0 = DateTime(2026, 10, 22, 14, 0, 0);
       final tBank = t0.add(const Duration(seconds: 30));
 

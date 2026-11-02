@@ -6615,7 +6615,6 @@ class DeleteLogsCompanion extends UpdateCompanion<DeleteLog> {
   }
 }
 
-
 class $DedupeEntriesTable extends DedupeEntries
     with TableInfo<$DedupeEntriesTable, DedupeEntry> {
   @override
@@ -6841,8 +6840,8 @@ class $DedupeEntriesTable extends DedupeEntries
           .read(DriftSqlType.string, data['${effectivePrefix}notification_id']),
       amount: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}amount']),
-      amountNormalized: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}amount_normalized']),
+      amountNormalized: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}amount_normalized']),
       currency: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}currency']),
       title: attachedDatabase.typeMapping
@@ -6861,8 +6860,8 @@ class $DedupeEntriesTable extends DedupeEntries
       createdTransactionPk: attachedDatabase.typeMapping.read(
           DriftSqlType.string,
           data['${effectivePrefix}created_transaction_pk']),
-      matchedEntryPk: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}matched_entry_pk']),
+      matchedEntryPk: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}matched_entry_pk']),
     );
   }
 
@@ -7053,9 +7052,8 @@ class DedupeEntry extends DataClass implements Insertable<DedupeEntry> {
         entryPk: entryPk ?? this.entryPk,
         eventKey: eventKey ?? this.eventKey,
         packageName: packageName.present ? packageName.value : this.packageName,
-        notificationId: notificationId.present
-            ? notificationId.value
-            : this.notificationId,
+        notificationId:
+            notificationId.present ? notificationId.value : this.notificationId,
         amount: amount.present ? amount.value : this.amount,
         amountNormalized: amountNormalized.present
             ? amountNormalized.value
