@@ -112,8 +112,8 @@ class NotificationDispatcher {
       currency: googlePayResult?.currency,
       title: googlePayResult?.merchant ?? event.title,
       rawContent: event.content,
-      eventTime: event.timestamp != null && event.timestamp! > 0
-          ? DateTime.fromMillisecondsSinceEpoch(event.timestamp!)
+      eventTime: event.timestamp != null && event.timestamp > 0
+          ? DateTime.fromMillisecondsSinceEpoch(event.timestamp)
           : null,
     );
 

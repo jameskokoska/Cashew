@@ -141,7 +141,7 @@ Future<Transaction?> processAddTransactionFromParams(
       source: 'app_link',
     );
     if (dedupeResult.isDuplicate) {
-      return;
+      return null;
     }
   }
   String title = params["title"] ?? params["name"] ?? "";
@@ -255,7 +255,7 @@ Future processAddTransactionRouteFromParams(
       source: 'app_link',
     );
     if (dedupeResult.isDuplicate) {
-      return;
+      return null;
     }
   }
   // Add a delay so the keyboard can focus
