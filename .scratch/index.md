@@ -5,7 +5,7 @@ Each task is a folder `.scratch/BT-N-<slug>/` with its `task.md` (copied from `.
 - IDs are stable and never renumbered. Rows are ordered by ID, which is creation order.
 - To add a task: take `Next ID`, create `.scratch/BT-<N>-<slug>/task.md`, add a row below, and bump `Next ID`.
 
-Next ID: 10
+Next ID: 11
 
 | ID | Title | Issue | Folder |
 |----|-------|-------|--------|
@@ -18,3 +18,4 @@ Next ID: 10
 | BT-7 | Recognize account owner in receipt capture to automatically route self-transfers vs expenses | [#12](https://github.com/kidomarcostelo/budget-tracking/issues/12) | [BT-7-owner-recognition-self-transfers](BT-7-owner-recognition-self-transfers/task.md) |
 | BT-8 | Colocate Test Suites with Library Subsystem Structure | [#14](https://github.com/kidomarcostelo/budget-tracking/issues/14) | [BT-8-colocate-tests](BT-8-colocate-tests/task.md) |
 | BT-9 | Route recognized self-transfers directly to Transfer balance flow | [#17](https://github.com/kidomarcostelo/budget-tracking/issues/17) | [BT-9-self-transfer-routing-fix](BT-9-self-transfer-routing-fix/task.md) |
+| BT-10 | Isolate Android debug build with applicationIdSuffix and distinct app label | [#21](https://github.com/kidomarcostelo/budget-tracking/issues/21) | [BT-10-debug-app-isolation](BT-10-debug-app-isolation/task.md) |

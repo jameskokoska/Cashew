@@ -47,6 +47,7 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
+        manifestPlaceholders = [appName: "Cashew"]
     }
 
     lintOptions {
@@ -73,8 +74,17 @@ android {
         }
     }
     buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+            manifestPlaceholders = [appName: "Cashew Dev"]
+        }
+        profile {
+            matchingFallbacks = ['release']
+            manifestPlaceholders = [appName: "Cashew Dev"]
+        }
         release {
             signingConfig signingConfigs.release
+            manifestPlaceholders = [appName: "Cashew"]
         }
     }
 }

@@ -63,3 +63,18 @@ Drift maintains schema evolution snapshots in `budget/drift_schemas/`.
 4. Run `dart run build_runner build --delete-conflicting-outputs` to regenerate `tables.g.dart`.
 5. Dump the new schema using Drift migration tools.
 6. **Never alter existing historical migration blocks.**
+
+---
+
+## 4. Android Environments & Package Isolation
+
+To allow developers to track real personal finances on their daily driver while simultaneously developing and testing features:
+- **Release Build (`release`):** Package `com.budget.tracker_app` with launcher label `Cashew`.
+- **Debug Build (`debug`):** Package `com.budget.tracker_app.debug` (via `applicationIdSuffix ".debug"`) with launcher label `Cashew Dev`.
+- **Profile Build (`profile`):** Uses `Cashew Dev` manifest placeholder and falls back to release signing configuration.
+
+### Data Safety Invariants:
+1. Both apps can be installed simultaneously on the same Android device with independent SQLite databases (`FinanceDatabase`) and separate `SharedPreferences`.
+2. Debug builds will never overwrite, corrupt, or wipe the production database upon install or uninstall.
+3. Realistic data testing is supported via the built-in database bridge: export a `.sql` snapshot from `Cashew` (`Settings → Import and export → Export data file`) and import it into `Cashew Dev`.
+
