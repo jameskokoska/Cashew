@@ -63,22 +63,22 @@ Each slice ends in something runnable and testable. S1 to S4 depend on S0.
   - posted + removed events for the same notification
   - Google Pay + bank notification for the same payment
   - Apple Pay Shortcut firing twice, or App Link throttler retries
-- [ ] **S4 Review route for uncertain matches.** When a match is ambiguous (two sources, no exact key match), show a "possible duplicate" prompt rather than auto-creating. Align with the heuristics in [`BT-2`](../BT-2-plan-bank-email-duplicate-detection/task.md) and wayfinder #2 Triage Inbox. Do not build the full Triage UI (#4).
+- [x] **S4 Review route for uncertain matches.** When a match is ambiguous (two sources, no exact key match, conflicting details, or uncertain merchant), show a "possible duplicate" prompt rather than auto-creating. Align with the heuristics in [`BT-2`](../BT-2-plan-bank-email-duplicate-detection/task.md) and wayfinder #2 Triage Inbox. Do not build the full Triage UI (#4).
 - [ ] **S5 Settings, permission UX, docs.** Settings copy for the Google Pay source (toggle per source). Update the FAQ/README pointer. Explain the notification-access permission and the Play policy note from S0.
 - [ ] **S6 Verification.** Widget tests for the prefilled page, unit tests for dedupe window and source classification, and a manual test on a device with real Google Pay notifications (redacted).
 
 ## Acceptance & verification
 
-- [ ] Unit / widget tests added or updated (S1, S2, S3, S4)
-- [ ] Static analysis passes: `cd budget && flutter analyze`
-- [ ] Code formatted: `cd budget && dart format --output=none --set-exit-if-changed .`
+- [x] Unit / widget tests added or updated (S1, S2, S3, S4)
+- [x] Static analysis passes: `cd budget && flutter analyze`
+- [x] Code formatted: `cd budget && dart format --output=none --set-exit-if-changed .`
 - [ ] Drift migration added as a new step; `schema_versions.dart` past steps untouched
 - [ ] Manual verification on an Android device with real Google Pay notifications (redacted fixtures saved under `.scratch/bank-samples/`)
 - [ ] Posted + removed event for one payment produces exactly one Transaction
 
 ## Roadblock
 
-None currently. PR #20 (Slice S3) successfully passed code review, CI quality gates, and was merged into `main`.
+None currently.
 
 ## Tried
 
@@ -87,12 +87,13 @@ None currently. PR #20 (Slice S3) successfully passed code review, CI quality ga
 - S1 implemented: upgraded to `notification_listener_service: ^1.0.0`, created `NotificationDispatcher` to own the listener stream, filtered out `hasRemoved == true` events, and added unit tests in `notification_dispatcher_test.dart`.
 - S2 implemented: created `GooglePayParser`, classified packages and payment content, routed to prefilled `AddTransactionPage`, and added unit tests with real 7-Eleven sample in `google_pay_parser_test.dart`.
 - S3 implemented: created `DedupeLedger` service, added additive Drift migration v46 -> v47 with `DedupeEntries` table and schema dump, wired deduplication into `NotificationDispatcher` and `appLinks`, addressed code review findings in `pr-20-review.md`, and merged PR #20 into `main`.
+- S4 implemented: enhanced `DedupeCheckResult` with `isUncertainMatch` and merchant corroboration heuristics in `DedupeLedger`, created `PossibleDuplicateBanner` widget, wired review routing into `NotificationDispatcher`, `GooglePayParser`, `autoTransactionsPageEmail`, and `appLinks`, and verified with full unit/widget test suites.
 
 ## Resume / next step
 
-1. Branch `feat/uncertain-match-review` from `main`.
-2. Implement S4: Review route for uncertain matches (show possible duplicate prompt rather than silent auto-creation when an ambiguous match is detected).
-3. Use `/mattpocock-tdd` for test-first implementation.
+1. Review PR for Slice S4 (`feat/uncertain-match-review`).
+2. Implement S5: Settings, permission UX, docs (settings copy for Google Pay source toggle, Play policy note, FAQ pointer).
+3. Implement S6: End-to-end device verification with real Google Pay notifications.
 
 ## Links
 

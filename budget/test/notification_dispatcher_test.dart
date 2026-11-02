@@ -496,4 +496,65 @@ void main() {
       expect(DedupeLedger.instance.suppressedEntries.isEmpty, isTrue);
     });
   });
+
+  group('NotificationDispatcher Uncertain Match Routing (Slice S4)', () {
+    late NotificationDispatcher dispatcher;
+
+    setUp(() {
+      DedupeLedger.instance.clear();
+      dispatcher = NotificationDispatcher.instance;
+      dispatcher.recentCapturedNotifications.clear();
+      dispatcher.queueHandler = null;
+      dispatcher.onGooglePayTransaction = null;
+    });
+
+    test(
+        'routes ambiguous match with conflicting merchants to review instead of suppressing',
+        () async {
+      final event1 = createTestEvent(
+        id: 111,
+        packageName: 'com.bank.one',
+        title: 'Purchase Alert',
+        content: 'Paid ₱250.00 at Starbucks',
+        timestamp: DateTime(2026, 10, 22, 10, 0, 0).millisecondsSinceEpoch,
+      );
+
+      final event2 = createTestEvent(
+        id: 222,
+        packageName: 'com.bank.two',
+        title: 'Purchase Alert',
+        content: "Paid ₱250.00 at McDonald's",
+        timestamp: DateTime(2026, 10, 22, 10, 0, 30).millisecondsSinceEpoch,
+      );
+
+      bool? capturedIsPossibleDuplicate;
+      DedupeEntryRecord? capturedMatchedEntry;
+      int dispatchCount = 0;
+
+      dispatcher.queueHandler = (
+        msg, {
+        dateTime,
+        willPushRoute = true,
+        isPossibleDuplicate = false,
+        possibleDuplicateEntry,
+      }) async {
+        dispatchCount++;
+        capturedIsPossibleDuplicate = isPossibleDuplicate;
+        capturedMatchedEntry = possibleDuplicateEntry;
+      };
+
+      final handled1 = await dispatcher.handleEvent(event1);
+      expect(handled1, isTrue);
+      expect(dispatchCount, equals(1));
+      expect(capturedIsPossibleDuplicate, isFalse);
+
+      final handled2 = await dispatcher.handleEvent(event2);
+      expect(handled2,
+          isTrue); // Not suppressed! Handled and dispatched for review!
+      expect(dispatchCount, equals(2));
+      expect(capturedIsPossibleDuplicate, isTrue);
+      expect(capturedMatchedEntry, isNotNull);
+      expect(capturedMatchedEntry!.amountNormalized, equals('250.00'));
+    });
+  });
 }

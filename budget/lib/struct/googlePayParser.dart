@@ -3,6 +3,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/dedupeLedger.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -133,7 +134,10 @@ class GooglePayParser {
     } else {
       final atMatch = _atMerchantRegex.firstMatch(trimmedContent);
       if (atMatch != null) {
-        merchant = atMatch.group(1)!.trim();
+        merchant = atMatch
+            .group(1)!
+            .replaceAll(RegExp(r'\s+with\s+.*$', caseSensitive: false), '')
+            .trim();
       } else {
         merchant = 'Google Wallet Purchase';
       }
@@ -202,11 +206,13 @@ class GooglePayParser {
     DateTime? dateTime,
     TransactionWallet? walletOverride,
     TransactionCategory? categoryOverride,
+    bool isPossibleDuplicate = false,
+    DedupeEntryRecord? possibleDuplicateEntry,
   }) async {
     final wallet = walletOverride ?? await resolveWallet(result);
     final category = categoryOverride ?? await resolveCategory(result);
 
-    if (willPushRoute) {
+    if (willPushRoute || isPossibleDuplicate) {
       pushRoute(
         null,
         AddTransactionPage(
@@ -218,6 +224,8 @@ class GooglePayParser {
           startInitialAddTransactionSequence: false,
           selectedWallet: wallet,
           selectedDate: dateTime ?? DateTime.now(),
+          isPossibleDuplicate: isPossibleDuplicate,
+          possibleDuplicateEntry: possibleDuplicateEntry,
         ),
       );
     } else {

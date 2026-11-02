@@ -378,7 +378,19 @@ class NotificationDispatcher {
 
     // If custom queue handler was supplied (e.g. in tests), prioritize it
     if (customQueueHandler != null) {
-      await customQueueHandler(messageString);
+      try {
+        await (customQueueHandler as dynamic)(
+          messageString,
+          isPossibleDuplicate: dedupeResult.isUncertainMatch,
+          possibleDuplicateEntry: dedupeResult.matchedEntry,
+        );
+      } catch (e) {
+        if (e is NoSuchMethodError) {
+          await customQueueHandler(messageString);
+        } else {
+          rethrow;
+        }
+      }
       return true;
     }
 
@@ -386,16 +398,46 @@ class NotificationDispatcher {
     if (GooglePayParser.isGooglePayEvent(event)) {
       // googlePayResult was parsed above for deduplication check
       if (googlePayResult != null) {
-        final gPayHandler = onGooglePayTransaction ??
-            GooglePayParser.processGooglePayTransaction;
-        await gPayHandler(googlePayResult);
+        if (onGooglePayTransaction != null) {
+          try {
+            await (onGooglePayTransaction as dynamic)(
+              googlePayResult,
+              isPossibleDuplicate: dedupeResult.isUncertainMatch,
+              possibleDuplicateEntry: dedupeResult.matchedEntry,
+            );
+          } catch (e) {
+            if (e is NoSuchMethodError) {
+              await onGooglePayTransaction!(googlePayResult);
+            } else {
+              rethrow;
+            }
+          }
+          return true;
+        }
+        await GooglePayParser.processGooglePayTransaction(
+          googlePayResult,
+          isPossibleDuplicate: dedupeResult.isUncertainMatch,
+          possibleDuplicateEntry: dedupeResult.matchedEntry,
+        );
         return true;
       }
     }
 
     TransactionQueueHandler? handler = queueHandler;
     if (handler != null) {
-      await handler(messageString);
+      try {
+        await (handler as dynamic)(
+          messageString,
+          isPossibleDuplicate: dedupeResult.isUncertainMatch,
+          possibleDuplicateEntry: dedupeResult.matchedEntry,
+        );
+      } catch (e) {
+        if (e is NoSuchMethodError) {
+          await handler(messageString);
+        } else {
+          rethrow;
+        }
+      }
     }
 
     return true;

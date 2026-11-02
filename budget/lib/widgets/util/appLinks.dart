@@ -126,9 +126,9 @@ class _AppLinksNativeState extends State<AppLinksNative> {
 //
 // Don't forget to update the README if this changed
 
-/// Checks whether an App Link payment should be suppressed as a duplicate.
+/// Checks whether an App Link payment matches the deduplication ledger.
 /// Deduplication is active only on Android and gated by notificationScanning setting.
-Future<bool> shouldDedupePayment({
+Future<DedupeCheckResult?> checkPaymentDedupe({
   required double amount,
   required Map<String, String?> params,
   PlatformOS? platform,
@@ -137,22 +137,39 @@ Future<bool> shouldDedupePayment({
 }) async {
   final currentPlatform = platform ?? getPlatform(ignoreEmulation: true);
   if (currentPlatform != PlatformOS.isAndroid) {
-    return false;
+    return null;
   }
   if (appStateSettings["notificationScanning"] != true) {
-    return false;
+    return null;
   }
   if (amount <= 0 || params["skipDedupe"] == "true") {
-    return false;
+    return null;
   }
-  final dedupeResult = await DedupeLedger.instance.checkAndRecordPayment(
+  return await DedupeLedger.instance.checkAndRecordPayment(
     amount: amount,
     currency: currency ?? params["currency"],
     title: params["title"] ?? params["name"],
     source: params["source"] ?? 'app_link',
     eventTime: eventTime,
   );
-  return dedupeResult.isDuplicate;
+}
+
+/// Checks whether an App Link payment should be suppressed as a duplicate.
+Future<bool> shouldDedupePayment({
+  required double amount,
+  required Map<String, String?> params,
+  PlatformOS? platform,
+  DateTime? eventTime,
+  String? currency,
+}) async {
+  final result = await checkPaymentDedupe(
+    amount: amount,
+    params: params,
+    platform: platform,
+    eventTime: eventTime,
+    currency: currency,
+  );
+  return result?.isDuplicate ?? false;
 }
 
 Future<Transaction?> processAddTransactionFromParams(
@@ -163,16 +180,40 @@ Future<Transaction?> processAddTransactionFromParams(
   String walletPk = wallet?.walletPk ?? appStateSettings["selectedWalletPk"];
   DateTime? dateCreated = await getDateTimeFromParams(params, context);
   double amount = getAmountFromParams(params);
-  if (await shouldDedupePayment(
+
+  final dedupeResult = await checkPaymentDedupe(
     amount: amount,
     params: params,
     eventTime: dateCreated,
     currency: wallet?.currency ?? params["currency"],
-  )) {
+  );
+
+  if (dedupeResult != null && dedupeResult.isDuplicate) {
     return null;
   }
+
   String title = params["title"] ?? params["name"] ?? "";
   String note = params["note"] ?? params["notes"] ?? "";
+
+  // If ambiguous match detected, route to review with possible duplicate banner instead of auto-creating
+  if (dedupeResult != null && dedupeResult.isUncertainMatch) {
+    await pushRoute(
+      context,
+      AddTransactionPage(
+        routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+        selectedAmount: amount,
+        selectedCategory: mainAndSubCategory.main,
+        selectedSubCategory: mainAndSubCategory.sub,
+        selectedWallet: wallet,
+        selectedDate: dateCreated,
+        selectedTitle: title.isNotEmpty ? title : null,
+        selectedNotes: note.isNotEmpty ? note : null,
+        isPossibleDuplicate: true,
+        possibleDuplicateEntry: dedupeResult.matchedEntry,
+      ),
+    );
+    return null;
+  }
 
   if (mainAndSubCategory.main == null) {
     Future.delayed(Duration(milliseconds: 100), () {
@@ -275,12 +316,14 @@ Future processAddTransactionRouteFromParams(
   TransactionWallet? wallet = await getWalletFromParams(params);
   DateTime? dateCreated = await getDateTimeFromParams(params, context);
   double amount = getAmountFromParams(params);
-  if (await shouldDedupePayment(
+  final dedupeResult = await checkPaymentDedupe(
     amount: amount,
     params: params,
     eventTime: dateCreated,
     currency: wallet?.currency ?? params["currency"],
-  )) {
+  );
+
+  if (dedupeResult != null && dedupeResult.isDuplicate) {
     return null;
   }
   // Add a delay so the keyboard can focus
@@ -296,6 +339,8 @@ Future processAddTransactionRouteFromParams(
         selectedDate: dateCreated,
         selectedTitle: params["title"],
         selectedNotes: params["notes"],
+        isPossibleDuplicate: dedupeResult?.isUncertainMatch ?? false,
+        possibleDuplicateEntry: dedupeResult?.matchedEntry,
       ),
     );
   });

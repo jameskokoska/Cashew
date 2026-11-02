@@ -731,4 +731,144 @@ void main() {
       expect(DedupeLedger.instance.entries.length, equals(1));
     });
   });
+
+  group('DedupeLedger Uncertain Match Classification (Slice S4)', () {
+    late DedupeLedger ledger;
+
+    setUp(() {
+      ledger = DedupeLedger();
+    });
+
+    test(
+        'two notifications with matching amount within window but conflicting merchants are classified as uncertain match',
+        () async {
+      final t0 = DateTime(2026, 10, 22, 10, 0, 0);
+      final t1 = t0.add(const Duration(seconds: 30));
+
+      // 1. First notification: Starbucks for 150 PHP
+      final res1 = await ledger.checkAndRecordNotification(
+        packageName: 'com.bank.one',
+        notificationId: '101',
+        amount: 150.0,
+        currency: 'PHP',
+        title: 'Starbucks Coffee',
+        rawContent: 'Paid PHP 150.00 at Starbucks Coffee',
+        eventTime: t0,
+      );
+      expect(res1.isDuplicate, isFalse);
+      expect(res1.isUncertainMatch, isFalse);
+
+      // 2. Second notification: McDonald's for 150 PHP (conflicting merchant!)
+      final res2 = await ledger.checkAndRecordNotification(
+        packageName: 'com.bank.two',
+        notificationId: '202',
+        amount: 150.0,
+        currency: 'PHP',
+        title: "McDonald's",
+        rawContent: "Paid PHP 150.00 at McDonald's",
+        eventTime: t1,
+      );
+
+      expect(res2.isDuplicate, isFalse);
+      expect(res2.isUncertainMatch, isTrue);
+      expect(res2.matchedEntry, isNotNull);
+      expect(res2.matchedEntry!.title, equals('Starbucks Coffee'));
+      expect(ledger.uncertainEntries.length, equals(1));
+      expect(ledger.uncertainEntries.first.status, equals('uncertain'));
+      expect(ledger.uncertainEntries.first.matchedEntryPk,
+          equals(ledger.entries.first.entryPk));
+    });
+
+    test(
+        'notification with matching amount but generic/uncertain merchant is classified as uncertain match',
+        () async {
+      final t0 = DateTime(2026, 10, 22, 10, 0, 0);
+      final t1 = t0.add(const Duration(seconds: 45));
+
+      // 1. First notification from Google Wallet with generic title and no parsed merchant
+      await ledger.checkAndRecordNotification(
+        packageName: 'com.google.android.apps.walletnfcrel',
+        notificationId: '301',
+        amount: 300.0,
+        currency: 'PHP',
+        title: 'Google Wallet',
+        rawContent: 'Payment of PHP 300.00 successful',
+        eventTime: t0,
+      );
+
+      // 2. Bank notification for 300 PHP with specific merchant "7-Eleven"
+      final res2 = await ledger.checkAndRecordNotification(
+        packageName: 'com.gotyme',
+        notificationId: '302',
+        amount: 300.0,
+        currency: 'PHP',
+        title: '7-Eleven Store',
+        rawContent: 'Paid ₱300.00 at 7-Eleven Store',
+        eventTime: t1,
+      );
+
+      expect(res2.isDuplicate, isFalse);
+      expect(res2.isUncertainMatch, isTrue);
+      expect(res2.matchReason, contains('uncertain'));
+    });
+
+    test(
+        'payment from App Link followed by bank notification with differing merchant is uncertain match',
+        () async {
+      final t0 = DateTime(2026, 10, 22, 11, 0, 0);
+      final t1 = t0.add(const Duration(minutes: 1));
+
+      // 1. App Link payment: 500 PHP at "Shell Gas"
+      await ledger.checkAndRecordPayment(
+        amount: 500.0,
+        currency: 'PHP',
+        title: 'Shell Gas',
+        source: 'app_link',
+        eventTime: t0,
+      );
+
+      // 2. Incoming notification: 500 PHP at "Petron"
+      final res2 = await ledger.checkAndRecordNotification(
+        packageName: 'com.bank.app',
+        notificationId: '401',
+        amount: 500.0,
+        currency: 'PHP',
+        title: 'Petron',
+        rawContent: 'Paid PHP 500.00 at Petron',
+        eventTime: t1,
+      );
+
+      expect(res2.isDuplicate, isFalse);
+      expect(res2.isUncertainMatch, isTrue);
+    });
+
+    test(
+        'exact notification match remains duplicate suppression even with different content',
+        () async {
+      final t0 = DateTime(2026, 10, 22, 12, 0, 0);
+      final t1 = t0.add(const Duration(seconds: 10));
+
+      await ledger.checkAndRecordNotification(
+        packageName: 'com.bank.app',
+        notificationId: '999',
+        amount: 100.0,
+        currency: 'PHP',
+        title: 'Bank Alert',
+        eventTime: t0,
+      );
+
+      final res2 = await ledger.checkAndRecordNotification(
+        packageName: 'com.bank.app',
+        notificationId: '999',
+        amount: 100.0,
+        currency: 'PHP',
+        title: 'Updated Bank Alert',
+        eventTime: t1,
+      );
+
+      expect(res2.isDuplicate, isTrue);
+      expect(res2.isUncertainMatch, isFalse);
+      expect(res2.matchReason, equals('exact_notification'));
+    });
+  });
 }

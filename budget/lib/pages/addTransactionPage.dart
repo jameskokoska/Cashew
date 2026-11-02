@@ -12,12 +12,14 @@ import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/pages/sharedBudgetSettings.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/dedupeLedger.dart';
 import 'package:budget/struct/navBarIconsData.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/upcomingTransactionsFunctions.dart';
 import 'package:budget/struct/uploadAttachment.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/navigationFramework.dart';
+import 'package:budget/widgets/possibleDuplicateBanner.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:budget/widgets/button.dart';
@@ -105,6 +107,8 @@ class AddTransactionPage extends StatefulWidget {
     this.selectedNotes,
     this.startInitialAddTransactionSequence = true,
     this.transferBalancePopup = false,
+    this.isPossibleDuplicate = false,
+    this.possibleDuplicateEntry,
     required this.routesToPopAfterDelete,
   }) : super(key: key);
 
@@ -125,6 +129,8 @@ class AddTransactionPage extends StatefulWidget {
   final String? selectedNotes;
   final bool startInitialAddTransactionSequence;
   final bool transferBalancePopup;
+  final bool isPossibleDuplicate;
+  final DedupeEntryRecord? possibleDuplicateEntry;
 
   @override
   _AddTransactionPageState createState() => _AddTransactionPageState();
@@ -132,6 +138,7 @@ class AddTransactionPage extends StatefulWidget {
 
 class _AddTransactionPageState extends State<AddTransactionPage>
     with SingleTickerProviderStateMixin {
+  bool dismissedDuplicateBanner = false;
   TransactionCategory? selectedCategory;
   TransactionCategory? selectedSubCategory;
   double? selectedAmount;
@@ -2178,6 +2185,17 @@ class _AddTransactionPageState extends State<AddTransactionPage>
           ),
         ),
         listWidgets: [
+          if ((widget.isPossibleDuplicate ||
+                  widget.possibleDuplicateEntry != null) &&
+              !dismissedDuplicateBanner)
+            PossibleDuplicateBanner(
+              matchedEntry: widget.possibleDuplicateEntry,
+              onDismiss: () {
+                setState(() {
+                  dismissedDuplicateBanner = true;
+                });
+              },
+            ),
           enableDoubleColumn(context) == false
               ? transactionAmountAndCategoryHeader
               : SizedBox.shrink(),

@@ -6,6 +6,7 @@ import 'package:budget/pages/addEmailTemplate.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/dedupeLedger.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/button.dart';
@@ -66,8 +67,13 @@ class _InitializeNotificationServiceState
   }
 }
 
-Future queueTransactionFromMessage(String messageString,
-    {bool willPushRoute = true, DateTime? dateTime}) async {
+Future queueTransactionFromMessage(
+  String messageString, {
+  bool willPushRoute = true,
+  DateTime? dateTime,
+  bool isPossibleDuplicate = false,
+  DedupeEntryRecord? possibleDuplicateEntry,
+}) async {
   String? title;
   double? amountDouble;
   List<ScannerTemplate> scannerTemplates =
@@ -110,7 +116,7 @@ Future queueTransactionFromMessage(String messageString,
       ? null
       : await database.getWalletInstanceOrNull(templateFound.walletFk);
 
-  if (willPushRoute) {
+  if (willPushRoute || isPossibleDuplicate) {
     pushRoute(
       null,
       AddTransactionPage(
@@ -122,6 +128,8 @@ Future queueTransactionFromMessage(String messageString,
         startInitialAddTransactionSequence: false,
         selectedWallet: wallet,
         selectedDate: dateTime,
+        isPossibleDuplicate: isPossibleDuplicate,
+        possibleDuplicateEntry: possibleDuplicateEntry,
       ),
     );
   } else {
