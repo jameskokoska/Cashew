@@ -107,9 +107,9 @@ class DedupeLedger {
   }
 
   /// Safely attempts to persist an entry to Drift if the database is initialized.
-  void _tryPersist(DedupeEntryRecord record) {
+  Future<void> _tryPersist(DedupeEntryRecord record) async {
     try {
-      database.insertDedupeEntry(
+      await database.insertDedupeEntry(
         DedupeEntriesCompanion(
           entryPk: Value(record.entryPk),
           eventKey: Value(record.eventKey),
@@ -207,7 +207,10 @@ class DedupeLedger {
               matchedEntryPk: existing.entryPk,
             );
             suppressedEntries.add(suppressed);
-            _tryPersist(suppressed);
+            if (suppressedEntries.length > 200) {
+              suppressedEntries.removeRange(0, suppressedEntries.length - 200);
+            }
+            await _tryPersist(suppressed);
             return DedupeCheckResult.duplicate(
               matchReason: 'exact_notification',
               matchedEntry: existing,
@@ -248,7 +251,10 @@ class DedupeLedger {
               matchedEntryPk: existing.entryPk,
             );
             suppressedEntries.add(suppressed);
-            _tryPersist(suppressed);
+            if (suppressedEntries.length > 200) {
+              suppressedEntries.removeRange(0, suppressedEntries.length - 200);
+            }
+            await _tryPersist(suppressed);
             return DedupeCheckResult.duplicate(
               matchReason: 'payment_window_match',
               matchedEntry: existing,
@@ -275,7 +281,7 @@ class DedupeLedger {
       status: 'created',
     );
     entries.add(newEntry);
-    _tryPersist(newEntry);
+    await _tryPersist(newEntry);
 
     // Keep memory capped at 200 entries to prevent memory leak
     if (entries.length > 200) {
@@ -328,7 +334,10 @@ class DedupeLedger {
               matchedEntryPk: existing.entryPk,
             );
             suppressedEntries.add(suppressed);
-            _tryPersist(suppressed);
+            if (suppressedEntries.length > 200) {
+              suppressedEntries.removeRange(0, suppressedEntries.length - 200);
+            }
+            await _tryPersist(suppressed);
             return DedupeCheckResult.duplicate(
               matchReason: 'payment_window_match',
               matchedEntry: existing,
@@ -356,7 +365,7 @@ class DedupeLedger {
       status: 'created',
     );
     entries.add(newEntry);
-    _tryPersist(newEntry);
+    await _tryPersist(newEntry);
 
     if (entries.length > 200) {
       entries.removeRange(0, entries.length - 200);

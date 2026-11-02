@@ -131,6 +131,7 @@ Future queueTransactionFromMessage(String messageString,
       "walletPk": wallet?.walletPk,
       "amount": amountDouble.toString(),
       "date": dateTime.toString(),
+      "skipDedupe": "true",
     });
   }
 }

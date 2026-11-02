@@ -136,6 +136,62 @@ void main() {
       expect(afterWindowResult.isDuplicate, isFalse);
       expect(ledger.entries.length, equals(2));
     });
+
+    test(
+        'notification at exact window boundary is duplicate, past window is allowed',
+        () async {
+      final t0 = DateTime(2026, 10, 22, 12, 0, 0);
+      final tBoundary = t0.add(const Duration(minutes: 5));
+      final tAfter = t0.add(const Duration(minutes: 5, seconds: 1));
+
+      await ledger.checkAndRecordNotification(
+        packageName: 'com.google.android.apps.walletnfcrel',
+        notificationId: '42',
+        amount: 250.0,
+        currency: 'PHP',
+        title: '7-Eleven',
+        eventTime: t0,
+      );
+
+      final boundaryResult = await ledger.checkAndRecordNotification(
+        packageName: 'com.google.android.apps.walletnfcrel',
+        notificationId: '42',
+        amount: 250.0,
+        currency: 'PHP',
+        title: '7-Eleven',
+        eventTime: tBoundary,
+      );
+      expect(boundaryResult.isDuplicate, isTrue);
+
+      final afterWindowResult = await ledger.checkAndRecordNotification(
+        packageName: 'com.google.android.apps.walletnfcrel',
+        notificationId: '42',
+        amount: 250.0,
+        currency: 'PHP',
+        title: '7-Eleven',
+        eventTime: tAfter,
+      );
+      expect(afterWindowResult.isDuplicate, isFalse);
+    });
+
+    test(
+        'null or empty package and notificationId does not trigger exact match',
+        () async {
+      final t0 = DateTime(2026, 10, 22, 12, 0, 0);
+      final res1 = await ledger.checkAndRecordNotification(
+        packageName: null,
+        notificationId: null,
+        eventTime: t0,
+      );
+      expect(res1.isDuplicate, isFalse);
+
+      final res2 = await ledger.checkAndRecordNotification(
+        packageName: '',
+        notificationId: '',
+        eventTime: t0.add(const Duration(seconds: 1)),
+      );
+      expect(res2.isDuplicate, isFalse);
+    });
   });
 
   group('DedupeLedger Cross-Package Payment Matching (Tier 2)', () {
@@ -229,6 +285,29 @@ void main() {
       );
       expect(secondLink.isDuplicate, isTrue);
       expect(secondLink.matchReason, equals('payment_window_match'));
+    });
+
+    test('suppressedEntries list is capped at 200 items', () async {
+      final t0 = DateTime(2026, 10, 22, 12, 0, 0);
+      await ledger.checkAndRecordNotification(
+        packageName: 'com.example.bank',
+        notificationId: '1',
+        amount: 100.0,
+        currency: 'PHP',
+        eventTime: t0,
+      );
+
+      for (int i = 0; i < 220; i++) {
+        await ledger.checkAndRecordNotification(
+          packageName: 'com.example.bank',
+          notificationId: '1',
+          amount: 100.0,
+          currency: 'PHP',
+          eventTime: t0.add(Duration(seconds: i + 1)),
+        );
+      }
+
+      expect(ledger.suppressedEntries.length, equals(200));
     });
   });
 

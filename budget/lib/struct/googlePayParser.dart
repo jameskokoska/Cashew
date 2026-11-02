@@ -228,6 +228,7 @@ class GooglePayParser {
           'walletPk': wallet?.walletPk,
           'amount': result.amount.toString(),
           'date': (dateTime ?? DateTime.now()).toString(),
+          'skipDedupe': 'true',
         });
       }
     }

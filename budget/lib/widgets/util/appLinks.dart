@@ -134,11 +134,11 @@ Future<Transaction?> processAddTransactionFromParams(
   String walletPk = wallet?.walletPk ?? appStateSettings["selectedWalletPk"];
   DateTime? dateCreated = await getDateTimeFromParams(params, context);
   double amount = getAmountFromParams(params);
-  if (amount > 0) {
+  if (amount > 0 && params["skipDedupe"] != "true") {
     final dedupeResult = await DedupeLedger.instance.checkAndRecordPayment(
       amount: amount,
       title: params["title"] ?? params["name"],
-      source: 'app_link',
+      source: params["source"] ?? 'app_link',
     );
     if (dedupeResult.isDuplicate) {
       return null;
@@ -248,11 +248,11 @@ Future processAddTransactionRouteFromParams(
   TransactionWallet? wallet = await getWalletFromParams(params);
   DateTime? dateCreated = await getDateTimeFromParams(params, context);
   double amount = getAmountFromParams(params);
-  if (amount > 0) {
+  if (amount > 0 && params["skipDedupe"] != "true") {
     final dedupeResult = await DedupeLedger.instance.checkAndRecordPayment(
       amount: amount,
       title: params["title"] ?? params["name"],
-      source: 'app_link',
+      source: params["source"] ?? 'app_link',
     );
     if (dedupeResult.isDuplicate) {
       return null;
