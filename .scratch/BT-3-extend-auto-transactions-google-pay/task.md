@@ -78,7 +78,7 @@ Each slice ends in something runnable and testable. S1 to S4 depend on S0.
 
 ## Roadblock
 
-PR #20 opened for S3 (`feat(notifications): add dedupe ledger and duplicate suppression (#7)`) on branch `feat/dedupe-ledger`. GitHub Actions CI quality gate failed at `Verify code formatting` (`dart format --output=none --set-exit-if-changed .`) on `schema_versions.dart`, `tables.dart`, `tables.g.dart`, and `dedupe_ledger_test.dart`. Needs `dart format .` run and committed before PR review.
+None currently. PR #20 (Slice S3) successfully passed code review, CI quality gates, and was merged into `main`.
 
 ## Tried
 
@@ -86,14 +86,13 @@ PR #20 opened for S3 (`feat(notifications): add dedupe ledger and duplicate supp
 - S0b evaluation of `notification_listener_service: 1.0.0` completed and recorded in `research.md`.
 - S1 implemented: upgraded to `notification_listener_service: ^1.0.0`, created `NotificationDispatcher` to own the listener stream, filtered out `hasRemoved == true` events, and added unit tests in `notification_dispatcher_test.dart`.
 - S2 implemented: created `GooglePayParser`, classified packages and payment content, routed to prefilled `AddTransactionPage`, and added unit tests with real 7-Eleven sample in `google_pay_parser_test.dart`.
-- S3 implemented: created `DedupeLedger` service, added additive Drift migration v46 -> v47 with `DedupeEntries` table and schema dump, wired deduplication into `NotificationDispatcher` and `appLinks`, and added unit tests in `dedupe_ledger_test.dart`.
+- S3 implemented: created `DedupeLedger` service, added additive Drift migration v46 -> v47 with `DedupeEntries` table and schema dump, wired deduplication into `NotificationDispatcher` and `appLinks`, addressed code review findings in `pr-20-review.md`, and merged PR #20 into `main`.
 
 ## Resume / next step
 
-1. In target workspace with Flutter/Dart SDK, format `budget/` via `dart format .` to fix CI on PR #20 and push.
-2. Run `/code-review` in an isolated session per `AGENTS.md`.
-3. Merge PR #20 into `main`.
-4. Proceed to S4: Implement review route for uncertain matches.
+1. Branch `feat/uncertain-match-review` from `main`.
+2. Implement S4: Review route for uncertain matches (show possible duplicate prompt rather than silent auto-creation when an ambiguous match is detected).
+3. Use `/mattpocock-tdd` for test-first implementation.
 
 ## Links
 
