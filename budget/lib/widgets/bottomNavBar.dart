@@ -214,6 +214,9 @@ class BottomNavBarState extends State<BottomNavBar> {
     return Container(
       decoration: BoxDecoration(
         boxShadow: boxShadowSharp(context),
+        border: Border(
+          top: BorderSide(color: getColor(context, "dividerColor")),
+        ),
       ),
       child: NavigationBarTheme(
         data: NavigationBarThemeData(
@@ -223,10 +226,16 @@ class BottomNavBarState extends State<BottomNavBar> {
             lightDarkAccent: getColor(context, "lightDarkAccent"),
           ),
           surfaceTintColor: Colors.transparent,
-          indicatorColor: appStateSettings["materialYou"]
-              ? dynamicPastel(context, Theme.of(context).colorScheme.primary,
-                  amount: 0.6)
-              : null,
+          indicatorColor: Theme.of(context).colorScheme.primary.withOpacity(
+              Theme.of(context).brightness == Brightness.dark ? 0.26 : 0.12),
+          indicatorShape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          iconTheme: MaterialStateProperty.resolveWith((states) => IconThemeData(
+                color: states.contains(MaterialState.selected)
+                    ? Theme.of(context).colorScheme.primary
+                    : getColor(context, "textLight"),
+              )),
+          elevation: 0,
           labelTextStyle: MaterialStateProperty.resolveWith((states) {
             if (states.contains(MaterialState.selected)) {
               return TextStyle(

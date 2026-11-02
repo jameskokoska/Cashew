@@ -861,26 +861,29 @@ getTotalSubscriptions(AllWallets allWallets, SelectedSubscriptionsType type,
   return total;
 }
 
+// Modern build: one soft, low shadow in light mode; flat in dark mode.
 List<BoxShadow> boxShadowGeneral(context) {
   if (appStateSettings["disableShadows"] == true) return [];
+  if (Theme.of(context).brightness == Brightness.dark) return [];
   return [
     BoxShadow(
-      color: getColor(context, "shadowColorLight").withAlpha(30),
-      blurRadius: 20,
-      offset: Offset(0, 0),
-      spreadRadius: 8,
+      color: Color(0xFF1B2240).withOpacity(0.06),
+      blurRadius: 24,
+      offset: Offset(0, 8),
+      spreadRadius: -4,
     ),
   ];
 }
 
 List<BoxShadow> boxShadowSharp(context) {
   if (appStateSettings["disableShadows"] == true) return [];
+  if (Theme.of(context).brightness == Brightness.dark) return [];
   return [
     BoxShadow(
-      color: getColor(context, "shadowColorLight").withAlpha(30),
-      blurRadius: 2,
-      offset: Offset(0, 0),
-      spreadRadius: 2,
+      color: Color(0xFF1B2240).withOpacity(0.05),
+      blurRadius: 12,
+      offset: Offset(0, -2),
+      spreadRadius: 0,
     ),
   ];
 }

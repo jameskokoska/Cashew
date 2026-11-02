@@ -1,5 +1,6 @@
 import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/struct/modernTheme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -45,7 +46,7 @@ AppColors getAppColors(
               : Color(0xFF242424);
   return brightness == Brightness.light
       ? AppColors(
-          colors: {
+          colors: _modernColors(Brightness.light, {
             "white": Colors.white,
             "black": Colors.black,
             "textLight": appStateSettings["increaseTextContrast"]
@@ -78,10 +79,10 @@ AppColors getAppColors(
                         amount: 0.3,
                       )
                     : lightDarkAccentHeavyLight,
-          },
+          }),
         )
       : AppColors(
-          colors: {
+          colors: _modernColors(Brightness.dark, {
             "white": Colors.black,
             "black": Colors.white,
             "textLight": appStateSettings["increaseTextContrast"]
@@ -116,8 +117,53 @@ AppColors getAppColors(
                         amount: 0.6,
                       )
                     : lightDarkAccentHeavyLight,
-          },
+          }),
         );
+}
+
+// Modern build: neutral surfaces, soft shadows, modern money colours.
+Map<String, Color> _modernColors(Brightness b, Map<String, Color> colors) {
+  final bool dark = b == Brightness.dark;
+  return {
+    ...colors,
+    "white": dark ? ModernPalette.darkBackground : Colors.white,
+    "black": ModernPalette.text(b),
+    "textLight": appStateSettings["increaseTextContrast"] == true
+        ? ModernPalette.text(b).withOpacity(0.7)
+        : ModernPalette.textMuted(b),
+    "lightDarkAccent": ModernPalette.surfaceAlt(b),
+    "lightDarkAccentHeavyLight": ModernPalette.surface(b),
+    "canvasContainer": ModernPalette.surfaceAlt(b),
+    "lightDarkAccentHeavy": ModernPalette.border(b),
+    "shadowColor": dark ? Color(0x00000000) : Color(0x1A1B2240),
+    "shadowColorLight": dark ? Color(0x00000000) : Color(0x141B2240),
+    "incomeAmount": dark ? ModernPalette.incomeDark : ModernPalette.incomeLight,
+    "expenseAmount":
+        dark ? ModernPalette.expenseDark : ModernPalette.expenseLight,
+    "unPaidUpcoming": dark ? Color(0xFF7DD3FC) : Color(0xFF0EA5E9),
+    "unPaidOverdue": dark ? Color(0xFFA5B4FC) : Color(0xFF6366F1),
+    "warningOrange": dark ? Color(0xFFFBBF24) : Color(0xFFF59E0B),
+    "dividerColor": ModernPalette.border(b),
+    "standardContainerColor": ModernPalette.surface(b),
+  };
+}
+
+ColorScheme _modernScheme(ColorScheme cs) {
+  final Brightness b = cs.brightness;
+  return cs.copyWith(
+    background: appStateSettings["forceFullDarkBackground"] == true &&
+            b == Brightness.dark
+        ? Colors.black
+        : ModernPalette.background(b),
+    onBackground: ModernPalette.text(b),
+    surface: ModernPalette.surface(b),
+    onSurface: ModernPalette.text(b),
+    surfaceTint: Colors.transparent,
+    secondaryContainer: ModernPalette.surface(b),
+    onSecondaryContainer: ModernPalette.text(b),
+    outline: ModernPalette.border(b),
+    outlineVariant: ModernPalette.border(b),
+  );
 }
 
 // Ensure you specify a shade, otherwise type will be of MaterialColor which can't be compared
@@ -382,7 +428,10 @@ bool isGrayScale(Color color, {int threshold = 10}) {
       (green - blue).abs() <= threshold;
 }
 
-ColorScheme getColorScheme(Brightness brightness) {
+ColorScheme getColorScheme(Brightness brightness) =>
+    _modernScheme(_getColorSchemeOriginal(brightness));
+
+ColorScheme _getColorSchemeOriginal(Brightness brightness) {
   if (isGrayScale(
     getSettingConstants(appStateSettings)["accentColor"],
     threshold: 15,
@@ -526,6 +575,8 @@ Color getBottomNavbarBackgroundColor({
   required Brightness brightness,
   required Color lightDarkAccent,
 }) {
+  return ModernPalette.surface(brightness);
+  // ignore: dead_code
   if (getPlatform() == PlatformOS.isIOS) {
     return brightness == Brightness.light
         ? lightenPastel(colorScheme.secondaryContainer,
@@ -583,7 +634,7 @@ class CustomColorTheme extends StatelessWidget {
         accentColor: accentColor!,
         brightness: Theme.of(context).brightness,
         themeData: Theme.of(context).copyWith(
-          colorScheme: colorScheme,
+          colorScheme: _modernScheme(colorScheme),
         ),
       ),
       child: child,
@@ -601,7 +652,7 @@ ThemeData generateThemeDataWithExtension(
     themeData: themeData,
   );
 
-  return themeData.copyWith(
+  return applyModernComponentThemes(themeData).copyWith(
     extensions: <ThemeExtension<dynamic>>[colors],
     appBarTheme: AppBarTheme(
       systemOverlayStyle: getSystemUiOverlayStyle(colors, brightness),
@@ -624,7 +675,7 @@ ThemeData getLightTheme() {
     colorScheme: getColorScheme(brightness),
     useMaterial3: true,
     applyElevationOverlayColor: false,
-    typography: Typography.material2014(),
+    typography: Typography.material2021(),
     splashColor: getPlatform() == PlatformOS.isIOS
         ? Colors.transparent
         : appStateSettings["materialYou"]
@@ -657,7 +708,7 @@ ThemeData getDarkTheme() {
     fontFamilyFallback: ['Inter'],
     colorScheme: getColorScheme(brightness),
     useMaterial3: true,
-    typography: Typography.material2014(),
+    typography: Typography.material2021(),
     splashColor: getPlatform() == PlatformOS.isIOS
         ? Colors.transparent
         : appStateSettings["materialYou"]

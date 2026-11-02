@@ -4,6 +4,7 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:budget/struct/modernTheme.dart';
 
 class HomePageUsername extends StatelessWidget {
   final AnimationController animationControllerHeader;
@@ -84,7 +85,7 @@ class HomePageUsername extends StatelessWidget {
               child: PartyHat(
                 size: 28,
                 enabled: !(showUsername && showGreeting),
-                child: TextFont(
+                child: GradientMask(child: TextFont(
                   text: !showUsername ? "home".tr() : username,
                   fontWeight: FontWeight.bold,
                   fontSize: 33,
@@ -92,7 +93,7 @@ class HomePageUsername extends StatelessWidget {
                   // textColor: showGreeting && showUsername
                   //     ? Theme.of(context).colorScheme.onPrimaryContainer
                   //     : Theme.of(context).colorScheme.onSecondaryContainer,
-                ),
+                )),
               ),
             ),
           ),
@@ -117,14 +118,14 @@ class HomePageWelcomeBannerSmall extends StatelessWidget {
     return Padding(
       padding: const EdgeInsetsDirectional.only(start: 17, end: 5),
       child: PartyHat(
-        child: TextFont(
+        child: GradientMask(child: TextFont(
           text:
               showGreeting && showUsername ? getWelcomeMessage() : "home".tr(),
           fontWeight: FontWeight.bold,
           fontSize: getIsFullScreen(context) ? 26 : 30,
           textColor: Theme.of(context).colorScheme.onPrimaryContainer,
           //textColor: Theme.of(context).colorScheme.onSecondaryContainer,
-        ),
+        )),
       ),
     );
   }

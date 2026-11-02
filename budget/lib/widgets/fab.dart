@@ -7,6 +7,7 @@ import 'package:budget/widgets/outlinedButtonStacked.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
+import 'package:budget/struct/modernTheme.dart';
 
 class AddFAB extends StatelessWidget {
   const AddFAB({
@@ -108,15 +109,25 @@ class FAB extends StatelessWidget {
     //         : blend(Theme.of(context).colorScheme.onSecondary,
     //             Theme.of(context).colorScheme.onPrimary,
     //             amount: 0.35);
+    final bool useGradient = color == null && !isOutlined;
     return OpenContainerNavigation(
-      closedElevation: 10,
+      closedElevation: useGradient ? 0 : 10,
       borderRadius: borderRadius,
-      closedColor: containerColor,
+      closedColor: useGradient ? Colors.transparent : containerColor,
       button: (openContainer) {
-        return Tooltip(
+        return DecoratedBox(
+          decoration: useGradient
+              ? BoxDecoration(
+                  gradient: modernGradient(context),
+                  borderRadius: BorderRadius.circular(borderRadius),
+                )
+              : BoxDecoration(),
+          child: Tooltip(
           message: tooltip ?? "",
           child: Tappable(
-            color: containerColor,
+            color: color == null && !isOutlined
+                ? Colors.transparent
+                : containerColor,
             onTap: () {
               if (onTap != null)
                 onTap!();
@@ -128,13 +139,15 @@ class FAB extends StatelessWidget {
               enabled: isOutlined,
               borderRadius: borderRadius,
               child: Builder(builder: (context) {
+                final bool gradient = color == null && !isOutlined;
+                final Color? iconColor2 = gradient ? Colors.white : iconColor;
                 Widget fabIcon = SizedBox(
                   height: fabSize,
                   width: fabSize,
                   child: Center(
                     child: Icon(
                       iconData,
-                      color: iconColor,
+                      color: iconColor2,
                     ),
                   ),
                 );
@@ -149,7 +162,7 @@ class FAB extends StatelessWidget {
                         child: TextFont(
                           text: label ?? "",
                           fontSize: labelSize,
-                          textColor: iconColor,
+                          textColor: iconColor2,
                         ),
                       ),
                     ],
@@ -158,6 +171,7 @@ class FAB extends StatelessWidget {
               }),
             ),
           ),
+        ),
         );
       },
       openPage: openPage ?? Container(),

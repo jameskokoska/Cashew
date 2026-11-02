@@ -29,8 +29,8 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "showExtraInfoText": true,
     "selectedWalletPk": "0",
     "selectedSubscriptionType": 0,
-    "accentColor": toHexString(Color(0xFF1B447A)),
-    "accentSystemColor": await systemColorByDefault(),
+    "accentColor": toHexString(Color(0xFF6366F1)),
+    "accentSystemColor": false,
     "widgetOpacity": 1,
     "widgetTheme": "system", //system, light, dark
     "nonCompactTransactions":
@@ -152,7 +152,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "notificationsReminderType": ReminderNotificationType.IfAppNotOpened.index,
     "appOpenedHour": DateTime.now().hour,
     "appOpenedMinute": DateTime.now().minute,
-    "materialYou": supportsSystemColor(),
+    "materialYou": false,
     "colorTintCategoryIcon": false,
     "sendTransactionsToServerQueue": {},
     "currentUserEmail": "",
@@ -171,7 +171,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "allSpendingSummaryAllWallets": true,
     "showPastSpendingTrajectory": false,
     "lastSynced": null,
-    "font": "Avenir",
+    "font": "Inter",
     "forceSmallHeader": false,
     "animationSpeed": 1.0,
     "logging": false,

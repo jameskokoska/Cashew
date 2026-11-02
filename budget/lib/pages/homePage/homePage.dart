@@ -33,6 +33,7 @@ import 'package:budget/widgets/viewAllTransactionsButton.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:budget/struct/modernTheme.dart';
 import 'package:budget/widgets/scrollbarWrap.dart';
 import 'package:budget/widgets/slidingSelectorIncomeExpense.dart';
 import 'package:budget/widgets/linearGradientFadedEdges.dart';
@@ -251,7 +252,18 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
           children: [
             AndroidOnly(child: CheckWidgetLaunch()),
             AndroidOnly(child: RenderHomePageWidgets()),
+            Positioned.fill(
+              child: ColoredBox(color: Theme.of(context).colorScheme.background),
+            ),
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              height: 340,
+              child: ModernHeaderGlow(),
+            ),
             Scaffold(
+              backgroundColor: Colors.transparent,
               resizeToAvoidBottomInset: false,
               body: ScrollbarWrap(
                 scrollController: _scrollController,

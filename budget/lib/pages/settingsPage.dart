@@ -1120,6 +1120,7 @@ void openFontPicker(BuildContext context) {
         itemsAreFonts: true,
         items: [
           // These values match that of pubspec font family
+          "Inter",
           "Avenir",
           "DMSans",
           "Metropolis",
@@ -1142,8 +1143,10 @@ void openFontPicker(BuildContext context) {
 }
 
 String fontNameDisplayFilter(String value) {
-  if (value == "Avenir") {
-    return "default".tr().capitalizeFirst;
+  if (value == "Inter") {
+    return "Inter (" + "default".tr() + ")";
+  } else if (value == "Avenir") {
+    return "Avenir";
   } else if (value == "(Platform)") {
     return "platform".tr().capitalizeFirst;
   } else if (value == "DMSans") {

@@ -42,6 +42,9 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.budget.tracker_app"
+        // Separate "Cashew Modern" app that installs next to the regular one
+        applicationIdSuffix ".modern"
+        resValue "string", "app_name", "Cashew Modern"
         minSdkVersion 23
         targetSdkVersion 34
         versionCode flutterVersionCode.toInteger()

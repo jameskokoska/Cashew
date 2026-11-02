@@ -56,6 +56,42 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:267621253497:android:e7a2967eaf8dd072842fa8",
+        "android_client_info": {
+          "package_name": "com.budget.tracker_app.modern"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "267621253497-1na8q1lt56qg9177dskkrkdds5jjiqrn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNVDtwGJUHBZohwB2RDeUco-5hAGfx2bA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "267621253497-1na8q1lt56qg9177dskkrkdds5jjiqrn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "267621253497-ih94g1srq37gun4mdmvadgl3ev588vpf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.budget.tracker-app"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

@@ -12,6 +12,7 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/swipeToSelectTransactions.dart';
 import 'package:flutter/material.dart';
+import 'package:budget/struct/modernTheme.dart';
 import 'package:budget/colors.dart';
 import 'package:budget/widgets/pullDownToRefreshSync.dart';
 import 'package:flutter/services.dart';
@@ -940,7 +941,11 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                 scale: percent * 0.15 + 1,
                 child: titleWidget ??
                     AnimatedSizeSwitcher(
-                      child: TextFont(
+                      child: GradientMask(
+                        key: ValueKey(titleString),
+                        enabled: textColor == null &&
+                            centeredTitleSmallWithDefault == false,
+                        child: TextFont(
                         key: ValueKey(titleString),
                         text: getIsFullScreen(context) == false &&
                                 titleString.length > 20
@@ -956,6 +961,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                         textAlign: centeredTitleWithDefault
                             ? TextAlign.center
                             : TextAlign.start,
+                      ),
                       ),
                     ),
               ),
@@ -979,6 +985,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                 context: context,
                 forceBackgroundColors: forceBackgroundColors,
               ),
+              if (appBarBackgroundColor == null) const ModernHeaderGlow(),
               subtitle != null &&
                       centeredTitleSmallWithDefault == false &&
                       centeredTitleWithDefault == false
