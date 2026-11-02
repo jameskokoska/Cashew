@@ -1,5 +1,8 @@
+import 'package:budget/functions.dart';
 import 'package:budget/struct/dedupeLedger.dart';
 import 'package:budget/struct/notificationDispatcher.dart';
+import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/util/appLinks.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:notification_listener_service/notification_event.dart';
 
@@ -399,6 +402,157 @@ void main() {
       expect(handled2, isFalse);
       expect(gpayDispatchCount, equals(1)); // Did not fire a second transaction
       expect(ledger.suppressedEntries.length, equals(1));
+    });
+  });
+
+  group('maxLedgerCapacity named constant', () {
+    test('maxLedgerCapacity is defined as 200', () {
+      expect(DedupeLedger.maxLedgerCapacity, equals(200));
+    });
+  });
+
+  group('DedupeLedger helper matching methods', () {
+    late DedupeLedger ledger;
+
+    setUp(() {
+      ledger = DedupeLedger();
+    });
+
+    test('findExactNotificationMatch finds matching entry within window',
+        () async {
+      final t0 = DateTime(2026, 10, 22, 10, 0, 0);
+      await ledger.checkAndRecordNotification(
+        packageName: 'com.bank',
+        notificationId: '99',
+        eventTime: t0,
+      );
+
+      final found = ledger.findExactNotificationMatch(
+        packageName: 'com.bank',
+        notificationId: '99',
+        now: t0.add(const Duration(minutes: 2)),
+        window: const Duration(minutes: 5),
+      );
+      expect(found, isNotNull);
+      expect(found!.eventKey, equals('notif:com.bank:99'));
+
+      final notFound = ledger.findExactNotificationMatch(
+        packageName: 'com.bank',
+        notificationId: '99',
+        now: t0.add(const Duration(minutes: 6)),
+        window: const Duration(minutes: 5),
+      );
+      expect(notFound, isNull);
+    });
+
+    test('findPaymentMatch finds matching amount and currency within window',
+        () async {
+      final t0 = DateTime(2026, 10, 22, 10, 0, 0);
+      await ledger.checkAndRecordPayment(
+        amount: 150.0,
+        currency: 'USD',
+        eventTime: t0,
+      );
+
+      final found = ledger.findPaymentMatch(
+        normAmount: '150.00',
+        normCurrency: 'USD',
+        now: t0.add(const Duration(minutes: 3)),
+        window: const Duration(minutes: 5),
+      );
+      expect(found, isNotNull);
+
+      final mismatchedCurrency = ledger.findPaymentMatch(
+        normAmount: '150.00',
+        normCurrency: 'EUR',
+        now: t0.add(const Duration(minutes: 1)),
+        window: const Duration(minutes: 5),
+      );
+      expect(mismatchedCurrency, isNull);
+    });
+  });
+
+  group('AppLink Deduplication Platform and Settings Gating', () {
+    setUp(() {
+      DedupeLedger.instance.clear();
+      appStateSettings["notificationScanning"] = true;
+    });
+
+    tearDown(() {
+      appStateSettings["notificationScanning"] = false;
+    });
+
+    test('deduplicates on Android when notificationScanning is true', () async {
+      appStateSettings["notificationScanning"] = true;
+
+      final isDup1 = await shouldDedupePayment(
+        amount: 250.0,
+        params: {"title": "Coffee"},
+        platform: PlatformOS.isAndroid,
+      );
+      expect(isDup1, isFalse);
+
+      final isDup2 = await shouldDedupePayment(
+        amount: 250.0,
+        params: {"title": "Coffee"},
+        platform: PlatformOS.isAndroid,
+      );
+      expect(isDup2, isTrue);
+    });
+
+    test('bypasses deduplication on non-Android platforms', () async {
+      appStateSettings["notificationScanning"] = true;
+
+      final isDup1 = await shouldDedupePayment(
+        amount: 250.0,
+        params: {"title": "Coffee"},
+        platform: PlatformOS.isIOS,
+      );
+      expect(isDup1, isFalse);
+
+      final isDup2 = await shouldDedupePayment(
+        amount: 250.0,
+        params: {"title": "Coffee"},
+        platform: PlatformOS.isIOS,
+      );
+      // Non-Android platforms are always bypassed
+      expect(isDup2, isFalse);
+    });
+
+    test('bypasses deduplication when notificationScanning is false', () async {
+      appStateSettings["notificationScanning"] = false;
+
+      final isDup1 = await shouldDedupePayment(
+        amount: 300.0,
+        params: {"title": "Lunch"},
+        platform: PlatformOS.isAndroid,
+      );
+      expect(isDup1, isFalse);
+
+      final isDup2 = await shouldDedupePayment(
+        amount: 300.0,
+        params: {"title": "Lunch"},
+        platform: PlatformOS.isAndroid,
+      );
+      expect(isDup2, isFalse);
+    });
+
+    test('bypasses deduplication when skipDedupe is true', () async {
+      appStateSettings["notificationScanning"] = true;
+
+      final isDup1 = await shouldDedupePayment(
+        amount: 500.0,
+        params: {"title": "Dinner"},
+        platform: PlatformOS.isAndroid,
+      );
+      expect(isDup1, isFalse);
+
+      final isDup2 = await shouldDedupePayment(
+        amount: 500.0,
+        params: {"title": "Dinner", "skipDedupe": "true"},
+        platform: PlatformOS.isAndroid,
+      );
+      expect(isDup2, isFalse);
     });
   });
 }

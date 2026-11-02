@@ -126,6 +126,31 @@ class _AppLinksNativeState extends State<AppLinksNative> {
 //
 // Don't forget to update the README if this changed
 
+/// Checks whether an App Link payment should be suppressed as a duplicate.
+/// Deduplication is active only on Android and gated by notificationScanning setting.
+Future<bool> shouldDedupePayment({
+  required double amount,
+  required Map<String, String?> params,
+  PlatformOS? platform,
+}) async {
+  final currentPlatform = platform ?? getPlatform(ignoreEmulation: true);
+  if (currentPlatform != PlatformOS.isAndroid) {
+    return false;
+  }
+  if (appStateSettings["notificationScanning"] != true) {
+    return false;
+  }
+  if (amount <= 0 || params["skipDedupe"] == "true") {
+    return false;
+  }
+  final dedupeResult = await DedupeLedger.instance.checkAndRecordPayment(
+    amount: amount,
+    title: params["title"] ?? params["name"],
+    source: params["source"] ?? 'app_link',
+  );
+  return dedupeResult.isDuplicate;
+}
+
 Future<Transaction?> processAddTransactionFromParams(
     BuildContext context, Map<String, String?> params) async {
   MainAndSubcategory mainAndSubCategory =
@@ -134,15 +159,8 @@ Future<Transaction?> processAddTransactionFromParams(
   String walletPk = wallet?.walletPk ?? appStateSettings["selectedWalletPk"];
   DateTime? dateCreated = await getDateTimeFromParams(params, context);
   double amount = getAmountFromParams(params);
-  if (amount > 0 && params["skipDedupe"] != "true") {
-    final dedupeResult = await DedupeLedger.instance.checkAndRecordPayment(
-      amount: amount,
-      title: params["title"] ?? params["name"],
-      source: params["source"] ?? 'app_link',
-    );
-    if (dedupeResult.isDuplicate) {
-      return null;
-    }
+  if (await shouldDedupePayment(amount: amount, params: params)) {
+    return null;
   }
   String title = params["title"] ?? params["name"] ?? "";
   String note = params["note"] ?? params["notes"] ?? "";
@@ -248,15 +266,8 @@ Future processAddTransactionRouteFromParams(
   TransactionWallet? wallet = await getWalletFromParams(params);
   DateTime? dateCreated = await getDateTimeFromParams(params, context);
   double amount = getAmountFromParams(params);
-  if (amount > 0 && params["skipDedupe"] != "true") {
-    final dedupeResult = await DedupeLedger.instance.checkAndRecordPayment(
-      amount: amount,
-      title: params["title"] ?? params["name"],
-      source: params["source"] ?? 'app_link',
-    );
-    if (dedupeResult.isDuplicate) {
-      return null;
-    }
+  if (await shouldDedupePayment(amount: amount, params: params)) {
+    return null;
   }
   // Add a delay so the keyboard can focus
   await Future.delayed(Duration(milliseconds: 50), () async {

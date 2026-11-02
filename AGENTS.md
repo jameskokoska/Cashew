@@ -33,13 +33,13 @@ Run these commands from `budget/` (e.g. `cd budget && ...`):
 - **Suppressions:** Do not add `// ignore:` or `// ignore_for_file:` directives without documented justification.
 - **Commit Trailers:** Do not add `Co-authored-by` trailers to commit messages, including GitHub Copilot or other AI co-author lines. Commit messages contain only the subject and body.
 - **Branching & Pull Requests:** NEVER push directly to the `main` branch. Always create a feature branch (e.g. `feat/owner-recognition`), push the branch, and open a Pull Request (PR) against `main` using `gh pr create` so changes can be reviewed before merging.
-- **Separate Session for Code Review:** Do NOT run `/code-review` in the same implementation session. Once changes are committed, pushed, and a PR is opened, the implementing agent MUST pause and stop immediately. The user will run code review in a separate, isolated session to evaluate standards and spec conformance with fresh context, and will provide a go signal before the agent takes any further actions.
+- **Separate Session for Code Review:** Do NOT run `/code-review` in the same implementation session. Once changes are committed, pushed, and a PR is opened, the implementing agent MUST pause and stop immediately. The user will run code review in a separate, isolated session to evaluate standards and spec conformance with fresh context, and will provide a go signal before the agent takes any further actions. Whenever a code review completes, automatically create a markdown report file in the code review directory (`.scratch/code-reviews/`).
 
 ## Agent skills
 
 ### Code review in separate session
 
-Do not run `/code-review` inside the implementation session. Implementation sessions accumulate conversation context and bias. Code reviews must happen in a clean, dedicated session executed by the user. The implementing agent pauses upon PR creation and awaits the user's go signal.
+Do not run `/code-review` inside the implementation session. Implementation sessions accumulate conversation context and bias. Code reviews must happen in a clean, dedicated session executed by the user. The implementing agent pauses upon PR creation and awaits the user's go signal. Whenever a code review completes, automatically create a markdown report file in the code review directory (`.scratch/code-reviews/` or task-specific `.scratch/BT-N-<slug>/`). See `docs/agents/code-review.md`.
 
 ### Issue tracker
 

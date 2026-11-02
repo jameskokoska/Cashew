@@ -16,6 +16,7 @@ import 'package:budget/widgets/watchAllWallets.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/struct/dedupeLedger.dart';
 import 'package:budget/struct/notificationsGlobal.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/globalLoadingProgress.dart';
@@ -56,6 +57,10 @@ void main() async {
     await loadCurrencyJSON();
     await loadLanguageNamesJSON();
     await initializeSettings();
+    if (getPlatform(ignoreEmulation: true) == PlatformOS.isAndroid &&
+        appStateSettings["notificationScanning"] == true) {
+      await DedupeLedger.instance.loadFromDatabase();
+    }
     tz.initializeTimeZones();
     final String? locationName = await FlutterTimezone.getLocalTimezone();
     tz.setLocalLocation(tz.getLocation(locationName ?? "America/New_York"));
