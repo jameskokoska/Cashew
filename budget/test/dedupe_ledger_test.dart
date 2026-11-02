@@ -1,10 +1,16 @@
+import 'dart:ffi';
+import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/dedupeLedger.dart';
 import 'package:budget/struct/notificationDispatcher.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/util/appLinks.dart';
+import 'package:drift/drift.dart' show Value;
+import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:notification_listener_service/notification_event.dart';
+import 'package:sqlite3/open.dart';
 
 ServiceNotificationEvent createTestNotification({
   int id = 1,
@@ -31,6 +37,16 @@ ServiceNotificationEvent createTestNotification({
 }
 
 void main() {
+  setUpAll(() {
+    open.overrideFor(OperatingSystem.linux, () {
+      try {
+        return DynamicLibrary.open('libsqlite3.so');
+      } catch (_) {
+        return DynamicLibrary.open('libsqlite3.so.0');
+      }
+    });
+  });
+
   group('DedupeLedger helper methods', () {
     test('normalizeAmount formats numbers to two decimal places', () {
       expect(DedupeLedger.normalizeAmount(250.0), equals('250.00'));
@@ -553,6 +569,166 @@ void main() {
         platform: PlatformOS.isAndroid,
       );
       expect(isDup2, isFalse);
+    });
+  });
+
+  group('DedupeLedger Persistence and Database Hydration', () {
+    late FinanceDatabase testDb;
+
+    setUp(() async {
+      testDb = FinanceDatabase(NativeDatabase.memory());
+      database = testDb;
+      DedupeLedger.instance.clear();
+    });
+
+    tearDown(() async {
+      await testDb.close();
+    });
+
+    test('populates notificationTimestamp when eventTime is provided',
+        () async {
+      final t0 = DateTime(2026, 10, 22, 14, 0, 0);
+      final result = await DedupeLedger.instance.checkAndRecordNotification(
+        packageName: 'com.maribank',
+        notificationId: '555',
+        amount: 750.0,
+        currency: 'PHP',
+        title: 'MariBank Sent',
+        eventTime: t0,
+      );
+
+      expect(result.isDuplicate, isFalse);
+      expect(DedupeLedger.instance.entries.length, equals(1));
+      expect(DedupeLedger.instance.entries.first.notificationTimestamp,
+          equals(t0));
+
+      final fromDb = await database.getAllDedupeEntries();
+      expect(fromDb.length, equals(1));
+      expect(fromDb.first.notificationTimestamp, equals(t0));
+    });
+
+    test(
+        'loadFromDatabase hydrates entries within sliding window and filters older ones',
+        () async {
+      final now = DateTime.now();
+      final recentTime = now.subtract(const Duration(minutes: 2));
+      final staleTime = now.subtract(const Duration(minutes: 10));
+
+      // 1. Insert directly into database: one recent, one stale
+      await database.insertDedupeEntry(
+        DedupeEntriesCompanion(
+          entryPk: const Value('recent-entry-pk'),
+          eventKey: const Value('notif:com.maribank:101'),
+          packageName: const Value('com.maribank'),
+          notificationId: const Value('101'),
+          amount: const Value(500.0),
+          amountNormalized: const Value('500.00'),
+          currency: const Value('PHP'),
+          title: const Value('Recent Transfer'),
+          source: const Value('notification'),
+          dateTimeCreated: Value(recentTime),
+          status: const Value('created'),
+        ),
+      );
+
+      await database.insertDedupeEntry(
+        DedupeEntriesCompanion(
+          entryPk: const Value('stale-entry-pk'),
+          eventKey: const Value('notif:com.maribank:102'),
+          packageName: const Value('com.maribank'),
+          notificationId: const Value('102'),
+          amount: const Value(300.0),
+          amountNormalized: const Value('300.00'),
+          currency: const Value('PHP'),
+          title: const Value('Stale Transfer'),
+          source: const Value('notification'),
+          dateTimeCreated: Value(staleTime),
+          status: const Value('created'),
+        ),
+      );
+
+      // 2. Hydrate ledger using default window (5 minutes)
+      await DedupeLedger.instance.loadFromDatabase();
+
+      // Only the recent entry within 5 minutes should be in memory
+      expect(DedupeLedger.instance.entries.length, equals(1));
+      expect(DedupeLedger.instance.entries.first.entryPk,
+          equals('recent-entry-pk'));
+      expect(DedupeLedger.instance.entries.first.amount, equals(500.0));
+    });
+
+    test('loadFromDatabase separates created vs suppressed entries correctly',
+        () async {
+      final now = DateTime.now();
+      final t = now.subtract(const Duration(minutes: 1));
+
+      await database.insertDedupeEntry(
+        DedupeEntriesCompanion(
+          entryPk: const Value('created-pk'),
+          eventKey: const Value('notif:com.maribank:201'),
+          packageName: const Value('com.maribank'),
+          notificationId: const Value('201'),
+          amount: const Value(250.0),
+          amountNormalized: const Value('250.00'),
+          currency: const Value('PHP'),
+          title: const Value('Created Entry'),
+          source: const Value('notification'),
+          dateTimeCreated: Value(t),
+          status: const Value('created'),
+        ),
+      );
+
+      await database.insertDedupeEntry(
+        DedupeEntriesCompanion(
+          entryPk: const Value('suppressed-pk'),
+          eventKey: const Value('notif:com.maribank:201'),
+          packageName: const Value('com.maribank'),
+          notificationId: const Value('201'),
+          amount: const Value(250.0),
+          amountNormalized: const Value('250.00'),
+          currency: const Value('PHP'),
+          title: const Value('Suppressed Entry'),
+          source: const Value('notification'),
+          dateTimeCreated: Value(t),
+          status: const Value('suppressed'),
+          matchedEntryPk: const Value('created-pk'),
+        ),
+      );
+
+      await DedupeLedger.instance.loadFromDatabase();
+
+      expect(DedupeLedger.instance.entries.length, equals(1));
+      expect(DedupeLedger.instance.entries.first.entryPk, equals('created-pk'));
+
+      expect(DedupeLedger.instance.suppressedEntries.length, equals(1));
+      expect(DedupeLedger.instance.suppressedEntries.first.entryPk,
+          equals('suppressed-pk'));
+    });
+
+    test('loadFromDatabase is idempotent on repeated calls', () async {
+      final now = DateTime.now();
+      await database.insertDedupeEntry(
+        DedupeEntriesCompanion(
+          entryPk: const Value('idempotent-pk'),
+          eventKey: const Value('notif:com.gotyme:301'),
+          packageName: const Value('com.gotyme'),
+          notificationId: const Value('301'),
+          amount: const Value(100.0),
+          amountNormalized: const Value('100.00'),
+          currency: const Value('PHP'),
+          title: const Value('Test GoTyme'),
+          source: const Value('notification'),
+          dateTimeCreated: Value(now.subtract(const Duration(minutes: 1))),
+          status: const Value('created'),
+        ),
+      );
+
+      await DedupeLedger.instance.loadFromDatabase();
+      expect(DedupeLedger.instance.entries.length, equals(1));
+
+      // Second invocation should not duplicate entries
+      await DedupeLedger.instance.loadFromDatabase();
+      expect(DedupeLedger.instance.entries.length, equals(1));
     });
   });
 }

@@ -273,11 +273,82 @@ void main() {
       expect(res.currency, isNull);
     });
 
+    test('extracts uppercase P prefix currency and amount', () {
+      final res1 = NotificationDispatcher.extractAmountAndCurrencyFromText(
+        'P123.00 with UnionBank Rewards Platinum **3353',
+      );
+      expect(res1, isNotNull);
+      expect(res1!.amount, equals(123.0));
+      expect(res1.currency, equals('PHP'));
+
+      final res2 = NotificationDispatcher.extractAmountAndCurrencyFromText(
+        'P 500.00 transferred successfully',
+      );
+      expect(res2, isNotNull);
+      expect(res2!.amount, equals(500.0));
+      expect(res2.currency, equals('PHP'));
+    });
+
     test('returns null for non-financial text with reference numbers', () {
       final res = NotificationDispatcher.extractAmountAndCurrencyFromText(
         'Your security verification code is 454658. Do not share.',
       );
       expect(res, isNull);
+    });
+
+    test(
+        'returns null for words ending in P followed by numbers (OTP, Trip, Shop, Step)',
+        () {
+      expect(
+        NotificationDispatcher.extractAmountAndCurrencyFromText(
+            'Your OTP 454658 is valid for 5 mins'),
+        isNull,
+      );
+      expect(
+        NotificationDispatcher.extractAmountAndCurrencyFromText(
+            'Your OTP: 987654'),
+        isNull,
+      );
+      expect(
+        NotificationDispatcher.extractAmountAndCurrencyFromText(
+            'Trip 10 was completed today'),
+        isNull,
+      );
+      expect(
+        NotificationDispatcher.extractAmountAndCurrencyFromText(
+            'Shop 500 deals available now'),
+        isNull,
+      );
+      expect(
+        NotificationDispatcher.extractAmountAndCurrencyFromText(
+            'Step 1 to activate your card'),
+        isNull,
+      );
+      expect(
+        NotificationDispatcher.extractAmountAndCurrencyFromText(
+            'Stop 50 meters ahead'),
+        isNull,
+      );
+    });
+
+    test(
+        'returns null for non-financial decimal numbers without financial context',
+        () {
+      expect(
+        NotificationDispatcher.extractAmountAndCurrencyFromText(
+            'App updated to version 2.40 successfully'),
+        isNull,
+      );
+      expect(
+        NotificationDispatcher.extractAmountAndCurrencyFromText(
+            'Team meeting scheduled at 10.30 tomorrow'),
+        isNull,
+      );
+      expect(
+        NotificationDispatcher.extractAmountAndCurrencyFromText(
+            'Battery charge level is 85.00% remaining'),
+        isNull,
+      );
     });
   });
 

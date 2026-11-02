@@ -202,7 +202,7 @@ class DedupeLedger {
   }
 
   /// Loads recent deduplication entries from Drift if available.
-  Future<void> loadFromDatabase({Duration? window}) async {
+  Future<void> loadFromDatabase({Duration? window = defaultWindow}) async {
     try {
       final dbEntries =
           await database.getAllDedupeEntries(limit: maxLedgerCapacity);
@@ -278,6 +278,7 @@ class DedupeLedger {
         rawContent: rawContent,
         source: 'notification',
         dateTimeCreated: now,
+        notificationTimestamp: eventTime,
         status: 'suppressed',
         matchedEntryPk: exactMatch.entryPk,
       );
@@ -310,6 +311,7 @@ class DedupeLedger {
           rawContent: rawContent,
           source: 'notification',
           dateTimeCreated: now,
+          notificationTimestamp: eventTime,
           status: 'suppressed',
           matchedEntryPk: paymentMatch.entryPk,
         );
@@ -335,6 +337,7 @@ class DedupeLedger {
       rawContent: rawContent,
       source: 'notification',
       dateTimeCreated: now,
+      notificationTimestamp: eventTime,
       status: 'created',
     );
     await _recordEntry(newEntry);
@@ -378,6 +381,7 @@ class DedupeLedger {
           title: title,
           source: source,
           dateTimeCreated: now,
+          notificationTimestamp: eventTime,
           status: 'suppressed',
           matchedEntryPk: paymentMatch.entryPk,
         );
@@ -404,6 +408,7 @@ class DedupeLedger {
       title: title,
       source: source,
       dateTimeCreated: now,
+      notificationTimestamp: eventTime,
       status: 'created',
     );
     await _recordEntry(newEntry);

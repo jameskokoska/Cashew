@@ -43,19 +43,22 @@ class NotificationDispatcher {
   Future<bool> Function(GooglePayTransactionResult)? onGooglePayTransaction;
 
   static final RegExp _currencyPrefixRegex = RegExp(
-    r'(?:([₱$€£¥₹]|PHP|USD|EUR|GBP|JPY|CAD|AUD|SGD|INR|P)\s*)'
+    r'(?:(?<![a-zA-Z])([₱$€£¥₹]|P)\s*|\b(PHP|USD|EUR|GBP|JPY|CAD|AUD|SGD|INR|php|usd|eur|gbp|jpy|cad|aud|sgd|inr)\s*)'
     r'([0-9]{1,3}(?:,[0-9]{3})*(?:\.[0-9]{2})?|[0-9]+(?:\.[0-9]{2})?)',
-    caseSensitive: false,
   );
 
   static final RegExp _currencySuffixRegex = RegExp(
     r'([0-9]{1,3}(?:,[0-9]{3})*(?:\.[0-9]{2})?|[0-9]+(?:\.[0-9]{2})?)'
-    r'(?:\s*([₱$€£¥₹]|PHP|USD|EUR|GBP|JPY|CAD|AUD|SGD|INR|P))\b',
+    r'\s*([₱$€£¥₹]|\b(?:PHP|USD|EUR|GBP|JPY|CAD|AUD|SGD|INR|php|usd|eur|gbp|jpy|cad|aud|sgd|inr)\b)',
+  );
+
+  static final RegExp _financialContextRegex = RegExp(
+    r'\b(?:debited|debit|credited|credit|paid|pay|payment|sent|transferred|transfer|spent|received|charge|charged|total|amount|balance|fee|purchase|withdrawn|withdraw)\b',
     caseSensitive: false,
   );
 
   static final RegExp _monetaryDecimalRegex = RegExp(
-    r'\b([0-9]{1,3}(?:,[0-9]{3})*\.[0-9]{2}|[0-9]+\.[0-9]{2})\b',
+    r'\b([0-9]{1,3}(?:,[0-9]{3})*\.[0-9]{2}|[0-9]+\.[0-9]{2})\b(?!\s*%)',
   );
 
   /// Normalizes currency symbols and codes to standard 3-letter ISO uppercase codes.
@@ -68,6 +71,9 @@ class NotificationDispatcher {
     if (upper == '£' || upper == 'GBP') return 'GBP';
     if (upper == '¥' || upper == 'JPY') return 'JPY';
     if (upper == '₹' || upper == 'INR') return 'INR';
+    if (upper == 'CAD') return 'CAD';
+    if (upper == 'AUD') return 'AUD';
+    if (upper == 'SGD') return 'SGD';
     return upper;
   }
 
@@ -117,11 +123,11 @@ class NotificationDispatcher {
   ) {
     if (text.trim().isEmpty) return null;
 
-    // 1. Check for prefix currency e.g. ₱3,600.00 or PHP 1,000.00
+    // 1. Check for prefix currency e.g. ₱3,600.00 or PHP 1,000.00 or P123.00
     final prefixMatch = _currencyPrefixRegex.firstMatch(text);
     if (prefixMatch != null) {
-      final rawCurrency = prefixMatch.group(1);
-      final rawAmount = prefixMatch.group(2);
+      final rawCurrency = prefixMatch.group(1) ?? prefixMatch.group(2);
+      final rawAmount = prefixMatch.group(3);
       if (rawAmount != null) {
         final cleanAmount = rawAmount.replaceAll(',', '');
         final parsed = double.tryParse(cleanAmount);
@@ -151,18 +157,20 @@ class NotificationDispatcher {
       }
     }
 
-    // 3. Fallback to standard 2-decimal monetary pattern without explicit currency symbol
-    final decimalMatch = _monetaryDecimalRegex.firstMatch(text);
-    if (decimalMatch != null) {
-      final rawAmount = decimalMatch.group(1);
-      if (rawAmount != null) {
-        final cleanAmount = rawAmount.replaceAll(',', '');
-        final parsed = double.tryParse(cleanAmount);
-        if (parsed != null && parsed > 0) {
-          return ExtractedNotificationDetails(
-            amount: parsed,
-            currency: null,
-          );
+    // 3. Fallback to standard 2-decimal monetary pattern only if financial context is present
+    if (_financialContextRegex.hasMatch(text)) {
+      final decimalMatch = _monetaryDecimalRegex.firstMatch(text);
+      if (decimalMatch != null) {
+        final rawAmount = decimalMatch.group(1);
+        if (rawAmount != null) {
+          final cleanAmount = rawAmount.replaceAll(',', '');
+          final parsed = double.tryParse(cleanAmount);
+          if (parsed != null && parsed > 0) {
+            return ExtractedNotificationDetails(
+              amount: parsed,
+              currency: null,
+            );
+          }
         }
       }
     }
@@ -234,6 +242,27 @@ class NotificationDispatcher {
         amount = parsed.amount;
         currency ??= parsed.currency;
       }
+    } else if (currency == null) {
+      final text = '${event.content ?? ''} ${event.title ?? ''}';
+      final parsed = extractAmountAndCurrencyFromText(text);
+      if (parsed?.currency != null) {
+        currency = parsed!.currency;
+      }
+    }
+
+    // 4. Default wallet currency fallback if currency remains unknown
+    if (amount != null && amount > 0 && currency == null) {
+      try {
+        final selectedWalletPk = appStateSettings["selectedWalletPk"];
+        if (selectedWalletPk != null) {
+          final defaultWallet =
+              await database.getWalletInstanceOrNull(selectedWalletPk);
+          if (defaultWallet?.currency != null &&
+              defaultWallet!.currency!.isNotEmpty) {
+            currency = normalizeCurrency(defaultWallet.currency);
+          }
+        }
+      } catch (_) {}
     }
 
     return ExtractedNotificationDetails(

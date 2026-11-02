@@ -132,6 +132,8 @@ Future<bool> shouldDedupePayment({
   required double amount,
   required Map<String, String?> params,
   PlatformOS? platform,
+  DateTime? eventTime,
+  String? currency,
 }) async {
   final currentPlatform = platform ?? getPlatform(ignoreEmulation: true);
   if (currentPlatform != PlatformOS.isAndroid) {
@@ -145,8 +147,10 @@ Future<bool> shouldDedupePayment({
   }
   final dedupeResult = await DedupeLedger.instance.checkAndRecordPayment(
     amount: amount,
+    currency: currency ?? params["currency"],
     title: params["title"] ?? params["name"],
     source: params["source"] ?? 'app_link',
+    eventTime: eventTime,
   );
   return dedupeResult.isDuplicate;
 }
@@ -159,7 +163,12 @@ Future<Transaction?> processAddTransactionFromParams(
   String walletPk = wallet?.walletPk ?? appStateSettings["selectedWalletPk"];
   DateTime? dateCreated = await getDateTimeFromParams(params, context);
   double amount = getAmountFromParams(params);
-  if (await shouldDedupePayment(amount: amount, params: params)) {
+  if (await shouldDedupePayment(
+    amount: amount,
+    params: params,
+    eventTime: dateCreated,
+    currency: wallet?.currency ?? params["currency"],
+  )) {
     return null;
   }
   String title = params["title"] ?? params["name"] ?? "";
@@ -266,7 +275,12 @@ Future processAddTransactionRouteFromParams(
   TransactionWallet? wallet = await getWalletFromParams(params);
   DateTime? dateCreated = await getDateTimeFromParams(params, context);
   double amount = getAmountFromParams(params);
-  if (await shouldDedupePayment(amount: amount, params: params)) {
+  if (await shouldDedupePayment(
+    amount: amount,
+    params: params,
+    eventTime: dateCreated,
+    currency: wallet?.currency ?? params["currency"],
+  )) {
     return null;
   }
   // Add a delay so the keyboard can focus
