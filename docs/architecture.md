@@ -71,7 +71,7 @@ Drift maintains schema evolution snapshots in `budget/drift_schemas/`.
 To allow developers to track real personal finances on their daily driver while simultaneously developing and testing features:
 - **Release Build (`release`):** Package `com.budget.tracker_app` with launcher label `Cashew`.
 - **Debug Build (`debug`):** Package `com.budget.tracker_app.debug` (via `applicationIdSuffix ".debug"`) with launcher label `Cashew Dev`.
-- **Profile Build (`profile`):** Uses `Cashew Dev` manifest placeholder and falls back to release signing configuration.
+- **Profile Build (`profile`):** Inherits release configuration (`com.budget.tracker_app`, `Cashew`) to measure production-accurate performance.
 
 ### Data Safety Invariants:
 1. Both apps can be installed simultaneously on the same Android device with independent SQLite databases (`FinanceDatabase`) and separate `SharedPreferences`.

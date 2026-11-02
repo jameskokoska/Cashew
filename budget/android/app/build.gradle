@@ -78,13 +78,8 @@ android {
             applicationIdSuffix ".debug"
             manifestPlaceholders = [appName: "Cashew Dev"]
         }
-        profile {
-            matchingFallbacks = ['release']
-            manifestPlaceholders = [appName: "Cashew Dev"]
-        }
         release {
             signingConfig signingConfigs.release
-            manifestPlaceholders = [appName: "Cashew"]
         }
     }
 }

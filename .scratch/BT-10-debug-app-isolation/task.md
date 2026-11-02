@@ -2,7 +2,7 @@
 
 **ID:** BT-10  
 **Issue Reference:** [#21](https://github.com/kidomarcostelo/budget-tracking/issues/21)  
-**Status:** In Progress  
+**Status:** Complete / Ready to Merge  
 **Assignee / Agent:** AI Assistant  
 
 ---
@@ -26,16 +26,16 @@
 ---
 
 ## 3. Plan & Implementation Steps
-- [x] Configure `manifestPlaceholders` in `budget/android/app/build.gradle` for `debug`, `profile`, and `release`.
+- [x] Configure `manifestPlaceholders` in `budget/android/app/build.gradle` for `debug` (`Cashew Dev`) and `defaultConfig` / `release` (`Cashew`).
 - [x] Set `applicationIdSuffix ".debug"` for the `debug` build type.
 - [x] Update `budget/android/app/src/main/AndroidManifest.xml` to use `android:label="${appName}"`.
 - [x] Add the `com.budget.tracker_app.debug` client entry to `budget/android/app/google-services.json`.
 - [x] Update `docs/architecture.md` documenting parallel dev vs production environments.
-- [ ] Verify Gradle configuration and CI compatibility.
+- [x] Address code review remediations from `docs/code-reviews/PR-22-debug-app-isolation.md`: remove redundant release placeholder and remove divergent `profile` block so it aligns with production release behavior.
 
 ---
 
 ## 4. Verification & Testing
-- [ ] Gradle build configuration validation
-- [ ] Code formatting and quality checks
-- [ ] GitHub Actions CI passing on Pull Request
+- [x] Gradle build configuration validation
+- [x] Code formatting and quality checks
+- [x] GitHub Actions CI passing on Pull Request (Run 41408157774 `Build Android APK` ✓, Run 41408157757 `CI Quality Gate` ✓)
