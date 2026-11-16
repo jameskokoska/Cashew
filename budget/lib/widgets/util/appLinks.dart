@@ -4,7 +4,9 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addEmailTemplate.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
+import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/throttler.dart';
@@ -229,6 +231,128 @@ Future<Transaction?> processAddTransactionFromParams(
   return null;
 }
 
+// Add a transfer between two accounts without a UI prompt
+// Creates the same pair of balance correction transactions as TransferBalancePopup
+//
+// Supported params in order of parsing - some take precedence over others
+//
+// walletFromPk, accountFrom (name), walletFrom (name)
+// walletToPk, accountTo (name), walletTo (name)
+// amountFrom, amount
+// amountTo (if not passed in, amountFrom is converted with the exchange rate)
+// date, dateCreated
+// title, name
+// notes, note
+//
+// JSON (standalone): {"transfers": [{...}, {...}]}
+//
+// Don't forget to update the README if this changed
+
+Future<bool> processAddTransferFromParams(
+    BuildContext context, Map<String, String?> params) async {
+  TransactionWallet? walletFrom =
+      await getTransferWalletFromParams(params, "From");
+  TransactionWallet? walletTo = await getTransferWalletFromParams(params, "To");
+
+  if (walletFrom == null || walletTo == null) {
+    openSnackbar(SnackbarMessage(
+      title: "no-accounts-found".tr(),
+      description: (walletFrom == null
+              ? (params["accountFrom"] ?? params["walletFrom"] ?? "")
+              : (params["accountTo"] ?? params["walletTo"] ?? ""))
+          .toString(),
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.warning_outlined
+          : Icons.warning_rounded,
+    ));
+    return false;
+  }
+
+  if (walletFrom.walletPk == walletTo.walletPk) {
+    openSnackbar(SnackbarMessage(
+      title: "same-accounts".tr(),
+      description: "select-2-different-accounts".tr(),
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.warning_outlined
+          : Icons.warning_rounded,
+    ));
+    return false;
+  }
+
+  // Each amount is in the currency of its own account
+  double amountFrom =
+      (double.tryParse(params["amountFrom"] ?? params["amount"] ?? "0") ?? 0)
+          .abs();
+  double? amountToParam = double.tryParse(params["amountTo"] ?? "");
+  double amountTo = amountToParam != null
+      ? amountToParam.abs()
+      : amountFrom *
+          ((walletFrom.currency == null || walletTo.currency == null)
+              ? 1
+              : (amountRatioFromToCurrency(
+                      walletFrom.currency!, walletTo.currency!) ??
+                  1));
+
+  AllWallets allWallets = Provider.of<AllWallets>(context, listen: false);
+  String title = params["title"] ?? params["name"] ?? "";
+  String extraNote = params["notes"] ?? params["note"] ?? "";
+  String transferString = getWalletStringName(allWallets, walletFrom) +
+      " → " +
+      getWalletStringName(allWallets, walletTo);
+  String note = "transferred-balance".tr() +
+      "\n" +
+      transferString +
+      (extraNote == "" ? "" : "\n" + extraNote);
+
+  // Want these times to be the same so we know the pairing of balance corrections
+  DateTime dateCreated =
+      getDateTimeFromParams(params, context) ?? DateTime.now();
+
+  String? transactionPk = await createCorrectionTransaction(
+    amountTo,
+    walletTo,
+    note: note,
+    dateTime: dateCreated.add(Duration(seconds: 1)),
+    title: title == "" ? (walletTo.name + " " + "transfer-in".tr()) : title,
+  );
+
+  await createCorrectionTransaction(
+    amountFrom * -1,
+    walletFrom,
+    pairedTransactionFk: transactionPk,
+    note: note,
+    dateTime: dateCreated,
+    title: title == "" ? (walletFrom.name + " " + "transfer-out".tr()) : title,
+  );
+
+  openSnackbar(SnackbarMessage(
+    title: "transferred-balance".tr(),
+    description: transferString,
+    icon: appStateSettings["outlinedIcons"]
+        ? Icons.compare_arrows_outlined
+        : Icons.compare_arrows_rounded,
+  ));
+  return true;
+}
+
+// direction is "From" or "To"
+Future<TransactionWallet?> getTransferWalletFromParams(
+    Map<String, String?> params, String direction) async {
+  TransactionWallet? result;
+  if (params.containsKey("wallet" + direction + "Pk")) {
+    result = await database.getWalletInstanceOrNull(
+        params["wallet" + direction + "Pk"].toString());
+  }
+  if (result == null && params.containsKey("account" + direction)) {
+    return await database
+        .getRelatingWallet(params["account" + direction] ?? "");
+  }
+  if (result == null && params.containsKey("wallet" + direction)) {
+    return await database.getRelatingWallet(params["wallet" + direction] ?? "");
+  }
+  return result;
+}
+
 Future processAddTransactionRouteFromParams(
     BuildContext context, Map<String, String?> params) async {
   MainAndSubcategory mainAndSubCategory =
@@ -345,6 +469,35 @@ Future executeAppLink(BuildContext? context, Uri uri,
         } else {
           dynamic res =
               await processAddTransactionRouteFromParams(context, params);
+          if (onDebug != null) onDebug(res);
+        }
+      }
+      break;
+    case "addTransfer":
+      if (context != null) {
+        if (params["JSON"] != null) {
+          try {
+            Map<String, dynamic> jsonData = json.decode(params["JSON"] ?? "");
+            for (dynamic transferObject in jsonData["transfers"]) {
+              Map<String, String> currentObject = {};
+              transferObject.forEach((key, value) {
+                currentObject[key] = value.toString();
+              });
+              dynamic res =
+                  await processAddTransferFromParams(context, currentObject);
+              if (onDebug != null) onDebug(res);
+            }
+          } catch (e) {
+            openSnackbar(SnackbarMessage(
+              title: "error-parsing-json".tr(),
+              description: e.toString(),
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.warning_outlined
+                  : Icons.warning_rounded,
+            ));
+          }
+        } else {
+          dynamic res = await processAddTransferFromParams(context, params);
           if (onDebug != null) onDebug(res);
         }
       }
